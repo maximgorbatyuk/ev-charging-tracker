@@ -13,6 +13,7 @@ struct ChargingSession: Identifiable {
     var odometer: Int
     var cost: Double?
     var notes: String
+    var isInitalRecord: Bool
 }
 
 enum ChargerType: String, CaseIterable, Codable {
@@ -32,7 +33,8 @@ class DatabaseManager {
     private var db: Connection?
     
     // Table definition
-    private let sessions = Table("charging_sessions")
+    private let chargingSessionsTable = Table("charging_sessions")
+
     private let id = Expression<Int64>("id")
     private let date = Expression<Date>("date")
     private let energyCharged = Expression<Double>("energy_charged")
@@ -40,6 +42,7 @@ class DatabaseManager {
     private let odometer = Expression<Int>("odometer")
     private let cost = Expression<Double?>("cost")
     private let notes = Expression<String>("notes")
+    private let isInitalRecord = Expression<Bool>("is_inital_record")
     
     private init() {
         setupDatabase()
@@ -65,7 +68,7 @@ class DatabaseManager {
         guard let db = db else { return }
         
         do {
-            try db.run(sessions.create(ifNotExists: true) { t in
+            try db.run(chargingSessionsTable.create(ifNotExists: true) { t in
                 t.column(id, primaryKey: .autoincrement)
                 t.column(date)
                 t.column(energyCharged)
@@ -73,25 +76,38 @@ class DatabaseManager {
                 t.column(odometer)
                 t.column(cost)
                 t.column(notes)
+                t.column(isInitalRecord)
             })
             print("Table created successfully")
         } catch {
             print("Unable to create table: \(error)")
         }
     }
-    
+
+    private func deleteTable() {
+        guard let db = db else { return }
+        
+        do {
+            try db.run(chargingSessionsTable.drop(ifExists: true))
+            print("Table deleted successfully")
+        } catch {
+            print("Unable to delete table: \(error)")
+        }
+    }
+
     // CRUD Operations
     func insertSession(_ session: ChargingSession) -> Int64? {
         guard let db = db else { return nil }
         
         do {
-            let insert = sessions.insert(
+            let insert = chargingSessionsTable.insert(
                 date <- session.date,
                 energyCharged <- session.energyCharged,
                 chargerType <- session.chargerType.rawValue,
                 odometer <- session.odometer,
                 cost <- session.cost,
-                notes <- session.notes
+                notes <- session.notes,
+                isInitalRecord <- session.isInitalRecord
             )
             
             let rowId = try db.run(insert)
@@ -109,7 +125,7 @@ class DatabaseManager {
         var sessionsList: [ChargingSession] = []
         
         do {
-            for session in try db.prepare(sessions.order(date.desc)) {
+            for session in try db.prepare(chargingSessionsTable.order(date.desc)) {
                 let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .home7kW
                 
                 let chargingSession = ChargingSession(
@@ -119,7 +135,8 @@ class DatabaseManager {
                     chargerType: chargerTypeEnum,
                     odometer: session[odometer],
                     cost: session[cost],
-                    notes: session[notes]
+                    notes: session[notes],
+                    isInitalRecord: session[isInitalRecord]
                 )
                 sessionsList.append(chargingSession)
             }
@@ -133,7 +150,7 @@ class DatabaseManager {
     func updateSession(_ session: ChargingSession) -> Bool {
         guard let db = db, let sessionId = session.id else { return false }
         
-        let sessionToUpdate = sessions.filter(id == sessionId)
+        let sessionToUpdate = chargingSessionsTable.filter(id == sessionId)
         
         do {
             try db.run(sessionToUpdate.update(
@@ -142,7 +159,8 @@ class DatabaseManager {
                 chargerType <- session.chargerType.rawValue,
                 odometer <- session.odometer,
                 cost <- session.cost,
-                notes <- session.notes
+                notes <- session.notes,
+                isInitalRecord <- session.isInitalRecord
             ))
             print("Updated session with id: \(sessionId)")
             return true
@@ -155,7 +173,7 @@ class DatabaseManager {
     func deleteSession(id sessionId: Int64) -> Bool {
         guard let db = db else { return false }
         
-        let sessionToDelete = sessions.filter(id == sessionId)
+        let sessionToDelete = chargingSessionsTable.filter(id == sessionId)
         
         do {
             try db.run(sessionToDelete.delete())
@@ -171,7 +189,7 @@ class DatabaseManager {
         guard let db = db else { return 0 }
         
         do {
-            let total = try db.scalar(sessions.select(energyCharged.sum))
+            let total = try db.scalar(chargingSessionsTable.select(energyCharged.sum))
             return total ?? 0
         } catch {
             print("Failed to get total energy: \(error)")
@@ -183,7 +201,7 @@ class DatabaseManager {
         guard let db = db else { return 0 }
         
         do {
-            let total = try db.scalar(sessions.select(cost.sum))
+            let total = try db.scalar(chargingSessionsTable.select(cost.sum))
             return total ?? 0
         } catch {
             print("Failed to get total cost: \(error)")
@@ -195,7 +213,7 @@ class DatabaseManager {
         guard let db = db else { return 0 }
         
         do {
-            return try db.scalar(sessions.count)
+            return try db.scalar(chargingSessionsTable.count)
         } catch {
             print("Failed to get session count: \(error)")
             return 0
@@ -525,6 +543,7 @@ struct AddSessionView: SwiftUICore.View {
     @State private var cost = ""
     @State private var notes = ""
     @State private var showingAlert = false
+    @State private var isInitialRecord = false
     
     var body: some SwiftUICore.View {
         NavigationView {
@@ -552,6 +571,11 @@ struct AddSessionView: SwiftUICore.View {
                         TextField("12345", text: $odometer)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
+                    }
+
+                    HStack {
+                        Spacer()
+                        Toggle("First record to start tracking?", isOn: $isInitialRecord)
                     }
                 }
                 
@@ -606,7 +630,8 @@ struct AddSessionView: SwiftUICore.View {
             chargerType: chargerType,
             odometer: odo,
             cost: sessionCost,
-            notes: notes
+            notes: notes,
+            isInitalRecord: isInitialRecord
         )
         
         viewModel.addSession(session)
