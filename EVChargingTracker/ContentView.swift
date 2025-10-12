@@ -53,7 +53,7 @@ struct ContentView: SwiftUICore.View {
                 }
             }
             .navigationTitle("Car Charging")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
                 AddSessionView(viewModel: viewModel, defaultCurrency: viewModel.defaultCurrency)
             }
