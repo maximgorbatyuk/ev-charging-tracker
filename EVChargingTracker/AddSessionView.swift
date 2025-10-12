@@ -7,7 +7,10 @@
 import SwiftUI
 
 struct AddSessionView: SwiftUICore.View {
+
     @ObservedObject var viewModel: ChargingViewModel
+    var defaultCurrency: Currency
+
     @Environment(\.dismiss) var dismiss
     
     @State private var date = Date()
@@ -55,7 +58,7 @@ struct AddSessionView: SwiftUICore.View {
                 
                 Section(header: Text("Optional")) {
                     HStack {
-                        Text("Cost")
+                        Text("Cost (\(defaultCurrency.rawValue))")
                         Spacer()
                         TextField("12.50", text: $cost)
                             .keyboardType(.decimalPad)
@@ -90,6 +93,9 @@ struct AddSessionView: SwiftUICore.View {
     }
     
     private func saveSession() {
+
+        energyCharged = energyCharged.replacing(",", with: ".")
+
         guard let energy = Double(energyCharged),
               let odo = Int(odometer) else {
             showingAlert = true
@@ -105,9 +111,11 @@ struct AddSessionView: SwiftUICore.View {
             odometer: odo,
             cost: sessionCost,
             notes: notes,
-            isInitalRecord: isInitialRecord
+            isInitialRecord: isInitialRecord,
+            expenseType: .charging,
+            currency: viewModel.defaultCurrency
         )
-        
+
         viewModel.addSession(session)
         dismiss()
     }

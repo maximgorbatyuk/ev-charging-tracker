@@ -1,17 +1,14 @@
 //
-//  DatabaseManager.swift
+//  ChargingSessionsRepository.swift
 //  EVChargingTracker
 //
-//  Created by Maxim Gorbatyuk on 10.10.2025.
+//  Created by Maxim Gorbatyuk on 12.10.2025.
 //
+
 @_exported import SQLite
 import Foundation
 
-class DatabaseManager {
-    static let shared = DatabaseManager()
-    private var db: Connection?
-    
-    // Table definition
+class ChargingSessionsRepository {
     private let chargingSessionsTable = Table("charging_sessions")
 
     private let id = Expression<Int64>("id")
@@ -21,51 +18,39 @@ class DatabaseManager {
     private let odometer = Expression<Int>("odometer")
     private let cost = Expression<Double?>("cost")
     private let notes = Expression<String>("notes")
-    private let isInitalRecord = Expression<Bool>("is_inital_record")
+    private let isInitialRecord = Expression<Bool>("is_inital_record")
+    private let currency = Expression<String>("currency")
+    private let expenseType = Expression<String>("expense_type")
+
+    private var db: Connection
     
-    private init() {
-        setupDatabase()
+    init(db: Connection) {
+        self.db = db
     }
-    
-    private func setupDatabase() {
-        do {
-            let path = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory, .userDomainMask, true
-            ).first!
-            
-            let dbPath = "\(path)/tesla_charging.sqlite3"
-            print("Database path: \(dbPath)")
-            
-            db = try Connection(dbPath)
-            createTable()
-        } catch {
-            print("Unable to setup database: \(error)")
+
+    func createTable() -> Void {
+        let command = chargingSessionsTable.create(ifNotExists: true) { t in
+            t.column(id, primaryKey: .autoincrement)
+            t.column(date)
+            t.column(energyCharged)
+            t.column(chargerType)
+            t.column(odometer)
+            t.column(cost)
+            t.column(notes)
+            t.column(isInitialRecord)
+            t.column(currency)
+            t.column(expenseType)
         }
-    }
-    
-    private func createTable() {
-        guard let db = db else { return }
-        
+
         do {
-            try db.run(chargingSessionsTable.create(ifNotExists: true) { t in
-                t.column(id, primaryKey: .autoincrement)
-                t.column(date)
-                t.column(energyCharged)
-                t.column(chargerType)
-                t.column(odometer)
-                t.column(cost)
-                t.column(notes)
-                t.column(isInitalRecord)
-            })
+            try db.run(command)
             print("Table created successfully")
         } catch {
             print("Unable to create table: \(error)")
         }
     }
 
-    private func deleteTable() {
-        guard let db = db else { return }
-        
+    func deleteTable() {
         do {
             try db.run(chargingSessionsTable.drop(ifExists: true))
             print("Table deleted successfully")
@@ -74,9 +59,7 @@ class DatabaseManager {
         }
     }
 
-    // CRUD Operations
     func insertSession(_ session: ChargingSession) -> Int64? {
-        guard let db = db else { return nil }
         
         do {
             let insert = chargingSessionsTable.insert(
@@ -86,7 +69,9 @@ class DatabaseManager {
                 odometer <- session.odometer,
                 cost <- session.cost,
                 notes <- session.notes,
-                isInitalRecord <- session.isInitalRecord
+                isInitialRecord <- session.isInitialRecord,
+                currency <- session.currency.rawValue,
+                expenseType <- session.expenseType.rawValue
             )
             
             let rowId = try db.run(insert)
@@ -99,14 +84,14 @@ class DatabaseManager {
     }
     
     func fetchAllSessions() -> [ChargingSession] {
-        guard let db = db else { return [] }
         
         var sessionsList: [ChargingSession] = []
         
         do {
             for session in try db.prepare(chargingSessionsTable.order(date.desc)) {
                 let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .home7kW
-                
+                let currencyEnum = Currency(rawValue: session[currency]) ?? .usd
+
                 let chargingSession = ChargingSession(
                     id: session[id],
                     date: session[date],
@@ -115,7 +100,9 @@ class DatabaseManager {
                     odometer: session[odometer],
                     cost: session[cost],
                     notes: session[notes],
-                    isInitalRecord: session[isInitalRecord]
+                    isInitialRecord: session[isInitialRecord],
+                    expenseType: ExpenseType(rawValue: session[expenseType]) ?? .other,
+                    currency: currencyEnum,
                 )
                 sessionsList.append(chargingSession)
             }
@@ -125,10 +112,9 @@ class DatabaseManager {
         
         return sessionsList
     }
-    
+
     func updateSession(_ session: ChargingSession) -> Bool {
-        guard let db = db, let sessionId = session.id else { return false }
-        
+        let sessionId = session.id ?? 0
         let sessionToUpdate = chargingSessionsTable.filter(id == sessionId)
         
         do {
@@ -139,7 +125,9 @@ class DatabaseManager {
                 odometer <- session.odometer,
                 cost <- session.cost,
                 notes <- session.notes,
-                isInitalRecord <- session.isInitalRecord
+                isInitialRecord <- session.isInitialRecord,
+                currency <- session.currency.rawValue,
+                expenseType <- session.expenseType.rawValue
             ))
             print("Updated session with id: \(sessionId)")
             return true
@@ -150,8 +138,6 @@ class DatabaseManager {
     }
     
     func deleteSession(id sessionId: Int64) -> Bool {
-        guard let db = db else { return false }
-        
         let sessionToDelete = chargingSessionsTable.filter(id == sessionId)
         
         do {
@@ -165,8 +151,6 @@ class DatabaseManager {
     }
     
     func getTotalEnergy() -> Double {
-        guard let db = db else { return 0 }
-        
         do {
             let total = try db.scalar(chargingSessionsTable.select(energyCharged.sum))
             return total ?? 0
@@ -177,8 +161,6 @@ class DatabaseManager {
     }
     
     func getTotalCost() -> Double {
-        guard let db = db else { return 0 }
-        
         do {
             let total = try db.scalar(chargingSessionsTable.select(cost.sum))
             return total ?? 0
@@ -189,8 +171,6 @@ class DatabaseManager {
     }
     
     func getSessionCount() -> Int {
-        guard let db = db else { return 0 }
-        
         do {
             return try db.scalar(chargingSessionsTable.count)
         } catch {

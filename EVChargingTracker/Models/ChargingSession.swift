@@ -15,5 +15,7 @@ struct ChargingSession: Identifiable {
     var odometer: Int
     var cost: Double?
     var notes: String
-    var isInitalRecord: Bool
+    var isInitialRecord: Bool
+    var expenseType: ExpenseType
+    var currency: Currency
 }
