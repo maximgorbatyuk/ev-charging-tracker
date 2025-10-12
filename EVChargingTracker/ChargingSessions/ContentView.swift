@@ -7,7 +7,6 @@ struct ContentView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
-                Color.black.ignoresSafeArea()
                 
                 ScrollView {
                     VStack(spacing: 20) {
@@ -63,16 +62,16 @@ struct ContentView: SwiftUICore.View {
     private var statsView: some SwiftUICore.View {
         HStack(spacing: 12) {
             StatCard(
-                title: "Total Energy",
-                value: String(format: "%.1f kWh", viewModel.totalEnergy),
+                title: "Total (kWh)",
+                value: String(format: "%.1f", viewModel.totalEnergy),
                 icon: "bolt.fill",
                 color: .yellow,
                 minHeight: 90
             )
             
             StatCard(
-                title: "Avg/Session",
-                value: String(format: "%.1f kWh", viewModel.averageEnergy),
+                title: "Avg (kWh)",
+                value: String(format: "%.1f ", viewModel.averageEnergy),
                 icon: "chart.line.uptrend.xyaxis",
                 color: .green,
                 minHeight: 90
@@ -101,7 +100,7 @@ struct ContentView: SwiftUICore.View {
             
             Text("Add your first session to start tracking")
                 .font(.subheadline)
-                .foregroundColor(.gray.opacity(0.7))
+                .foregroundColor(.gray.opacity(0.9))
         }
         .padding(.top, 60)
     }
@@ -123,7 +122,7 @@ struct ContentView: SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Total Charging Cost")
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(.green)
 
             Text(String(format: "\(viewModel.defaultCurrency.rawValue)%.2f", viewModel.totalCost))
                 .font(.system(size: 28, weight: .bold))

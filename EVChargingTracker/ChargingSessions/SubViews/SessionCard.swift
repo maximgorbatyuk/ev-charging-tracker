@@ -8,6 +8,9 @@ import Foundation
 import SwiftUI
 
 struct SessionCard: SwiftUICore.View {
+
+    @Environment(\.colorScheme) var colorScheme
+    
     let session: ChargingSession
     let onDelete: () -> Void
     
@@ -16,7 +19,7 @@ struct SessionCard: SwiftUICore.View {
             HStack {
                 Text(session.date, style: .date)
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundColor(.gray)
                 
                 Spacer()
                 
@@ -42,7 +45,7 @@ struct SessionCard: SwiftUICore.View {
                     Text("\(String(format: "%.1f", session.energyCharged)) kWh")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundColor(.yellow)
+                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -52,7 +55,7 @@ struct SessionCard: SwiftUICore.View {
                     Text("\(session.odometer.formatted()) km")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundColor(.white)
+                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
                 }
                 
                 if let cost = session.cost {
@@ -80,7 +83,7 @@ struct SessionCard: SwiftUICore.View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.2))
+                .fill(Color.gray.opacity(0.12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(Color.gray.opacity(0.3), lineWidth: 1)

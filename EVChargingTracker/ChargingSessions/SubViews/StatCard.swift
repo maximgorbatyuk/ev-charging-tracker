@@ -8,6 +8,9 @@ import Foundation
 import SwiftUI
 
 struct StatCard: SwiftUICore.View {
+
+    @Environment(\.colorScheme) var colorScheme
+    
     let title: String
     let value: String
     let icon: String
@@ -26,8 +29,8 @@ struct StatCard: SwiftUICore.View {
             }
             
             Text(value)
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(.white)
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: minHeight)

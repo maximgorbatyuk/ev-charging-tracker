@@ -11,7 +11,7 @@ import SwiftUI
 struct EVChargingTrackerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
         }
     }
 }

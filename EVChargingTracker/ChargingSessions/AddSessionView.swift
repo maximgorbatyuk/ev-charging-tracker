@@ -94,6 +94,7 @@ struct AddSessionView: SwiftUICore.View {
     
     private func saveSession() {
 
+        cost = cost.replacing(",", with: ".")
         energyCharged = energyCharged.replacing(",", with: ".")
 
         guard let energy = Double(energyCharged),
