@@ -90,6 +90,12 @@ struct SessionCard: SwiftUICore.View {
                 Spacer()
             }
             
+            if (session.expenseType == .charging && session.notes != "") {
+                Text(session.notes)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
             if !session.notes.isEmpty {
                 Text(session.notes)
                     .font(.caption)

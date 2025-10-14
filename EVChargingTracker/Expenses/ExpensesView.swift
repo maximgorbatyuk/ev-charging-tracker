@@ -60,7 +60,9 @@ struct ExpensesView: SwiftUICore.View {
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
                 AddSessionView(
+                    defaultExpenseType: nil,
                     defaultCurrency: viewModel.getDefaultCurrency(),
+                    showFirstTrackingRecordToggle: viewModel.expenses.isEmpty,
                     onAdd: { newExpense in
                         viewModel.addExpense(newExpense) // closure receives Expense param
                     })

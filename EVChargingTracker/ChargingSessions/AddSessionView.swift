@@ -8,7 +8,9 @@ import SwiftUI
 
 struct AddSessionView: SwiftUICore.View {
 
+    let defaultExpenseType: ExpenseType?
     let defaultCurrency: Currency
+    let showFirstTrackingRecordToggle: Bool
     let onAdd: (Expense) -> Void
 
     @Environment(\.dismiss) var dismiss
@@ -16,31 +18,45 @@ struct AddSessionView: SwiftUICore.View {
     @State private var date = Date()
     @State private var energyCharged = ""
     @State private var chargerType: ChargerType = .home7kW
+    @State private var expenseType: ExpenseType? = nil
     @State private var odometer = ""
     @State private var cost = ""
     @State private var notes = ""
     @State private var showingAlert = false
     @State private var isInitialRecord = false
+
+    @State private var alertMessage: String? = nil
     
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
                 Section(header: Text("Session Details")) {
                     DatePicker("Date", selection: $date, displayedComponents: .date)
-                    
-                    HStack {
-                        Text("Energy (kWh)")
-                        Spacer()
-                        TextField("45.2", text: $energyCharged)
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    
-                    Picker("Charger Type", selection: $chargerType) {
-                        ForEach(ChargerType.allCases, id: \.self) { type in
-                            Text(type.rawValue).tag(type)
+
+                    if (defaultExpenseType == .charging) {
+                        HStack {
+                            Text("Energy (kWh)")
+                            Spacer()
+                            TextField("45.2", text: $energyCharged)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                        }
+                        
+                        Picker("Charger Type", selection: $chargerType) {
+                            ForEach(ChargerType.allCases, id: \.self) { type in
+                                Text(type.rawValue).tag(type)
+                            }
+                        }
+                    } else {
+                        // TODO mgorbatyuk: implement other expense types
+                        
+                        Picker("Expense Type", selection: $expenseType) {
+                            ForEach(ExpenseType.allCases, id: \.self) { type in
+                                Text(type.rawValue).tag(type)
+                            }
                         }
                     }
+
                     
                     HStack {
                         Text("Odometer (km)")
@@ -50,10 +66,13 @@ struct AddSessionView: SwiftUICore.View {
                             .multilineTextAlignment(.trailing)
                     }
 
-                    HStack {
-                        Spacer()
-                        Toggle("First record to start tracking?", isOn: $isInitialRecord)
+                    if (showFirstTrackingRecordToggle) {
+                        HStack {
+                            Spacer()
+                            Toggle("First record to start tracking?", isOn: $isInitialRecord)
+                        }
                     }
+                    
                 }
                 
                 Section(header: Text("Optional")) {
@@ -84,11 +103,6 @@ struct AddSessionView: SwiftUICore.View {
                     .fontWeight(.semibold)
                 }
             }
-            .alert("Invalid Input", isPresented: $showingAlert) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text("Please enter valid values for Energy and Odometer.")
-            }
         }
     }
     
@@ -97,9 +111,31 @@ struct AddSessionView: SwiftUICore.View {
         cost = cost.replacing(",", with: ".")
         energyCharged = energyCharged.replacing(",", with: ".")
 
-        guard let energy = Double(energyCharged),
-              let odo = Int(odometer) else {
-            showingAlert = true
+        // Unwrap expense type
+        let finalExpenseType: ExpenseType?
+        if let defaultType = defaultExpenseType {
+            finalExpenseType = defaultType
+        } else {
+            finalExpenseType = expenseType
+        }
+
+        guard let expenseTypeUnwrapped = finalExpenseType else {
+            alertMessage = "Please select an expense type."
+            return
+        }
+
+        var energy = 0.0
+        if (expenseTypeUnwrapped == .charging) {
+            guard let energyParsed = Double(energyCharged) else {
+                alertMessage = "Please type a valid value for Energy."
+                return
+            }
+
+            energy = energyParsed
+        }
+
+        guard let odo = Int(odometer) else {
+            alertMessage = "Please type a valid value for Odometer."
             return
         }
         
@@ -113,11 +149,21 @@ struct AddSessionView: SwiftUICore.View {
             cost: sessionCost,
             notes: notes,
             isInitialRecord: isInitialRecord,
-            expenseType: .charging,
+            expenseType: expenseTypeUnwrapped,
             currency: defaultCurrency
         )
 
         onAdd(session)
         dismiss()
     }
+}
+
+#Preview {
+    AddSessionView(
+        defaultExpenseType: nil,
+        defaultCurrency: .usd,
+        showFirstTrackingRecordToggle: false,
+        onAdd: { session in
+            print("Added session: \(session)")
+        })
 }
