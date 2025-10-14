@@ -12,6 +12,16 @@ struct ChargingSessionsView: SwiftUICore.View {
                     VStack(spacing: 20) {
                         // Stats Cards
                         statsView
+
+                        // Total Cost
+                        if viewModel.totalCost > 0 {
+                            totalCostView
+                        }
+                        
+                        // Sessions List
+                        if viewModel.expenses.isEmpty {
+                            emptyStateView
+                        }
                         
                         // Add Button
                         Button(action: {
@@ -35,16 +45,6 @@ struct ChargingSessionsView: SwiftUICore.View {
                             .cornerRadius(12)
                         }
                         .padding(.horizontal)
-
-                        // Total Cost
-                        if viewModel.totalCost > 0 {
-                            totalCostView
-                        }
-                        
-                        // Sessions List
-                        if viewModel.expenses.isEmpty {
-                            emptyStateView
-                        }
                     }
                     .padding(.vertical)
                 }

@@ -49,6 +49,8 @@ struct ExpensesView: SwiftUICore.View {
                         // Sessions List
                         if viewModel.expenses.isEmpty {
                             emptyStateView
+                        } else {
+                            sessionsListView
                         }
                     }
                     .padding(.vertical)

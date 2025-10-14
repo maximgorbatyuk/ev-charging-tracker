@@ -29,25 +29,42 @@ struct SessionCard: SwiftUICore.View {
                 }
             }
             
-            Text(session.chargerType.rawValue)
-                .font(.caption)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(Color.red.opacity(0.2))
-                .foregroundColor(.red)
-                .cornerRadius(12)
-            
+            if (session.expenseType == .charging) {
+                Text(session.chargerType.rawValue)
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.red.opacity(0.2))
+                    .foregroundColor(.red)
+                    .cornerRadius(12)
+            } else {
+                // TODO mgorbatyuk: write notes if available
+            }
+
             HStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Energy")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    Text("\(String(format: "%.1f", session.energyCharged)) kWh")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
-                }
                 
+                if (session.expenseType == .charging) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Energy")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        Text("\(String(format: "%.1f", session.energyCharged)) kWh")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                    }
+                } else {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Expense type")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        Text("\(session.expenseType.rawValue)")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                    }
+                }
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Odometer")
                         .font(.caption)
