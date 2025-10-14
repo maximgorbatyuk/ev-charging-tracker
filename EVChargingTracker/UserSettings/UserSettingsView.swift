@@ -22,3 +22,7 @@ struct UserSettingsView: SwiftUICore.View {
         }
     }
 }
+
+#Preview {
+    UserSettingsView()
+}

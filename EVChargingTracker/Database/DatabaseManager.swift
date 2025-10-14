@@ -10,7 +10,7 @@ import Foundation
 class DatabaseManager {
     static let shared = DatabaseManager()
 
-    var chargingSessionsRepository: ChargingSessionsRepository?
+    var expensesRepository: ExpensesRepository?
     var migrationRepository: MigrationsRepository?
     
     private var db: Connection?
@@ -31,7 +31,7 @@ class DatabaseManager {
                 return
             }
 
-            self.chargingSessionsRepository = ChargingSessionsRepository(db: dbConnection)
+            self.expensesRepository = ExpensesRepository(db: dbConnection)
             self.migrationRepository = MigrationsRepository(db: dbConnection)
 
             migrateIfNeeded()
@@ -54,8 +54,8 @@ class DatabaseManager {
         for version in (Int(currentVersion) + 1)...latestVersion {
             switch version {
             case 1:
-                chargingSessionsRepository!.deleteTable()
-                chargingSessionsRepository!.createTable()
+                expensesRepository!.deleteTable()
+                expensesRepository!.createTable()
             default:
                 break
             }

@@ -8,7 +8,8 @@
 @_exported import SQLite
 import Foundation
 
-class ChargingSessionsRepository {
+class ExpensesRepository {
+    // TODO mgorbatyuk: rename the table to "expenses"
     private let chargingSessionsTable = Table("charging_sessions")
 
     private let id = Expression<Int64>("id")
@@ -59,7 +60,7 @@ class ChargingSessionsRepository {
         }
     }
 
-    func insertSession(_ session: ChargingSession) -> Int64? {
+    func insertSession(_ session: Expense) -> Int64? {
         
         do {
             let insert = chargingSessionsTable.insert(
@@ -83,16 +84,16 @@ class ChargingSessionsRepository {
         }
     }
     
-    func fetchAllSessions() -> [ChargingSession] {
+    func fetchAllSessions() -> [Expense] {
         
-        var sessionsList: [ChargingSession] = []
+        var sessionsList: [Expense] = []
         
         do {
             for session in try db.prepare(chargingSessionsTable.order(date.desc)) {
                 let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .home7kW
                 let currencyEnum = Currency(rawValue: session[currency]) ?? .usd
 
-                let chargingSession = ChargingSession(
+                let chargingSession = Expense(
                     id: session[id],
                     date: session[date],
                     energyCharged: session[energyCharged],
@@ -113,7 +114,7 @@ class ChargingSessionsRepository {
         return sessionsList
     }
 
-    func updateSession(_ session: ChargingSession) -> Bool {
+    func updateSession(_ session: Expense) -> Bool {
         let sessionId = session.id ?? 0
         let sessionToUpdate = chargingSessionsTable.filter(id == sessionId)
         

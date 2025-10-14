@@ -1,36 +1,36 @@
 //
-//  ChargingViewModel.swift
+//  ExpensesViewModel.swift
 //  EVChargingTracker
 //
-//  Created by Maxim Gorbatyuk on 11.10.2025.
+//  Created by Maxim Gorbatyuk on 14.10.2025.
 //
 
 import Foundation
 
-class ChargingViewModel: ObservableObject, IExpenseView {
+class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
 
     let defaultCurrency: Currency
     
     private let db: DatabaseManager
-    private let expensesRepository: ExpensesRepository
-
+    private let chargingSessionsRepository: ExpensesRepository
+    
     init() {
         
         self.db = DatabaseManager.shared
-        self.expensesRepository = db.expensesRepository!
+        self.chargingSessionsRepository = db.expensesRepository!
         self.defaultCurrency = .kzt
 
         loadSessions()
     }
 
     func loadSessions() {
-        expenses = expensesRepository.fetchAllSessions()
+        expenses = chargingSessionsRepository.fetchAllSessions()
     }
 
     func addExpense(_ session: Expense) {
-        if let id = expensesRepository.insertSession(session) {
+        if let id = chargingSessionsRepository.insertSession(session) {
             var newSession = session
             newSession.id = id
             expenses.insert(newSession, at: 0)
@@ -40,42 +40,25 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     func deleteSession(_ session: Expense) {
         guard let sessionId = session.id else { return }
         
-        if expensesRepository.deleteSession(id: sessionId) {
+        if chargingSessionsRepository.deleteSession(id: sessionId) {
             expenses.removeAll { $0.id == sessionId }
         }
     }
     
     func updateSession(_ session: Expense) {
-        if expensesRepository.updateSession(session) {
+        if chargingSessionsRepository.updateSession(session) {
             if let index = expenses.firstIndex(where: { $0.id == session.id }) {
                 expenses[index] = session
             }
-
             loadSessions() // Reload to get proper sorting
         }
     }
-    
+
     func getDefaultCurrency() -> Currency {
         return defaultCurrency
     }
-    
-    var totalEnergy: Double {
-        expenses.reduce(0) { $0 + $1.energyCharged }
-    }
-    
-    var averageEnergy: Double {
-        guard !expenses.isEmpty else { return 0 }
-        
-        let sessionsToCount = expenses
-            .filter({ $0.isInitialRecord == false && $0.expenseType == .charging })
-            .count
-
-        return totalEnergy / Double(sessionsToCount)
-    }
 
     var totalCost: Double {
-        expenses
-            .filter { $0.isInitialRecord == false && $0.expenseType == .charging }
-            .compactMap { $0.cost }.reduce(0, +)
+        expenses.compactMap { $0.cost }.reduce(0, +)
     }
 }

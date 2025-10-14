@@ -8,8 +8,8 @@ import SwiftUI
 
 struct AddSessionView: SwiftUICore.View {
 
-    @ObservedObject var viewModel: ChargingViewModel
-    var defaultCurrency: Currency
+    let defaultCurrency: Currency
+    let onAdd: (Expense) -> Void
 
     @Environment(\.dismiss) var dismiss
     
@@ -104,8 +104,8 @@ struct AddSessionView: SwiftUICore.View {
         }
         
         let sessionCost = Double(cost)
-        
-        let session = ChargingSession(
+
+        let session = Expense(
             date: date,
             energyCharged: energy,
             chargerType: chargerType,
@@ -114,10 +114,10 @@ struct AddSessionView: SwiftUICore.View {
             notes: notes,
             isInitialRecord: isInitialRecord,
             expenseType: .charging,
-            currency: viewModel.defaultCurrency
+            currency: defaultCurrency
         )
 
-        viewModel.addSession(session)
+        onAdd(session)
         dismiss()
     }
 }

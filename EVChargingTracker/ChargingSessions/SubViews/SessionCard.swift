@@ -11,7 +11,7 @@ struct SessionCard: SwiftUICore.View {
 
     @Environment(\.colorScheme) var colorScheme
     
-    let session: ChargingSession
+    let session: Expense
     let onDelete: () -> Void
     
     var body: some SwiftUICore.View {

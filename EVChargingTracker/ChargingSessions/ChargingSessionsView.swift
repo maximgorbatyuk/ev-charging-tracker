@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: SwiftUICore.View {
+struct ChargingSessionsView: SwiftUICore.View {
     @StateObject private var viewModel = ChargingViewModel()
     @State private var showingAddSession = false
     
@@ -42,19 +42,21 @@ struct ContentView: SwiftUICore.View {
                         }
                         
                         // Sessions List
-                        if viewModel.sessions.isEmpty {
+                        if viewModel.expenses.isEmpty {
                             emptyStateView
-                        } else {
-                            sessionsListView
                         }
                     }
                     .padding(.vertical)
                 }
             }
-            .navigationTitle("Car Charging")
+            .navigationTitle("Charging stats")
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
-                AddSessionView(viewModel: viewModel, defaultCurrency: viewModel.defaultCurrency)
+                AddSessionView(
+                    defaultCurrency: viewModel.getDefaultCurrency(),
+                    onAdd: { newExpense in
+                        viewModel.addExpense(newExpense) // closure receives Expense param
+                    })
             }
         }
     }
@@ -79,7 +81,7 @@ struct ContentView: SwiftUICore.View {
             
             StatCard(
                 title: "Sessions",
-                value: "\(viewModel.sessions.count)",
+                value: "\(viewModel.expenses.count)",
                 icon: "gauge.high",
                 color: .blue,
                 minHeight: 90
@@ -105,19 +107,6 @@ struct ContentView: SwiftUICore.View {
         .padding(.top, 60)
     }
     
-    private var sessionsListView: some SwiftUICore.View {
-        LazyVStack(spacing: 12) {
-            ForEach(viewModel.sessions) { session in
-                SessionCard(
-                    session: session,
-                    onDelete: {
-                        viewModel.deleteSession(session)
-                    })
-            }
-        }
-        .padding(.horizontal)
-    }
-    
     private var totalCostView: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Total Charging Cost")
@@ -140,4 +129,8 @@ struct ContentView: SwiftUICore.View {
         )
         .padding(.horizontal)
     }
+}
+
+#Preview {
+    ChargingSessionsView()
 }

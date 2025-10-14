@@ -10,17 +10,24 @@ import SwiftUI
 struct MainTabView: SwiftUI.View {
     var body: some SwiftUI.View {
         TabView {
-            // Your existing charging view
-            ContentView()  // Replace with your actual view name
+            ChargingSessionsView()
                 .tabItem {
-                    Label("Car Charging", systemImage: "bolt.car.fill")
+                    Label("Stats", systemImage: "bolt.car.fill")
+                }
+            
+            ExpensesView()
+                .tabItem {
+                    Label("Expenses", systemImage: "dollarsign.circle")
                 }
 
-            // New settings view
             UserSettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "person.circle.fill")
                 }
         }
     }
+}
+
+#Preview {
+    MainTabView()
 }
