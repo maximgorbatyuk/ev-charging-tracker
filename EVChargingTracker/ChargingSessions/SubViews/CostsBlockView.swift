@@ -12,16 +12,27 @@ struct CostsBlockView: SwiftUICore.View {
     let title: String
     let currency: Currency
     let costsValue: Double
+    let perKilometer: Bool
+
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.subheadline)
-                .foregroundColor(.black)
+                .foregroundColor(colorScheme == .dark ? .white : .black)
 
-            Text(String(format: "\(currency.rawValue)%.2f", costsValue))
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(.black)
+            HStack(alignment: .lastTextBaseline) {
+                Text(String(format: "\(currency.rawValue)%.2f", costsValue))
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                
+                if (perKilometer) {
+                    Text("per km")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                }
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
@@ -35,12 +46,14 @@ struct CostsBlockView: SwiftUICore.View {
         )
         .padding(.horizontal)
     }
+
 }
 
 #Preview {
     CostsBlockView(
         title: "How much one kilometer costs you",
         currency: .kzt,
-        costsValue: 45
+        costsValue: 45,
+        perKilometer: true
     )
 }

@@ -56,8 +56,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             loadSessions() // Reload to get proper sorting
         }
     }
-    
-    func calculateOneKilometerCosts() -> Double {
+
+    func calculateOneKilometerCosts(_ onlyCharging: Bool) -> Double {
         if (expenses.count < 2) {
             return 0
         }
@@ -65,6 +65,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         let initialRecord = expenses.first(where: { $0.isInitialRecord })
         let lastRecord = expenses
             .filter({ $0.isInitialRecord == false })
+            .sorted(by: { $0.id ?? 0 < $1.id ?? 0 })
             .last
 
         let totalDistance = (lastRecord?.odometer ?? 0) - (initialRecord?.odometer ?? 0)
@@ -72,8 +73,11 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             return 0
         }
 
-        var totalCost = expenses
-            .filter { $0.isInitialRecord == false }
+        let expensesToBeConsidered = onlyCharging
+            ? expenses.filter({ $0.isInitialRecord == false && $0.expenseType == .charging })
+            : expenses.filter { $0.isInitialRecord == false }
+
+        let totalCost = expensesToBeConsidered
             .compactMap { $0.cost }.reduce(0.0, +)
 
         return totalCost / Double(totalDistance)
@@ -81,6 +85,10 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     
     func getDefaultCurrency() -> Currency {
         return defaultCurrency
+    }
+    
+    func getChargingSessionsCount() -> Int {
+        expenses.filter({ $0.isInitialRecord == false && $0.expenseType == .charging }).count
     }
     
     var totalEnergy: Double {

@@ -17,12 +17,25 @@ struct ChargingSessionsView: SwiftUICore.View {
                         if viewModel.totalCost > 0 {
 
                             CostsBlockView(
-                                title: "How much one kilometer costs you",
+                                title: "How much one kilometer costs you (charging only)",
                                 currency: viewModel.defaultCurrency,
-                                costsValue: viewModel.calculateOneKilometerCosts()
+                                costsValue: viewModel.calculateOneKilometerCosts(true),
+                                perKilometer: true
+                            )
+
+                            CostsBlockView(
+                                title: "How much one kilometer costs you (total)",
+                                currency: viewModel.defaultCurrency,
+                                costsValue: viewModel.calculateOneKilometerCosts(false),
+                                perKilometer: true
                             )
                             
-                            totalCostView
+                            CostsBlockView(
+                                title: "Total expenses costs",
+                                currency: viewModel.defaultCurrency,
+                                costsValue: viewModel.totalCost,
+                                perKilometer: false
+                            )
                         }
                         
                         // Sessions List
@@ -90,7 +103,7 @@ struct ChargingSessionsView: SwiftUICore.View {
             
             StatCard(
                 title: "Sessions",
-                value: "\(viewModel.expenses.count)",
+                value: "\(viewModel.getChargingSessionsCount())",
                 icon: "gauge.high",
                 color: .blue,
                 minHeight: 90
