@@ -103,7 +103,7 @@ struct ExpensesView: SwiftUICore.View {
     // TODO mgorbatyuk: void copypasteed code
     private var totalCostView: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Total Charging Cost")
+            Text("Total expenses")
                 .font(.subheadline)
                 .foregroundColor(.green)
 

@@ -34,7 +34,7 @@ struct AboutView: SwiftUICore.View {
                         Text("Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations.")
                             .padding(.bottom)
                         
-                        Text("If you have any questions or suggestions, feel free to create an issue on [Github](https://\(githubRepoUrl)).")
+                        Text("If you have any questions or suggestions, feel free to create an issue on [Github](\(getGithubLink())).")
                             
                     }
                     .padding(.horizontal)
@@ -47,7 +47,7 @@ struct AboutView: SwiftUICore.View {
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        Text("Repo URL: [ ev-charging-tracker (Github)](https://\(githubRepoUrl))")
+                        Text("Repo URL: [ ev-charging-tracker (Github)](\(getGithubLink()))")
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
@@ -64,6 +64,10 @@ struct AboutView: SwiftUICore.View {
             .navigationTitle("EV Charge Tracker")
             .navigationBarTitleDisplayMode(.automatic)
         }
+    }
+
+    private func getGithubLink() -> String {
+        return "https://\(githubRepoUrl)"
     }
 }
 
