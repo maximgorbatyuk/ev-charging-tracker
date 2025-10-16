@@ -24,6 +24,11 @@ struct MainTabView: SwiftUI.View {
                 .tabItem {
                     Label("Settings", systemImage: "person.circle.fill")
                 }
+            
+            AboutView()
+                .tabItem {
+                    Label("About", systemImage: "info.circle")
+                }
         }
     }
 }

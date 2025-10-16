@@ -1,0 +1,8 @@
+//
+//  Debug.xcconfig
+//  EVChargingTracker
+//
+//  Created by Maxim Gorbatyuk on 16.10.2025.
+//
+
+#include "Base.xcconfig"

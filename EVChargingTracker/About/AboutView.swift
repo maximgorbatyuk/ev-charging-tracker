@@ -1,13 +1,13 @@
 //
-//  UserSettingsView.swift
+//  AboutView.swift
 //  EVChargingTracker
 //
-//  Created by Maxim Gorbatyuk on 12.10.2025.
+//  Created by Maxim Gorbatyuk on 16.10.2025.
 //
 
 import SwiftUI
 
-struct UserSettingsView: SwiftUICore.View {
+struct AboutView: SwiftUICore.View {
 
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "AppVisibleVersion") as? String ?? "0.0.0"
 
@@ -18,26 +18,41 @@ struct UserSettingsView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
+                
+                Image("BackgroundImage")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 0) // 👈 This will keep other views (like a large text) in the frame
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(0.2)
 
                 ScrollView {
-                    Text("EV Charge Tracker")
-                    Divider()
-                    Text("Hello Another World")
+                    VStack(alignment: .leading) {
+                        Text("Track your electric vehicle charging costs and discover your true cost per kilometer.")
+                            .padding(.bottom)
 
+                        Text("Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations.")
+                            .padding(.bottom)
+                        
+                        Text("If you have any questions or suggestions, feel free to create an issue on [Github](https://\(githubRepoUrl)).")
+                            
+                    }
+                    .padding(.horizontal)
 
                     VStack(alignment: .leading) {
+
                         Divider()
                         Text("Version: \(appVersion)")
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
-                        
-                        Text("Github: \(githubRepoUrl)")
+
+                        Text("Repo URL: [ ev-charging-tracker (Github)](https://\(githubRepoUrl))")
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        Text("Developer: \(developerName)")
+                        Text("Developer: © \(developerName)")
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
@@ -46,12 +61,12 @@ struct UserSettingsView: SwiftUICore.View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .navigationTitle("User settings")
+            .navigationTitle("EV Charge Tracker")
             .navigationBarTitleDisplayMode(.automatic)
         }
     }
 }
 
 #Preview {
-    UserSettingsView()
+    AboutView()
 }

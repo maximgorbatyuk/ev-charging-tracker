@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppVisibleVersion</key>
+	<string>$(APP_VISIBLE_VERSION)</string>
+
+	<key>DeveloperName</key>
+	<string>$(DEVELOPER_NAME)</string>
+
+	<key>GithubRepoUrl</key>
+	<string>$(GITHUB_REPO_URL)</string>
+</dict>
+</plist>
