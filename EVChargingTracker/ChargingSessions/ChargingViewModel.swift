@@ -20,6 +20,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         
         self.db = DatabaseManager.shared
         self.expensesRepository = db.expensesRepository!
+        
+        // TODO mgorbatyuk: take from database
         self.defaultCurrency = .kzt
 
         loadSessions()
@@ -53,6 +55,28 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
             loadSessions() // Reload to get proper sorting
         }
+    }
+    
+    func calculateOneKilometerCosts() -> Double {
+        if (expenses.count < 2) {
+            return 0
+        }
+
+        let initialRecord = expenses.first(where: { $0.isInitialRecord })
+        let lastRecord = expenses
+            .filter({ $0.isInitialRecord == false })
+            .last
+
+        let totalDistance = (lastRecord?.odometer ?? 0) - (initialRecord?.odometer ?? 0)
+        if (totalDistance <= 0) {
+            return 0
+        }
+
+        var totalCost = expenses
+            .filter { $0.isInitialRecord == false }
+            .compactMap { $0.cost }.reduce(0.0, +)
+
+        return totalCost / Double(totalDistance)
     }
     
     func getDefaultCurrency() -> Currency {

@@ -9,38 +9,32 @@ import SwiftUI
 
 struct UserSettingsView: SwiftUICore.View {
 
-    let appVersion = Bundle.main.object(forInfoDictionaryKey: "AppVisibleVersion") as? String ?? "0.0.0"
-
-    let developerName = Bundle.main.object(forInfoDictionaryKey: "DeveloperName") as? String ?? "-"
-    
-    let githubRepoUrl = Bundle.main.object(forInfoDictionaryKey: "GithubRepoUrl") as? String ?? "-"
+    @StateObject private var viewModel = UserSettingsViewModel()
+    @State private var showEditCurrencyModal: Bool = false
 
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
 
                 ScrollView {
-                    Text("EV Charge Tracker")
-                    Divider()
-                    Text("Hello Another World")
-
-
                     VStack(alignment: .leading) {
-                        Divider()
-                        Text("Version: \(appVersion)")
-                            .fontWeight(.semibold)
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(.gray)
-                        
-                        Text("Github: \(githubRepoUrl)")
-                            .fontWeight(.semibold)
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(.gray)
 
-                        Text("Developer: \(developerName)")
-                            .fontWeight(.semibold)
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(.gray)
+                        HStack {
+                            Text("Currency")
+                                .fontWeight(.semibold)
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.gray)
+                            Spacer()
+                            Button(action: {
+                                showEditCurrencyModal = true
+                            }) {
+                                Text("\(viewModel.defaultCurrency.rawValue)")
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 16, weight: .bold))
+                            }
+                            
+                        }
+                        Divider()
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -48,6 +42,13 @@ struct UserSettingsView: SwiftUICore.View {
             }
             .navigationTitle("User settings")
             .navigationBarTitleDisplayMode(.automatic)
+            .sheet(isPresented: $showEditCurrencyModal) {
+                EditDefaultCurrencyView(
+                    selectedCurrency: viewModel.getDefaultCurrency(),
+                    onSave: { newCurrency in
+                        viewModel.saveDefaultCurrency(newCurrency)
+                    })
+            }
         }
     }
 }

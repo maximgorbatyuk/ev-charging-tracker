@@ -15,6 +15,13 @@ struct ChargingSessionsView: SwiftUICore.View {
 
                         // Total Cost
                         if viewModel.totalCost > 0 {
+
+                            CostsBlockView(
+                                title: "How much one kilometer costs you",
+                                currency: viewModel.defaultCurrency,
+                                costsValue: viewModel.calculateOneKilometerCosts()
+                            )
+                            
                             totalCostView
                         }
                         
