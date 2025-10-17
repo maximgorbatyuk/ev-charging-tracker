@@ -29,9 +29,9 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 costsValue: viewModel.calculateOneKilometerCosts(false),
                                 perKilometer: true
                             )
-                            
+
                             CostsBlockView(
-                                title: "Total expenses costs",
+                                title: "Total charging costs",
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.totalCost,
                                 perKilometer: false
@@ -102,7 +102,7 @@ struct ChargingSessionsView: SwiftUICore.View {
             )
             
             StatCard(
-                title: "Sessions",
+                title: "Charges",
                 value: "\(viewModel.getChargingSessionsCount())",
                 icon: "gauge.high",
                 color: .blue,
@@ -127,29 +127,6 @@ struct ChargingSessionsView: SwiftUICore.View {
                 .foregroundColor(.gray.opacity(0.9))
         }
         .padding(.top, 60)
-    }
-    
-    private var totalCostView: some SwiftUICore.View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Total Charging Cost")
-                .font(.subheadline)
-                .foregroundColor(.green)
-
-            Text(String(format: "\(viewModel.defaultCurrency.rawValue)%.2f", viewModel.totalCost))
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(.green)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.green.opacity(0.15))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.green.opacity(0.3), lineWidth: 1)
-                )
-        )
-        .padding(.horizontal)
     }
 }
 

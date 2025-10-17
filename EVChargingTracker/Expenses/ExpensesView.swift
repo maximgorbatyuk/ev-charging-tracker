@@ -43,7 +43,11 @@ struct ExpensesView: SwiftUICore.View {
 
                         // Total Cost
                         if viewModel.totalCost > 0 {
-                            totalCostView
+                            CostsBlockView(
+                                title: "Total costs",
+                                currency: viewModel.defaultCurrency,
+                                costsValue: viewModel.totalCost,
+                                perKilometer: false)
                         }
 
                         // Sessions List
@@ -97,30 +101,6 @@ struct ExpensesView: SwiftUICore.View {
                     })
             }
         }
-        .padding(.horizontal)
-    }
-
-    // TODO mgorbatyuk: void copypasteed code
-    private var totalCostView: some SwiftUICore.View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Total expenses")
-                .font(.subheadline)
-                .foregroundColor(.green)
-
-            Text(String(format: "\(viewModel.defaultCurrency.rawValue)%.2f", viewModel.totalCost))
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(.green)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.green.opacity(0.15))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.green.opacity(0.3), lineWidth: 1)
-                )
-        )
         .padding(.horizontal)
     }
 }
