@@ -24,15 +24,23 @@ struct UserSettingsView: SwiftUICore.View {
                                 .fontWeight(.semibold)
                                 .font(.system(size: 14, weight: .bold))
                                 .foregroundColor(.gray)
+
                             Spacer()
-                            Button(action: {
-                                showEditCurrencyModal = true
-                            }) {
+
+                            if (!viewModel.hasAnyExpense()) {
+                                Button(action: {
+                                    showEditCurrencyModal = true
+                                }) {
+                                    Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
+                                        .fontWeight(.semibold)
+                                        .font(.system(size: 16, weight: .bold))
+                                }
+                            } else {
                                 Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
                                     .fontWeight(.semibold)
                                     .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(.gray)
                             }
-                            
                         }
                         Divider()
                     }

@@ -83,7 +83,16 @@ class ExpensesRepository {
             return nil
         }
     }
-    
+
+    func expensesCount() -> Int {
+        do {
+            return try db.scalar(chargingSessionsTable.count)
+        } catch {
+            print("Failed to get expenses count: \(error)")
+            return 0
+        }
+    }
+
     func fetchAllSessions() -> [Expense] {
         
         var sessionsList: [Expense] = []

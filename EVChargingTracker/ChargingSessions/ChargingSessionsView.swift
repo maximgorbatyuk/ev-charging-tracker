@@ -10,10 +10,14 @@ struct ChargingSessionsView: SwiftUICore.View {
                 
                 ScrollView {
                     VStack(spacing: 20) {
-                        // Stats Cards
-                        statsView
 
-                        // Total Cost
+                        StatsBlockView(
+                            totalEnergy: viewModel.totalEnergy,
+                            averageEnergy: viewModel.averageEnergy,
+                            chargingSessionsCount: viewModel.getChargingSessionsCount()
+                        )
+                        .padding(.horizontal)
+
                         if viewModel.totalCost > 0 {
 
                             CostsBlockView(
@@ -37,13 +41,12 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 perKilometer: false
                             )
                         }
-                        
-                        // Sessions List
+
                         if viewModel.expenses.isEmpty {
-                            emptyStateView
+                            NoExpensesView()
+                                .padding(.top, 60)
                         }
-                        
-                        // Add Button
+
                         Button(action: {
                             showingAddSession = true
                         }) {
@@ -81,52 +84,6 @@ struct ChargingSessionsView: SwiftUICore.View {
                     })
             }
         }
-    }
-    
-    private var statsView: some SwiftUICore.View {
-        HStack(spacing: 12) {
-            StatCard(
-                title: "Total (kWh)",
-                value: String(format: "%.1f", viewModel.totalEnergy),
-                icon: "bolt.fill",
-                color: .yellow,
-                minHeight: 90
-            )
-            
-            StatCard(
-                title: "Avg (kWh)",
-                value: String(format: "%.1f ", viewModel.averageEnergy),
-                icon: "chart.line.uptrend.xyaxis",
-                color: .green,
-                minHeight: 90
-            )
-            
-            StatCard(
-                title: "Charges",
-                value: "\(viewModel.getChargingSessionsCount())",
-                icon: "gauge.high",
-                color: .blue,
-                minHeight: 90
-            )
-        }
-        .padding(.horizontal)
-    }
-    
-    private var emptyStateView: some SwiftUICore.View {
-        VStack(spacing: 16) {
-            Image(systemName: "battery.100.bolt")
-                .font(.system(size: 64))
-                .foregroundColor(.gray.opacity(0.5))
-            
-            Text("No charging sessions yet")
-                .font(.title3)
-                .foregroundColor(.gray)
-            
-            Text("Add your first session to start tracking")
-                .font(.subheadline)
-                .foregroundColor(.gray.opacity(0.9))
-        }
-        .padding(.top, 60)
     }
 }
 

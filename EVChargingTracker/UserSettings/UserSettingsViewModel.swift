@@ -22,6 +22,10 @@ class UserSettingsViewModel: ObservableObject {
         self.defaultCurrency = userSettingsRepository?.fetchCurrency() ?? .kzt
     }
 
+    func hasAnyExpense() -> Bool {
+        return expensesRepository.expensesCount() > 0
+    }
+
     func getDefaultCurrency() -> Currency {
         return defaultCurrency
     }
