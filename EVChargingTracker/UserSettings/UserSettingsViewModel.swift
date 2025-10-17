@@ -19,12 +19,7 @@ class UserSettingsViewModel: ObservableObject {
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
 
-        // Try to load saved currency from DB; fallback to kzt
-        if let saved = userSettingsRepository?.fetchCurrency(), let currency = Currency(rawValue: saved) {
-            self.defaultCurrency = currency
-        } else {
-            self.defaultCurrency = .kzt
-        }
+        self.defaultCurrency = userSettingsRepository?.fetchCurrency() ?? .kzt
     }
 
     func getDefaultCurrency() -> Currency {

@@ -20,9 +20,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         
         self.db = DatabaseManager.shared
         self.expensesRepository = db.expensesRepository!
-        
-        // TODO mgorbatyuk: take from database
-        self.defaultCurrency = .kzt
+
+        self.defaultCurrency = self.db.userSettingsRepository!.fetchCurrency()
 
         loadSessions()
     }

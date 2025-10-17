@@ -61,8 +61,16 @@ class UserSettingsRepository {
     }
 
     // Convenience older API for currency to avoid touching callers immediately
-    func fetchCurrency() -> String? {
+    func fetchCurrencyAsString() -> String? {
         return fetchValue(for: "currency")
+    }
+
+    func fetchCurrency() -> Currency {
+        if let currencyString = fetchCurrencyAsString(), let currency = Currency(rawValue: currencyString) {
+            return currency
+        }
+
+        return .kzt // default fallback
     }
 
     func upsertCurrency(_ currencyValue: String) -> Bool {
