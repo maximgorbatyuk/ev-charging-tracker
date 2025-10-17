@@ -5,10 +5,7 @@
 //  Created by Maxim Gorbatyuk on 12.10.2025.
 //
 
-class UserSettings {
-    let defaultCurency: Currency
-
-    init (defaultCurency: Currency) {
-        self.defaultCurency = defaultCurency
-    }
+// Define keys used to store user settings in the DB
+enum UserSettingKey: String {
+    case currency = "currency"
 }

@@ -8,18 +8,23 @@
 import Foundation
 
 class UserSettingsViewModel: ObservableObject {
-    let defaultCurrency: Currency
+    @Published var defaultCurrency: Currency
     
     private let db: DatabaseManager
+    private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
 
     init() {
-        
         self.db = DatabaseManager.shared
         self.expensesRepository = db.expensesRepository!
-        
-        // TODO mgorbatyuk: take from database
-        self.defaultCurrency = .kzt
+        self.userSettingsRepository = db.userSettingsRepository
+
+        // Try to load saved currency from DB; fallback to kzt
+        if let saved = userSettingsRepository?.fetchCurrency(), let currency = Currency(rawValue: saved) {
+            self.defaultCurrency = currency
+        } else {
+            self.defaultCurrency = .kzt
+        }
     }
 
     func getDefaultCurrency() -> Currency {
@@ -27,6 +32,15 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     func saveDefaultCurrency(_ currency: Currency) {
-        // TODO mgorbatyuk: Implement saving logic if needed
+        // update in-memory value first so UI updates
+        DispatchQueue.main.async {
+            self.defaultCurrency = currency
+        }
+
+        // persist to DB (upsert)
+        let success = userSettingsRepository?.upsertCurrency(currency.rawValue) ?? false
+        if !success {
+            print("Failed to save default currency to DB")
+        }
     }
 }
