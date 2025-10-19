@@ -4,11 +4,19 @@ Take control of your electric vehicle expenses with our intuitive charge trackin
 
 Whether you charge at home, at work, or at public charging stations, get clear insights into what your EV really costs to run.
 
-<img src="/images/apple-screenshot-1.jpg" alt="drawing" width="400"/>
-
-<img src="/images/apple-screenshot-2.jpg" alt="drawing" width="400"/>
-
-<img src="/images/apple-screenshot-3.jpg" alt="drawing" width="400"/>
+<table>
+  <tr>
+    <td>
+      <img src="/images/apple-screenshot-1.jpg" alt="drawing" width="400"/>
+    </td>
+    <td>
+      <img src="/images/apple-screenshot-2.jpg" alt="drawing" width="400"/>
+    </td>
+    <td>
+      <img src="/images/apple-screenshot-3.jpg" alt="drawing" width="400"/>
+    </td>
+   </tr>
+</table>
 
 ## Key Features:
 
