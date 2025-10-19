@@ -4,6 +4,12 @@ Take control of your electric vehicle expenses with our intuitive charge trackin
 
 Whether you charge at home, at work, or at public charging stations, get clear insights into what your EV really costs to run.
 
+![](/images/apple-screenshot-1.jpg)
+
+![](/images/apple-screenshot-2.jpg)
+
+![](/images/apple-screenshot-3.jpg)
+
 ## Key Features:
 
 ### Cost Per Kilometer Analysis
