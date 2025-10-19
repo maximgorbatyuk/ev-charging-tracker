@@ -11,7 +11,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
 
-    let defaultCurrency: Currency
+    var defaultCurrency: Currency
     
     private let db: DatabaseManager
     private let chargingSessionsRepository: ExpensesRepository
@@ -20,7 +20,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         
         self.db = DatabaseManager.shared
         self.chargingSessionsRepository = db.expensesRepository!
-        self.defaultCurrency = .kzt
+        self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
 
         loadSessions()
     }
@@ -55,6 +55,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func getDefaultCurrency() -> Currency {
+        self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
         return defaultCurrency
     }
 

@@ -83,6 +83,9 @@ struct ChargingSessionsView: SwiftUICore.View {
                         viewModel.addExpense(newExpense) // closure receives Expense param
                     })
             }
+            .onAppear {
+                viewModel.loadSessions()
+            }
         }
     }
 }

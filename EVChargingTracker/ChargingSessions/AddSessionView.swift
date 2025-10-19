@@ -51,7 +51,7 @@ struct AddSessionView: SwiftUICore.View {
                         // TODO mgorbatyuk: implement other expense types
                         
                         Picker("Expense Type", selection: $expenseType) {
-                            ForEach(ExpenseType.allCases, id: \.self) { type in
+                            ForEach(ExpenseType.allCases.filter({ $0 != .charging }), id: \.self) { type in
                                 Text(type.rawValue).tag(type)
                             }
                         }

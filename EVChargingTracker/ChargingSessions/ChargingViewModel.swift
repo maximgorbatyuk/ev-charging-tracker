@@ -11,7 +11,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
 
-    let defaultCurrency: Currency
+    var defaultCurrency: Currency
     
     private let db: DatabaseManager
     private let expensesRepository: ExpensesRepository
@@ -81,8 +81,9 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
         return totalCost / Double(totalDistance)
     }
-    
+
     func getDefaultCurrency() -> Currency {
+        self.defaultCurrency = self.db.userSettingsRepository!.fetchCurrency()
         return defaultCurrency
     }
     

@@ -22,7 +22,7 @@ struct UserSettingsView: SwiftUICore.View {
                         HStack {
                             Text("Currency")
                                 .fontWeight(.semibold)
-                                .font(.system(size: 14, weight: .bold))
+                                .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.gray)
 
                             Spacer()
@@ -42,6 +42,13 @@ struct UserSettingsView: SwiftUICore.View {
                                     .foregroundColor(.gray)
                             }
                         }
+
+                        Text("It is recommended to set the default currency before adding any expenses.")
+                            .fontWeight(.semibold)
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(.gray)
+                            .padding(.top)
+                        
                         Divider()
                     }
                     .padding()
