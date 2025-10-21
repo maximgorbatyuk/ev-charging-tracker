@@ -8,3 +8,4 @@
 APP_VISIBLE_VERSION = 1.0.0
 GITHUB_REPO_URL = github.com/maximgorbatyuk/ev-charging-tracker
 DEVELOPER_NAME = Maxim Gorbatyuk
+BUILD_ENVIRONMENT = release

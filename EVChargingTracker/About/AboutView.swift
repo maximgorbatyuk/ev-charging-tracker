@@ -14,6 +14,8 @@ struct AboutView: SwiftUICore.View {
     let developerName = Bundle.main.object(forInfoDictionaryKey: "DeveloperName") as? String ?? "-"
     
     let githubRepoUrl = Bundle.main.object(forInfoDictionaryKey: "GithubRepoUrl") as? String ?? "-"
+    
+    let buildEnvironment = Bundle.main.object(forInfoDictionaryKey: "BuildEnvironment") as? String ?? "-"
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -58,6 +60,13 @@ struct AboutView: SwiftUICore.View {
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
+
+                        if (buildEnvironment == "dev") {
+                            Text("Build: development")
+                                .fontWeight(.semibold)
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.gray)
+                        }
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)

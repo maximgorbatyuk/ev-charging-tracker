@@ -9,8 +9,9 @@
 import Foundation
 
 class ExpensesRepository {
+
     // TODO mgorbatyuk: rename the table to "expenses"
-    private let chargingSessionsTable = Table("charging_sessions")
+    private let chargingSessionsTable: Table
 
     private let id = Expression<Int64>("id")
     private let date = Expression<Date>("date")
@@ -22,11 +23,13 @@ class ExpensesRepository {
     private let isInitialRecord = Expression<Bool>("is_inital_record")
     private let currency = Expression<String>("currency")
     private let expenseType = Expression<String>("expense_type")
+    private let carIdColumn = Expression<Int64?>("car_id")
 
     private var db: Connection
     
-    init(db: Connection) {
+    init(db: Connection, tableName: String) {
         self.db = db
+        self.chargingSessionsTable = Table(tableName)
     }
 
     func createTable() -> Void {
@@ -41,6 +44,7 @@ class ExpensesRepository {
             t.column(isInitialRecord)
             t.column(currency)
             t.column(expenseType)
+            t.column(carIdColumn)
         }
 
         do {
@@ -72,7 +76,8 @@ class ExpensesRepository {
                 notes <- session.notes,
                 isInitialRecord <- session.isInitialRecord,
                 currency <- session.currency.rawValue,
-                expenseType <- session.expenseType.rawValue
+                expenseType <- session.expenseType.rawValue,
+                carIdColumn <- session.carId
             )
             
             let rowId = try db.run(insert)
@@ -113,7 +118,9 @@ class ExpensesRepository {
                     isInitialRecord: session[isInitialRecord],
                     expenseType: ExpenseType(rawValue: session[expenseType]) ?? .other,
                     currency: currencyEnum,
+                    carId: session[carIdColumn]
                 )
+
                 sessionsList.append(chargingSession)
             }
         } catch {
@@ -137,7 +144,8 @@ class ExpensesRepository {
                 notes <- session.notes,
                 isInitialRecord <- session.isInitialRecord,
                 currency <- session.currency.rawValue,
-                expenseType <- session.expenseType.rawValue
+                expenseType <- session.expenseType.rawValue,
+                carIdColumn <- session.carId
             ))
             print("Updated session with id: \(sessionId)")
             return true

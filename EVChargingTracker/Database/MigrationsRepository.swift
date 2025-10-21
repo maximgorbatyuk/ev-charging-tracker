@@ -9,15 +9,16 @@
 import Foundation
 
 class MigrationsRepository {
-    private let table = Table("migrations")
+    private let table: Table
 
     private let id = Expression<Int64>("id")
     private let date = Expression<Date>("date")
     
     private var db: Connection
     
-    init(db: Connection) {
+    init(db: Connection, tableName: String) {
         self.db = db
+        self.table = Table(tableName)
     }
 
     func createTableIfNotExists() -> Void {

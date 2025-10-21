@@ -6,3 +6,5 @@
 //
 
 #include "Base.xcconfig"
+
+BUILD_ENVIRONMENT = release

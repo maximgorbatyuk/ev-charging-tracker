@@ -8,14 +8,21 @@
 import Foundation
 
 class DatabaseManager {
+    
+    static let ExpensesTableName = "charging_sessions"
+    static let MigrationsTableName = "migrations"
+    static let UserSettingsTableName = "user_settings"
+    static let CarsTableName = "cars"
+
     static let shared = DatabaseManager()
 
     var expensesRepository: ExpensesRepository?
     var migrationRepository: MigrationsRepository?
     var userSettingsRepository: UserSettingsRepository?
-    
+    var carRepository: CarRepository?
+
     private var db: Connection?
-    private let latestVersion = 2
+    private let latestVersion = 3
     
     private init() {
        
@@ -32,9 +39,10 @@ class DatabaseManager {
                 return
             }
 
-            self.expensesRepository = ExpensesRepository(db: dbConnection)
-            self.migrationRepository = MigrationsRepository(db: dbConnection)
-            self.userSettingsRepository = UserSettingsRepository(db: dbConnection)
+            self.expensesRepository = ExpensesRepository(db: dbConnection, tableName: DatabaseManager.ExpensesTableName)
+            self.migrationRepository = MigrationsRepository(db: dbConnection, tableName: DatabaseManager.MigrationsTableName)
+            self.userSettingsRepository = UserSettingsRepository(db: dbConnection, tableName: DatabaseManager.UserSettingsTableName)
+            self.carRepository = CarRepository(db: dbConnection, tableName: DatabaseManager.CarsTableName, expensesTableName: DatabaseManager.ExpensesTableName)
 
             // Ensure user settings table exists
             self.userSettingsRepository?.createTable()
@@ -65,6 +73,10 @@ class DatabaseManager {
             case 2:
                 userSettingsRepository!.createTable()
                 userSettingsRepository!.upsertCurrency(Currency.kzt.rawValue)
+
+            case 3:
+                let migration3 = Migration_20251021_CreateCarsTable(db: db!)
+                migration3.execute()
 
             default:
                 break

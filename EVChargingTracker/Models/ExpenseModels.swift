@@ -36,4 +36,5 @@ struct Expense: Identifiable {
     var isInitialRecord: Bool
     var expenseType: ExpenseType
     var currency: Currency
+    var carId: Int64?
 }

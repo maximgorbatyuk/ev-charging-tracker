@@ -8,4 +8,10 @@
 enum Currency: String, CaseIterable, Codable {
     case usd = "$"
     case kzt = "₸"
+    case eur = "€"
+    case aed = "Dh"
+    case sar = "SR"
+    case gbp = "£"
+    case jpy = "¥"
+    case rub = "₽"
 }
