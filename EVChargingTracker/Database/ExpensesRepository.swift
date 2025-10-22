@@ -102,8 +102,8 @@ class ExpensesRepository {
         var sessionsList: [Expense] = []
         
         do {
-            for session in try db.prepare(chargingSessionsTable.order(date.desc)) {
-                let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .home7kW
+            for session in try db.prepare(chargingSessionsTable.order(id.desc)) {
+                let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .other
                 let currencyEnum = Currency(rawValue: session[currency]) ?? .usd
 
                 let chargingSession = Expense(

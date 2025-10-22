@@ -80,7 +80,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                 AddExpenseView(
                     defaultExpenseType: .charging,
                     defaultCurrency: viewModel.getDefaultCurrency(),
-                    showFirstTrackingRecordToggle: viewModel.expenses.isEmpty,
+                    selectedCar: selectedCar,
                     onAdd: { newExpenseResult in
 
                         var carId: Int64? = nil
@@ -96,14 +96,16 @@ struct ChargingSessionsView: SwiftUICore.View {
                             let car = Car(
                                 name: newExpenseResult.carName!,
                                 selectedForTracking: true,
-                                batteryCapacity: nil,
-                                expenseCurrency: newExpenseResult.expense.currency,
-                                currentMileage: newExpenseResult.expense.odometer,
-                                initialMileage: newExpenseResult.expense.odometer,
+                                batteryCapacity: newExpenseResult.batteryCapacity,
+                                expenseCurrency: newExpenseResult.initialExpenseForNewCar!.currency,
+                                currentMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
+                                initialMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
                                 milleageSyncedAt: now,
                                 createdAt: now)
 
                             carId = viewModel.addCar(car: car)
+                            newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
+                            viewModel.addExpense(newExpenseResult.initialExpenseForNewCar!)
                         } else {
                             carId = selectedCar!.id
                         }

@@ -11,6 +11,7 @@ enum ExpenseType: String, CaseIterable, Codable {
     case charging = "charging"
     case maintenance = "maintenance"
     case repair = "repair"
+    case carwash = "carwash"
     case other = "other"
 }
 
@@ -23,6 +24,7 @@ enum ChargerType: String, CaseIterable, Codable {
     case superchargerV4 = "Supercharger V4 (350kW)"
     case publicFast50kW = "Public Fast (50kW)"
     case publicRapid100kW = "Public Rapid (100kW)"
+    case other = "Other"
 }
 
 class Expense: Identifiable {

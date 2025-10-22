@@ -68,36 +68,41 @@ struct ExpensesView: SwiftUICore.View {
                 AddExpenseView(
                     defaultExpenseType: nil,
                     defaultCurrency: viewModel.getDefaultCurrency(),
-                    showFirstTrackingRecordToggle: viewModel.expenses.isEmpty,
+                    selectedCar: selectedCar,
                     onAdd: { newExpenseResult in
                         var carId: Int64? = nil
                         if (selectedCar == nil) {
                             if (newExpenseResult.carName == nil) {
-
+                                
                                 // TODO mgorbatyuk: show error alert to user
                                 print("Error: First expense must have a car name!")
                                 return
                             }
-
+                            
                             let now = Date()
                             let car = Car(
                                 name: newExpenseResult.carName!,
                                 selectedForTracking: true,
-                                batteryCapacity: nil,
-                                expenseCurrency: newExpenseResult.expense.currency,
-                                currentMileage: newExpenseResult.expense.odometer,
-                                initialMileage: newExpenseResult.expense.odometer,
+                                batteryCapacity: newExpenseResult.batteryCapacity,
+                                expenseCurrency: newExpenseResult.initialExpenseForNewCar!.currency,
+                                currentMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
+                                initialMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
                                 milleageSyncedAt: now,
                                 createdAt: now)
 
                             carId = viewModel.addCar(car: car)
+                            newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
+                            viewModel.addExpense(newExpenseResult.initialExpenseForNewCar!)
                         } else {
                             carId = selectedCar!.id
                         }
-
+                        
                         newExpenseResult.expense.setCarId(carId)
                         viewModel.addExpense(newExpenseResult.expense)
                     })
+            }
+            .onAppear {
+                viewModel.loadSessions()
             }
         }
     }
