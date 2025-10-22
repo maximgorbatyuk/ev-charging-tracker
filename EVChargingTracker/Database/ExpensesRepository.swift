@@ -44,7 +44,6 @@ class ExpensesRepository {
             t.column(isInitialRecord)
             t.column(currency)
             t.column(expenseType)
-            t.column(carIdColumn)
         }
 
         do {

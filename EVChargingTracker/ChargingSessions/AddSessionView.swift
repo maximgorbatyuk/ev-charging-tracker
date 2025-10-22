@@ -1,17 +1,17 @@
 //
-//  AddSessionView.swift
+//  AddExpenseView.swift
 //  EVChargingTracker
 //
 //  Created by Maxim Gorbatyuk on 10.10.2025.
 //
 import SwiftUI
 
-struct AddSessionView: SwiftUICore.View {
+struct AddExpenseView: SwiftUICore.View {
 
     let defaultExpenseType: ExpenseType?
     let defaultCurrency: Currency
     let showFirstTrackingRecordToggle: Bool
-    let onAdd: (Expense) -> Void
+    let onAdd: (AddExpenseViewResult) -> Void
 
     @Environment(\.dismiss) var dismiss
     
@@ -150,20 +150,33 @@ struct AddSessionView: SwiftUICore.View {
             notes: notes,
             isInitialRecord: isInitialRecord,
             expenseType: expenseTypeUnwrapped,
-            currency: defaultCurrency
+            currency: defaultCurrency,
+            carId: nil
         )
 
-        onAdd(session)
+        onAdd(
+            AddExpenseViewResult(
+                expense: session,
+                carName: nil,
+                initialOdometr: odo,
+                batteryCapacity: nil))
         dismiss()
     }
 }
 
 #Preview {
-    AddSessionView(
+    AddExpenseView(
         defaultExpenseType: nil,
         defaultCurrency: .usd,
         showFirstTrackingRecordToggle: false,
         onAdd: { session in
             print("Added session: \(session)")
         })
+}
+
+struct AddExpenseViewResult {
+    let expense: Expense
+    let carName: String?
+    let initialOdometr: Int
+    let batteryCapacity: Double?
 }

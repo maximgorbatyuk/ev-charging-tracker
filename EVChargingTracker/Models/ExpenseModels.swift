@@ -25,7 +25,7 @@ enum ChargerType: String, CaseIterable, Codable {
     case publicRapid100kW = "Public Rapid (100kW)"
 }
 
-struct Expense: Identifiable {
+class Expense: Identifiable {
     var id: Int64?
     var date: Date
     var energyCharged: Double
@@ -37,4 +37,71 @@ struct Expense: Identifiable {
     var expenseType: ExpenseType
     var currency: Currency
     var carId: Int64?
+
+    init(
+        id: Int64? = nil,
+        date: Date,
+        energyCharged: Double,
+        chargerType: ChargerType,
+        odometer: Int,
+        cost: Double? = nil,
+        notes: String,
+        isInitialRecord: Bool,
+        expenseType: ExpenseType,
+        currency: Currency,
+        carId: Int64? = nil) {
+        self.id = id
+        self.date = date
+        self.energyCharged = energyCharged
+        self.chargerType = chargerType
+        self.odometer = odometer
+        self.cost = cost
+        self.notes = notes
+        self.isInitialRecord = isInitialRecord
+        self.expenseType = expenseType
+        self.currency = currency
+        self.carId = carId
+    }
+
+    // Convenience initializer to match existing call sites that construct
+    // Expense(date: ..., energyCharged: ..., ... ) without the `id:` label.
+    convenience init(
+        date: Date,
+        energyCharged: Double,
+        chargerType: ChargerType,
+        odometer: Int,
+        cost: Double? = nil,
+        notes: String,
+        isInitialRecord: Bool,
+        expenseType: ExpenseType,
+        currency: Currency,
+        carId: Int64? = nil) {
+        self.init(
+            id: nil,
+            date: date,
+            energyCharged: energyCharged,
+            chargerType: chargerType,
+            odometer: odometer,
+            cost: cost,
+            notes: notes,
+            isInitialRecord: isInitialRecord,
+            expenseType: expenseType,
+            currency: currency,
+            carId: carId
+        )
+    }
+
+    func setCarId(_ carId: Int64?) -> Void {
+        if (self.carId != nil) {
+            print("Car ID is already set and cannot be changed.")
+            return
+        }
+        
+        if (carId == nil) {
+            print("Provided Car ID is nil. Cannot set nil Car ID.")
+            return
+        }
+
+        self.carId = carId
+    }
 }

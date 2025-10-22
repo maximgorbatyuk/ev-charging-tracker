@@ -17,9 +17,13 @@ class Migration_20251021_CreateCarsTable {
     }
 
     func execute() {
-        let carsTable = Table(DatabaseManager.CarsTableName)
         let expensesTable = Table(DatabaseManager.ExpensesTableName)
-        let carsRepository = CarRepository(db: db, tableName: DatabaseManager.CarsTableName, expensesTableName: DatabaseManager.ExpensesTableName)
+        let carsRepository = CarRepository(
+            db: db,
+            tableName: DatabaseManager.CarsTableName,
+            expensesTableName: DatabaseManager.ExpensesTableName,
+            userSettingsTableName: DatabaseManager.UserSettingsTableName)
+
         let expensesRepository = ExpensesRepository(db: db, tableName: DatabaseManager.ExpensesTableName)
 
         do {
@@ -32,11 +36,12 @@ class Migration_20251021_CreateCarsTable {
             try db.run(addColumnToExpensesCommand)
             print("car_id column added to expenses table successfully")
 
-            var allExpenses = expensesRepository.fetchAllSessions()
+            let allExpenses = expensesRepository.fetchAllSessions()
             if (allExpenses.count > 0) {
                 
                 let now = Date()
-                var lastExpense = allExpenses[0]
+                let lastExpense = allExpenses[0]
+                let firstExpense = allExpenses.filter({ $0.isInitialRecord == true })[0]
 
                 let defaultCar = Car(
                     name: "My car",
@@ -44,13 +49,14 @@ class Migration_20251021_CreateCarsTable {
                     batteryCapacity: nil,
                     expenseCurrency: lastExpense.currency,
                     currentMileage: lastExpense.odometer,
+                    initialMileage: firstExpense.odometer,
                     milleageSyncedAt: now,
                     createdAt: now
                 )
 
                 let carId = carsRepository.insert(defaultCar)
                 for i in 0..<allExpenses.count {
-                    var expense = allExpenses[i]
+                    let expense = allExpenses[i]
                     expense.carId = carId
                     _ = expensesRepository.updateSession(expense)
                 }

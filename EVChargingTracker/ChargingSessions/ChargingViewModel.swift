@@ -16,6 +16,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     private let db: DatabaseManager
     private let expensesRepository: ExpensesRepository
 
+    private var _selectedCarForExpenses: Car?
+
     init() {
         
         self.db = DatabaseManager.shared
@@ -32,7 +34,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     func addExpense(_ session: Expense) {
         if let id = expensesRepository.insertSession(session) {
-            var newSession = session
+            let newSession = session
             newSession.id = id
             expenses.insert(newSession, at: 0)
         }
@@ -90,7 +92,19 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     func getChargingSessionsCount() -> Int {
         expenses.filter({ $0.isInitialRecord == false && $0.expenseType == .charging }).count
     }
+
+    func addCar(car: Car) -> Int64? {
+        return db.carRepository!.insert(car)
+    }
     
+    var selectedCarForExpenses: Car? {
+        if (_selectedCarForExpenses == nil) {
+            _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+        }
+
+        return _selectedCarForExpenses
+    }
+
     var totalEnergy: Double {
         expenses.reduce(0) { $0 + $1.energyCharged }
     }

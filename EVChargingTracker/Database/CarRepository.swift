@@ -17,16 +17,25 @@ class CarRepository {
     private let selectedForTrackingColumn = Expression<Bool>("selected_for_tracking")
     private let batteryCapacityColumn = Expression<Double?>("battery_capacity")
     private let expenseCurrencyColumn = Expression<String>("expense_currency")
-    private let currentMileageColumn = Expression<Double>("current_mileage")
+    private let currentMileageColumn = Expression<Int>("current_mileage")
+    private let initialMileageColumn = Expression<Int>("initial_mileage")
     private let milleageSyncedAtColumn = Expression<Date>("milleage_synced_at")
     private let createdAtColumn = Expression<Date>("created_at")
 
+    private let userSettingsRepository: UserSettingsRepository
+
     private var db: Connection
     
-    init(db: Connection, tableName: String, expensesTableName: String) {
+    init(
+        db: Connection,
+        tableName: String,
+        expensesTableName: String,
+        userSettingsTableName: String) {
+
         self.db = db
         self.table = Table(tableName)
         self.expensesTable = Table(expensesTableName)
+        self.userSettingsRepository = UserSettingsRepository(db: db, tableName: userSettingsTableName)
     }
 
     func getCreateTableCommand() -> String {
@@ -37,6 +46,7 @@ class CarRepository {
             t.column(batteryCapacityColumn)
             t.column(expenseCurrencyColumn)
             t.column(currentMileageColumn)
+            t.column(initialMileageColumn)
             t.column(milleageSyncedAtColumn)
             t.column(createdAtColumn)
         }
@@ -44,7 +54,8 @@ class CarRepository {
 
     func deleteTable() {
         do {
-            var allCars = try db.prepare(table)
+            let allCars = try db.prepare(table)
+
             for car in allCars {
                 let carId = car[idColumn]
                 let relatedExpenses = expensesTable.filter(Expression<Int64>("car_id") == carId)
@@ -68,6 +79,7 @@ class CarRepository {
                 batteryCapacityColumn <- car.batteryCapacity,
                 expenseCurrencyColumn <- car.expenseCurrency.rawValue,
                 currentMileageColumn <- car.currentMileage,
+                initialMileageColumn <- car.currentMileage,
                 milleageSyncedAtColumn <- car.milleageSyncedAt,
                 createdAtColumn <- currentDate
             )
@@ -82,20 +94,65 @@ class CarRepository {
     }
     
     func delete(id: Int64) -> Bool {
-        let car = table.filter(idColumn == id)
+        
+        let carExpenses = expensesTable.filter(Expression<Int64>("car_id") == id)
         do {
-            var deleted = try db.run()
-            
-            let deleted = try db.run(car.delete())
-            if (deleted > 0) {
-                
+            let deletionResult = try db.run(carExpenses.delete())
+            if (deletionResult > 0) {
+                print("Deleted \(deletionResult) related expenses for car id: \(id)")
             }
-
+        } catch {
+            print("Failed to delete related expenses: \(error)")
             return false
+        }
+
+        let carCommand = table.filter(idColumn == id)
+
+        do {
+            let deleted = try db.run(carCommand.delete())
+            return deleted > 0
         } catch {
             print("Delete failed: \(error)")
             return false
         }
+    }
+
+    func getCarsCount() -> Int {
+        do {
+            return try db.scalar(table.count)
+        } catch {
+            print("Failed to get cars count: \(error)")
+            return 0
+        }
+    }
+
+    func getSelectedForExpensesCar() -> Car? {
+        do {
+            let query = table.filter(selectedForTrackingColumn == true).limit(1)
+            if let row = try db.pluck(query) {
+                
+                var expenseCurrency = Currency(rawValue: row[expenseCurrencyColumn])
+                if (expenseCurrency == nil) {
+                    expenseCurrency = userSettingsRepository.fetchCurrency()
+                }
+
+                return Car(
+                    id: row[idColumn],
+                    name: row[nameColumn],
+                    selectedForTracking: row[selectedForTrackingColumn],
+                    batteryCapacity: row[batteryCapacityColumn],
+                    expenseCurrency: expenseCurrency ?? .kzt,
+                    currentMileage: row[currentMileageColumn],
+                    initialMileage: row[initialMileageColumn],
+                    milleageSyncedAt: row[milleageSyncedAtColumn],
+                    createdAt: row[createdAtColumn]
+                )
+            }
+        } catch {
+            print("Failed to fetch selected car for expenses: \(error)")
+        }
+
+        return nil
     }
 
 }

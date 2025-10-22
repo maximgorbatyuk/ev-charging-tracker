@@ -14,15 +14,18 @@ class Car {
     var batteryCapacity: Double? // in kWh
     var expenseCurrency: Currency
     var currentMileage: Int // in km
+    var initialMileage: Int // in km
     var milleageSyncedAt: Date
     var createdAt: Date
 
     init(
+        id: Int64? = nil,
         name: String,
         selectedForTracking: Bool,
         batteryCapacity: Double?,
         expenseCurrency: Currency,
         currentMileage: Int,
+        initialMileage: Int,
         milleageSyncedAt: Date,
         createdAt: Date) {
 
@@ -32,6 +35,7 @@ class Car {
         self.batteryCapacity = batteryCapacity
         self.expenseCurrency = expenseCurrency
         self.currentMileage = currentMileage
+        self.initialMileage = initialMileage
 
         self.milleageSyncedAt = milleageSyncedAt
         self.createdAt = createdAt

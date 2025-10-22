@@ -63,12 +63,40 @@ struct ExpensesView: SwiftUICore.View {
             .navigationTitle("All car expenses")
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
-                AddSessionView(
+                
+                let selectedCar = viewModel.selectedCarForExpenses
+                AddExpenseView(
                     defaultExpenseType: nil,
                     defaultCurrency: viewModel.getDefaultCurrency(),
                     showFirstTrackingRecordToggle: viewModel.expenses.isEmpty,
-                    onAdd: { newExpense in
-                        viewModel.addExpense(newExpense) // closure receives Expense param
+                    onAdd: { newExpenseResult in
+                        var carId: Int64? = nil
+                        if (selectedCar == nil) {
+                            if (newExpenseResult.carName == nil) {
+
+                                // TODO mgorbatyuk: show error alert to user
+                                print("Error: First expense must have a car name!")
+                                return
+                            }
+
+                            let now = Date()
+                            let car = Car(
+                                name: newExpenseResult.carName!,
+                                selectedForTracking: true,
+                                batteryCapacity: nil,
+                                expenseCurrency: newExpenseResult.expense.currency,
+                                currentMileage: newExpenseResult.expense.odometer,
+                                initialMileage: newExpenseResult.expense.odometer,
+                                milleageSyncedAt: now,
+                                createdAt: now)
+
+                            carId = viewModel.addCar(car: car)
+                        } else {
+                            carId = selectedCar!.id
+                        }
+
+                        newExpenseResult.expense.setCarId(carId)
+                        viewModel.addExpense(newExpenseResult.expense)
                     })
             }
         }

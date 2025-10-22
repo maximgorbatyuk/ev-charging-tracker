@@ -22,7 +22,7 @@ class DatabaseManager {
     var carRepository: CarRepository?
 
     private var db: Connection?
-    private let latestVersion = 3
+    private let latestVersion = 2
     
     private init() {
        
@@ -42,7 +42,11 @@ class DatabaseManager {
             self.expensesRepository = ExpensesRepository(db: dbConnection, tableName: DatabaseManager.ExpensesTableName)
             self.migrationRepository = MigrationsRepository(db: dbConnection, tableName: DatabaseManager.MigrationsTableName)
             self.userSettingsRepository = UserSettingsRepository(db: dbConnection, tableName: DatabaseManager.UserSettingsTableName)
-            self.carRepository = CarRepository(db: dbConnection, tableName: DatabaseManager.CarsTableName, expensesTableName: DatabaseManager.ExpensesTableName)
+            self.carRepository = CarRepository(
+                db: dbConnection,
+                tableName: DatabaseManager.CarsTableName,
+                expensesTableName: DatabaseManager.ExpensesTableName,
+                userSettingsTableName: DatabaseManager.UserSettingsTableName)
 
             // Ensure user settings table exists
             self.userSettingsRepository?.createTable()
@@ -72,7 +76,7 @@ class DatabaseManager {
 
             case 2:
                 userSettingsRepository!.createTable()
-                userSettingsRepository!.upsertCurrency(Currency.kzt.rawValue)
+                _ = userSettingsRepository!.upsertCurrency(Currency.kzt.rawValue)
 
             case 3:
                 let migration3 = Migration_20251021_CreateCarsTable(db: db!)
