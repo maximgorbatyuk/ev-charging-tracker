@@ -42,4 +42,27 @@ class UserSettingsViewModel: ObservableObject {
             print("Failed to save default currency to DB")
         }
     }
+
+    func getCars() -> [CarViewModel] {
+        let cars = db.carRepository?.getAllCars() ?? []
+        return cars.map { car in
+            CarViewModel(
+                id: car.id ?? 0,
+                name: car.name,
+                selectedForTracking: car.selectedForTracking,
+                batteryCapacity: car.batteryCapacity
+            )
+        }
+    }
+
+    func getCarsCount() -> Int {
+        return db.carRepository?.getCarsCount() ?? 0
+    }
+}
+
+struct CarViewModel: Identifiable {
+    let id: Int64
+    let name: String
+    let selectedForTracking: Bool
+    let batteryCapacity: Double?
 }

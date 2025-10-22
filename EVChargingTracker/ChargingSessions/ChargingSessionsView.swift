@@ -94,6 +94,7 @@ struct ChargingSessionsView: SwiftUICore.View {
 
                             let now = Date()
                             let car = Car(
+                                id: nil,
                                 name: newExpenseResult.carName!,
                                 selectedForTracking: true,
                                 batteryCapacity: newExpenseResult.batteryCapacity,

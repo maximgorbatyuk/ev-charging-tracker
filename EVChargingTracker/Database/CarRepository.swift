@@ -126,6 +126,36 @@ class CarRepository {
         }
     }
 
+    func getAllCars() -> [Car] {
+        var cars: [Car] = []
+        do {
+            let allCars = try db.prepare(table)
+            for row in allCars {
+
+                let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
+
+                let rowId = row[idColumn]
+                let carItems = Car(
+                    id: rowId,
+                    name: row[nameColumn],
+                    selectedForTracking: row[selectedForTrackingColumn],
+                    batteryCapacity: row[batteryCapacityColumn],
+                    expenseCurrency: currency,
+                    currentMileage: row[currentMileageColumn],
+                    initialMileage: row[initialMileageColumn],
+                    milleageSyncedAt: row[milleageSyncedAtColumn],
+                    createdAt: row[createdAtColumn]
+                )
+                cars.append(carItems)
+            }
+        }
+        catch {
+            print("Failed to fetch cars: \(error)")
+        }
+
+        return cars
+    }
+
     func getSelectedForExpensesCar() -> Car? {
         do {
             let query = table.filter(selectedForTrackingColumn == true).limit(1)

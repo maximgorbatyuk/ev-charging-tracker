@@ -44,6 +44,7 @@ class Migration_20251021_CreateCarsTable {
                 let firstExpense = allExpenses.filter({ $0.isInitialRecord == true })[0]
 
                 let defaultCar = Car(
+                    id: nil,
                     name: "My car",
                     selectedForTracking: true,
                     batteryCapacity: nil,

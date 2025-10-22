@@ -29,7 +29,7 @@ class Car {
         milleageSyncedAt: Date,
         createdAt: Date) {
 
-        self.id = nil
+        self.id = id
         self.name = name
         self.selectedForTracking = selectedForTracking
         self.batteryCapacity = batteryCapacity
