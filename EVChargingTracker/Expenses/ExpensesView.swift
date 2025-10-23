@@ -96,8 +96,10 @@ struct ExpensesView: SwiftUICore.View {
                             viewModel.addExpense(newExpenseResult.initialExpenseForNewCar!)
                         } else {
                             carId = selectedCar!.id
+                            selectedCar!.updateMileage(newMileage: newExpenseResult.expense.odometer)
+                            _ = viewModel.updateMilleage(selectedCar!)
                         }
-                        
+
                         newExpenseResult.expense.setCarId(carId)
                         viewModel.addExpense(newExpenseResult.expense)
                     })

@@ -69,7 +69,15 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             .sorted(by: { $0.id ?? 0 < $1.id ?? 0 })
             .last
 
-        let totalDistance = (lastRecord?.odometer ?? 0) - (initialRecord?.odometer ?? 0)
+        var totalDistance: Int
+        let selectedCarForExpenses = self.selectedCarForExpenses
+
+        if (selectedCarForExpenses != nil) {
+            totalDistance = selectedCarForExpenses!.getTotalMileage()
+        } else {
+            totalDistance = (lastRecord?.odometer ?? 0) - (initialRecord?.odometer ?? 0)
+        }
+
         if (totalDistance <= 0) {
             return 0
         }
@@ -96,6 +104,10 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     func addCar(car: Car) -> Int64? {
         return db.carRepository!.insert(car)
     }
+
+    func updateMilleage(_ car: Car) -> Bool {
+        return db.carRepository!.updateMilleage(car)
+    }
     
     var selectedCarForExpenses: Car? {
         if (_selectedCarForExpenses == nil) {
@@ -115,11 +127,21 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         let sessionsToCount = expenses
             .filter({ $0.isInitialRecord == false && $0.expenseType == .charging })
             .count
+        
+        if (sessionsToCount == 0) {
+            return 0
+        }
 
         return totalEnergy / Double(sessionsToCount)
     }
 
     var totalCost: Double {
+        expenses
+            .filter { $0.isInitialRecord == false }
+            .compactMap { $0.cost }.reduce(0, +)
+    }
+
+    var totalChargingCost: Double {
         expenses
             .filter { $0.isInitialRecord == false && $0.expenseType == .charging }
             .compactMap { $0.cost }.reduce(0, +)

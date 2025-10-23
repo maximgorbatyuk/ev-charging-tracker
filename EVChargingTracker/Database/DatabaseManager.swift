@@ -31,7 +31,7 @@ class DatabaseManager {
                 .documentDirectory, .userDomainMask, true
             ).first!
             
-            let dbPath = "\(path)/tesla_charging_2.sqlite3"
+            let dbPath = "\(path)/tesla_charging.sqlite3"
             print("Database path: \(dbPath)")
 
             self.db = try Connection(dbPath)

@@ -37,7 +37,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                             CostsBlockView(
                                 title: "Total charging costs",
                                 currency: viewModel.defaultCurrency,
-                                costsValue: viewModel.totalCost,
+                                costsValue: viewModel.totalChargingCost,
                                 perKilometer: false
                             )
                         }
@@ -109,6 +109,8 @@ struct ChargingSessionsView: SwiftUICore.View {
                             viewModel.addExpense(newExpenseResult.initialExpenseForNewCar!)
                         } else {
                             carId = selectedCar!.id
+                            selectedCar!.updateMileage(newMileage: newExpenseResult.expense.odometer)
+                            _ = viewModel.updateMilleage(selectedCar!)
                         }
 
                         newExpenseResult.expense.setCarId(carId)

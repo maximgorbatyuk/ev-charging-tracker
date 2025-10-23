@@ -40,4 +40,17 @@ class Car {
         self.milleageSyncedAt = milleageSyncedAt
         self.createdAt = createdAt
     }
+    
+    func updateMileage(newMileage: Int) {
+        if (self.currentMileage < newMileage) {
+            return
+        }
+
+        self.currentMileage = newMileage
+        self.milleageSyncedAt = Date()
+    }
+
+    func getTotalMileage() -> Int {
+        return self.currentMileage - self.initialMileage
+    }
 }

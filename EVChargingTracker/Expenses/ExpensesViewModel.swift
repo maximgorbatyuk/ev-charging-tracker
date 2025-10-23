@@ -39,6 +39,10 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
     }
     
+    func updateMilleage(_ car: Car) -> Bool {
+        return db.carRepository!.updateMilleage(car)
+    }
+
     func deleteSession(_ session: Expense) {
         guard let sessionId = session.id else { return }
         

@@ -65,10 +65,18 @@ struct UserSettingsView: SwiftUICore.View {
                                 Spacer()
                                 VStack(alignment: .leading) {
                                     ForEach(cars) { car in
-                                        Text("\(car.name) (\(car.batteryCapacity.map { String($0) } ?? "-") kWh)")
-                                            .fontWeight(.semibold)
-                                            .font(.system(size: 16, weight: .bold))
-                                            .padding(.vertical, 2)
+                                        HStack {
+                                            Text("\(car.name) (\(car.batteryCapacity.map { String($0) } ?? "-") kWh)")
+                                                .fontWeight(.semibold)
+                                                .font(.system(size: 16, weight: .bold))
+                                                .padding(.vertical, 2)
+                                            Spacer()
+
+                                            Text(car.selectedForTracking ? "Tracking" : "Not tracking")
+                                                .fontWeight(.semibold)
+                                                .font(.system(size: 16, weight: .regular))
+                                                .foregroundColor(car.selectedForTracking ? .green : .red)
+                                        }
                                     }
                                 }
                             }

@@ -92,7 +92,27 @@ class CarRepository {
             return nil
         }
     }
-    
+
+    func updateMilleage(_ car: Car) -> Bool {
+        guard let carId = car.id else {
+            print("Update failed: Car id is nil")
+            return false
+        }
+
+        let carToUpdate = table.filter(idColumn == carId)
+        do {
+            let update = carToUpdate.update(
+                currentMileageColumn <- car.currentMileage,
+                milleageSyncedAtColumn <- car.milleageSyncedAt
+            )
+            let updated = try db.run(update)
+            return updated > 0
+        } catch {
+            print("Update failed: \(error)")
+            return false
+        }
+    }
+
     func delete(id: Int64) -> Bool {
         
         let carExpenses = expensesTable.filter(Expression<Int64>("car_id") == id)
