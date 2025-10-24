@@ -112,6 +112,50 @@ class CarRepository {
             return false
         }
     }
+    
+    func getCarById(_ id: Int64) -> Car? {
+        do {
+            let query = table.filter(idColumn == id).limit(1)
+            if let row = try db.pluck(query) {
+                
+                let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
+
+                return Car(
+                    id: row[idColumn],
+                    name: row[nameColumn],
+                    selectedForTracking: row[selectedForTrackingColumn],
+                    batteryCapacity: row[batteryCapacityColumn],
+                    expenseCurrency: currency,
+                    currentMileage: row[currentMileageColumn],
+                    initialMileage: row[initialMileageColumn],
+                    milleageSyncedAt: row[milleageSyncedAtColumn],
+                    createdAt: row[createdAtColumn]
+                )
+            }
+        } catch {
+            print("Failed to fetch car by id \(id): \(error)")
+        }
+
+        return nil
+    }
+
+    // Update general editable fields for a car (name, batteryCapacity, currentMileage)
+    func updateCar(car: Car) -> Bool {
+        let carToUpdate = table.filter(idColumn == car.id!)
+        do {
+            let update = carToUpdate.update(
+                nameColumn <- car.name,
+                batteryCapacityColumn <- car.batteryCapacity,
+                currentMileageColumn <- car.currentMileage,
+                milleageSyncedAtColumn <- car.milleageSyncedAt
+            )
+            let updated = try db.run(update)
+            return updated > 0
+        } catch {
+            print("Update failed: \(error)")
+            return false
+        }
+    }
 
     func delete(id: Int64) -> Bool {
         

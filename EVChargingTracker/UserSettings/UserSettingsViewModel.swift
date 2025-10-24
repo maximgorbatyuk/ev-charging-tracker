@@ -60,4 +60,20 @@ class UserSettingsViewModel: ObservableObject {
     func getCarsCount() -> Int {
         return db.carRepository?.getCarsCount() ?? 0
     }
+
+    func getCarById(_ id: Int64) -> Car? {
+        return db.carRepository?.getCarById(id)
+    }
+
+    // Update car editable fields and notify UI to refresh
+    func updateCar(car: Car) -> Bool {
+        let success = db.carRepository?.updateCar(car: car) ?? false
+        if success {
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
+
+        return success
+    }
 }

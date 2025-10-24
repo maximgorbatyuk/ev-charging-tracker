@@ -12,7 +12,7 @@ struct CarRecordView: SwiftUICore.View  {
     @Environment(\.colorScheme) var colorScheme
 
     let car: CarDto
-    let onDelete: () -> Void
+    let onEdit: () -> Void
 
     var body: some SwiftUICore.View {
         // compute common values up front to simplify chained expressions
@@ -24,12 +24,11 @@ struct CarRecordView: SwiftUICore.View  {
                     .font(.headline)
                     .foregroundColor(.gray)
                 Spacer()
-                
-                Button(action: onDelete) {
-                    Image(systemName: "trash")
+
+                Button(action: onEdit) {
+                    Image(systemName: "pencil")
                         .foregroundColor(.gray.opacity(0.7))
                 }
-                .disabled(true)
             }
             
             HStack(spacing: 20) {

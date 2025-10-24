@@ -11,6 +11,7 @@ struct UserSettingsView: SwiftUICore.View {
 
     @StateObject private var viewModel = UserSettingsViewModel()
     @State private var showEditCurrencyModal: Bool = false
+    @State private var editingCar: CarDto? = nil
 
     // Make this a computed property so it can access `viewModel` safely
     private var cars: [CarDto] {
@@ -66,16 +67,9 @@ struct UserSettingsView: SwiftUICore.View {
                                 VStack(alignment: .leading) {
                                     ForEach(cars) { car in
                                         CarRecordView(
-                                            car: CarDto(
-                                                id: car.id ?? 0,
-                                                name: car.name,
-                                                selectedForTracking: car.selectedForTracking,
-                                                batteryCapacity: car.batteryCapacity,
-                                                currentMileage: car.currentMileage,
-                                                initialMileage: car.initialMileage,
-                                            ),
-                                            onDelete: {
-                                                // do nothing
+                                            car: car,
+                                            onEdit: {
+                                                editingCar = car
                                             })
                                     }
                                 }
@@ -94,6 +88,42 @@ struct UserSettingsView: SwiftUICore.View {
                     onSave: { newCurrency in
                         viewModel.saveDefaultCurrency(newCurrency)
                     })
+            }
+            .sheet(item: $editingCar) { car in
+                EditCarView(
+                    car: car,
+                    onSave: { updated in
+                        
+                        if (updated.name.trimmingCharacters(in: .whitespaces).isEmpty) {
+                            // TODO mgorbatyuk: show alert
+                            return
+                        }
+
+                        if (updated.batteryCapacity != nil &&
+                            updated.batteryCapacity! < 0){
+                            // TODO mgorbatyuk: show alert
+                            return
+                        }
+
+                        let carToUpdate = viewModel.getCarById(car.id)
+                        if (carToUpdate == nil) {
+                            // TODO mgorbatyuk: alert that car was not found
+                            return
+                        }
+
+                        carToUpdate!.updateValues(
+                            name: updated.name,
+                            batteryCapacity: updated.batteryCapacity,
+                            currentMileage: updated.currentMileage)
+
+                        _ = viewModel.updateCar(car: carToUpdate!)
+
+                        editingCar = nil
+                    },
+                    onCancel: {
+                        editingCar = nil
+                    }
+                )
             }
         }
     }

@@ -53,4 +53,19 @@ class Car {
     func getTotalMileage() -> Int {
         return self.currentMileage - self.initialMileage
     }
+    
+    func updateValues(name: String, batteryCapacity: Double?, currentMileage: Int) -> Void {
+        if (!name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
+            self.name = name
+        }
+
+        if (batteryCapacity != nil && batteryCapacity! > 0) {
+            self.batteryCapacity = batteryCapacity
+        }
+
+        if (currentMileage > 0 && currentMileage >= self.currentMileage) {
+            self.currentMileage = currentMileage
+            self.milleageSyncedAt = Date()
+        }
+    }
 }
