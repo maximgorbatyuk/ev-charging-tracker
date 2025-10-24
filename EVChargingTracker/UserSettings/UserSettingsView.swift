@@ -13,7 +13,7 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showEditCurrencyModal: Bool = false
 
     // Make this a computed property so it can access `viewModel` safely
-    private var cars: [CarViewModel] {
+    private var cars: [CarDto] {
         return viewModel.getCars()
     }
 
@@ -23,7 +23,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                 ScrollView {
                     VStack(alignment: .leading) {
-                        
+
                         Section(header: Text("Base settings")) {
                             Spacer()
                             HStack {
@@ -56,7 +56,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 .foregroundColor(.gray)
                                 .padding(.top)
                         }
-                        
+
                         Divider()
                         Spacer()
 
@@ -65,18 +65,18 @@ struct UserSettingsView: SwiftUICore.View {
                                 Spacer()
                                 VStack(alignment: .leading) {
                                     ForEach(cars) { car in
-                                        HStack {
-                                            Text("\(car.name) (\(car.batteryCapacity.map { String($0) } ?? "-") kWh)")
-                                                .fontWeight(.semibold)
-                                                .font(.system(size: 16, weight: .bold))
-                                                .padding(.vertical, 2)
-                                            Spacer()
-
-                                            Text(car.selectedForTracking ? "Tracking" : "Not tracking")
-                                                .fontWeight(.semibold)
-                                                .font(.system(size: 16, weight: .regular))
-                                                .foregroundColor(car.selectedForTracking ? .green : .red)
-                                        }
+                                        CarRecordView(
+                                            car: CarDto(
+                                                id: car.id ?? 0,
+                                                name: car.name,
+                                                selectedForTracking: car.selectedForTracking,
+                                                batteryCapacity: car.batteryCapacity,
+                                                currentMileage: car.currentMileage,
+                                                initialMileage: car.initialMileage,
+                                            ),
+                                            onDelete: {
+                                                // do nothing
+                                            })
                                     }
                                 }
                             }

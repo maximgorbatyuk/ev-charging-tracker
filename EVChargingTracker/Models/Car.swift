@@ -42,7 +42,7 @@ class Car {
     }
     
     func updateMileage(newMileage: Int) {
-        if (self.currentMileage < newMileage) {
+        if (self.currentMileage >= newMileage) {
             return
         }
 

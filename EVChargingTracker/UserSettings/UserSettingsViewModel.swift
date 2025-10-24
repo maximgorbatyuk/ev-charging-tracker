@@ -43,14 +43,16 @@ class UserSettingsViewModel: ObservableObject {
         }
     }
 
-    func getCars() -> [CarViewModel] {
+    func getCars() -> [CarDto] {
         let cars = db.carRepository?.getAllCars() ?? []
         return cars.map { car in
-            CarViewModel(
+            CarDto(
                 id: car.id ?? 0,
                 name: car.name,
                 selectedForTracking: car.selectedForTracking,
-                batteryCapacity: car.batteryCapacity
+                batteryCapacity: car.batteryCapacity,
+                currentMileage: car.currentMileage,
+                initialMileage: car.initialMileage
             )
         }
     }
@@ -58,11 +60,4 @@ class UserSettingsViewModel: ObservableObject {
     func getCarsCount() -> Int {
         return db.carRepository?.getCarsCount() ?? 0
     }
-}
-
-struct CarViewModel: Identifiable {
-    let id: Int64
-    let name: String
-    let selectedForTracking: Bool
-    let batteryCapacity: Double?
 }
