@@ -71,7 +71,7 @@ struct AddExpenseView: SwiftUICore.View {
                     HStack {
                         Text("Odometer (km)")
                         Spacer()
-                        TextField("35000", text: $odometer)
+                        TextField(selectedCar?.currentMileage.formatted() ?? "", text: $odometer)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                     }

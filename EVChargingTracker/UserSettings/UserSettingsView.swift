@@ -12,10 +12,15 @@ struct UserSettingsView: SwiftUICore.View {
     @StateObject private var viewModel = UserSettingsViewModel()
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
+    @State private var _cars: [CarDto]? = nil
 
     // Make this a computed property so it can access `viewModel` safely
     private var cars: [CarDto] {
-        return viewModel.getCars()
+        if (_cars == nil) {
+            self._cars = viewModel.getCars()
+        }
+
+        return _cars ?? []
     }
 
     var body: some SwiftUICore.View {
@@ -124,6 +129,9 @@ struct UserSettingsView: SwiftUICore.View {
                         editingCar = nil
                     }
                 )
+            }
+            .onAppear {
+                self._cars = viewModel.getCars()
             }
         }
     }

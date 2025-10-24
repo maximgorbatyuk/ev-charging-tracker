@@ -76,7 +76,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     var totalCost: Double {
         expenses.compactMap { $0.cost }.reduce(0, +)
     }
-    
+
     var selectedCarForExpenses: Car? {
         if (_selectedCarForExpenses == nil) {
             _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
