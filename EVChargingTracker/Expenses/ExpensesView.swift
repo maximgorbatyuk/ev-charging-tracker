@@ -11,6 +11,8 @@ struct ExpensesView: SwiftUICore.View {
 
     @StateObject private var viewModel = ExpensesViewModel()
     @State private var showingAddSession = false
+    @State private var showingDeleteConfirmation: Bool = false
+    @State private var expenseToDelete: Expense? = nil
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -45,6 +47,7 @@ struct ExpensesView: SwiftUICore.View {
                         if viewModel.totalCost > 0 {
                             CostsBlockView(
                                 title: "Total costs",
+                                hint: nil,
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.totalCost,
                                 perKilometer: false)
@@ -107,10 +110,13 @@ struct ExpensesView: SwiftUICore.View {
             .onAppear {
                 viewModel.loadSessions()
             }
-        }
-    }
+            .alert(isPresented: $showingDeleteConfirmation) {
+                deleteConfirmationAlert()
+            }
+         }
+     }
 
-    private var emptyStateView: some SwiftUICore.View {
+     private var emptyStateView: some SwiftUICore.View {
         VStack(spacing: 16) {
             Image(systemName: "dollarsign.circle.fill")
                 .font(.system(size: 64))
@@ -133,11 +139,44 @@ struct ExpensesView: SwiftUICore.View {
                 SessionCard(
                     session: session,
                     onDelete: {
-                        viewModel.deleteSession(session)
+                        // ask for confirmation before deleting
+                        expenseToDelete = session
+                        showingDeleteConfirmation = true
                     })
             }
         }
         .padding(.horizontal)
+    }
+    
+    // Confirmation alert attached to the view
+    private func deleteConfirmationAlert() -> Alert {
+        let title = Text("Delete expense")
+        let message: Text
+        if let e = expenseToDelete {
+            // Show date and optional amount
+            let dateText = e.date.formatted(date: .abbreviated, time: .omitted)
+            if let cost = e.cost {
+                message = Text("Delete expense on \(dateText) with amount \(e.currency.rawValue)\(String(format: "%.2f", cost))? This action cannot be undone.")
+            } else {
+                message = Text("Delete expense on \(dateText)? This action cannot be undone.")
+            }
+        } else {
+            message = Text("Delete selected expense? This action cannot be undone.")
+        }
+
+        return Alert(
+            title: title,
+            message: message,
+            primaryButton: .destructive(Text("Delete")) {
+                if let e = expenseToDelete {
+                    viewModel.deleteSession(e)
+                }
+                expenseToDelete = nil
+            },
+            secondaryButton: .cancel {
+                expenseToDelete = nil
+            }
+        )
     }
 }
 

@@ -21,14 +21,16 @@ struct ChargingSessionsView: SwiftUICore.View {
                         if viewModel.totalCost > 0 {
 
                             CostsBlockView(
-                                title: "How much one kilometer costs you (charging only)",
+                                title: "One kilometer price (charging only)",
+                                hint: "How much one kilometer costs you including only charging expenses",
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.calculateOneKilometerCosts(true),
                                 perKilometer: true
                             )
 
                             CostsBlockView(
-                                title: "How much one kilometer costs you (total)",
+                                title: "One kilometer price (total)",
+                                hint: "How much one kilometer costs you including all logged expenses",
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.calculateOneKilometerCosts(false),
                                 perKilometer: true
@@ -36,6 +38,7 @@ struct ChargingSessionsView: SwiftUICore.View {
 
                             CostsBlockView(
                                 title: "Total charging costs",
+                                hint: nil,
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.totalChargingCost,
                                 perKilometer: false

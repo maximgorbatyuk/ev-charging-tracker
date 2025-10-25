@@ -11,11 +11,7 @@ struct UserSettingsView: SwiftUICore.View {
 
     @StateObject private var viewModel = UserSettingsViewModel()
     @State private var showEditCurrencyModal: Bool = false
-
-    // Make this a computed property so it can access `viewModel` safely
-    private var cars: [CarDto] {
-        return viewModel.getCars()
-    }
+    @State private var editingCar: CarDto? = nil
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -64,18 +60,11 @@ struct UserSettingsView: SwiftUICore.View {
                             Section(header: Text("Cars")) {
                                 Spacer()
                                 VStack(alignment: .leading) {
-                                    ForEach(cars) { car in
+                                    ForEach(viewModel.allCars) { car in
                                         CarRecordView(
-                                            car: CarDto(
-                                                id: car.id ?? 0,
-                                                name: car.name,
-                                                selectedForTracking: car.selectedForTracking,
-                                                batteryCapacity: car.batteryCapacity,
-                                                currentMileage: car.currentMileage,
-                                                initialMileage: car.initialMileage,
-                                            ),
-                                            onDelete: {
-                                                // do nothing
+                                            car: car,
+                                            onEdit: {
+                                                editingCar = car
                                             })
                                     }
                                 }
@@ -94,6 +83,44 @@ struct UserSettingsView: SwiftUICore.View {
                     onSave: { newCurrency in
                         viewModel.saveDefaultCurrency(newCurrency)
                     })
+            }
+            .sheet(item: $editingCar) { car in
+                EditCarView(
+                    car: car,
+                    onSave: { updated in
+                        
+                        if updated.name.trimmingCharacters(in: .whitespaces).isEmpty {
+                            // TODO mgorbatyuk: show alert
+                            return
+                        }
+
+                        if let batteryCapacity = updated.batteryCapacity, batteryCapacity < 0 {
+                            // TODO mgorbatyuk: show alert
+                            return
+                        }
+
+                        guard let carToUpdate = viewModel.getCarById(car.id) else {
+                            // TODO mgorbatyuk: alert that car was not found
+                            return
+                        }
+
+                        carToUpdate.updateValues(
+                            name: updated.name,
+                            batteryCapacity: updated.batteryCapacity,
+                            currentMileage: updated.currentMileage)
+
+                        _ = viewModel.updateCar(car: carToUpdate)
+
+                        editingCar = nil
+                        viewModel.refetchCars()
+                    },
+                    onCancel: {
+                        editingCar = nil
+                    }
+                )
+            }
+            .onAppear {
+                viewModel.refetchCars()
             }
         }
     }
