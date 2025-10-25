@@ -66,7 +66,7 @@ struct EditCarView: SwiftUICore.View {
                         
                         var batteryToSave : Double? = nil
                         if (battery != nil && battery! <= 200) {
-                            // unrealistic battery capacity
+                            // realistic battery capacity
                             batteryToSave = battery
                         }
 
