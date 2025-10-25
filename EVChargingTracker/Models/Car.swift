@@ -63,7 +63,7 @@ class Car {
             self.batteryCapacity = batteryCapacity
         }
 
-        if (currentMileage > 0 && currentMileage >= self.currentMileage) {
+        if (currentMileage > 0 && currentMileage > self.currentMileage) {
             self.currentMileage = currentMileage
             self.milleageSyncedAt = Date()
         }
