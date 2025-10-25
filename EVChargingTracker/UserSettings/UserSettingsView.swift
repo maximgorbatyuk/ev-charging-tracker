@@ -104,8 +104,7 @@ struct UserSettingsView: SwiftUICore.View {
                             return
                         }
 
-                        if (updated.batteryCapacity != nil &&
-                            updated.batteryCapacity! < 0){
+                        if let batteryCapacity = updated.batteryCapacity, batteryCapacity < 0 {
                             // TODO mgorbatyuk: show alert
                             return
                         }
