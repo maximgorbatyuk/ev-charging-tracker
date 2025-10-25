@@ -47,6 +47,7 @@ struct ExpensesView: SwiftUICore.View {
                         if viewModel.totalCost > 0 {
                             CostsBlockView(
                                 title: "Total costs",
+                                hint: nil,
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.totalCost,
                                 perKilometer: false)

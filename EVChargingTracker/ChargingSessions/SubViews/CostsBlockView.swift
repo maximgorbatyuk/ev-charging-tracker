@@ -10,17 +10,49 @@ import SwiftUI
 struct CostsBlockView: SwiftUICore.View {
 
     let title: String
+    let hint: String?
     let currency: Currency
     let costsValue: Double
     let perKilometer: Bool
 
     @Environment(\.colorScheme) var colorScheme
+
+    @State private var showingHelp = false
+    @State private var textToShowInSheet = ""
     
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(colorScheme == .dark ? .white : .black)
+            HStack {
+                Text(title)
+                    .font(.subheadline)
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                Spacer()
+
+                if let hint = hint {
+                    
+                    Button(action: {
+                        textToShowInSheet = hint
+                        showingHelp.toggle()
+                    }) {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(.gray)
+                            .help(hint)
+                    }
+                    .popover(isPresented: $showingHelp) {
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Hint")
+                                .font(.headline)
+                            
+                            Text(hint)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding()
+                        .presentationCompactAdaptation(.popover)
+                        .frame(width: 250)
+                    }
+                }
+            }
 
             HStack(alignment: .lastTextBaseline) {
                 Text(String(format: "\(currency.rawValue)%.2f", costsValue))
@@ -52,6 +84,7 @@ struct CostsBlockView: SwiftUICore.View {
 #Preview {
     CostsBlockView(
         title: "How much one kilometer costs you",
+        hint: nil,
         currency: .kzt,
         costsValue: 45,
         perKilometer: true

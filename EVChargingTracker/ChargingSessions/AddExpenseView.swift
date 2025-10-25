@@ -76,10 +76,16 @@ struct AddExpenseView: SwiftUICore.View {
                             .multilineTextAlignment(.trailing)
                     }
 
+                    HStack {
+                        Text("Cost (\(defaultCurrency.rawValue))")
+                        Spacer()
+                        TextField("12.50", text: $cost)
+                            .keyboardType(.decimalPad)
+                            .multilineTextAlignment(.trailing)
+                    }
+
                     if (selectedCar == nil) {
                         HStack {
-                            
-
                             Text("Car name")
                             Spacer()
                             TextField("Name of the car", text: $carName)
@@ -98,17 +104,9 @@ struct AddExpenseView: SwiftUICore.View {
                     }
                     
                 }
-                
+
                 Section(header: Text("Optional")) {
-                    HStack {
-                        Text("Cost (\(defaultCurrency.rawValue))")
-                        Spacer()
-                        TextField("12.50", text: $cost)
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    
-                    TextField("Notes", text: $notes)
+                    TextField("Notes (optional)", text: $notes)
                 }
             }
             .navigationTitle("Add expense")

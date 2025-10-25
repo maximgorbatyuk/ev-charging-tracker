@@ -12,16 +12,6 @@ struct UserSettingsView: SwiftUICore.View {
     @StateObject private var viewModel = UserSettingsViewModel()
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
-    @State private var _cars: [CarDto]? = nil
-
-    // Make this a computed property so it can access `viewModel` safely
-    private var cars: [CarDto] {
-        if (_cars == nil) {
-            self._cars = viewModel.getCars()
-        }
-
-        return _cars ?? []
-    }
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -70,7 +60,7 @@ struct UserSettingsView: SwiftUICore.View {
                             Section(header: Text("Cars")) {
                                 Spacer()
                                 VStack(alignment: .leading) {
-                                    ForEach(cars) { car in
+                                    ForEach(viewModel.allCars) { car in
                                         CarRecordView(
                                             car: car,
                                             onEdit: {
@@ -122,6 +112,7 @@ struct UserSettingsView: SwiftUICore.View {
                         _ = viewModel.updateCar(car: carToUpdate)
 
                         editingCar = nil
+                        viewModel.refetchCars()
                     },
                     onCancel: {
                         editingCar = nil
@@ -129,7 +120,7 @@ struct UserSettingsView: SwiftUICore.View {
                 )
             }
             .onAppear {
-                self._cars = viewModel.getCars()
+                viewModel.refetchCars()
             }
         }
     }

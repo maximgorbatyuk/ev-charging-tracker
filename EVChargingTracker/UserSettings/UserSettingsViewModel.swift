@@ -14,12 +14,24 @@ class UserSettingsViewModel: ObservableObject {
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
 
+    private var _allCars: [CarDto] = []
+
     init() {
         self.db = DatabaseManager.shared
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
 
         self.defaultCurrency = userSettingsRepository?.fetchCurrency() ?? .kzt
+        self._allCars = db.carRepository?.getAllCars()
+            .map {
+                CarDto(
+                    id: $0.id ?? 0,
+                    name: $0.name,
+                    selectedForTracking: $0.selectedForTracking,
+                    batteryCapacity: $0.batteryCapacity,
+                    currentMileage: $0.currentMileage,
+                    initialMileage: $0.initialMileage)
+            } ?? []
     }
 
     func hasAnyExpense() -> Bool {
@@ -75,5 +87,25 @@ class UserSettingsViewModel: ObservableObject {
         }
 
         return success
+    }
+
+    func refetchCars() {
+        DispatchQueue.main.async {
+            self._allCars = self.db.carRepository?.getAllCars()
+                .map {
+                    CarDto(
+                        id: $0.id ?? 0,
+                        name: $0.name,
+                        selectedForTracking: $0.selectedForTracking,
+                        batteryCapacity: $0.batteryCapacity,
+                        currentMileage: $0.currentMileage,
+                        initialMileage: $0.initialMileage)
+                } ?? []
+            self.objectWillChange.send()
+        }
+    }
+
+    var allCars : [CarDto] {
+        return _allCars
     }
 }
