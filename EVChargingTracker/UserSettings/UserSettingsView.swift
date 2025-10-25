@@ -99,7 +99,7 @@ struct UserSettingsView: SwiftUICore.View {
                     car: car,
                     onSave: { updated in
                         
-                        if (updated.name.trimmingCharacters(in: .whitespaces).isEmpty) {
+                        if updated.name.trimmingCharacters(in: .whitespaces).isEmpty {
                             // TODO mgorbatyuk: show alert
                             return
                         }
