@@ -64,7 +64,7 @@ struct EditCarView: SwiftUICore.View {
                     Button("Save") {
                         let battery = Double(batteryText)
                         
-                        var batteryToSave : Double? = nil
+                        var batteryToSave: Double? = nil
                         if (battery != nil && battery! <= 200) {
                             // realistic battery capacity
                             batteryToSave = battery
