@@ -18,7 +18,6 @@ struct CostsBlockView: SwiftUICore.View {
     @Environment(\.colorScheme) var colorScheme
 
     @State private var showingHelp = false
-    @State private var textToShowInSheet = ""
     
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
@@ -31,7 +30,6 @@ struct CostsBlockView: SwiftUICore.View {
                 if let hint = hint {
                     
                     Button(action: {
-                        textToShowInSheet = hint
                         showingHelp.toggle()
                     }) {
                         Image(systemName: "info.circle")
