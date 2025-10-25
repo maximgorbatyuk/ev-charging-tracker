@@ -109,18 +109,17 @@ struct UserSettingsView: SwiftUICore.View {
                             return
                         }
 
-                        let carToUpdate = viewModel.getCarById(car.id)
-                        if (carToUpdate == nil) {
+                        guard let carToUpdate = viewModel.getCarById(car.id) else {
                             // TODO mgorbatyuk: alert that car was not found
                             return
                         }
 
-                        carToUpdate!.updateValues(
+                        carToUpdate.updateValues(
                             name: updated.name,
                             batteryCapacity: updated.batteryCapacity,
                             currentMileage: updated.currentMileage)
 
-                        _ = viewModel.updateCar(car: carToUpdate!)
+                        _ = viewModel.updateCar(car: carToUpdate)
 
                         editingCar = nil
                     },
