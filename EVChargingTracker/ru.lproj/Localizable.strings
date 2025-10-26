@@ -1,7 +1,7 @@
 /* Russian localization */
 "Car" = "Автомобиль";
 "Name" = "Название";
-"Battery capacity (kWh)" = "Ёмкость батареи (кВт⋅ч)";
+"Battery capacity (kWh)" = "Ёмкость батареи (кВт/ч)";
 "e.g. 75" = "например 75";
 "Current mileage (km)" = "Текущий пробег (км)";
 "Minimum: %d" = "Минимум: %d";
@@ -15,30 +15,30 @@
 "Initial millage" = "Начальный пробег";
 "Current millage" = "Текущий пробег";
 "Battery" = "Батарея";
-"Tracking" = "Отслеживается";
-"Not tracking" = "Не отслеживается";
+"Tracking" = "Ведется учет";
+"Not tracking" = "Не выбран для учета";
 
 "Base settings" = "Основные настройки";
 "Currency" = "Валюта";
 "It is recommended to set the default currency before adding any expenses." = "Рекомендуется установить валюту по умолчанию перед добавлением расходов.";
 "Cars" = "Автомобили";
-"User settings" = "Настройки пользователя";
+"User settings" = "Настройки";
 
 "Expense details" = "Детали расхода";
 "Car" = "Автомобиль";
 "Date" = "Дата";
-"Energy (kWh)" = "Энергия (кВт⋅ч)";
+"Energy (kWh)" = "Энергия (кВт/ч)";
 "Charger Type" = "Тип зарядного устройства";
-"Expense Type" = "Тип расхода";
+"Expense Type" = "Тип траты";
 "Odometer (km)" = "Одометр (км)";
 "Cost (%@)" = "Стоимость (%@)";
 "Car name" = "Название автомобиля";
 "Name of the car" = "Название автомобиля";
 "Optional" = "Дополнительно";
 "Notes (optional)" = "Примечания (необязательно)";
-"Add expense" = "Добавить расход";
+"Add expense" = "Добавить затраты";
 
-"Please select an expense type." = "Пожалуйста, выберите тип расхода.";
+"Please select an expense type." = "Пожалуйста, выберите тип затрат.";
 "Please type a valid value for Energy." = "Пожалуйста, введите корректное значение энергии.";
 "Please type a valid value for Odometer." = "Пожалуйста, введите корректное значение одометра.";
 
@@ -56,20 +56,20 @@
 "Add Expense" = "Добавить расход";
 "Total costs" = "Общие расходы";
 "All car expenses" = "Все расходы по автомобилю";
-"No expenses yet" = "Пока нет расходов";
-"Add your first expense to start tracking" = "Добавьте первый расход, чтобы начать отслеживание";
+"No expenses yet" = "Пока нет затрат";
+"Add your first expense to start tracking" = "Добавьте первый расход, чтобы начать учет";
 
 "Delete expense" = "Удалить расход";
-"Delete expense on %@ with amount %@? This action cannot be undone." = "Удалить расход от %@ на сумму %@? Это действие нельзя отменить.";
-"Delete expense on %@? This action cannot be undone." = "Удалить расход от %@? Это действие нельзя отменить.";
-"Delete selected expense? This action cannot be undone." = "Удалить выбранный расход? Это действие нельзя отменить.";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Удалить запись от %@ на сумму %@? Это действие нельзя отменить.";
+"Delete expense on %@? This action cannot be undone." = "Удалить запись от %@? Это действие нельзя отменить.";
+"Delete selected expense? This action cannot be undone." = "Удалить выбраную запись? Это действие нельзя отменить.";
 "Delete" = "Удалить";
 
 "Energy" = "Энергия";
-"Expense type" = "Тип расхода";
+"Expense type" = "Тип затрат";
 "Odometer" = "Одометр";
 "Cost" = "Стоимость";
-"%.1f kWh" = "%.1f кВт⋅ч";
+"%.1f kWh" = "%.1f кВт/ч";
 
 "How much one kilometer costs you" = "Сколько стоит один километр";
 
