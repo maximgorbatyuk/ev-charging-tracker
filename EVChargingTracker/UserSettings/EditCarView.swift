@@ -5,6 +5,8 @@ struct EditCarView: SwiftUICore.View {
     let onSave: (CarDto) -> Void
     let onCancel: () -> Void
 
+    @ObservedObject private var loc = LocalizationManager.shared
+
     @State private var name: String
     @State private var batteryText: String
     @State private var mileageText: String
@@ -28,40 +30,40 @@ struct EditCarView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
-                Section(header: Text("Car")) {
-                    TextField("Name", text: $name)
+                Section(header: Text(L("Car"))) {
+                    TextField(L("Name"), text: $name)
                 }
 
-                Section(header: Text("Battery capacity (kWh)")) {
-                    TextField("e.g. 75", text: $batteryText)
+                Section(header: Text(L("Battery capacity (kWh)"))) {
+                    TextField(L("e.g. 75"), text: $batteryText)
                         .keyboardType(.numberPad)
                 }
 
-                Section(header: Text("Current mileage (km)")) {
-                    Text("Minimum: \(car.initialMileage)")
+                Section(header: Text(L("Current mileage (km)"))) {
+                    Text(String(format: L("Minimum: %d"), car.initialMileage))
                         .font(.footnote)
                         .foregroundColor(.secondary)
                         .padding(.top, 2)
 
-                    TextField("Current: \(car.currentMileage)", text: $mileageText)
+                    TextField(String(format: L("Current: %d"), car.currentMileage), text: $mileageText)
                         .keyboardType(.numberPad)
                 }
 
-                Section(header: Text("Danger zone")) {
-                    Toggle("Selected for tracking", isOn: $selectedForTracking)
+                Section(header: Text(L("Danger zone"))) {
+                    Toggle(L("Selected for tracking"), isOn: $selectedForTracking)
                         .disabled(true)
                 }
             }
-            .navigationTitle("Edit car")
+            .navigationTitle(L("Edit car"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(L("Cancel")) {
                         onCancel()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(L("Save")) {
                         let battery = Double(batteryText)
                         
                         var batteryToSave: Double? = nil

@@ -7,27 +7,28 @@
 
 import SwiftUI
 
+// TODO mgorbatyuk: fix cached localizations after language change
 struct MainTabView: SwiftUI.View {
     var body: some SwiftUI.View {
         TabView {
             ChargingSessionsView()
                 .tabItem {
-                    Label("Stats", systemImage: "bolt.car.fill")
+                    Label(L("Stats"), systemImage: "bolt.car.fill")
                 }
             
             ExpensesView()
                 .tabItem {
-                    Label("Expenses", systemImage: "dollarsign.circle")
+                    Label(L("Expenses"), systemImage: "dollarsign.circle")
                 }
 
             UserSettingsView()
                 .tabItem {
-                    Label("Settings", systemImage: "person.circle.fill")
+                    Label(L("Settings"), systemImage: "person.circle.fill")
                 }
             
             AboutView()
                 .tabItem {
-                    Label("About", systemImage: "info.circle")
+                    Label(L("About"), systemImage: "info.circle")
                 }
         }
     }

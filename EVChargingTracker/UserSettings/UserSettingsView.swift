@@ -12,6 +12,7 @@ struct UserSettingsView: SwiftUICore.View {
     @StateObject private var viewModel = UserSettingsViewModel()
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
+    @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -20,10 +21,10 @@ struct UserSettingsView: SwiftUICore.View {
                 ScrollView {
                     VStack(alignment: .leading) {
 
-                        Section(header: Text("Base settings")) {
+                        Section(header: Text(L("Base settings"))) {
                             Spacer()
                             HStack {
-                                Text("Currency")
+                                Text(L("Currency"))
                                     .fontWeight(.semibold)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.gray)
@@ -46,7 +47,27 @@ struct UserSettingsView: SwiftUICore.View {
                                 }
                             }
 
-                            Text("It is recommended to set the default currency before adding any expenses.")
+                            // Language selector row
+                            HStack {
+                                Text(L("Language"))
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(.gray)
+
+                                Spacer()
+
+                                Picker(selection: $viewModel.selectedLanguage, label: Text(viewModel.selectedLanguage.displayName)) {
+                                    ForEach(AppLanguage.allCases, id: \.self) { lang in
+                                        Text(lang.displayName).tag(lang)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .onChange(of: viewModel.selectedLanguage) { newLang in
+                                    viewModel.saveLanguage(newLang)
+                                }
+                            }
+
+                            Text(L("It is recommended to set the default currency before adding any expenses."))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundColor(.gray)
@@ -57,7 +78,7 @@ struct UserSettingsView: SwiftUICore.View {
                         Spacer()
 
                         if (viewModel.getCarsCount() > 0) {
-                            Section(header: Text("Cars")) {
+                            Section(header: Text(L("Cars"))) {
                                 Spacer()
                                 VStack(alignment: .leading) {
                                     ForEach(viewModel.allCars) { car in
@@ -75,7 +96,7 @@ struct UserSettingsView: SwiftUICore.View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .navigationTitle("User settings")
+            .navigationTitle(L("User settings"))
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showEditCurrencyModal) {
                 EditDefaultCurrencyView(

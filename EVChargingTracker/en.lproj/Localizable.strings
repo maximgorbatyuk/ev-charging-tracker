@@ -1,0 +1,99 @@
+/* English localization */
+"Car" = "Car";
+"Name" = "Name";
+"Battery capacity (kWh)" = "Battery capacity (kWh)";
+"e.g. 75" = "e.g. 75";
+"Current mileage (km)" = "Current mileage (km)";
+"Minimum: %d" = "Minimum: %d";
+"Current: %d" = "Current: %d";
+"Danger zone" = "Danger zone";
+"Selected for tracking" = "Selected for tracking";
+"Edit car" = "Edit car";
+"Cancel" = "Cancel";
+"Save" = "Save";
+
+"Initial millage" = "Initial millage";
+"Current millage" = "Current millage";
+"Battery" = "Battery";
+"Tracking" = "Tracking";
+"Not tracking" = "Not tracking";
+
+"Base settings" = "Base settings";
+"Currency" = "Currency";
+"It is recommended to set the default currency before adding any expenses." = "It is recommended to set the default currency before adding any expenses.";
+"Cars" = "Cars";
+"User settings" = "User settings";
+
+"Expense details" = "Expense details";
+"Car" = "Car";
+"Date" = "Date";
+"Energy (kWh)" = "Energy (kWh)";
+"Charger Type" = "Charger Type";
+"Expense Type" = "Expense Type";
+"Odometer (km)" = "Odometer (km)";
+"Cost (%@)" = "Cost (%@)";
+"Car name" = "Car name";
+"Name of the car" = "Name of the car";
+"Battery capacity (kWh)" = "Battery capacity (kWh)";
+"Optional" = "Optional";
+"Notes (optional)" = "Notes (optional)";
+"Add expense" = "Add expense";
+
+"Please select an expense type." = "Please select an expense type.";
+"Please type a valid value for Energy." = "Please type a valid value for Energy.";
+"Please type a valid value for Odometer." = "Please type a valid value for Odometer.";
+
+"Hint" = "Hint";
+"per km" = "per km";
+
+"One kilometer price (charging only)" = "One kilometer price (charging only)";
+"How much one kilometer costs you including only charging expenses" = "How much one kilometer costs you including only charging expenses";
+"One kilometer price (total)" = "One kilometer price (total)";
+"How much one kilometer costs you including all logged expenses" = "How much one kilometer costs you including all logged expenses";
+"Total charging costs" = "Total charging costs";
+"Add Charging Session" = "Add Charging Session";
+"Car stats" = "Car stats";
+
+"Add Expense" = "Add Expense";
+"Total costs" = "Total costs";
+"All car expenses" = "All car expenses";
+"No expenses yet" = "No expenses yet";
+"Add your first expense to start tracking" = "Add your first expense to start tracking";
+
+"Delete expense" = "Delete expense";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Delete expense on %@ with amount %@? This action cannot be undone.";
+"Delete expense on %@? This action cannot be undone." = "Delete expense on %@? This action cannot be undone.";
+"Delete selected expense? This action cannot be undone." = "Delete selected expense? This action cannot be undone.";
+"Delete" = "Delete";
+
+"Energy" = "Energy";
+"Expense type" = "Expense type";
+"Odometer" = "Odometer";
+"Cost" = "Cost";
+"%.1f kWh" = "%.1f kWh";
+
+"How much one kilometer costs you" = "How much one kilometer costs you";
+
+/* ExpenseType human-friendly */
+"charging" = "Charging";
+"maintenance" = "Maintenance";
+"repair" = "Repair";
+"carwash" = "Car wash";
+"other" = "Other";
+
+/* ChargerType human-friendly */
+"Home (7kW)" = "Home (7kW)";
+"Home (11kW)" = "Home (11kW)";
+"Destination (22kW)" = "Destination (22kW)";
+"Supercharger V2 (150kW)" = "Supercharger V2 (150kW)";
+"Supercharger V3 (250kW)" = "Supercharger V3 (250kW)";
+"Supercharger V4 (350kW)" = "Supercharger V4 (350kW)";
+"Public Fast (50kW)" = "Public Fast (50kW)";
+"Public Rapid (100kW)" = "Public Rapid (100kW)";
+"Other" = "Other";
+
+/* Menu */
+"Stats" = "Stats";
+"Expenses" = "Expenses";
+"Settings" = "Settings";
+"About" = "About";

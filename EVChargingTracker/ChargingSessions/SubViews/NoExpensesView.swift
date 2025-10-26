@@ -8,17 +8,19 @@
 import SwiftUI
 
 struct NoExpensesView: SwiftUICore.View {
+    @ObservedObject private var loc = LocalizationManager.shared
+
     var body: some SwiftUICore.View {
         VStack(spacing: 16) {
             Image(systemName: "battery.100.bolt")
                 .font(.system(size: 64))
                 .foregroundColor(.gray.opacity(0.5))
             
-            Text("No charging sessions yet")
+            Text(L("No charging sessions yet"))
                 .font(.title3)
                 .foregroundColor(.gray)
             
-            Text("Add your first session to start tracking")
+            Text(L("Add your first session to start tracking"))
                 .font(.subheadline)
                 .foregroundColor(.gray.opacity(0.9))
         }

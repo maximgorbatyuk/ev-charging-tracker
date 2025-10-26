@@ -9,6 +9,7 @@ import Foundation
 
 class UserSettingsViewModel: ObservableObject {
     @Published var defaultCurrency: Currency
+    @Published var selectedLanguage: AppLanguage
     
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
@@ -22,6 +23,7 @@ class UserSettingsViewModel: ObservableObject {
         self.userSettingsRepository = db.userSettingsRepository
 
         self.defaultCurrency = userSettingsRepository?.fetchCurrency() ?? .kzt
+        self.selectedLanguage = userSettingsRepository?.fetchLanguage() ?? .en
         self._allCars = db.carRepository?.getAllCars()
             .map {
                 CarDto(
@@ -53,6 +55,21 @@ class UserSettingsViewModel: ObservableObject {
         if !success {
             print("Failed to save default currency to DB")
         }
+    }
+
+    // New: save selected language
+    func saveLanguage(_ language: AppLanguage) {
+        DispatchQueue.main.async {
+            self.selectedLanguage = language
+        }
+
+        let success = userSettingsRepository?.upsertLanguage(language.rawValue) ?? false
+        if !success {
+            print("Failed to save selected language to DB")
+        }
+
+        // Update runtime localization manager so UI can react immediately
+        LocalizationManager.shared.setLanguage(language)
     }
 
     func getCars() -> [CarDto] {

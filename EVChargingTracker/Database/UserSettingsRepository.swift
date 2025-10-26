@@ -77,4 +77,20 @@ class UserSettingsRepository {
     func upsertCurrency(_ currencyValue: String) -> Bool {
         return upsertValue(key: "currency", value: currencyValue)
     }
+
+    // New: language helpers (store language as string code: "en", "ru")
+    func fetchLanguageAsString() -> String? {
+        return fetchValue(for: "language")
+    }
+
+    func fetchLanguage() -> AppLanguage {
+        if let langString = fetchLanguageAsString(), let lang = AppLanguage(rawValue: langString) {
+            return lang
+        }
+        return .en
+    }
+
+    func upsertLanguage(_ languageValue: String) -> Bool {
+        return upsertValue(key: "language", value: languageValue)
+    }
 }

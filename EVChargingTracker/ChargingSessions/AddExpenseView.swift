@@ -14,6 +14,7 @@ struct AddExpenseView: SwiftUICore.View {
     let onAdd: (AddExpenseViewResult) -> Void
 
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var loc = LocalizationManager.shared
     
     @State private var date = Date()
     @State private var energyCharged = ""
@@ -33,43 +34,43 @@ struct AddExpenseView: SwiftUICore.View {
         NavigationView {
                       
             Form {
-                Section(header: Text("Expense details")) {
+                Section(header: Text(L("Expense details"))) {
                     
                     if (selectedCar != nil) {
                         HStack {
-                            Text("Car")
+                            Text(L("Car"))
                             Spacer()
                             Text(selectedCar!.name)
                                 .disabled(true)
                         }
                     }
 
-                    DatePicker("Date", selection: $date, displayedComponents: .date)
+                    DatePicker(L("Date"), selection: $date, displayedComponents: .date)
 
                     if (defaultExpenseType == .charging) {
                         HStack {
-                            Text("Energy (kWh)")
+                            Text(L("Energy (kWh)"))
                             Spacer()
-                            TextField("45.2", text: $energyCharged)
+                            TextField(L("45.2"), text: $energyCharged)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                         }
                         
-                        Picker("Charger Type", selection: $chargerType) {
+                        Picker(L("Charger Type"), selection: $chargerType) {
                             ForEach(ChargerType.allCases, id: \.self) { type in
-                                Text(type.rawValue).tag(type)
+                                Text(L(type.rawValue)).tag(type)
                             }
                         }
                     } else {
-                        Picker("Expense Type", selection: $expenseType) {
+                        Picker(L("Expense Type"), selection: $expenseType) {
                             ForEach(ExpenseType.allCases.filter({ $0 != .charging }), id: \.self) { type in
-                                Text(type.rawValue).tag(type)
+                                Text(L(type.rawValue)).tag(type)
                             }
                         }
                     }
                     
                     HStack {
-                        Text("Odometer (km)")
+                        Text(L("Odometer (km)"))
                         Spacer()
                         TextField(selectedCar?.currentMileage.formatted() ?? "", text: $odometer)
                             .keyboardType(.numberPad)
@@ -77,27 +78,27 @@ struct AddExpenseView: SwiftUICore.View {
                     }
 
                     HStack {
-                        Text("Cost (\(defaultCurrency.rawValue))")
+                        Text(String(format: L("Cost (%@)"), defaultCurrency.rawValue))
                         Spacer()
-                        TextField("12.50", text: $cost)
+                        TextField(L("12.50"), text: $cost)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                     }
 
                     if (selectedCar == nil) {
                         HStack {
-                            Text("Car name")
+                            Text(L("Car name"))
                             Spacer()
-                            TextField("Name of the car", text: $carName)
+                            TextField(L("Name of the car"), text: $carName)
                                 .multilineTextAlignment(.trailing)
                         }
                         
                         HStack {
                             Spacer()
 
-                            Text("Battery capacity (kWh)")
+                            Text(L("Battery capacity (kWh)"))
                             Spacer()
-                            TextField("75", text: $batteryCapacity)
+                            TextField(L("75"), text: $batteryCapacity)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                         }
@@ -105,21 +106,21 @@ struct AddExpenseView: SwiftUICore.View {
                     
                 }
 
-                Section(header: Text("Optional")) {
-                    TextField("Notes (optional)", text: $notes)
+                Section(header: Text(L("Optional"))) {
+                    TextField(L("Notes (optional)"), text: $notes)
                 }
             }
-            .navigationTitle("Add expense")
+            .navigationTitle(L("Add expense"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(L("Cancel")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button(L("Save")) {
                         saveSession()
                     }
                     .fontWeight(.semibold)
@@ -143,14 +144,14 @@ struct AddExpenseView: SwiftUICore.View {
         }
 
         guard let expenseTypeUnwrapped = finalExpenseType else {
-            alertMessage = "Please select an expense type."
+            alertMessage = L("Please select an expense type.")
             return
         }
 
         var energy = 0.0
         if (expenseTypeUnwrapped == .charging) {
             guard let energyParsed = Double(energyCharged) else {
-                alertMessage = "Please type a valid value for Energy."
+                alertMessage = L("Please type a valid value for Energy.")
                 return
             }
 
@@ -158,7 +159,7 @@ struct AddExpenseView: SwiftUICore.View {
         }
 
         guard let odo = Int(odometer) else {
-            alertMessage = "Please type a valid value for Odometer."
+            alertMessage = L("Please type a valid value for Odometer.")
             return
         }
         
@@ -186,7 +187,7 @@ struct AddExpenseView: SwiftUICore.View {
                 chargerType: .other,
                 odometer: odo,
                 cost: 0.0,
-                notes: "Initial record for tracking car",
+                notes: L("Initial record for tracking car"),
                 isInitialRecord: true,
                 expenseType: .other,
                 currency: defaultCurrency,

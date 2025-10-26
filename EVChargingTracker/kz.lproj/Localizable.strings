@@ -1,0 +1,99 @@
+/* Kazakh localization */
+"Car" = "Көлік";
+"Name" = "Атауы";
+"Battery capacity (kWh)" = "Батарея сыйымдылығы (кВт⋅сағ)";
+"e.g. 75" = "мысалы, 75";
+"Current mileage (km)" = "Ағымдағы жүріс (км)";
+"Minimum: %d" = "Минимум: %d";
+"Current: %d" = "Ағымдағы: %d";
+"Danger zone" = "Қауіп аймағы";
+"Selected for tracking" = "Бақылауға таңдалды";
+"Edit car" = "Көлікті өңдеу";
+"Cancel" = "Бас тарту";
+"Save" = "Сақтау";
+
+"Initial millage" = "Бастапқы жүріс";
+"Current millage" = "Ағымдағы жүріс";
+"Battery" = "Батарея";
+"Tracking" = "Бақылау";
+"Not tracking" = "Бақылаусыз";
+
+"Base settings" = "Негізгі баптаулар";
+"Currency" = "Валюта";
+"It is recommended to set the default currency before adding any expenses." = "Шығындар қоспай тұрып әдепкі валютаны орнату ұсынылады.";
+"Cars" = "Көліктер";
+"User settings" = "Пайдаланушы баптаулары";
+
+"Expense details" = "Шығын туралы мәліметтер";
+"Car" = "Көлік";
+"Date" = "Күні";
+"Energy (kWh)" = "Энергия (кВт⋅сағ)";
+"Charger Type" = "Зарядтағыш түрі";
+"Expense Type" = "Шығын түрі";
+"Odometer (km)" = "Одометр (км)";
+"Cost (%@)" = "Құны (%@)";
+"Car name" = "Көлік атауы";
+"Name of the car" = "Көлік атауы";
+"Battery capacity (kWh)" = "Батарея сыйымдылығы (кВт⋅сағ)";
+"Optional" = "Қосымша";
+"Notes (optional)" = "Ескертпе (қосымша)";
+"Add expense" = "Шығын қосу";
+
+"Please select an expense type." = "Шығын түрін таңдаңыз.";
+"Please type a valid value for Energy." = "Энергия үшін дұрыс мән енгізіңіз.";
+"Please type a valid value for Odometer." = "Одометр үшін дұрыс мән енгізіңіз.";
+
+"Hint" = "Кеңес";
+"per km" = "км сайын";
+
+"One kilometer price (charging only)" = "1 км бағасы (тек зарядтау)";
+"How much one kilometer costs you including only charging expenses" = "1 км тек зарядтау шығындарын қоса есептегендегі құны";
+"One kilometer price (total)" = "1 км бағасы (барлығы)";
+"How much one kilometer costs you including all logged expenses" = "1 км барлық тіркелген шығындарды қоса есептегендегі құны";
+"Total charging costs" = "Зарядтау бойынша жалпы шығындар";
+"Add Charging Session" = "Зарядтау сессиясын қосу";
+"Car stats" = "Көлік статистикасы";
+
+"Add Expense" = "Шығын қосу";
+"Total costs" = "Жалпы шығындар";
+"All car expenses" = "Барлық шығындары";
+"No expenses yet" = "Әзірге шығындар жоқ";
+"Add your first expense to start tracking" = "Бақылауды бастау үшін алғашқы шығыныңызды қосыңыз";
+
+"Delete expense" = "Шығынды жою";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "%@ күні %@ сомасындағы шығынды жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
+"Delete expense on %@? This action cannot be undone." = "%@ күнгі шығынды жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
+"Delete selected expense? This action cannot be undone." = "Таңдалған шығынды жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
+"Delete" = "Жою";
+
+"Energy" = "Энергия";
+"Expense type" = "Шығын түрі";
+"Odometer" = "Одометр";
+"Cost" = "Құны";
+"%.1f kWh" = "%.1f кВт⋅сағ";
+
+"How much one kilometer costs you" = "1 км қанша тұрады";
+
+/* ExpenseType human-friendly */
+"charging" = "Зарядтау";
+"maintenance" = "Техникалық қызмет";
+"repair" = "Жөндеу";
+"carwash" = "Көлік жуу";
+"other" = "Басқа";
+
+/* ChargerType human-friendly */
+"Home (7kW)" = "Үйдегі (7 кВт)";
+"Home (11kW)" = "Үйдегі (11 кВт)";
+"Destination (22kW)" = "Мекенжайлық (22 кВт)";
+"Supercharger V2 (150kW)" = "Суперчарджер V2 (150 кВт)";
+"Supercharger V3 (250kW)" = "Суперчарджер V3 (250 кВт)";
+"Supercharger V4 (350kW)" = "Суперчарджер V4 (350 кВт)";
+"Public Fast (50kW)" = "Қоғамдық жылдам (50 кВт)";
+"Public Rapid (100kW)" = "Қоғамдық жоғары жылдам (100 кВт)";
+"Other" = "Басқа";
+
+/* Menu */
+"Stats" = "Статистика";
+"Expenses" = "Шығындар";
+"Settings" = "Баптаулар";
+"About" = "Қолданба туралы";
