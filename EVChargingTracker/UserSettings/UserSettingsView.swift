@@ -20,10 +20,10 @@ struct UserSettingsView: SwiftUICore.View {
                 ScrollView {
                     VStack(alignment: .leading) {
 
-                        Section(header: Text("Base settings")) {
+                        Section(header: Text(NSLocalizedString("Base settings", comment: "Section header for base settings"))) {
                             Spacer()
                             HStack {
-                                Text("Currency")
+                                Text(NSLocalizedString("Currency", comment: "Label for currency"))
                                     .fontWeight(.semibold)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.gray)
@@ -46,7 +46,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 }
                             }
 
-                            Text("It is recommended to set the default currency before adding any expenses.")
+                            Text(NSLocalizedString("It is recommended to set the default currency before adding any expenses.", comment: "Recommendation to set default currency"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundColor(.gray)
@@ -57,7 +57,7 @@ struct UserSettingsView: SwiftUICore.View {
                         Spacer()
 
                         if (viewModel.getCarsCount() > 0) {
-                            Section(header: Text("Cars")) {
+                            Section(header: Text(NSLocalizedString("Cars", comment: "Section header for cars"))) {
                                 Spacer()
                                 VStack(alignment: .leading) {
                                     ForEach(viewModel.allCars) { car in
@@ -75,7 +75,7 @@ struct UserSettingsView: SwiftUICore.View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .navigationTitle("User settings")
+            .navigationTitle(NSLocalizedString("User settings", comment: "Navigation title for user settings"))
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showEditCurrencyModal) {
                 EditDefaultCurrencyView(

@@ -30,16 +30,16 @@ struct AboutView: SwiftUICore.View {
 
                 ScrollView {
                     VStack(alignment: .leading) {
-                        Text("Track your electric vehicle charging costs and discover your true cost per kilometer.")
+                        Text(NSLocalizedString("Track your electric vehicle charging costs and discover your true cost per kilometer.", comment: "About description line 1"))
                             .padding(.bottom)
 
-                        Text("Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations.")
+                        Text(NSLocalizedString("Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations.", comment: "About description line 2"))
                             .padding(.bottom)
 
-                        Text("If you have any questions or suggestions, feel free to create an issue on Github:")
+                        Text(NSLocalizedString("If you have any questions or suggestions, feel free to create an issue on Github:", comment: "About contact prompt"))
 
                         if let url = URL(string: getGithubLink()) {
-                            Link("ev-charging-tracker", destination: url)
+                            Link(NSLocalizedString("ev-charging-tracker", comment: "GitHub repo link label"), destination: url)
                         } else {
                             Text(getGithubLink())
                                 .foregroundColor(.blue)
@@ -51,18 +51,18 @@ struct AboutView: SwiftUICore.View {
                     VStack(alignment: .leading) {
 
                         Divider()
-                        Text("Version: \(appVersion)")
+                        Text(String(format: NSLocalizedString("Version: %@", comment: "Version label with version"), appVersion))
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        Text("Developer: © \(developerName)")
+                        Text(String(format: NSLocalizedString("Developer: © %@", comment: "Developer label with name"), developerName))
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
                         if (buildEnvironment == "dev") {
-                            Text("Build: development")
+                            Text(NSLocalizedString("Build: development", comment: "Build environment label"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundColor(.gray)
@@ -72,7 +72,7 @@ struct AboutView: SwiftUICore.View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .navigationTitle("EV Charge Tracker")
+            .navigationTitle(NSLocalizedString("EV Charge Tracker", comment: "Navigation title for About view"))
             .navigationBarTitleDisplayMode(.automatic)
         }
     }

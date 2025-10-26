@@ -1,0 +1,83 @@
+/* Russian localization */
+"Car" = "Автомобиль";
+"Name" = "Название";
+"Battery capacity (kWh)" = "Ёмкость батареи (кВт⋅ч)";
+"e.g. 75" = "например 75";
+"Current mileage (km)" = "Текущий пробег (км)";
+"Minimum: %d" = "Минимум: %d";
+"Current: %d" = "Текущий: %d";
+"Danger zone" = "Опасная зона";
+"Selected for tracking" = "Выбран для отслеживания";
+"Edit car" = "Редактировать автомобиль";
+"Cancel" = "Отмена";
+"Save" = "Сохранить";
+
+"Initial millage" = "Начальный пробег";
+"Current millage" = "Текущий пробег";
+"Battery" = "Батарея";
+"Tracking" = "Отслеживается";
+"Not tracking" = "Не отслеживается";
+
+"Base settings" = "Основные настройки";
+"Currency" = "Валюта";
+"It is recommended to set the default currency before adding any expenses." = "Рекомендуется установить валюту по умолчанию перед добавлением расходов.";
+"Cars" = "Автомобили";
+"User settings" = "Настройки пользователя";
+
+"Expense details" = "Детали расхода";
+"Car" = "Автомобиль";
+"Date" = "Дата";
+"Energy (kWh)" = "Энергия (кВт⋅ч)";
+"Charger Type" = "Тип зарядного устройства";
+"Expense Type" = "Тип расхода";
+"Odometer (km)" = "Одометр (км)";
+"Cost (%@)" = "Стоимость (%@)";
+"Car name" = "Название автомобиля";
+"Name of the car" = "Название автомобиля";
+"Optional" = "Дополнительно";
+"Notes (optional)" = "Примечания (необязательно)";
+"Add expense" = "Добавить расход";
+
+"Please select an expense type." = "Пожалуйста, выберите тип расхода.";
+"Please type a valid value for Energy." = "Пожалуйста, введите корректное значение энергии.";
+"Please type a valid value for Odometer." = "Пожалуйста, введите корректное значение одометра.";
+
+"Hint" = "Подсказка";
+"per km" = "за км";
+
+"One kilometer price (charging only)" = "Цена за километр (только зарядка)";
+"How much one kilometer costs you including only charging expenses" = "Сколько стоит один километр, учитывая только затраты на зарядку";
+"One kilometer price (total)" = "Цена за километр (всего)";
+"How much one kilometer costs you including all logged expenses" = "Сколько стоит один километр, учитывая все расходы";
+"Total charging costs" = "Общие расходы на зарядку";
+"Add Charging Session" = "Добавить сессию зарядки";
+"Charging stats" = "Статистика зарядки";
+
+"Add Expense" = "Добавить расход";
+"Total costs" = "Общие расходы";
+"All car expenses" = "Все расходы по автомобилю";
+"No expenses yet" = "Пока нет расходов";
+"Add your first expense to start tracking" = "Добавьте первый расход, чтобы начать отслеживание";
+
+"Delete expense" = "Удалить расход";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Удалить расход от %@ на сумму %@? Это действие нельзя отменить.";
+"Delete expense on %@? This action cannot be undone." = "Удалить расход от %@? Это действие нельзя отменить.";
+"Delete selected expense? This action cannot be undone." = "Удалить выбранный расход? Это действие нельзя отменить.";
+"Delete" = "Удалить";
+
+"Energy" = "Энергия";
+"Expense type" = "Тип расхода";
+"Odometer" = "Одометр";
+"Cost" = "Стоимость";
+"%.1f kWh" = "%.1f кВт⋅ч";
+
+"How much one kilometer costs you" = "Сколько стоит один километр";
+
+"Track your electric vehicle charging costs and discover your true cost per kilometer." = "Отслеживайте затраты на зарядку электромобиля и узнайте реальную стоимость одного километра.";
+"Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Записывайте сессии зарядки, анализируйте расходы и оптимизируйте стратегию зарядки электромобиля с помощью подробной аналитики и автоматических расчётов.";
+"If you have any questions or suggestions, feel free to create an issue on Github:" = "Если у вас есть вопросы или предложения, создайте issue на GitHub:";
+"ev-charging-tracker" = "ev-charging-tracker";
+"Version: %@" = "Версия: %@";
+"Developer: © %@" = "Разработчик: © %@";
+"Build: development" = "Сборка: разработка";
+"EV Charge Tracker" = "EV Charge Tracker";

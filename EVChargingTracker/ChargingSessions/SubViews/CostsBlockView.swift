@@ -39,7 +39,7 @@ struct CostsBlockView: SwiftUICore.View {
                     .popover(isPresented: $showingHelp) {
                         
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Hint")
+                            Text(NSLocalizedString("Hint", comment: "Header for hint popover"))
                                 .font(.headline)
                             
                             Text(hint)
@@ -53,12 +53,12 @@ struct CostsBlockView: SwiftUICore.View {
             }
 
             HStack(alignment: .lastTextBaseline) {
-                Text(String(format: "\(currency.rawValue)%.2f", costsValue))
+                Text(String(format: "%@%.2f", currency.rawValue, costsValue))
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                 
                 if (perKilometer) {
-                    Text("per km")
+                    Text(NSLocalizedString("per km", comment: "Label for per kilometer"))
                         .font(.system(size: 14, weight: .regular))
                         .foregroundColor(colorScheme == .dark ? .white : .black)
                 }
@@ -81,7 +81,7 @@ struct CostsBlockView: SwiftUICore.View {
 
 #Preview {
     CostsBlockView(
-        title: "How much one kilometer costs you",
+        title: NSLocalizedString("How much one kilometer costs you", comment: "Preview title for costs block"),
         hint: nil,
         currency: .kzt,
         costsValue: 45,

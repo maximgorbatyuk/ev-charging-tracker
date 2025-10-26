@@ -28,40 +28,40 @@ struct EditCarView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
-                Section(header: Text("Car")) {
-                    TextField("Name", text: $name)
+                Section(header: Text(NSLocalizedString("Car", comment: "Section header for car info"))) {
+                    TextField(NSLocalizedString("Name", comment: "Placeholder for car name"), text: $name)
                 }
 
-                Section(header: Text("Battery capacity (kWh)")) {
-                    TextField("e.g. 75", text: $batteryText)
+                Section(header: Text(NSLocalizedString("Battery capacity (kWh)", comment: "Section header for battery capacity"))) {
+                    TextField(NSLocalizedString("e.g. 75", comment: "Placeholder example for battery capacity"), text: $batteryText)
                         .keyboardType(.numberPad)
                 }
 
-                Section(header: Text("Current mileage (km)")) {
-                    Text("Minimum: \(car.initialMileage)")
+                Section(header: Text(NSLocalizedString("Current mileage (km)", comment: "Section header for current mileage"))) {
+                    Text(String(format: NSLocalizedString("Minimum: %d", comment: "Label showing minimum allowed mileage"), car.initialMileage))
                         .font(.footnote)
                         .foregroundColor(.secondary)
                         .padding(.top, 2)
 
-                    TextField("Current: \(car.currentMileage)", text: $mileageText)
+                    TextField(String(format: NSLocalizedString("Current: %d", comment: "Placeholder showing current mileage"), car.currentMileage), text: $mileageText)
                         .keyboardType(.numberPad)
                 }
 
-                Section(header: Text("Danger zone")) {
-                    Toggle("Selected for tracking", isOn: $selectedForTracking)
+                Section(header: Text(NSLocalizedString("Danger zone", comment: "Section header for dangerous settings"))) {
+                    Toggle(NSLocalizedString("Selected for tracking", comment: "Toggle label for selected for tracking"), isOn: $selectedForTracking)
                         .disabled(true)
                 }
             }
-            .navigationTitle("Edit car")
+            .navigationTitle(NSLocalizedString("Edit car", comment: "Navigation title for edit car screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         onCancel()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(NSLocalizedString("Save", comment: "Save button")) {
                         let battery = Double(batteryText)
                         
                         var batteryToSave: Double? = nil

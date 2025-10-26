@@ -26,7 +26,7 @@ struct ExpensesView: SwiftUICore.View {
                         }) {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
-                                Text("Add Expense")
+                                Text(NSLocalizedString("Add Expense", comment: "Button to add expense"))
                                     .fontWeight(.semibold)
                             }
                             .frame(maxWidth: .infinity)
@@ -46,7 +46,7 @@ struct ExpensesView: SwiftUICore.View {
                         // Total Cost
                         if viewModel.totalCost > 0 {
                             CostsBlockView(
-                                title: "Total costs",
+                                title: NSLocalizedString("Total costs", comment: "Title for total costs"),
                                 hint: nil,
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.totalCost,
@@ -63,7 +63,7 @@ struct ExpensesView: SwiftUICore.View {
                     .padding(.vertical)
                 }
             }
-            .navigationTitle("All car expenses")
+            .navigationTitle(NSLocalizedString("All car expenses", comment: "Navigation title for expenses"))
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
                 
@@ -122,11 +122,11 @@ struct ExpensesView: SwiftUICore.View {
                 .font(.system(size: 64))
                 .foregroundColor(.gray.opacity(0.5))
 
-            Text("No expenses yet")
+            Text(NSLocalizedString("No expenses yet", comment: "Empty state: no expenses"))
                 .font(.title3)
                 .foregroundColor(.gray)
             
-            Text("Add your first expense to start tracking")
+            Text(NSLocalizedString("Add your first expense to start tracking", comment: "Prompt to add first expense"))
                 .font(.subheadline)
                 .foregroundColor(.gray.opacity(0.9))
         }
@@ -150,24 +150,27 @@ struct ExpensesView: SwiftUICore.View {
     
     // Confirmation alert attached to the view
     private func deleteConfirmationAlert() -> Alert {
-        let title = Text("Delete expense")
+        let title = Text(NSLocalizedString("Delete expense", comment: "Alert title for deletion"))
         let message: Text
         if let e = expenseToDelete {
             // Show date and optional amount
             let dateText = e.date.formatted(date: .abbreviated, time: .omitted)
             if let cost = e.cost {
-                message = Text("Delete expense on \(dateText) with amount \(e.currency.rawValue)\(String(format: "%.2f", cost))? This action cannot be undone.")
+                let amount = String(format: "%@%.2f", e.currency.rawValue, cost)
+                let messageString = String(format: NSLocalizedString("Delete expense on %@ with amount %@? This action cannot be undone.", comment: "Delete expense with amount message"), dateText, amount)
+                message = Text(messageString)
             } else {
-                message = Text("Delete expense on \(dateText)? This action cannot be undone.")
+                let messageString = String(format: NSLocalizedString("Delete expense on %@? This action cannot be undone.", comment: "Delete expense without amount message"), dateText)
+                message = Text(messageString)
             }
         } else {
-            message = Text("Delete selected expense? This action cannot be undone.")
+            message = Text(NSLocalizedString("Delete selected expense? This action cannot be undone.", comment: "Fallback delete message"))
         }
 
         return Alert(
             title: title,
             message: message,
-            primaryButton: .destructive(Text("Delete")) {
+            primaryButton: .destructive(Text(NSLocalizedString("Delete", comment: "Delete button"))) {
                 if let e = expenseToDelete {
                     viewModel.deleteSession(e)
                 }

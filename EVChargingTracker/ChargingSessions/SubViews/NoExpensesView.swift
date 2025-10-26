@@ -14,11 +14,11 @@ struct NoExpensesView: SwiftUICore.View {
                 .font(.system(size: 64))
                 .foregroundColor(.gray.opacity(0.5))
             
-            Text("No charging sessions yet")
+            Text(NSLocalizedString("No charging sessions yet", comment: "Empty state title when there are no charging sessions"))
                 .font(.title3)
                 .foregroundColor(.gray)
             
-            Text("Add your first session to start tracking")
+            Text(NSLocalizedString("Add your first session to start tracking", comment: "Empty state subtitle prompting to add first session"))
                 .font(.subheadline)
                 .foregroundColor(.gray.opacity(0.9))
         }

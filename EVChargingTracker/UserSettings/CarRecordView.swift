@@ -34,7 +34,7 @@ struct CarRecordView: SwiftUICore.View  {
             HStack(spacing: 20) {
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Initial millage")
+                    Text(NSLocalizedString("Initial millage", comment: "Label for initial mileage"))
                         .font(.caption)
                         .foregroundColor(.gray)
 
@@ -45,7 +45,7 @@ struct CarRecordView: SwiftUICore.View  {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Current millage")
+                    Text(NSLocalizedString("Current millage", comment: "Label for current mileage"))
                         .font(.caption)
                         .foregroundColor(.gray)
 
@@ -58,7 +58,7 @@ struct CarRecordView: SwiftUICore.View  {
                 // Safely unwrap optional batteryCapacity to avoid complex optional chaining inside interpolations
                 if let battery = car.batteryCapacity {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Battery")
+                        Text(NSLocalizedString("Battery", comment: "Label for battery capacity"))
                             .font(.caption)
                             .foregroundColor(.gray)
 
@@ -70,7 +70,7 @@ struct CarRecordView: SwiftUICore.View  {
                 }
             }
 
-            Text(car.selectedForTracking ? "Tracking" : "Not tracking")
+            Text(car.selectedForTracking ? NSLocalizedString("Tracking", comment: "Indicates tracking enabled") : NSLocalizedString("Not tracking", comment: "Indicates tracking disabled"))
                 .fontWeight(.semibold)
                 .font(.system(size: 16, weight: .regular))
                 .foregroundColor(car.selectedForTracking ? .green : .red)
