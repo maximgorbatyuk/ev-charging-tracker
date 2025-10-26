@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-// TODO mgorbatyuk: fix cached localizations after language change
 struct MainTabView: SwiftUI.View {
+    @ObservedObject private var loc = LocalizationManager.shared
+
     var body: some SwiftUI.View {
         TabView {
             ChargingSessionsView()
@@ -31,6 +32,7 @@ struct MainTabView: SwiftUI.View {
                     Label(L("About"), systemImage: "info.circle")
                 }
         }
+        .id(loc.currentLanguage.rawValue)
     }
 }
 

@@ -14,7 +14,7 @@ struct ChargingSessionsView: SwiftUICore.View {
 
                         StatsBlockView(
                             totalEnergy: viewModel.totalEnergy,
-                            averageEnergy: viewModel.averageEnergy,
+                            averageEnergy: viewModel.getAvgConsumptionKWhPer100(),
                             chargingSessionsCount: viewModel.getChargingSessionsCount()
                         )
                         .padding(.horizontal)

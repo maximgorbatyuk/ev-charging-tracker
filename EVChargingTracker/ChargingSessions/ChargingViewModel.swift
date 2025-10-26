@@ -12,6 +12,12 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     @Published var expenses: [Expense] = []
 
     var defaultCurrency: Currency
+
+    // ICE average consumption in liters per 100 km
+    let iceLPer100 = 10.0
+
+    // Average fuel density in kg per gas liter
+    let fuelKgPerL = 2.31
     
     private let db: DatabaseManager
     private let expensesRepository: ExpensesRepository
@@ -108,7 +114,28 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     func updateMilleage(_ car: Car) -> Bool {
         return db.carRepository!.updateMilleage(car)
     }
-    
+
+    func getTotalCarDistance() -> Double {
+        return Double(selectedCarForExpenses?.getTotalMileage() ?? 0)
+    }
+
+    func getAvgConsumptionKWhPer100() -> Double {
+        let totalEnergy = self.totalEnergy
+        let totalDistance = self.getTotalCarDistance()
+        if (totalDistance == 0) {
+            return 0.0
+        }
+
+        return (totalEnergy / totalDistance) * 100.0
+    }
+
+    func co2SavedInKg() -> Double {
+        let icePer100 = iceLPer100 * fuelKgPerL
+        let totalDistance = self.getTotalCarDistance()
+
+        return icePer100 * (totalDistance / 100.0)
+    }
+
     var selectedCarForExpenses: Car? {
         if (_selectedCarForExpenses == nil) {
             _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()

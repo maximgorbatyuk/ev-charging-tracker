@@ -22,9 +22,9 @@ struct StatsBlockView: SwiftUICore.View {
                 color: .yellow,
                 minHeight: 90
             )
-            
+
             StatCard(
-                title: "Avg (kWh)",
+                title: "kWh / 100km",
                 value: String(format: "%.1f ", averageEnergy),
                 icon: "chart.line.uptrend.xyaxis",
                 color: .green,
