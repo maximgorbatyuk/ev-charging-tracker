@@ -46,6 +46,26 @@ struct UserSettingsView: SwiftUICore.View {
                                 }
                             }
 
+                            // Language selector row
+                            HStack {
+                                Text(NSLocalizedString("Language", comment: "Label for language selector"))
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(.gray)
+
+                                Spacer()
+
+                                Picker(selection: $viewModel.selectedLanguage, label: Text(viewModel.selectedLanguage.displayName)) {
+                                    ForEach(AppLanguage.allCases, id: \.self) { lang in
+                                        Text(lang.displayName).tag(lang)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .onChange(of: viewModel.selectedLanguage) { _, newLang in
+                                    viewModel.saveLanguage(newLang)
+                                }
+                            }
+
                             Text(NSLocalizedString("It is recommended to set the default currency before adding any expenses.", comment: "Recommendation to set default currency"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 14, weight: .regular))
