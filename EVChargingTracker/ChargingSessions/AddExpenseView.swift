@@ -14,6 +14,7 @@ struct AddExpenseView: SwiftUICore.View {
     let onAdd: (AddExpenseViewResult) -> Void
 
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var loc = LocalizationManager.shared
     
     @State private var date = Date()
     @State private var energyCharged = ""
@@ -33,43 +34,43 @@ struct AddExpenseView: SwiftUICore.View {
         NavigationView {
                       
             Form {
-                Section(header: Text(NSLocalizedString("Expense details", comment: "Section header for expense details"))) {
+                Section(header: Text(L("Expense details"))) {
                     
                     if (selectedCar != nil) {
                         HStack {
-                            Text(NSLocalizedString("Car", comment: "Label for car"))
+                            Text(L("Car"))
                             Spacer()
                             Text(selectedCar!.name)
                                 .disabled(true)
                         }
                     }
 
-                    DatePicker(NSLocalizedString("Date", comment: "Date picker label"), selection: $date, displayedComponents: .date)
+                    DatePicker(L("Date"), selection: $date, displayedComponents: .date)
 
                     if (defaultExpenseType == .charging) {
                         HStack {
-                            Text(NSLocalizedString("Energy (kWh)", comment: "Label for energy charged"))
+                            Text(L("Energy (kWh)"))
                             Spacer()
-                            TextField(NSLocalizedString("45.2", comment: "Placeholder for energy"), text: $energyCharged)
+                            TextField(L("45.2"), text: $energyCharged)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                         }
                         
-                        Picker(NSLocalizedString("Charger Type", comment: "Picker label for charger type"), selection: $chargerType) {
+                        Picker(L("Charger Type"), selection: $chargerType) {
                             ForEach(ChargerType.allCases, id: \.self) { type in
-                                Text(type.rawValue).tag(type)
+                                Text(L(type.rawValue)).tag(type)
                             }
                         }
                     } else {
-                        Picker(NSLocalizedString("Expense Type", comment: "Picker label for expense type"), selection: $expenseType) {
+                        Picker(L("Expense Type"), selection: $expenseType) {
                             ForEach(ExpenseType.allCases.filter({ $0 != .charging }), id: \.self) { type in
-                                Text(type.rawValue).tag(type)
+                                Text(L(type.rawValue)).tag(type)
                             }
                         }
                     }
                     
                     HStack {
-                        Text(NSLocalizedString("Odometer (km)", comment: "Label for odometer"))
+                        Text(L("Odometer (km)"))
                         Spacer()
                         TextField(selectedCar?.currentMileage.formatted() ?? "", text: $odometer)
                             .keyboardType(.numberPad)
@@ -77,27 +78,27 @@ struct AddExpenseView: SwiftUICore.View {
                     }
 
                     HStack {
-                        Text(String(format: NSLocalizedString("Cost (%@)", comment: "Label for cost with currency"), defaultCurrency.rawValue))
+                        Text(String(format: L("Cost (%@)"), defaultCurrency.rawValue))
                         Spacer()
-                        TextField(NSLocalizedString("12.50", comment: "Placeholder for cost"), text: $cost)
+                        TextField(L("12.50"), text: $cost)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                     }
 
                     if (selectedCar == nil) {
                         HStack {
-                            Text(NSLocalizedString("Car name", comment: "Label for car name when creating new car"))
+                            Text(L("Car name"))
                             Spacer()
-                            TextField(NSLocalizedString("Name of the car", comment: "Placeholder for car name"), text: $carName)
+                            TextField(L("Name of the car"), text: $carName)
                                 .multilineTextAlignment(.trailing)
                         }
                         
                         HStack {
                             Spacer()
 
-                            Text(NSLocalizedString("Battery capacity (kWh)", comment: "Label for battery capacity for new car"))
+                            Text(L("Battery capacity (kWh)"))
                             Spacer()
-                            TextField(NSLocalizedString("75", comment: "Placeholder for battery capacity"), text: $batteryCapacity)
+                            TextField(L("75"), text: $batteryCapacity)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                         }
@@ -105,21 +106,21 @@ struct AddExpenseView: SwiftUICore.View {
                     
                 }
 
-                Section(header: Text(NSLocalizedString("Optional", comment: "Section header for optional fields"))) {
-                    TextField(NSLocalizedString("Notes (optional)", comment: "Placeholder for optional notes"), text: $notes)
+                Section(header: Text(L("Optional"))) {
+                    TextField(L("Notes (optional)"), text: $notes)
                 }
             }
-            .navigationTitle(NSLocalizedString("Add expense", comment: "Title for add expense screen"))
+            .navigationTitle(L("Add expense"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
+                    Button(L("Cancel")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(NSLocalizedString("Save", comment: "Save button")) {
+                    Button(L("Save")) {
                         saveSession()
                     }
                     .fontWeight(.semibold)
@@ -143,14 +144,14 @@ struct AddExpenseView: SwiftUICore.View {
         }
 
         guard let expenseTypeUnwrapped = finalExpenseType else {
-            alertMessage = NSLocalizedString("Please select an expense type.", comment: "Validation message when expense type not selected")
+            alertMessage = L("Please select an expense type.")
             return
         }
 
         var energy = 0.0
         if (expenseTypeUnwrapped == .charging) {
             guard let energyParsed = Double(energyCharged) else {
-                alertMessage = NSLocalizedString("Please type a valid value for Energy.", comment: "Validation message for energy")
+                alertMessage = L("Please type a valid value for Energy.")
                 return
             }
 
@@ -158,7 +159,7 @@ struct AddExpenseView: SwiftUICore.View {
         }
 
         guard let odo = Int(odometer) else {
-            alertMessage = NSLocalizedString("Please type a valid value for Odometer.", comment: "Validation message for odometer")
+            alertMessage = L("Please type a valid value for Odometer.")
             return
         }
         
@@ -186,7 +187,7 @@ struct AddExpenseView: SwiftUICore.View {
                 chargerType: .other,
                 odometer: odo,
                 cost: 0.0,
-                notes: "Initial record for tracking car",
+                notes: L("Initial record for tracking car"),
                 isInitialRecord: true,
                 expenseType: .other,
                 currency: defaultCurrency,

@@ -10,6 +10,7 @@ import SwiftUI
 struct CarRecordView: SwiftUICore.View  {
     
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject private var loc = LocalizationManager.shared
 
     let car: CarDto
     let onEdit: () -> Void
@@ -34,7 +35,7 @@ struct CarRecordView: SwiftUICore.View  {
             HStack(spacing: 20) {
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(NSLocalizedString("Initial millage", comment: "Label for initial mileage"))
+                    Text(L("Initial millage"))
                         .font(.caption)
                         .foregroundColor(.gray)
 
@@ -45,7 +46,7 @@ struct CarRecordView: SwiftUICore.View  {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(NSLocalizedString("Current millage", comment: "Label for current mileage"))
+                    Text(L("Current millage"))
                         .font(.caption)
                         .foregroundColor(.gray)
 
@@ -58,7 +59,7 @@ struct CarRecordView: SwiftUICore.View  {
                 // Safely unwrap optional batteryCapacity to avoid complex optional chaining inside interpolations
                 if let battery = car.batteryCapacity {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(NSLocalizedString("Battery", comment: "Label for battery capacity"))
+                        Text(L("Battery"))
                             .font(.caption)
                             .foregroundColor(.gray)
 
@@ -70,7 +71,7 @@ struct CarRecordView: SwiftUICore.View  {
                 }
             }
 
-            Text(car.selectedForTracking ? NSLocalizedString("Tracking", comment: "Indicates tracking enabled") : NSLocalizedString("Not tracking", comment: "Indicates tracking disabled"))
+            Text(car.selectedForTracking ? L("Tracking") : L("Not tracking"))
                 .fontWeight(.semibold)
                 .font(.system(size: 16, weight: .regular))
                 .foregroundColor(car.selectedForTracking ? .green : .red)

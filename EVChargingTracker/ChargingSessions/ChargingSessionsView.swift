@@ -3,6 +3,7 @@ import SwiftUI
 struct ChargingSessionsView: SwiftUICore.View {
     @StateObject private var viewModel = ChargingViewModel()
     @State private var showingAddSession = false
+    @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -21,23 +22,23 @@ struct ChargingSessionsView: SwiftUICore.View {
                         if viewModel.totalCost > 0 {
 
                             CostsBlockView(
-                                title: NSLocalizedString("One kilometer price (charging only)", comment: "Title for per-km cost (charging only)"),
-                                hint: NSLocalizedString("How much one kilometer costs you including only charging expenses", comment: "Hint explaining per-km charging-only calculation"),
+                                title: L("One kilometer price (charging only)"),
+                                hint: L("How much one kilometer costs you including only charging expenses"),
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.calculateOneKilometerCosts(true),
                                 perKilometer: true
                             )
 
                             CostsBlockView(
-                                title: NSLocalizedString("One kilometer price (total)", comment: "Title for per-km cost (total)"),
-                                hint: NSLocalizedString("How much one kilometer costs you including all logged expenses", comment: "Hint explaining per-km total calculation"),
+                                title: L("One kilometer price (total)"),
+                                hint: L("How much one kilometer costs you including all logged expenses"),
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.calculateOneKilometerCosts(false),
                                 perKilometer: true
                             )
 
                             CostsBlockView(
-                                title: NSLocalizedString("Total charging costs", comment: "Title for total charging costs"),
+                                title: L("Total charging costs"),
                                 hint: nil,
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.totalChargingCost,
@@ -55,7 +56,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                         }) {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
-                                Text(NSLocalizedString("Add Charging Session", comment: "Button title to add a charging session"))
+                                Text(L("Add Charging Session"))
                                     .fontWeight(.semibold)
                             }
                             .frame(maxWidth: .infinity)
@@ -75,7 +76,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                     .padding(.vertical)
                 }
             }
-            .navigationTitle(NSLocalizedString("Charging stats", comment: "Navigation title for charging stats screen"))
+            .navigationTitle(L("Charging stats"))
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
 

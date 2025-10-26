@@ -16,6 +16,7 @@ struct CostsBlockView: SwiftUICore.View {
     let perKilometer: Bool
 
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject private var loc = LocalizationManager.shared
 
     @State private var showingHelp = false
     
@@ -39,7 +40,7 @@ struct CostsBlockView: SwiftUICore.View {
                     .popover(isPresented: $showingHelp) {
                         
                         VStack(alignment: .leading, spacing: 10) {
-                            Text(NSLocalizedString("Hint", comment: "Header for hint popover"))
+                            Text(L("Hint"))
                                 .font(.headline)
                             
                             Text(hint)
@@ -58,7 +59,7 @@ struct CostsBlockView: SwiftUICore.View {
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                 
                 if (perKilometer) {
-                    Text(NSLocalizedString("per km", comment: "Label for per kilometer"))
+                    Text(L("per km"))
                         .font(.system(size: 14, weight: .regular))
                         .foregroundColor(colorScheme == .dark ? .white : .black)
                 }
@@ -81,7 +82,7 @@ struct CostsBlockView: SwiftUICore.View {
 
 #Preview {
     CostsBlockView(
-        title: NSLocalizedString("How much one kilometer costs you", comment: "Preview title for costs block"),
+        title: L("How much one kilometer costs you"),
         hint: nil,
         currency: .kzt,
         costsValue: 45,

@@ -5,6 +5,8 @@ struct EditCarView: SwiftUICore.View {
     let onSave: (CarDto) -> Void
     let onCancel: () -> Void
 
+    @ObservedObject private var loc = LocalizationManager.shared
+
     @State private var name: String
     @State private var batteryText: String
     @State private var mileageText: String
@@ -28,40 +30,40 @@ struct EditCarView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
-                Section(header: Text(NSLocalizedString("Car", comment: "Section header for car info"))) {
-                    TextField(NSLocalizedString("Name", comment: "Placeholder for car name"), text: $name)
+                Section(header: Text(L("Car"))) {
+                    TextField(L("Name"), text: $name)
                 }
 
-                Section(header: Text(NSLocalizedString("Battery capacity (kWh)", comment: "Section header for battery capacity"))) {
-                    TextField(NSLocalizedString("e.g. 75", comment: "Placeholder example for battery capacity"), text: $batteryText)
+                Section(header: Text(L("Battery capacity (kWh)"))) {
+                    TextField(L("e.g. 75"), text: $batteryText)
                         .keyboardType(.numberPad)
                 }
 
-                Section(header: Text(NSLocalizedString("Current mileage (km)", comment: "Section header for current mileage"))) {
-                    Text(String(format: NSLocalizedString("Minimum: %d", comment: "Label showing minimum allowed mileage"), car.initialMileage))
+                Section(header: Text(L("Current mileage (km)"))) {
+                    Text(String(format: L("Minimum: %d"), car.initialMileage))
                         .font(.footnote)
                         .foregroundColor(.secondary)
                         .padding(.top, 2)
 
-                    TextField(String(format: NSLocalizedString("Current: %d", comment: "Placeholder showing current mileage"), car.currentMileage), text: $mileageText)
+                    TextField(String(format: L("Current: %d"), car.currentMileage), text: $mileageText)
                         .keyboardType(.numberPad)
                 }
 
-                Section(header: Text(NSLocalizedString("Danger zone", comment: "Section header for dangerous settings"))) {
-                    Toggle(NSLocalizedString("Selected for tracking", comment: "Toggle label for selected for tracking"), isOn: $selectedForTracking)
+                Section(header: Text(L("Danger zone"))) {
+                    Toggle(L("Selected for tracking"), isOn: $selectedForTracking)
                         .disabled(true)
                 }
             }
-            .navigationTitle(NSLocalizedString("Edit car", comment: "Navigation title for edit car screen"))
+            .navigationTitle(L("Edit car"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
+                    Button(L("Cancel")) {
                         onCancel()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(NSLocalizedString("Save", comment: "Save button")) {
+                    Button(L("Save")) {
                         let battery = Double(batteryText)
                         
                         var batteryToSave: Double? = nil

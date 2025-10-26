@@ -13,6 +13,7 @@ struct ExpensesView: SwiftUICore.View {
     @State private var showingAddSession = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var expenseToDelete: Expense? = nil
+    @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -26,7 +27,7 @@ struct ExpensesView: SwiftUICore.View {
                         }) {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
-                                Text(NSLocalizedString("Add Expense", comment: "Button to add expense"))
+                                Text(L("Add Expense"))
                                     .fontWeight(.semibold)
                             }
                             .frame(maxWidth: .infinity)
@@ -46,7 +47,7 @@ struct ExpensesView: SwiftUICore.View {
                         // Total Cost
                         if viewModel.totalCost > 0 {
                             CostsBlockView(
-                                title: NSLocalizedString("Total costs", comment: "Title for total costs"),
+                                title: L("Total costs"),
                                 hint: nil,
                                 currency: viewModel.defaultCurrency,
                                 costsValue: viewModel.totalCost,
@@ -150,27 +151,27 @@ struct ExpensesView: SwiftUICore.View {
     
     // Confirmation alert attached to the view
     private func deleteConfirmationAlert() -> Alert {
-        let title = Text(NSLocalizedString("Delete expense", comment: "Alert title for deletion"))
+        let title = Text(L("Delete expense"))
         let message: Text
         if let e = expenseToDelete {
             // Show date and optional amount
             let dateText = e.date.formatted(date: .abbreviated, time: .omitted)
             if let cost = e.cost {
                 let amount = String(format: "%@%.2f", e.currency.rawValue, cost)
-                let messageString = String(format: NSLocalizedString("Delete expense on %@ with amount %@? This action cannot be undone.", comment: "Delete expense with amount message"), dateText, amount)
+                let messageString = String(format: L("Delete expense on %@ with amount %@? This action cannot be undone."), dateText, amount)
                 message = Text(messageString)
             } else {
-                let messageString = String(format: NSLocalizedString("Delete expense on %@? This action cannot be undone.", comment: "Delete expense without amount message"), dateText)
+                let messageString = String(format: L("Delete expense on %@? This action cannot be undone."), dateText)
                 message = Text(messageString)
             }
         } else {
-            message = Text(NSLocalizedString("Delete selected expense? This action cannot be undone.", comment: "Fallback delete message"))
+            message = Text(L("Delete selected expense? This action cannot be undone."))
         }
 
         return Alert(
             title: title,
             message: message,
-            primaryButton: .destructive(Text(NSLocalizedString("Delete", comment: "Delete button"))) {
+            primaryButton: .destructive(Text(L("Delete"))) {
                 if let e = expenseToDelete {
                     viewModel.deleteSession(e)
                 }

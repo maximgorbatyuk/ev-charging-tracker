@@ -67,6 +67,9 @@ class UserSettingsViewModel: ObservableObject {
         if !success {
             print("Failed to save selected language to DB")
         }
+
+        // Update runtime localization manager so UI can react immediately
+        LocalizationManager.shared.setLanguage(language)
     }
 
     func getCars() -> [CarDto] {

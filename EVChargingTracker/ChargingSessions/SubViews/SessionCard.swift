@@ -10,6 +10,7 @@ import SwiftUI
 struct SessionCard: SwiftUICore.View {
 
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject private var loc = LocalizationManager.shared
     
     let session: Expense
     let onDelete: () -> Void
@@ -30,7 +31,7 @@ struct SessionCard: SwiftUICore.View {
             }
             
             if (session.expenseType == .charging) {
-                Text(NSLocalizedString(session.chargerType.rawValue, comment: "Charger type human readable"))
+                Text(L(session.chargerType.rawValue))
                     .font(.caption)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
@@ -45,20 +46,20 @@ struct SessionCard: SwiftUICore.View {
                 
                 if (session.expenseType == .charging) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(NSLocalizedString("Energy", comment: "Label for energy charged"))
+                        Text(L("Energy"))
                             .font(.caption)
                             .foregroundColor(.gray)
-                        Text(String(format: NSLocalizedString("%.1f kWh", comment: "Energy value with unit"), session.energyCharged))
+                        Text(String(format: L("%.1f kWh"), session.energyCharged))
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
                     }
                 } else {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(NSLocalizedString("Expense type", comment: "Label for expense type"))
+                        Text(L("Expense type"))
                             .font(.caption)
                             .foregroundColor(.gray)
-                        Text(NSLocalizedString(session.expenseType.rawValue, comment: "Expense type human readable"))
+                        Text(L(session.expenseType.rawValue))
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
@@ -66,7 +67,7 @@ struct SessionCard: SwiftUICore.View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(NSLocalizedString("Odometer", comment: "Label for odometer"))
+                    Text(L("Odometer"))
                         .font(.caption)
                         .foregroundColor(.gray)
                     Text("\(session.odometer.formatted()) km")
@@ -77,7 +78,7 @@ struct SessionCard: SwiftUICore.View {
                 
                 if let cost = session.cost {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(NSLocalizedString("Cost", comment: "Label for cost"))
+                        Text(L("Cost"))
                             .font(.caption)
                             .foregroundColor(.gray)
                         Text(String(format: "%@%.2f", session.currency.rawValue, cost))
