@@ -62,7 +62,7 @@ struct UserSettingsView: SwiftUICore.View {
                                     }
                                 }
                                 .pickerStyle(MenuPickerStyle())
-                                .onChange(of: viewModel.selectedLanguage) { newLang in
+                                .onChange(of: viewModel.selectedLanguage) { _, newLang in
                                     viewModel.saveLanguage(newLang)
                                 }
                             }

@@ -14,13 +14,13 @@ enum UserSettingKey: String {
 enum AppLanguage: String, CaseIterable, Codable {
     case en = "en"
     case ru = "ru"
-    case kz = "kz"
+    case kk = "kk"
 
     var displayName: String {
         switch self {
             case .en: return "🇬🇧 English"
             case .ru: return "🇷🇺 Русский"
-            case .kz: return "🇰🇿 Қазақша"
+            case .kk: return "🇰🇿 Қазақша"
         }
     }
 }
