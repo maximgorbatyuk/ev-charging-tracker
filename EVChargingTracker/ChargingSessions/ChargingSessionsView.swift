@@ -76,7 +76,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                     .padding(.vertical)
                 }
             }
-            .navigationTitle(L("Charging stats"))
+            .navigationTitle(L("Car stats"))
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
 

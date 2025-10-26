@@ -34,6 +34,7 @@ final class LocalizationManager: ObservableObject {
            let bundle = Bundle(path: path) {
             return bundle.localizedString(forKey: key, value: key, table: nil)
         }
+
         // fallback to main bundle / key itself
         return Bundle.main.localizedString(forKey: key, value: key, table: nil)
     }

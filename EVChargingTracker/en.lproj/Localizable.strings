@@ -52,7 +52,7 @@
 "How much one kilometer costs you including all logged expenses" = "How much one kilometer costs you including all logged expenses";
 "Total charging costs" = "Total charging costs";
 "Add Charging Session" = "Add Charging Session";
-"Charging stats" = "Charging stats";
+"Car stats" = "Car stats";
 
 "Add Expense" = "Add Expense";
 "Total costs" = "Total costs";
@@ -91,3 +91,9 @@
 "Public Fast (50kW)" = "Public Fast (50kW)";
 "Public Rapid (100kW)" = "Public Rapid (100kW)";
 "Other" = "Other";
+
+/* Menu */
+"Stats" = "Stats";
+"Expenses" = "Expenses";
+"Settings" = "Settings";
+"About" = "About";

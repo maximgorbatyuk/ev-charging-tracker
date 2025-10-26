@@ -24,7 +24,7 @@
 "Cars" = "Автомобили";
 "User settings" = "Настройки";
 
-"Expense details" = "Детали расхода";
+"Expense details" = "Детали";
 "Car" = "Автомобиль";
 "Date" = "Дата";
 "Energy (kWh)" = "Энергия (кВт/ч)";
@@ -36,9 +36,9 @@
 "Name of the car" = "Название автомобиля";
 "Optional" = "Дополнительно";
 "Notes (optional)" = "Примечания (необязательно)";
-"Add expense" = "Добавить затраты";
+"Add expense" = "Добавить расход";
 
-"Please select an expense type." = "Пожалуйста, выберите тип затрат.";
+"Please select an expense type." = "Пожалуйста, выберите тип расхода.";
 "Please type a valid value for Energy." = "Пожалуйста, введите корректное значение энергии.";
 "Please type a valid value for Odometer." = "Пожалуйста, введите корректное значение одометра.";
 
@@ -46,18 +46,18 @@
 "per km" = "за км";
 
 "One kilometer price (charging only)" = "Цена за километр (только зарядка)";
-"How much one kilometer costs you including only charging expenses" = "Сколько стоит один километр, учитывая только затраты на зарядку";
+"How much one kilometer costs you including only charging expenses" = "Сколько стоит один километр, учитывая только расход на зарядку";
 "One kilometer price (total)" = "Цена за километр (всего)";
 "How much one kilometer costs you including all logged expenses" = "Сколько стоит один километр, учитывая все расходы";
 "Total charging costs" = "Общие расходы на зарядку";
 "Add Charging Session" = "Добавить сессию зарядки";
-"Charging stats" = "Статистика зарядки";
+"Car stats" = "Статистика";
 
 "Add Expense" = "Добавить расход";
 "Total costs" = "Общие расходы";
-"All car expenses" = "Все расходы по автомобилю";
-"No expenses yet" = "Пока нет затрат";
-"Add your first expense to start tracking" = "Добавьте первый расход, чтобы начать учет";
+"All car expenses" = "Все расходы";
+"No expenses yet" = "Пока нет записей";
+"Add your first expense to start tracking" = "Добавьте первую запись расхода, чтобы начать учет";
 
 "Delete expense" = "Удалить расход";
 "Delete expense on %@ with amount %@? This action cannot be undone." = "Удалить запись от %@ на сумму %@? Это действие нельзя отменить.";
@@ -66,14 +66,14 @@
 "Delete" = "Удалить";
 
 "Energy" = "Энергия";
-"Expense type" = "Тип затрат";
+"Expense type" = "Тип расхода";
 "Odometer" = "Одометр";
 "Cost" = "Стоимость";
 "%.1f kWh" = "%.1f кВт/ч";
 
 "How much one kilometer costs you" = "Сколько стоит один километр";
 
-"Track your electric vehicle charging costs and discover your true cost per kilometer." = "Отслеживайте затраты на зарядку электромобиля и узнайте реальную стоимость одного километра.";
+"Track your electric vehicle charging costs and discover your true cost per kilometer." = "Отслеживайте расходы на зарядку электромобиля и узнайте реальную стоимость одного километра.";
 "Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Записывайте сессии зарядки, анализируйте расходы и оптимизируйте стратегию зарядки электромобиля с помощью подробной аналитики и автоматических расчётов.";
 "If you have any questions or suggestions, feel free to create an issue on Github:" = "Если у вас есть вопросы или предложения, создайте issue на GitHub:";
 "ev-charging-tracker" = "ev-charging-tracker";
@@ -81,3 +81,9 @@
 "Developer: © %@" = "Разработчик: © %@";
 "Build: development" = "Сборка: разработка";
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Menu */
+"Stats" = "Статистика";
+"Expenses" = "Расходы";
+"Settings" = "Настройки";
+"About" = "О приложении";

@@ -64,7 +64,7 @@ struct ExpensesView: SwiftUICore.View {
                     .padding(.vertical)
                 }
             }
-            .navigationTitle(NSLocalizedString("All car expenses", comment: "Navigation title for expenses"))
+            .navigationTitle(L("All car expenses"))
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
                 
@@ -123,11 +123,11 @@ struct ExpensesView: SwiftUICore.View {
                 .font(.system(size: 64))
                 .foregroundColor(.gray.opacity(0.5))
 
-            Text(NSLocalizedString("No expenses yet", comment: "Empty state: no expenses"))
+            Text(L("No expenses yet"))
                 .font(.title3)
                 .foregroundColor(.gray)
             
-            Text(NSLocalizedString("Add your first expense to start tracking", comment: "Prompt to add first expense"))
+            Text(L("Add your first expense to start tracking"))
                 .font(.subheadline)
                 .foregroundColor(.gray.opacity(0.9))
         }
