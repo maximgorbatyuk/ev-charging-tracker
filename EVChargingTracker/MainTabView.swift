@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO mgorbatyuk: fix cached localizations after language change
 struct MainTabView: SwiftUI.View {
     var body: some SwiftUI.View {
         TabView {
