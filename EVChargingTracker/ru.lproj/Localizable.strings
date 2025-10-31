@@ -37,6 +37,7 @@
 "Optional" = "Дополнительно";
 "Notes (optional)" = "Примечания (необязательно)";
 "Add expense" = "Добавить расход";
+"Price per kWh" = "Цена 1 kWh";
 
 "Please select an expense type." = "Пожалуйста, выберите тип расхода.";
 "Please type a valid value for Energy." = "Пожалуйста, введите корректное значение энергии.";
@@ -87,3 +88,15 @@
 "Expenses" = "Расходы";
 "Settings" = "Настройки";
 "About" = "О приложении";
+
+/* ChargerType human-friendly */
+"Home (3kW)" = "Дома (3kW)";
+"Home (7kW)" = "Дома (7kW)";
+"Home (11kW)" = "Дома (11kW)";
+"Destination (22kW)" = "Destination (22kW)";
+"Supercharger V2 (150kW)" = "Supercharger V2 (150kW)";
+"Supercharger V3 (250kW)" = "Supercharger V3 (250kW)";
+"Supercharger V4 (350kW)" = "Supercharger V4 (350kW)";
+"Public Fast (50kW)" = "Быстрая зарядка (50kW)";
+"Public Rapid (100kW)" = "Быстрая зарядка (100kW)";
+"Other" = "Other";

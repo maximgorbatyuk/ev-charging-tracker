@@ -38,6 +38,7 @@
 "Optional" = "Optional";
 "Notes (optional)" = "Notes (optional)";
 "Add expense" = "Add expense";
+"Price per kWh" = "Price per kWh";
 
 "Please select an expense type." = "Please select an expense type.";
 "Please type a valid value for Energy." = "Please type a valid value for Energy.";
@@ -82,6 +83,7 @@
 "other" = "Other";
 
 /* ChargerType human-friendly */
+"Home (3kW)" = "Home (3kW)";
 "Home (7kW)" = "Home (7kW)";
 "Home (11kW)" = "Home (11kW)";
 "Destination (22kW)" = "Destination (22kW)";

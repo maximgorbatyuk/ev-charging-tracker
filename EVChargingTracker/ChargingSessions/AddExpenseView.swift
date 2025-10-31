@@ -21,15 +21,18 @@ struct AddExpenseView: SwiftUICore.View {
     @State private var chargerType: ChargerType = .home7kW
     @State private var expenseType: ExpenseType? = nil
     @State private var odometer = ""
+    @State private var pricePerKWh = ""
     @State private var cost = ""
     @State private var notes = ""
     @State private var showingAlert = false
-    
     @State private var carName = ""
     @State private var batteryCapacity = ""
 
     @State private var alertMessage: String? = nil
-    
+
+    @FocusState private var isPricePerKWhFocused: Bool
+    @FocusState private var isCostFocused: Bool
+
     var body: some SwiftUICore.View {
         NavigationView {
                       
@@ -55,12 +58,40 @@ struct AddExpenseView: SwiftUICore.View {
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                         }
-                        
+
+                        HStack {
+                            Text(String(format: L("Price per kWh"), defaultCurrency.rawValue))
+                            Spacer()
+                            TextField(L("65.0"), text: $pricePerKWh)
+                                .focused($isPricePerKWhFocused)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .onChange(of: pricePerKWh, { oldValue, newValue in
+
+                                    if (!isPricePerKWhFocused) {
+                                        return
+                                    }
+
+                                    guard let pricePerKWhValue = Double(pricePerKWh.replacing(",", with: ".")) else {
+                                        return
+                                    }
+
+                                    guard let energyChargedValue = Double(energyCharged.replacing(",", with: ".")) else {
+                                        return
+                                    }
+
+                                    let totalCost = pricePerKWhValue * energyChargedValue
+                                    cost = String(format: "%.2f", totalCost)
+                                })
+                        }
+
                         Picker(L("Charger Type"), selection: $chargerType) {
                             ForEach(ChargerType.allCases, id: \.self) { type in
                                 Text(L(type.rawValue)).tag(type)
                             }
                         }
+
+                        
                     } else {
                         Picker(L("Expense Type"), selection: $expenseType) {
                             ForEach(ExpenseType.allCases.filter({ $0 != .charging }), id: \.self) { type in
@@ -76,14 +107,36 @@ struct AddExpenseView: SwiftUICore.View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                     }
-
+                    
                     HStack {
                         Text(String(format: L("Cost (%@)"), defaultCurrency.rawValue))
                         Spacer()
                         TextField(L("12.50"), text: $cost)
+                            .focused($isCostFocused)
+                            .onChange(of: cost, { oldValue, newValue in
+                                
+                                if (!isCostFocused) {
+                                    return
+                                }
+
+                                guard let energyChargedValue = Double(energyCharged.replacing(",", with: ".")) else {
+                                    return
+                                }
+
+                                guard let costValue = Double(newValue.replacing(",", with: ".")) else {
+                                    return
+                                }
+
+                                if (energyChargedValue > 0) {
+                                    let pricePerKWhValue = costValue / energyChargedValue
+                                    pricePerKWh = String(format: "%.2f", pricePerKWhValue)
+                                }
+                            })
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                     }
+
+                    
 
                     if (selectedCar == nil) {
                         HStack {

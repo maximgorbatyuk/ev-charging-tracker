@@ -38,6 +38,7 @@
 "Optional" = "Қосымша";
 "Notes (optional)" = "Ескертпе (қосымша)";
 "Add expense" = "Шығын қосу";
+"Price per kWh" = "1 kWh бағасы";
 
 "Please select an expense type." = "Шығын түрін таңдаңыз.";
 "Please type a valid value for Energy." = "Энергия үшін дұрыс мән енгізіңіз.";
@@ -82,6 +83,7 @@
 "other" = "Басқа";
 
 /* ChargerType human-friendly */
+"Home (3kW)" = "Үйдегі (3 кВт)";
 "Home (7kW)" = "Үйдегі (7 кВт)";
 "Home (11kW)" = "Үйдегі (11 кВт)";
 "Destination (22kW)" = "Мекенжайлық (22 кВт)";

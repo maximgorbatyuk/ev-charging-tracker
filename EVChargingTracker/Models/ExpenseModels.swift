@@ -16,6 +16,7 @@ enum ExpenseType: String, CaseIterable, Codable {
 }
 
 enum ChargerType: String, CaseIterable, Codable {
+    case home3kW = "Home (3kW)"
     case home7kW = "Home (7kW)"
     case home11kW = "Home (11kW)"
     case destination22kW = "Destination (22kW)"
