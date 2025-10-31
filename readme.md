@@ -4,6 +4,8 @@ Take control of your electric vehicle expenses with our intuitive charge trackin
 
 Whether you charge at home, at work, or at public charging stations, get clear insights into what your EV really costs to run.
 
+if you have any questions, feel free to reach me out via Telegram: [maximgorbatyuk](https://t.me/maximgorbatyuk)
+
 <table>
   <tr>
     <td>
