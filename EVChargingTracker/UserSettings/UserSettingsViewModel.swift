@@ -122,6 +122,11 @@ class UserSettingsViewModel: ObservableObject {
         }
     }
 
+    func isDevelopmentMode() -> Bool {
+        let buildEnvironment = Bundle.main.object(forInfoDictionaryKey: "BuildEnvironment") as? String ?? "-"
+        return buildEnvironment == "dev"
+    }
+
     var allCars : [CarDto] {
         return _allCars
     }

@@ -12,6 +12,8 @@ struct UserSettingsView: SwiftUICore.View {
     @StateObject private var viewModel = UserSettingsViewModel()
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
+    @State private var isNotificationsEnabled: Bool = false
+
     @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUICore.View {
@@ -23,28 +25,35 @@ struct UserSettingsView: SwiftUICore.View {
 
                         Section(header: Text(L("Base settings"))) {
                             Spacer()
-                            HStack {
-                                Text(L("Currency"))
-                                    .fontWeight(.semibold)
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.gray)
-
-                                Spacer()
-
-                                if (!viewModel.hasAnyExpense()) {
-                                    Button(action: {
-                                        showEditCurrencyModal = true
-                                    }) {
-                                        Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
-                                            .fontWeight(.semibold)
-                                            .font(.system(size: 16, weight: .bold))
-                                    }
-                                } else {
-                                    Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
+                            VStack(spacing: 10) {
+                                HStack {
+                                    Text(L("Currency"))
                                         .fontWeight(.semibold)
                                         .font(.system(size: 16, weight: .bold))
                                         .foregroundColor(.gray)
+
+                                    Spacer()
+
+                                    if (!viewModel.hasAnyExpense()) {
+                                        Button(action: {
+                                            showEditCurrencyModal = true
+                                        }) {
+                                            Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
+                                                .fontWeight(.semibold)
+                                                .font(.system(size: 16, weight: .bold))
+                                        }
+                                    } else {
+                                        Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
+                                            .fontWeight(.semibold)
+                                            .font(.system(size: 16, weight: .bold))
+                                            .foregroundColor(.gray)
+                                    }
                                 }
+
+                                Text(L("It is recommended to set the default currency before adding any expenses."))
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 14, weight: .regular))
+                                    .foregroundColor(.gray)
                             }
 
                             // Language selector row
@@ -66,12 +75,20 @@ struct UserSettingsView: SwiftUICore.View {
                                     viewModel.saveLanguage(newLang)
                                 }
                             }
+                            
+                            HStack {
+                                Text(L("Notifications enabled"))
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(.gray)
 
-                            Text(L("It is recommended to set the default currency before adding any expenses."))
-                                .fontWeight(.semibold)
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundColor(.gray)
-                                .padding(.top)
+                                Spacer()
+
+                                Toggle("", isOn: $isNotificationsEnabled)
+                                    .onChange(of: isNotificationsEnabled) { _, newValue in
+                                        viewModel.saveNotificationsEnabled(newValue)
+                                    }
+                            }
                         }
 
                         Divider()
@@ -87,6 +104,38 @@ struct UserSettingsView: SwiftUICore.View {
                                             onEdit: {
                                                 editingCar = car
                                             })
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if (viewModel.isDevelopmentMode()) {
+                            Divider()
+                            Spacer()
+
+                            Section(header: Text("Development mode")) {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Button("Request Permission") {
+                                        NotificationManager.shared.requestPermission()
+                                    }
+
+                                    Button("Send Notification Now") {
+                                        NotificationManager.shared.sendNotification(
+                                            title: "Hello!",
+                                            body: "This is a test notification"
+                                        )
+                                    }
+
+                                    Button("Schedule for 5 seconds") {
+                                        NotificationManager.shared.scheduleNotification(
+                                            title: "Reminder",
+                                            body: "5 seconds have passed!",
+                                            afterSeconds: 5
+                                        )
+                                    }
+
+                                    Button("Get pending notifications") {
+                                        NotificationManager.shared.getPendingNotificationRequests()
                                     }
                                 }
                             }
@@ -142,6 +191,17 @@ struct UserSettingsView: SwiftUICore.View {
             }
             .onAppear {
                 viewModel.refetchCars()
+
+                NotificationManager.shared.checkAndRequestPermission(
+                    completion: () {
+                        self.isNotificationsEnabled = true
+                    },
+                    onDeniedNotificationPermission: {
+                        self.isNotificationsEnabled = false
+                    }
+                ) {
+                    
+                }
             }
         }
     }

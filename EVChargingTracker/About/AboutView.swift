@@ -14,7 +14,8 @@ struct AboutView: SwiftUICore.View {
     let developerName = Bundle.main.object(forInfoDictionaryKey: "DeveloperName") as? String ?? "-"
     
     let githubRepoUrl = Bundle.main.object(forInfoDictionaryKey: "GithubRepoUrl") as? String ?? "-"
-    
+
+    // TODO mgorbatyuk: introduce Environment manager and then reuse it here
     let buildEnvironment = Bundle.main.object(forInfoDictionaryKey: "BuildEnvironment") as? String ?? "-"
     @ObservedObject private var loc = LocalizationManager.shared
 
