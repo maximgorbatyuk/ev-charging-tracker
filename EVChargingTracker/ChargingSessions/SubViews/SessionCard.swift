@@ -10,7 +10,6 @@ import SwiftUI
 struct SessionCard: SwiftUICore.View {
 
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject private var loc = LocalizationManager.shared
     
     let session: Expense
     let onDelete: () -> Void

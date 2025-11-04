@@ -24,7 +24,7 @@ struct MainTabView: SwiftUI.View {
 
             PlanedMaintenanceView()
                 .tabItem {
-                    Label(L("Maintenance"), systemImage: "info.circle")
+                    Label(L("Maintenance"), systemImage: "hammer.fill")
                 }
             
             UserSettingsView()

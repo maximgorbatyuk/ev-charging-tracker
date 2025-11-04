@@ -13,12 +13,10 @@ struct ExpensesView: SwiftUICore.View {
     @State private var showingAddSession = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var expenseToDelete: Expense? = nil
-    @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
-
                 ScrollView {
                     VStack(spacing: 20) {
 
@@ -152,21 +150,7 @@ struct ExpensesView: SwiftUICore.View {
     // Confirmation alert attached to the view
     private func deleteConfirmationAlert() -> Alert {
         let title = Text(L("Delete expense"))
-        let message: Text
-        if let e = expenseToDelete {
-            // Show date and optional amount
-            let dateText = e.date.formatted(date: .abbreviated, time: .omitted)
-            if let cost = e.cost {
-                let amount = String(format: "%@%.2f", e.currency.rawValue, cost)
-                let messageString = String(format: L("Delete expense on %@ with amount %@? This action cannot be undone."), dateText, amount)
-                message = Text(messageString)
-            } else {
-                let messageString = String(format: L("Delete expense on %@? This action cannot be undone."), dateText)
-                message = Text(messageString)
-            }
-        } else {
-            message = Text(L("Delete selected expense? This action cannot be undone."))
-        }
+        let message = Text(L("Delete selected expense? This action cannot be undone."))
 
         return Alert(
             title: title,

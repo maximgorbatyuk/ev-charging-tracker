@@ -110,3 +110,11 @@
 "Public Fast (50kW)" = "Быстрая зарядка (50kW)";
 "Public Rapid (100kW)" = "Быстрая зарядка (100kW)";
 "Other" = "Other";
+
+
+"Add maintenance" = "Добавить обслуживание";
+"Maintenance" = "Обслуживание";
+"No maintenance records yet" = "Еще нет записей об обслуживании";
+"Add your first maintenance record" = "Добавьте первую запись, что нужно сделать с автомобилем в будущем";
+"Delete maintenance record?" = "Удалить запись?";
+"Delete selected maintenance record? This action cannot be undone." = "Удалить эту запись? Действие не может быть отменено.";

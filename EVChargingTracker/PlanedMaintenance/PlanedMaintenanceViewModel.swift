@@ -13,12 +13,11 @@ class PlanedMaintenanceViewModel: ObservableObject {
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
 
     private let db: DatabaseManager
-    private let repository: PlannedMaintenanceRepository
+    let repository: PlannedMaintenanceRepository
 
     private var _selectedCarForExpenses: Car?
     
     init() {
-        
         self.db = DatabaseManager.shared
         self.repository = db.plannedMaintenanceRepository!
     }
@@ -30,8 +29,13 @@ class PlanedMaintenanceViewModel: ObservableObject {
         }
 
         let now = Date()
-        let records = repository.getAllRecords(carId: selectedCar!.id!).map { dbRecord in
+        var records = repository.getAllRecords(carId: selectedCar!.id!).map { dbRecord in
             PlannedMaintenanceItem(maintenance: dbRecord, car: selectedCar, now: now)
+        }
+
+        records.sort()
+        DispatchQueue.main.async {
+            self.maintenanceRecords = records
         }
     }
 
@@ -45,7 +49,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
 }
 
 // TODO mgorbatyuk: implement date difference in days, propably
-struct PlannedMaintenanceItem: Identifiable {
+struct PlannedMaintenanceItem: Identifiable, Comparable {
     let id: Int64
     let name: String
     let notes: String
@@ -78,4 +82,20 @@ struct PlannedMaintenanceItem: Identifiable {
             self.daysDifference = nil
         }
     }
+
+    static func == (first: PlannedMaintenanceItem, second: PlannedMaintenanceItem) -> Bool {
+        return first.when == second.when && first.mileageDifference == second.mileageDifference
+      }
+
+      static func < (first: PlannedMaintenanceItem, second: PlannedMaintenanceItem) -> Bool {
+          if (first.mileageDifference != nil && second.mileageDifference != nil) {
+                return first.mileageDifference! < second.mileageDifference!
+          }
+
+          if (first.when != nil && second.when != nil) {
+              return first.when! < second.when!
+          }
+  
+        return first.createdAt < second.createdAt
+      }
 }
