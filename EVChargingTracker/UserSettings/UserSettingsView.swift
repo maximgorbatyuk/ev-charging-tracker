@@ -15,6 +15,7 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var isNotificationsEnabled: Bool = false
 
     @ObservedObject private var loc = LocalizationManager.shared
+    @ObservedObject private var notificationsManager = NotificationManager.shared
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -76,18 +77,32 @@ struct UserSettingsView: SwiftUICore.View {
                                 }
                             }
                             
-                            HStack {
-                                Text(L("Notifications enabled"))
-                                    .fontWeight(.semibold)
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.gray)
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text(L("Notifications enabled"))
+                                        .fontWeight(.semibold)
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor(.gray)
 
-                                Spacer()
+                                    Spacer()
+                                    
+                                    Toggle("", isOn: $isNotificationsEnabled)
+                                        .disabled(true)
+                                        .labelsHidden()
+                                }
 
-                                Toggle("", isOn: $isNotificationsEnabled)
-                                    .onChange(of: isNotificationsEnabled) { _, newValue in
-                                        viewModel.saveNotificationsEnabled(newValue)
+                                if (!isNotificationsEnabled) {
+                                    HStack {
+                                        Text(L("Notifications are disabled"))
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+
+                                        Spacer()
+                                        Button(L("Open Settings")) {
+                                            openSettings()
+                                        }
                                     }
+                                }
                             }
                         }
 
@@ -190,19 +205,27 @@ struct UserSettingsView: SwiftUICore.View {
                 )
             }
             .onAppear {
-                viewModel.refetchCars()
-
-                NotificationManager.shared.checkAndRequestPermission(
-                    completion: () {
-                        self.isNotificationsEnabled = true
-                    },
-                    onDeniedNotificationPermission: {
-                        self.isNotificationsEnabled = false
-                    }
-                ) {
-                    
-                }
+                refreshData()
             }
+            .refreshable {
+                refreshData()
+            }
+        }
+    }
+
+    private func refreshData() -> Void {
+        viewModel.refetchCars()
+
+        notificationsManager.getAuthorizationStatus() { status in
+           DispatchQueue.main.async {
+               self.isNotificationsEnabled = status == .authorized
+           }
+       }
+    }
+
+    private func openSettings() {
+        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(settingsUrl)
         }
     }
 }

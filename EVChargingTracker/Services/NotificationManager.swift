@@ -7,8 +7,14 @@
 
 import UserNotifications
 
-class NotificationManager {
+class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
+
+    func getAuthorizationStatus(completion: @escaping (UNAuthorizationStatus) -> Void) -> Void {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            completion(settings.authorizationStatus)
+        }
+    }
 
     func checkNotificationPermission() {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
@@ -101,7 +107,7 @@ class NotificationManager {
             }
         }
     }
-    
+
     private func sendNotification(
         title: String,
         body: String,

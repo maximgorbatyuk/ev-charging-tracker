@@ -10,7 +10,8 @@ import Foundation
 class UserSettingsViewModel: ObservableObject {
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
-    
+
+    private let environment: EnvironmentService
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
@@ -18,6 +19,7 @@ class UserSettingsViewModel: ObservableObject {
     private var _allCars: [CarDto] = []
 
     init() {
+        self.environment = EnvironmentService.shared
         self.db = DatabaseManager.shared
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
@@ -123,8 +125,7 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     func isDevelopmentMode() -> Bool {
-        let buildEnvironment = Bundle.main.object(forInfoDictionaryKey: "BuildEnvironment") as? String ?? "-"
-        return buildEnvironment == "dev"
+        return environment.isDevelopmentMode()
     }
 
     var allCars : [CarDto] {
