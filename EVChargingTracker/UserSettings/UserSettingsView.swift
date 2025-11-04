@@ -42,7 +42,6 @@ struct UserSettingsView: SwiftUICore.View {
                             Text(L("Notifications enabled"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(.gray)
 
                             Spacer()
                             
@@ -68,7 +67,6 @@ struct UserSettingsView: SwiftUICore.View {
                             Text(L("Currency"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(.gray)
 
                             Spacer()
 
@@ -94,12 +92,6 @@ struct UserSettingsView: SwiftUICore.View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     }
-
-                    Button(action: {
-                        showingAppAboutModal = true
-                    }) {
-                        Label(L("What is the app about?"), systemImage: "questionmark")
-                    }
                 }
 
                 if (viewModel.getCarsCount() > 0) {
@@ -117,12 +109,18 @@ struct UserSettingsView: SwiftUICore.View {
                 }
 
                 Section(header: Text(L("About app"))) {
+                    Button(action: {
+                        showingAppAboutModal = true
+                    }) {
+                        Text(L("What is the app about?"))
+                    }
+
                     HStack {
-                        Label(L("Version"), systemImage: "info.circle")
+                        Label(L("App version"), systemImage: "info.circle")
                         Spacer()
                         Text(envorinment.getAppVisibleVersion())
                     }
-                    
+
                     HStack {
                         Label(L("Developer"), systemImage: "person")
                         Spacer()
@@ -145,11 +143,7 @@ struct UserSettingsView: SwiftUICore.View {
                         Button(action: {
                             NotificationManager.shared.requestPermission()
                         }) {
-                            HStack {
-                                Image(systemName: "hand.point.right.fill")
-                                    .foregroundColor(.accentColor)
-                                Text("Request Permission")
-                            }
+                            Text("Request Permission")
                         }
                         .buttonStyle(.plain)
 
@@ -159,11 +153,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 body: "This is a test notification"
                             )
                         }) {
-                            HStack {
-                                Image(systemName: "hand.point.right.fill")
-                                    .foregroundColor(.accentColor)
-                                Text("Send Notification Now")
-                            }
+                            Text("Send Notification Now")
                         }
                         .buttonStyle(.plain)
 
@@ -174,11 +164,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 afterSeconds: 5
                             )
                         }) {
-                            HStack {
-                                Image(systemName: "hand.point.right.fill")
-                                    .foregroundColor(.accentColor)
-                                Text("Schedule for 5 seconds")
-                            }
+                            Text("Schedule for 5 seconds")
                         }
                         .buttonStyle(.plain)
                     }

@@ -122,9 +122,16 @@ struct ChargingSessionsView: SwiftUICore.View {
                     })
             }
             .onAppear {
-                viewModel.loadSessions()
+                loadData()
+            }
+            .refreshable {
+                loadData()
             }
         }
+    }
+    
+    private func loadData() -> Void {
+        viewModel.loadSessions()
     }
 }
 
