@@ -11,6 +11,7 @@
 "Edit car" = "Көлікті өңдеу";
 "Cancel" = "Бас тарту";
 "Save" = "Сақтау";
+"Close" = "Жабу";
 
 "Initial millage" = "Бастапқы жүріс";
 "Current millage" = "Ағымдағы жүріс";
@@ -25,7 +26,12 @@
 "User settings" = "Пайдаланушы баптаулары";
 "Notifications enabled" = "Хабарламалар қосылған";
 "Open settings" = "Баптауларды ашу";
-"In case you want to change this setting, please open app settings" = "Осы баптауды өзгерткіңіз келсе, қолданба баптауларын ашыңыз";
+"In case you want to change this setting, please open app settings" = "Осы баптауды өзгерткіңіз келсе, бағдарлама баптауларын ашыңыз";
+"About app" = "Бағдарлама туралы";
+"Tracking settings" = "Бақылау баптаулары";
+"App version" = "Сборка нұсқасы";
+"Developer" = "Бағдарламашы";
+"What is the app about?" = "Бағдарлама не туралы?";
 
 "Expense details" = "Шығын туралы мәліметтер";
 "Car" = "Көлік";
@@ -101,7 +107,8 @@
 "Stats" = "Статистика";
 "Expenses" = "Шығындар";
 "Settings" = "Баптаулар";
-"About" = "Қолданба туралы";
+"About" = "Бағдарлама туралы";
+"Maintenance" = "Техникалық қызмет";
 
 "Track your electric vehicle charging costs and discover your true cost per kilometer." = "Электрлік көлігіңіздің зарядтау шығындарын қадағалаңыз және шынайы километр басына шығыныңызды анықтаңыз.";
 "Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Зарядтау сеанстарын тіркеңіз, шығындарды талдаңыз және толық ақпарат пен автоматты есептеулер арқылы электрлік көлігіңіздің зарядтау стратегиясын оңтайландырыңыз.";

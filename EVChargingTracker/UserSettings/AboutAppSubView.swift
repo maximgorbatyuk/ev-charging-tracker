@@ -7,9 +7,11 @@
 
 import SwiftUI
 
-struct AboutView: SwiftUICore.View {
+struct AboutAppSubView: SwiftUICore.View {
     @ObservedObject private var loc = LocalizationManager.shared
     @ObservedObject private var envorinment = EnvironmentService.shared
+
+    @Environment(\.dismiss) var dismiss
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -68,6 +70,13 @@ struct AboutView: SwiftUICore.View {
             }
             .navigationTitle(L("EV Charge Tracker"))
             .navigationBarTitleDisplayMode(.automatic)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(L("Close")) {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 
@@ -77,5 +86,5 @@ struct AboutView: SwiftUICore.View {
 }
 
 #Preview {
-    AboutView()
+    AboutAppSubView()
 }

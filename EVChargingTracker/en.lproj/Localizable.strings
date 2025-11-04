@@ -11,6 +11,7 @@
 "Edit car" = "Edit car";
 "Cancel" = "Cancel";
 "Save" = "Save";
+"Close" = "Close";
 
 "Initial millage" = "Initial millage";
 "Current millage" = "Current millage";
@@ -26,6 +27,11 @@
 "Notifications enabled" = "Notifications enabled";
 "Open settings" = "Open settings";
 "In case you want to change this setting, please open app settings" = "In case you want to change this setting, please open app settings";
+"About app" = "About app";
+"Tracking settings" = "Tracking settings";
+"App version" = "App version";
+"Developer" = "Developer";
+"What is the app about?" = "What is the app about?";
 
 "Expense details" = "Expense details";
 "Car" = "Car";
@@ -102,3 +108,4 @@
 "Expenses" = "Expenses";
 "Settings" = "Settings";
 "About" = "About";
+"Maintenance" = "Maintenance";

@@ -11,6 +11,7 @@
 "Edit car" = "Редактировать автомобиль";
 "Cancel" = "Отмена";
 "Save" = "Сохранить";
+"Close" = "Закрыть";
 
 "Initial millage" = "Начальный пробег";
 "Current millage" = "Текущий пробег";
@@ -26,6 +27,11 @@
 "Notifications enabled" = "Уведомления";
 "Open settings" = "Открыть настройки";
 "In case you want to change this setting, please open app settings" = "Если вы хотите изменить эту настройки уведомлений, откройте настройки iOS";
+"About app" = "О приложении";
+"Tracking settings" = "Настройки учета";
+"App version" = "Версия сборки";
+"Developer" = "Разработчик";
+"What is the app about?" = "Для чего это приложение?";
 
 "Expense details" = "Детали";
 "Car" = "Автомобиль";
@@ -81,8 +87,6 @@
 "Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Записывайте сессии зарядки, анализируйте расходы и оптимизируйте стратегию зарядки электромобиля с помощью подробной аналитики и автоматических расчётов.";
 "If you have any questions or suggestions, feel free to create an issue on Github:" = "Если у вас есть вопросы или предложения, создайте issue на GitHub:";
 "ev-charging-tracker" = "ev-charging-tracker";
-"Version: %@" = "Версия: %@";
-"Developer: © %@" = "Разработчик: © %@";
 "Build: development" = "Сборка: разработка";
 "EV Charge Tracker" = "EV Charge Tracker";
 
@@ -91,6 +95,7 @@
 "Expenses" = "Расходы";
 "Settings" = "Настройки";
 "About" = "О приложении";
+"Maintenance" = "Обслуживание";
 
 /* ChargerType human-friendly */
 "Home (3kW)" = "Дома (3kW)";
