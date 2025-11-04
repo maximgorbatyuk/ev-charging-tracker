@@ -56,7 +56,14 @@ struct UserSettingsView: SwiftUICore.View {
 
                             Spacer()
                             Button(L("Open settings")) {
-                                openSettings()
+                                notificationsManager.checkAndRequestPermission(
+                                    completion: {
+                                        openSettings()
+                                    },
+                                    onDeniedNotificationPermission: {
+                                        openSettings()
+                                    }
+                                )
                             }
                         }
                         .font(.caption)
