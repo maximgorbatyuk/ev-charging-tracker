@@ -126,6 +126,59 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
     let onDelete: () -> Void
 
     var body: some SwiftUICore.View {
-        
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(record.name)
+                    .font(.headline)
+                    .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+
+                Spacer()
+                
+                Button(action: onDelete) {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                }
+            }
+
+            HStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L("When"))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+
+                    Text(record.when, style: .date)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L("Odometer"))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+
+                    Text("\(record.odometer.formatted()) km")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                }
+            }
+
+            if !record.notes.isEmpty {
+                Text(record.notes)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                    .lineLimit(2)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.gray.opacity(0.12))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                )
+        )
     }
 }
