@@ -65,7 +65,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     func calculateOneKilometerCosts(_ onlyCharging: Bool) -> Double {
-        if (expenses.count < 2) {
+        if (expenses.count < 1) {
             return 0
         }
 

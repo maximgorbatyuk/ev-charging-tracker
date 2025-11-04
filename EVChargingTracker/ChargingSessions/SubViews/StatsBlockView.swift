@@ -41,3 +41,41 @@ struct StatsBlockView: SwiftUICore.View {
         }
     }
 }
+
+struct StatCard: SwiftUICore.View {
+
+    @Environment(\.colorScheme) var colorScheme
+    
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+    let minHeight: CGFloat
+
+    var body: some SwiftUICore.View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(title)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                Spacer()
+                Image(systemName: icon)
+                    .foregroundColor(color)
+            }
+            
+            Text(value)
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+        }
+        .padding()
+        .frame(maxWidth: .infinity, minHeight: minHeight)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.gray.opacity(0.2))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+}
