@@ -29,7 +29,7 @@ struct MainTabView: SwiftUI.View {
             
             UserSettingsView()
                 .tabItem {
-                    Label(L("Settings"), systemImage: "person.circle.fill")
+                    Label(L("Settings"), systemImage: "gear")
                 }
         }
         .id(loc.currentLanguage.rawValue)

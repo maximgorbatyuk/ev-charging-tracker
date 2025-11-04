@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct UserSettingsView: SwiftUICore.View {
 
@@ -19,6 +20,8 @@ struct UserSettingsView: SwiftUICore.View {
     @ObservedObject private var loc = LocalizationManager.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var envorinment = EnvironmentService.shared
+
+    @Environment(\.requestReview) var requestReview
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -115,13 +118,46 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                 }
 
-                Section(header: Text(L("About app"))) {
+                Section(header: Text(L("Support"))) {
                     Button(action: {
                         showingAppAboutModal = true
                     }) {
-                        Text(L("What is the app about?"))
+                        HStack {
+                            Image(systemName: "questionmark.circle.fill")
+                                .foregroundColor(.green)
+
+                            Text(L("What is the app about?"))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
                     }
 
+                    Button {
+                        requestReview()
+                    } label: {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+
+                            Text(L("Rate the app"))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+
+                    Link(destination: URL(string: envorinment.getDeveloperTelegramLink())!) {
+                        HStack {
+                            Image(systemName: "ellipses.bubble.fill")
+                                .foregroundColor(.blue)
+
+                            Text(L("Contact developer via Telegram"))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                }
+
+                Section(header: Text(L("About app"))) {
                     HStack {
                         Label(L("App version"), systemImage: "info.circle")
                         Spacer()

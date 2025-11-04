@@ -6,5 +6,7 @@
 //
 
 GITHUB_REPO_URL = github.com/maximgorbatyuk/ev-charging-tracker
+DEVELOPER_TELEGRAM_LINK = t.me/maximgorbatyuk
+APP_STORE_LINK = apps.apple.com/app/id6754165643
 DEVELOPER_NAME = Maxim Gorbatyuk
 BUILD_ENVIRONMENT = release

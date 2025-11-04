@@ -13,6 +13,8 @@ class EnvironmentService: ObservableObject {
     var _gitHubRepositoryUrl: String? = nil
     var _buildEnvironment: String? = nil
     var _appVisibleVersion: String? = nil
+    var _developerTelegramLink: String? = nil
+    var _appStoreAppLink : String? = nil
 
     static let shared = EnvironmentService()
 
@@ -54,6 +56,32 @@ class EnvironmentService: ObservableObject {
 
         _buildEnvironment = Bundle.main.object(forInfoDictionaryKey: "BuildEnvironment") as? String ?? "-"
         return _buildEnvironment!
+    }
+    
+    func getDeveloperTelegramLink() -> String {
+        if _developerTelegramLink != nil {
+            return _developerTelegramLink!
+        }
+
+        _developerTelegramLink = Bundle.main.object(forInfoDictionaryKey: "DeveloperTelegramLink") as? String ?? "-"
+        if _developerTelegramLink != "-" {
+            _developerTelegramLink = "https://\(_developerTelegramLink!)"
+        }
+
+        return _developerTelegramLink!
+    }
+
+    func getAppStoreAppLink() -> String {
+        if _appStoreAppLink != nil {
+            return _appStoreAppLink!
+        }
+
+        _appStoreAppLink = Bundle.main.object(forInfoDictionaryKey: "AppStoreAppLink") as? String ?? "-"
+        if _appStoreAppLink != "-" {
+            _appStoreAppLink = "https://\(_appStoreAppLink!)"
+        }
+
+        return _appStoreAppLink!
     }
 
     func isDevelopmentMode() -> Bool {
