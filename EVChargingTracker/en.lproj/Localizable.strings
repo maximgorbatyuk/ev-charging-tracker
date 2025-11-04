@@ -23,6 +23,9 @@
 "It is recommended to set the default currency before adding any expenses." = "It is recommended to set the default currency before adding any expenses.";
 "Cars" = "Cars";
 "User settings" = "User settings";
+"Notifications enabled" = "Notifications enabled";
+"Open settings" = "Open settings";
+"In case you want to change this setting, please open app settings" = "In case you want to change this setting, please open app settings";
 
 "Expense details" = "Expense details";
 "Car" = "Car";

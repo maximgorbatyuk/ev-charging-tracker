@@ -56,6 +56,7 @@ struct UserSettingsView: SwiftUICore.View {
                                     .font(.system(size: 14, weight: .regular))
                                     .foregroundColor(.gray)
                             }
+                            .padding(.top, 5)
 
                             // Language selector row
                             HStack {
@@ -76,6 +77,7 @@ struct UserSettingsView: SwiftUICore.View {
                                     viewModel.saveLanguage(newLang)
                                 }
                             }
+                            .padding(.top, 5)
                             
                             VStack(alignment: .leading) {
                                 HStack {
@@ -91,19 +93,18 @@ struct UserSettingsView: SwiftUICore.View {
                                         .labelsHidden()
                                 }
 
-                                if (!isNotificationsEnabled) {
-                                    HStack {
-                                        Text(L("Notifications are disabled"))
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
+                                HStack {
+                                    Text(L("In case you want to change this setting, please open app settings"))
+                                        .foregroundColor(.secondary)
 
-                                        Spacer()
-                                        Button(L("Open Settings")) {
-                                            openSettings()
-                                        }
+                                    Spacer()
+                                    Button(L("Open settings")) {
+                                        openSettings()
                                     }
                                 }
+                                .font(.caption)
                             }
+                            .padding(.top, 5)
                         }
 
                         Divider()

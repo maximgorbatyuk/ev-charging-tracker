@@ -23,6 +23,9 @@
 "It is recommended to set the default currency before adding any expenses." = "Шығындар қоспай тұрып әдепкі валютаны орнату ұсынылады.";
 "Cars" = "Көліктер";
 "User settings" = "Пайдаланушы баптаулары";
+"Notifications enabled" = "Хабарламалар қосылған";
+"Open settings" = "Баптауларды ашу";
+"In case you want to change this setting, please open app settings" = "Осы баптауды өзгерткіңіз келсе, қолданба баптауларын ашыңыз";
 
 "Expense details" = "Шығын туралы мәліметтер";
 "Car" = "Көлік";
