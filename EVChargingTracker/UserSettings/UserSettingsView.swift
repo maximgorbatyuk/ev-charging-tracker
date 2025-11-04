@@ -16,6 +16,7 @@ struct UserSettingsView: SwiftUICore.View {
 
     @ObservedObject private var loc = LocalizationManager.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
+    @ObservedObject private var envorinment = EnvironmentService.shared
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -124,13 +125,35 @@ struct UserSettingsView: SwiftUICore.View {
                                 }
                             }
                         }
-                        
+
+                        VStack(alignment: .leading) {
+
+                            Divider()
+                            Text(String(format: L("Version: %@"), envorinment.getAppVisibleVersion()))
+                                .fontWeight(.semibold)
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.gray)
+
+                            Text(String(format: L("Developer: © %@"), envorinment.getDeveloperName()))
+                                .fontWeight(.semibold)
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.gray)
+
+                            if (viewModel.isDevelopmentMode()) {
+                                Text(L("Build: development"))
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .padding(.top, 15)
+
                         if (viewModel.isDevelopmentMode()) {
                             Divider()
                             Spacer()
 
                             Section(header: Text("Development mode")) {
-                                VStack(alignment: .leading, spacing: 10) {
+                                VStack(alignment: .leading, spacing: 15) {
                                     Button("Request Permission") {
                                         NotificationManager.shared.requestPermission()
                                     }
@@ -158,7 +181,6 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                     }
                     .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             .navigationTitle(L("User settings"))
