@@ -9,20 +9,21 @@ import Foundation
 
 class PlannedMaintenance: Identifiable {
     var id: Int64?
-    var odometer: Int
+    var odometer: Int?
     var name: String
     var notes: String
-    var when: Date
+    var when: Date?
     var carId: Int64
     var createdAt: Date
     
     init(
         id: Int64? = nil,
-        when: Date,
-        odometer: Int,
+        when: Date?,
+        odometer: Int?,
         name: String,
         notes: String,
-        carId: Int64) {
+        carId: Int64,
+        createdAt: Date?) {
 
         self.id = id
         self.when = when
@@ -30,13 +31,13 @@ class PlannedMaintenance: Identifiable {
         self.notes = notes
         self.name = name
         self.carId = carId
-        self.createdAt = Date()
+        self.createdAt = createdAt ?? Date()
     }
 
     // Convenience initializer to match existing call sites that construct without the `id:` label.
     convenience init(
-        when: Date,
-        odometer: Int,
+        when: Date?,
+        odometer: Int?,
         name: String,
         notes: String,
         carId: Int64) {
@@ -46,7 +47,8 @@ class PlannedMaintenance: Identifiable {
             odometer: odometer,
             name: name,
             notes: notes,
-            carId: carId
+            carId: carId,
+            createdAt: nil
         )
     }
 }
