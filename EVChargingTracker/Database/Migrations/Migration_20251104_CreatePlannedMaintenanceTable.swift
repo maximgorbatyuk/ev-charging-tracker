@@ -24,7 +24,7 @@ final class Migration_20251104_CreatePlannedMaintenanceTable {
             try db.run(createCommand)
             print("Planned maintenance table created successfully")
         } catch {
-            print("Unable to exeucte migration \(migrationName): \(error)")
+            print("Unable to execute migration \(migrationName): \(error)")
         }
     }
 }

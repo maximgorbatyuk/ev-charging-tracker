@@ -19,7 +19,7 @@ struct UserSettingsView: SwiftUICore.View {
 
     @ObservedObject private var loc = LocalizationManager.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
-    @ObservedObject private var envorinment = EnvironmentService.shared
+    @ObservedObject private var environment = EnvironmentService.shared
 
     @Environment(\.requestReview) var requestReview
 
@@ -145,7 +145,7 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                     }
 
-                    Link(destination: URL(string: envorinment.getDeveloperTelegramLink())!) {
+                    Link(destination: URL(string: environment.getDeveloperTelegramLink())!) {
                         HStack {
                             Image(systemName: "ellipses.bubble.fill")
                                 .foregroundColor(.blue)
@@ -161,18 +161,18 @@ struct UserSettingsView: SwiftUICore.View {
                     HStack {
                         Label(L("App version"), systemImage: "info.circle")
                         Spacer()
-                        Text(envorinment.getAppVisibleVersion())
+                        Text(environment.getAppVisibleVersion())
                     }
 
                     HStack {
                         Label(L("Developer"), systemImage: "person")
                         Spacer()
-                        Text(envorinment.getDeveloperName())
+                        Text(environment.getDeveloperName())
                     }
 
                     if (viewModel.isDevelopmentMode()) {
                         HStack {
-                            Label(L("Buid"), systemImage: "star.circle")
+                            Label(L("Build"), systemImage: "star.circle")
                             Spacer()
                             Text("Development")
                         }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AboutAppSubView: SwiftUICore.View {
     @ObservedObject private var loc = LocalizationManager.shared
-    @ObservedObject private var envorinment = EnvironmentService.shared
+    @ObservedObject private var environment = EnvironmentService.shared
 
     @Environment(\.dismiss) var dismiss
 
@@ -47,17 +47,17 @@ struct AboutAppSubView: SwiftUICore.View {
                     VStack(alignment: .leading) {
 
                         Divider()
-                        Text(String(format: L("Version: %@"), envorinment.getAppVisibleVersion()))
+                        Text(String(format: L("Version: %@"), environment.getAppVisibleVersion()))
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        Text(String(format: L("Developer: © %@"), envorinment.getDeveloperName()))
+                        Text(String(format: L("Developer: © %@"), environment.getDeveloperName()))
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        if (envorinment.getBuildEnvironment() == "dev") {
+                        if (environment.getBuildEnvironment() == "dev") {
                             Text(L("Build: development"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 12, weight: .bold))
