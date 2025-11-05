@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UserNotifications
+import FirebaseCore
 
 @main
 struct EVChargingTrackerApp: App {
@@ -28,8 +29,11 @@ final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNU
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         // Set the delegate
         UNUserNotificationCenter.current().delegate = self
+        FirebaseApp.configure()
+
         return true
     }
+
     // Show alert while app is in foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
