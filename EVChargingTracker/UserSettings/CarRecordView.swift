@@ -17,7 +17,7 @@ struct CarRecordView: SwiftUICore.View  {
 
     var body: some SwiftUICore.View {
         // compute common values up front to simplify chained expressions
-        let textColor: Color = (colorScheme == .dark) ? .white : Color.black.opacity(0.9)
+        let textColor: Color = (colorScheme == .dark) ? .white : Color.primary
 
         return VStack(alignment: .leading, spacing: 5) {
             HStack {

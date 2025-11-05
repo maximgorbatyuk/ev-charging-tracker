@@ -24,7 +24,7 @@ class DatabaseManager {
     var plannedMaintenanceRepository: PlannedMaintenanceRepository?
 
     private var db: Connection?
-    private let latestVersion = 3
+    private let latestVersion = 4
     
     private init() {
        

@@ -120,3 +120,12 @@
 "Delete maintenance record?" = "Delete maintenance record?";
 "Delete selected maintenance record? This action cannot be undone." = "Delete selected maintenance record? This action cannot be undone.";
 "Please add car first to track maintenance records" = "Please add car first to track maintenance records";
+"When" = "When";
+
+"Plan a maintenace" = "Plan a maintenace";
+"Maintenance details" = "Maintenance details";
+"Odometer value cannot be less than current car mileage." = "Odometer value cannot be less than current car mileage.";
+"What should be done?" = "What should be done?";
+"Remind by date (optional)" = "Remind by date (optional)";
+"Remind by odometer (optional)" = "Remind by odometer (optional)";
+"Additional information that will be helpful" = "Additional information that will be helpful";

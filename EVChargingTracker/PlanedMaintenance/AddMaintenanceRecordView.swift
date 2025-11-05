@@ -59,7 +59,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
                     TextField(L("Additional information that will be helpful"), text: $notes)
                 }
             } // Form end
-            .navigationTitle(L("Add maintenance record"))
+            .navigationTitle(L("Plan a maintenance"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -80,6 +80,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     
     private func save() {
         
+        alertMessage = nil
         if (selectedCar == nil) {
             return
         }
@@ -87,11 +88,17 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
         var odo: Int? = nil
         if (remindByOdometer && odometer != nil && odometer != "") {
             guard let odometerValue = Int(odometer) else {
+                // TODO mgorbatyuk: show alert
                 alertMessage = L("Please type a valid value for Odometer.")
                 return
             }
 
-            odo = odometerValue
+            if (odometerValue < selectedCar!.currentMileage) {
+                // TODO mgorbatyuk: show alert
+                alertMessage = L("Odometer value cannot be less than current car mileage.")
+            } else {
+                odo = odometerValue
+            }
         }
 
         let record = PlannedMaintenance(

@@ -127,3 +127,12 @@
 "Delete maintenance record?" = "Техникалық қызмет жазбасын жою керек пе?";
 "Delete selected maintenance record? This action cannot be undone." = "Таңдалған техникалық қызмет жазбасын жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
 "Please add car first to track maintenance records" = "Техникалық қызмет жазбаларын қадағалау үшін алдымен көлікті қосыңыз";
+"When" = "Қашан";
+
+"Plan a maintenace" = "Техникалық қызметті жоспарлау";
+"Maintenance details" = "Техникалық қызмет туралы мәліметтер";
+"Odometer value cannot be less than current car mileage." = "Одометр мәні ағымдағы көлік жүрісінен аз болмауы керек.";
+"What should be done?" = "Не істеу керек?";
+"Remind by date (optional)" = "Күн бойынша еске салу (қосымша)";
+"Remind by odometer (optional)" = "Одометр бойынша еске салу (қосымша)";
+"Additional information that will be helpful" = "Пайдалы болатын қосымша ақпарат";

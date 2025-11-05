@@ -50,7 +50,7 @@
 "Name of the car" = "Название автомобиля";
 "Optional" = "Дополнительно";
 "Notes (optional)" = "Примечания (необязательно)";
-"Add expense" = "Добавить расход";
+"Add expense" = "Добавить расход и/или сервис";
 "Price per kWh" = "Цена 1 kWh";
 
 "Please select an expense type." = "Пожалуйста, выберите тип расхода.";
@@ -68,7 +68,7 @@
 "Add Charging Session" = "Добавить сессию зарядки";
 "Car stats" = "Статистика";
 
-"Add Expense" = "Добавить расход";
+"Add Expense" = "Добавить расход и/или сервис";
 "Total costs" = "Общие расходы";
 "All car expenses" = "Все расходы";
 "No expenses yet" = "Пока нет записей";
@@ -100,7 +100,7 @@
 "Expenses" = "Расходы";
 "Settings" = "Настройки";
 "About" = "О приложении";
-"Maintenance" = "Обслуживание";
+"Maintenance" = "Сервис";
 
 /* ChargerType human-friendly */
 "Home (3kW)" = "Дома (3kW)";
@@ -114,11 +114,20 @@
 "Public Rapid (100kW)" = "Быстрая зарядка (100kW)";
 "Other" = "Other";
 
-"Planned maintenance" = "Запланированное обслуживание";
-"Add maintenance" = "Добавить обслуживание";
-"Maintenance" = "Обслуживание";
-"No maintenance records yet" = "Еще нет записей об обслуживании";
-"Add your first maintenance record" = "Добавьте первую запись, какие работы по обслуживанию нужно сделать с автомобилем в будущем";
+"Planned maintenance" = "Запланированный сервис";
+"Add maintenance" = "Запланировать сервисные работы";
+"Maintenance" = "Сервис";
+"No maintenance records yet" = "Еще нет записей о запланированном сервисе";
+"Add your first maintenance record" = "Добавьте первую запись, какие работы по обслуживанию/сервису нужно сделать с автомобилем в будущем";
 "Delete maintenance record?" = "Удалить запись?";
 "Delete selected maintenance record? This action cannot be undone." = "Удалить эту запись? Действие не может быть отменено.";
 "Please add car first to track maintenance records" = "Пожалуйста, сначала добавьте автомобиль на экране с зарядками или ремонтными работами, чтобы функция добавления запланированых работ была доступна";
+"When" = "Когда";
+
+"Plan a maintenance" = "Запланировать сервис";
+"Maintenance details" = "Сервисные работы";
+"Odometer value cannot be less than current car mileage." = "Значение одометра не может быть меньше текущего пробега автомобиля.";
+"What should be done?" = "Что должно быть сделано?";
+"Remind by date (optional)" = "Напомнить по дате (опционально)";
+"Remind by odometer (optional)" = "Напомнить по одометру (опционально)";
+"Additional information that will be helpful" = "Дополнительная информация, о которой будет полезно напомнить";

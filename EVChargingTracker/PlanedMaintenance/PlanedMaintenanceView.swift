@@ -53,6 +53,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             LazyVStack(spacing: 12) {
                                 ForEach(viewModel.maintenanceRecords) { record in
                                     PlannedMaintenanceItemView(
+                                        selectedCar: viewModel.selectedCarForExpenses!,
                                         record: record,
                                         onDelete: {
                                             recordToDelete = record
@@ -140,6 +141,7 @@ struct EmptyStateView: SwiftUICore.View {
             }
        }
        .padding(.top, 60)
-       .padding(.horizontal)
+       .padding(.horizontal, 20)
+       .multilineTextAlignment(.center)
     }
 }

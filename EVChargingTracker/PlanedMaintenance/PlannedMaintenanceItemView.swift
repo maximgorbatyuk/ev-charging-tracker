@@ -12,6 +12,7 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
     
     @Environment(\.colorScheme) var colorScheme
 
+    let selectedCar: Car
     let record: PlannedMaintenanceItem
     let onDelete: () -> Void
 
@@ -20,7 +21,7 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
             HStack {
                 Text(record.name)
                     .font(.headline)
-                    .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                    .foregroundColor(colorScheme == .dark ? .white : .primary)
 
                 Spacer()
 
@@ -30,22 +31,40 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
                 }
             }
 
-            HStack(spacing: 20) {
-                
-                SmallLabelView(
-                    title: L("When"),
-                    value: record.when != nil ? "\(record.when!.formatted(date: .abbreviated, time: .omitted))" : "-")
+            if (record.when != nil || record.odometer != nil) {
+                HStack(spacing: 20) {
 
-                SmallLabelView(
-                    title: L("Odometer"),
-                    value: record.odometer != nil ? "\(record.odometer!.formatted()) km" : "-")
+                    if (record.when != nil) {
+                        SmallLabelView(
+                            title: L("When"),
+                            value: record.when!.formatted(date: .abbreviated, time: .omitted),
+                            color: .primary,
+                            darkSchemeColor: .white)
+                    }
+
+                    if (record.odometer != nil) {
+                        SmallLabelView(
+                            title: L("Odometer"),
+                            value: "\(record.odometer!.formatted()) km",
+                            color: .primary,
+                            darkSchemeColor: .white)
+
+                        SmallLabelView(
+                            title: L("Remain at odometer"),
+                            value: "\(record.odometer! - selectedCar.currentMileage) km",
+                            color: (record.odometer! - selectedCar.currentMileage) > 0 ? .green : .red,
+                            darkSchemeColor: (record.odometer! - selectedCar.currentMileage) > 0 ? .green : .red)
+                    }
+                }
+                .padding(.top, 8)
             }
 
             if !record.notes.isEmpty {
                 Text(record.notes)
                     .font(.caption)
                     .foregroundColor(.gray)
-                    .lineLimit(2)
+                    .lineLimit(3)
+                    .padding(.top, 8)
             }
         }
         .padding()
@@ -64,6 +83,8 @@ struct SmallLabelView : SwiftUICore.View {
     
     let title: String
     let value: String
+    let color: Color = .primary
+    let darkSchemeColor: Color = .white
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -77,7 +98,7 @@ struct SmallLabelView : SwiftUICore.View {
             Text(value)
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                .foregroundColor(colorScheme == .dark ? darkSchemeColor : color)
         }
     }
 }

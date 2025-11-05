@@ -65,7 +65,7 @@ struct StatCard: SwiftUICore.View {
             
             Text(value)
                 .font(.system(size: 16, weight: .bold))
-                .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                .foregroundColor(colorScheme == .dark ? .white : .primary)
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: minHeight)
