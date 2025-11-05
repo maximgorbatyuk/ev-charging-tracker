@@ -112,9 +112,11 @@
 "About" = "About";
 "Maintenance" = "Maintenance";
 
+"Planned maintenance" = "Planned maintenance";
 "Add maintenance" = "Add maintenance";
 "Maintenance" = "Maintenance";
 "No maintenance records yet" = "No future maintenance records yet";
-"Add your first maintenance record" = "Add your first maintenance record for future";
+"Add your first maintenance record" = "Add your first car maintenance record for future";
 "Delete maintenance record?" = "Delete maintenance record?";
 "Delete selected maintenance record? This action cannot be undone." = "Delete selected maintenance record? This action cannot be undone.";
+"Please add car first to track maintenance records" = "Please add car first to track maintenance records";

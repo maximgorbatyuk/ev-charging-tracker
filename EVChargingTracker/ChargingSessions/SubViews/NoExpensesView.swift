@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct NoExpensesView: SwiftUICore.View {
-    @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUICore.View {
         VStack(spacing: 16) {

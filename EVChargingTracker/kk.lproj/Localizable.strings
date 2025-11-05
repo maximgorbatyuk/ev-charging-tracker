@@ -19,6 +19,9 @@
 "Tracking" = "Бақылау";
 "Not tracking" = "Бақылаусыз";
 
+"No charging sessions yet" = "Әзірге зарядтау сессиялары жоқ";
+"Add your first session to start tracking" = "Бақылауды бастау үшін алғашқы сессияңызды қосыңыз";
+
 "Base settings" = "Негізгі баптаулар";
 "Currency" = "Валюта";
 "It is recommended to set the default currency before adding any expenses." = "Шығындар қоспай тұрып әдепкі валютаны орнату ұсынылады.";
@@ -116,10 +119,11 @@
 "Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Зарядтау сеанстарын тіркеңіз, шығындарды талдаңыз және толық ақпарат пен автоматты есептеулер арқылы электрлік көлігіңіздің зарядтау стратегиясын оңтайландырыңыз.";
 "If you have any questions or suggestions, feel free to create an issue on Github:" = "Егер сұрақтарыңыз немесе ұсыныстарыңыз болса, Github-та еркін мәселе жасаңыз:";
 
-
+"Planned maintenance" = "Жоспарланған техникалық қызмет";
 "Add maintenance" = "Техникалық қызметті қосу";
 "Maintenance" = "Техникалық қызметы";
 "No maintenance records yet" = "Әзірге техникалық қызмет жазбалары жоқ";
 "Add your first maintenance record" = "Алғашқы техникалық қызмет жазбаңызды қосыңыз";
 "Delete maintenance record?" = "Техникалық қызмет жазбасын жою керек пе?";
 "Delete selected maintenance record? This action cannot be undone." = "Таңдалған техникалық қызмет жазбасын жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
+"Please add car first to track maintenance records" = "Техникалық қызмет жазбаларын қадағалау үшін алдымен көлікті қосыңыз";

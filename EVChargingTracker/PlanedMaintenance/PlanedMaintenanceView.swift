@@ -5,6 +5,7 @@
 //  Created by Maxim Gorbatyuk on 04.11.2025.
 //
 
+import Foundation
 import SwiftUI
 
 struct PlanedMaintenanceView: SwiftUICore.View {
@@ -13,7 +14,11 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     @State private var showingAddMaintenanceRecord = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var recordToDelete: PlannedMaintenanceItem? = nil
-    
+
+    init() {
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+    }
+
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
@@ -40,9 +45,10 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             .cornerRadius(12)
                         }
                         .padding(.horizontal)
+                        .disabled(viewModel.selectedCarForExpenses == nil)
 
                         if viewModel.maintenanceRecords.isEmpty {
-                            emptyStateView
+                            EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
                         } else {
                             LazyVStack(spacing: 12) {
                                 ForEach(viewModel.maintenanceRecords) { record in
@@ -60,7 +66,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                     .padding(.vertical)
                 }
             } // end of ZStack
-            .navigationTitle(L("Maintenance"))
+            .navigationTitle(L("Planned maintenance"))
             .navigationBarTitleDisplayMode(.automatic)
             .onAppear {
                 loadData()
@@ -80,23 +86,6 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     private func loadData() {
         viewModel.loadData()
     }
-
-    private var emptyStateView: some SwiftUICore.View {
-       VStack(spacing: 16) {
-           Image(systemName: "hammer.fill")
-               .font(.system(size: 64))
-               .foregroundColor(.gray.opacity(0.5))
-
-           Text(L("No maintenance records yet"))
-               .font(.title3)
-               .foregroundColor(.gray)
-
-           Text(L("Add your first maintenance record"))
-               .font(.subheadline)
-               .foregroundColor(.gray.opacity(0.9))
-       }
-       .padding(.top, 60)
-   }
 
     private func deleteConfirmationAlert() -> Alert {
         let title = Text(L("Delete maintenance record?"))
@@ -118,67 +107,31 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     }
 }
 
-struct PlannedMaintenanceItemView: SwiftUICore.View {
+struct EmptyStateView: SwiftUICore.View {
     
-    @Environment(\.colorScheme) var colorScheme
-
-    let record: PlannedMaintenanceItem
-    let onDelete: () -> Void
+    let selectedCar: Car?
 
     var body: some SwiftUICore.View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(record.name)
-                    .font(.headline)
-                    .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+        VStack(alignment: .center, spacing: 16) {
+           Image(systemName: "hammer.fill")
+               .font(.system(size: 64))
+               .foregroundColor(.gray.opacity(0.5))
 
-                Spacer()
-                
-                Button(action: onDelete) {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
-                }
+           Text(L("No maintenance records yet"))
+               .font(.title3)
+               .foregroundColor(.gray)
+
+           Text(L("Add your first maintenance record"))
+               .font(.subheadline)
+               .foregroundColor(.gray.opacity(0.9))
+
+            if (selectedCar == nil) {
+                Text(L("Please add car first to track maintenance records"))
+                    .font(.subheadline)
+                    .foregroundColor(.gray.opacity(0.9))
             }
-
-            HStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(L("When"))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-
-                    Text(record.when, style: .date)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
-                }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(L("Odometer"))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-
-                    Text("\(record.odometer.formatted()) km")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
-                }
-            }
-
-            if !record.notes.isEmpty {
-                Text(record.notes)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .lineLimit(2)
-            }
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                )
-        )
+       }
+       .padding(.top, 60)
+       .padding(.horizontal)
     }
 }

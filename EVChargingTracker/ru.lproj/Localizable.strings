@@ -19,6 +19,9 @@
 "Tracking" = "Ведется учет";
 "Not tracking" = "Не выбран для учета";
 
+"No charging sessions yet" = "Пока нет сессий зарядки";
+"Add your first session to start tracking" = "Добавьте первую сессию зарядки, чтобы начать учет";
+
 "Base settings" = "Основные настройки";
 "Currency" = "Валюта";
 "It is recommended to set the default currency before adding any expenses." = "Рекомендуется установить валюту по умолчанию перед добавлением расходов.";
@@ -111,10 +114,11 @@
 "Public Rapid (100kW)" = "Быстрая зарядка (100kW)";
 "Other" = "Other";
 
-
+"Planned maintenance" = "Запланированное обслуживание";
 "Add maintenance" = "Добавить обслуживание";
 "Maintenance" = "Обслуживание";
 "No maintenance records yet" = "Еще нет записей об обслуживании";
-"Add your first maintenance record" = "Добавьте первую запись, что нужно сделать с автомобилем в будущем";
+"Add your first maintenance record" = "Добавьте первую запись, какие работы по обслуживанию нужно сделать с автомобилем в будущем";
 "Delete maintenance record?" = "Удалить запись?";
 "Delete selected maintenance record? This action cannot be undone." = "Удалить эту запись? Действие не может быть отменено.";
+"Please add car first to track maintenance records" = "Пожалуйста, сначала добавьте автомобиль на экране с зарядками или ремонтными работами, чтобы функция добавления запланированых работ была доступна";
