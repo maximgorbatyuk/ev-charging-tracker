@@ -153,7 +153,7 @@ class ExpensesRepository {
             return false
         }
     }
-    
+
     func deleteSession(id sessionId: Int64) -> Bool {
         let sessionToDelete = chargingSessionsTable.filter(id == sessionId)
         
@@ -166,7 +166,7 @@ class ExpensesRepository {
             return false
         }
     }
-    
+
     func getTotalEnergy() -> Double {
         do {
             let total = try db.scalar(chargingSessionsTable.select(energyCharged.sum))

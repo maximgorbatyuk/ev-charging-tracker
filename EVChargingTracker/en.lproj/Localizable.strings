@@ -11,6 +11,10 @@
 "Edit car" = "Edit car";
 "Cancel" = "Cancel";
 "Save" = "Save";
+"Close" = "Close";
+"CO₂ saved (kg)" = "CO₂ saved (kg)";
+"kWh / 100km" = "kWh / 100km";
+"Charges" = "Charges";
 
 "Initial millage" = "Initial millage";
 "Current millage" = "Current millage";
@@ -23,6 +27,16 @@
 "It is recommended to set the default currency before adding any expenses." = "It is recommended to set the default currency before adding any expenses.";
 "Cars" = "Cars";
 "User settings" = "User settings";
+"Notifications enabled" = "Notifications enabled";
+"Open settings" = "Open settings";
+"In case you want to change this setting, please open app settings" = "In case you want to change this setting, please open app settings";
+"About app" = "About app";
+"Tracking settings" = "Tracking settings";
+"App version" = "App version";
+"Developer" = "Developer";
+"What is the app about?" = "What is the app about?";
+"Rate the app" = "Rate the app";
+"Contact developer via Telegram" = "Contact developer via Telegram";
 
 "Expense details" = "Expense details";
 "Car" = "Car";
@@ -99,3 +113,22 @@
 "Expenses" = "Expenses";
 "Settings" = "Settings";
 "About" = "About";
+"Maintenance" = "Maintenance";
+
+"Planned maintenance" = "Planned maintenance";
+"Add maintenance" = "Add maintenance";
+"Maintenance" = "Maintenance";
+"No maintenance records yet" = "No future maintenance records yet";
+"Add your first maintenance record" = "Add your first car maintenance record for future";
+"Delete maintenance record?" = "Delete maintenance record?";
+"Delete selected maintenance record? This action cannot be undone." = "Delete selected maintenance record? This action cannot be undone.";
+"Please add car first to track maintenance records" = "Please add car first to track maintenance records";
+"When" = "When";
+
+"Plan a maintenance" = "Plan a maintenance";
+"Maintenance details" = "Maintenance details";
+"Odometer value cannot be less than current car mileage." = "Odometer value cannot be less than current car mileage.";
+"What should be done?" = "What should be done?";
+"Remind by date (optional)" = "Remind by date (optional)";
+"Remind by odometer (optional)" = "Remind by odometer (optional)";
+"Additional information that will be helpful" = "Additional information that will be helpful";

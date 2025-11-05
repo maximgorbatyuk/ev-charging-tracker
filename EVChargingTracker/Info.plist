@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Co2EuropePollutionPerOneKilometer</key>
+	<string>$(CO2_EUROPE_POLLUTION_PER_ONE_KILOMETER)</string>
+	<key>AppStoreAppLink</key>
+	<string>$(APP_STORE_LINK)</string>
+	<key>DeveloperTelegramLink</key>
+	<string>$(DEVELOPER_TELEGRAM_LINK)</string>
 	<key>BuildEnvironment</key>
 	<string>$(BUILD_ENVIRONMENT)</string>
 	<key>AppVisibleVersion</key>

@@ -22,14 +22,14 @@ struct MainTabView: SwiftUI.View {
                     Label(L("Expenses"), systemImage: "dollarsign.circle")
                 }
 
-            UserSettingsView()
+            PlanedMaintenanceView()
                 .tabItem {
-                    Label(L("Settings"), systemImage: "person.circle.fill")
+                    Label(L("Maintenance"), systemImage: "hammer.fill")
                 }
             
-            AboutView()
+            UserSettingsView()
                 .tabItem {
-                    Label(L("About"), systemImage: "info.circle")
+                    Label(L("Settings"), systemImage: "gear")
                 }
         }
         .id(loc.currentLanguage.rawValue)

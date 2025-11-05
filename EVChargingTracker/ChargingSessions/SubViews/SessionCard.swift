@@ -10,7 +10,6 @@ import SwiftUI
 struct SessionCard: SwiftUICore.View {
 
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject private var loc = LocalizationManager.shared
     
     let session: Expense
     let onDelete: () -> Void
@@ -52,7 +51,7 @@ struct SessionCard: SwiftUICore.View {
                         Text(String(format: L("%.1f kWh"), session.energyCharged))
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                            .foregroundColor(colorScheme == .dark ? .white : .primary)
                     }
                 } else {
                     VStack(alignment: .leading, spacing: 4) {
@@ -62,7 +61,7 @@ struct SessionCard: SwiftUICore.View {
                         Text(L(session.expenseType.rawValue))
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                            .foregroundColor(colorScheme == .dark ? .white : .primary)
                     }
                 }
 
@@ -73,7 +72,7 @@ struct SessionCard: SwiftUICore.View {
                     Text("\(session.odometer.formatted()) km")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.9))
+                        .foregroundColor(colorScheme == .dark ? .white : .primary)
                 }
                 
                 if let cost = session.cost {

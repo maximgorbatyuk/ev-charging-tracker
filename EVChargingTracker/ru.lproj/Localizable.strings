@@ -11,6 +11,11 @@
 "Edit car" = "Редактировать автомобиль";
 "Cancel" = "Отмена";
 "Save" = "Сохранить";
+"Close" = "Закрыть";
+
+"CO₂ saved (kg)" = "CO₂ сэкономлено (кг)";
+"kWh / 100km" = "кВт / 100км";
+"Charges" = "Зарядок";
 
 "Initial millage" = "Начальный пробег";
 "Current millage" = "Текущий пробег";
@@ -18,11 +23,24 @@
 "Tracking" = "Ведется учет";
 "Not tracking" = "Не выбран для учета";
 
+"No charging sessions yet" = "Пока нет сессий зарядки";
+"Add your first session to start tracking" = "Добавьте первую сессию зарядки, чтобы начать учет";
+
 "Base settings" = "Основные настройки";
 "Currency" = "Валюта";
 "It is recommended to set the default currency before adding any expenses." = "Рекомендуется установить валюту по умолчанию перед добавлением расходов.";
 "Cars" = "Автомобили";
 "User settings" = "Настройки";
+"Notifications enabled" = "Уведомления";
+"Open settings" = "Открыть настройки";
+"In case you want to change this setting, please open app settings" = "Если вы хотите изменить эту настройки уведомлений, откройте настройки iOS";
+"About app" = "О приложении";
+"Tracking settings" = "Настройки учета";
+"App version" = "Версия сборки";
+"Developer" = "Разработчик";
+"What is the app about?" = "Для чего это приложение?";
+"Rate the app" = "Оценить приложение в App Store";
+"Contact developer via Telegram" = "Связаться с разработчиком в Telegram";
 
 "Expense details" = "Детали";
 "Car" = "Автомобиль";
@@ -36,7 +54,7 @@
 "Name of the car" = "Название автомобиля";
 "Optional" = "Дополнительно";
 "Notes (optional)" = "Примечания (необязательно)";
-"Add expense" = "Добавить расход";
+"Add expense" = "Добавить расход и/или сервис";
 "Price per kWh" = "Цена 1 kWh";
 
 "Please select an expense type." = "Пожалуйста, выберите тип расхода.";
@@ -54,7 +72,7 @@
 "Add Charging Session" = "Добавить сессию зарядки";
 "Car stats" = "Статистика";
 
-"Add Expense" = "Добавить расход";
+"Add Expense" = "Добавить расход и/или сервис";
 "Total costs" = "Общие расходы";
 "All car expenses" = "Все расходы";
 "No expenses yet" = "Пока нет записей";
@@ -78,8 +96,6 @@
 "Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Записывайте сессии зарядки, анализируйте расходы и оптимизируйте стратегию зарядки электромобиля с помощью подробной аналитики и автоматических расчётов.";
 "If you have any questions or suggestions, feel free to create an issue on Github:" = "Если у вас есть вопросы или предложения, создайте issue на GitHub:";
 "ev-charging-tracker" = "ev-charging-tracker";
-"Version: %@" = "Версия: %@";
-"Developer: © %@" = "Разработчик: © %@";
 "Build: development" = "Сборка: разработка";
 "EV Charge Tracker" = "EV Charge Tracker";
 
@@ -88,6 +104,7 @@
 "Expenses" = "Расходы";
 "Settings" = "Настройки";
 "About" = "О приложении";
+"Maintenance" = "Сервис";
 
 /* ChargerType human-friendly */
 "Home (3kW)" = "Дома (3kW)";
@@ -100,3 +117,21 @@
 "Public Fast (50kW)" = "Быстрая зарядка (50kW)";
 "Public Rapid (100kW)" = "Быстрая зарядка (100kW)";
 "Other" = "Other";
+
+"Planned maintenance" = "Запланированный сервис";
+"Add maintenance" = "Запланировать сервисные работы";
+"Maintenance" = "Сервис";
+"No maintenance records yet" = "Еще нет записей о запланированном сервисе";
+"Add your first maintenance record" = "Добавьте первую запись, какие работы по обслуживанию/сервису нужно сделать с автомобилем в будущем";
+"Delete maintenance record?" = "Удалить запись?";
+"Delete selected maintenance record? This action cannot be undone." = "Удалить эту запись? Действие не может быть отменено.";
+"Please add car first to track maintenance records" = "Пожалуйста, сначала добавьте автомобиль на экране с зарядками или ремонтными работами, чтобы функция добавления запланированых работ была доступна";
+"When" = "Когда";
+
+"Plan a maintenance" = "Запланировать сервис";
+"Maintenance details" = "Сервисные работы";
+"Odometer value cannot be less than current car mileage." = "Значение одометра не может быть меньше текущего пробега автомобиля.";
+"What should be done?" = "Что должно быть сделано?";
+"Remind by date (optional)" = "Напомнить по дате (опционально)";
+"Remind by odometer (optional)" = "Напомнить по одометру (опционально)";
+"Additional information that will be helpful" = "Дополнительная информация, о которой будет полезно напомнить";

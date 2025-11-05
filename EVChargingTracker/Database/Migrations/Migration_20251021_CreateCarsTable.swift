@@ -67,7 +67,7 @@ class Migration_20251021_CreateCarsTable {
 
             print("Migration \(migrationName) executed successfully")
         } catch {
-            print("Unable to exeucte migration \(migrationName): \(error)")
+            print("Unable to execute migration \(migrationName): \(error)")
         }
     }
 }

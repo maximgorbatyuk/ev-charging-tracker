@@ -7,16 +7,11 @@
 
 import SwiftUI
 
-struct AboutView: SwiftUICore.View {
-
-    let appVersion = Bundle.main.object(forInfoDictionaryKey: "AppVisibleVersion") as? String ?? "0.0.0"
-
-    let developerName = Bundle.main.object(forInfoDictionaryKey: "DeveloperName") as? String ?? "-"
-    
-    let githubRepoUrl = Bundle.main.object(forInfoDictionaryKey: "GithubRepoUrl") as? String ?? "-"
-    
-    let buildEnvironment = Bundle.main.object(forInfoDictionaryKey: "BuildEnvironment") as? String ?? "-"
+struct AboutAppSubView: SwiftUICore.View {
     @ObservedObject private var loc = LocalizationManager.shared
+    @ObservedObject private var environment = EnvironmentService.shared
+
+    @Environment(\.dismiss) var dismiss
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -52,17 +47,17 @@ struct AboutView: SwiftUICore.View {
                     VStack(alignment: .leading) {
 
                         Divider()
-                        Text(String(format: L("Version: %@"), appVersion))
+                        Text(String(format: L("Version: %@"), environment.getAppVisibleVersion()))
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        Text(String(format: L("Developer: © %@"), developerName))
+                        Text(String(format: L("Developer: © %@"), environment.getDeveloperName()))
                             .fontWeight(.semibold)
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        if (buildEnvironment == "dev") {
+                        if (environment.getBuildEnvironment() == "dev") {
                             Text(L("Build: development"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 12, weight: .bold))
@@ -75,14 +70,21 @@ struct AboutView: SwiftUICore.View {
             }
             .navigationTitle(L("EV Charge Tracker"))
             .navigationBarTitleDisplayMode(.automatic)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(L("Close")) {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 
     private func getGithubLink() -> String {
-        return "https://\(githubRepoUrl)"
+        return "https://\(envorinment.getGitHubRepositoryUrl())"
     }
 }
 
 #Preview {
-    AboutView()
+    AboutAppSubView()
 }

@@ -17,9 +17,9 @@ struct CarRecordView: SwiftUICore.View  {
 
     var body: some SwiftUICore.View {
         // compute common values up front to simplify chained expressions
-        let textColor: Color = (colorScheme == .dark) ? .white : Color.black.opacity(0.9)
+        let textColor: Color = (colorScheme == .dark) ? .white : Color.primary
 
-        return VStack(alignment: .leading, spacing: 8) {
+        return VStack(alignment: .leading, spacing: 5) {
             HStack {
                 Text(car.name)
                     .font(.headline)
@@ -76,14 +76,5 @@ struct CarRecordView: SwiftUICore.View  {
                 .font(.system(size: 16, weight: .regular))
                 .foregroundColor(car.selectedForTracking ? .green : .red)
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.2))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                )
-        )
     }
 }
