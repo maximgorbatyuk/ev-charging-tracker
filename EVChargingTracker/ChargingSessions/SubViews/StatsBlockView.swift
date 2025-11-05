@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct StatsBlockView: SwiftUICore.View {
-    
-    let totalEnergy: Double
+
+    let co2Saved: Double
     let averageEnergy: Double
     let chargingSessionsCount: Int
 
     var body: some SwiftUICore.View {
         HStack(spacing: 12) {
             StatCard(
-                title: "Total (kWh)",
-                value: String(format: "%.1f", totalEnergy),
-                icon: "bolt.fill",
-                color: .yellow,
+                title: "CO₂ saved (kg)",
+                value: String(format: "%.1f", co2Saved),
+                icon: "globe",
+                color: .green,
                 minHeight: 90
             )
 
@@ -27,7 +27,7 @@ struct StatsBlockView: SwiftUICore.View {
                 title: "kWh / 100km",
                 value: String(format: "%.1f ", averageEnergy),
                 icon: "chart.line.uptrend.xyaxis",
-                color: .green,
+                color: .blue,
                 minHeight: 90
             )
             
@@ -35,7 +35,7 @@ struct StatsBlockView: SwiftUICore.View {
                 title: "Charges",
                 value: "\(chargingSessionsCount)",
                 icon: "gauge.high",
-                color: .blue,
+                color: .cyan,
                 minHeight: 90
             )
         }

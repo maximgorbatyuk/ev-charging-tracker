@@ -13,7 +13,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                     VStack(spacing: 20) {
 
                         StatsBlockView(
-                            totalEnergy: viewModel.totalEnergy,
+                            co2Saved: viewModel.co2Saved,
                             averageEnergy: viewModel.getAvgConsumptionKWhPer100(),
                             chargingSessionsCount: viewModel.getChargingSessionsCount()
                         )

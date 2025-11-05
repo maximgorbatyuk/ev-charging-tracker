@@ -19,13 +19,15 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     // Average fuel density in kg per gas liter
     let fuelKgPerL = 2.31
     
+    private let environment: EnvironmentService
     private let db: DatabaseManager
     private let expensesRepository: ExpensesRepository
 
     private var _selectedCarForExpenses: Car?
 
     init() {
-        
+
+        self.environment = EnvironmentService.shared
         self.db = DatabaseManager.shared
         self.expensesRepository = db.expensesRepository!
 
@@ -147,7 +149,13 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     var totalEnergy: Double {
         expenses.reduce(0) { $0 + $1.energyCharged }
     }
-    
+
+    var co2Saved: Double {
+        let co2PerKm = environment.getCo2EuropePollutionPerOneKilometer();
+        let totalDistance = self.getTotalCarDistance()
+        return co2PerKm * totalDistance
+    }
+
     var averageEnergy: Double {
         guard !expenses.isEmpty else { return 0 }
         

@@ -15,6 +15,7 @@ class EnvironmentService: ObservableObject {
     var _appVisibleVersion: String? = nil
     var _developerTelegramLink: String? = nil
     var _appStoreAppLink : String? = nil
+    var _co2EuropePollutionPerOneKilometer: Double? = nil
 
     static let shared = EnvironmentService()
 
@@ -82,6 +83,17 @@ class EnvironmentService: ObservableObject {
         }
 
         return _appStoreAppLink!
+    }
+    
+    func getCo2EuropePollutionPerOneKilometer() -> Double {
+        if _co2EuropePollutionPerOneKilometer != nil {
+            return _co2EuropePollutionPerOneKilometer!
+        }
+
+        let valueAsString = Bundle.main.object(forInfoDictionaryKey: "Co2EuropePollutionPerOneKilometer") as? String ?? "0.0";
+        _co2EuropePollutionPerOneKilometer = Double(valueAsString) ?? 0.0
+
+        return _co2EuropePollutionPerOneKilometer!
     }
 
     func isDevelopmentMode() -> Bool {
