@@ -14,7 +14,6 @@ struct AddExpenseView: SwiftUICore.View {
     let onAdd: (AddExpenseViewResult) -> Void
 
     @Environment(\.dismiss) var dismiss
-    @ObservedObject private var loc = LocalizationManager.shared
     
     @State private var date = Date()
     @State private var energyCharged = ""

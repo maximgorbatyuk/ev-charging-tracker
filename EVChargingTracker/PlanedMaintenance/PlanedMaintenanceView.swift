@@ -78,7 +78,15 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                 deleteConfirmationAlert()
             }
             .sheet(isPresented: $showingAddMaintenanceRecord) {
-                
+                let selectedCar = viewModel.selectedCarForExpenses!
+                AddMaintenanceRecordView(
+                    selectedCar: selectedCar,
+                    onAdd: { newRecord in
+                        _ = viewModel.repository.insertRecord(newRecord)
+                        loadData()
+                    }
+                )
+                    
             }
         }
     }
