@@ -16,7 +16,7 @@ struct StatsBlockView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         HStack(spacing: 12) {
             StatCard(
-                title: "CO₂ saved (kg)",
+                title: L("CO₂ saved (kg)"),
                 value: String(format: "%.1f", co2Saved),
                 icon: "globe",
                 color: .green,
@@ -24,7 +24,7 @@ struct StatsBlockView: SwiftUICore.View {
             )
 
             StatCard(
-                title: "kWh / 100km",
+                title: L("kWh / 100km"),
                 value: String(format: "%.1f ", averageEnergy),
                 icon: "chart.line.uptrend.xyaxis",
                 color: .blue,
@@ -32,7 +32,7 @@ struct StatsBlockView: SwiftUICore.View {
             )
             
             StatCard(
-                title: "Charges",
+                title: L("Charges"),
                 value: "\(chargingSessionsCount)",
                 icon: "gauge.high",
                 color: .cyan,
@@ -53,12 +53,11 @@ struct StatCard: SwiftUICore.View {
     let minHeight: CGFloat
 
     var body: some SwiftUICore.View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 3) {
             HStack {
                 Text(title)
                     .font(.caption)
                     .foregroundColor(.gray)
-                Spacer()
                 Image(systemName: icon)
                     .foregroundColor(color)
             }
@@ -67,7 +66,6 @@ struct StatCard: SwiftUICore.View {
                 .font(.system(size: 16, weight: .bold))
                 .foregroundColor(colorScheme == .dark ? .white : .primary)
         }
-        .padding()
         .frame(maxWidth: .infinity, minHeight: minHeight)
         .background(
             RoundedRectangle(cornerRadius: 12)

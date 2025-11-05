@@ -12,6 +12,9 @@
 "Cancel" = "Cancel";
 "Save" = "Save";
 "Close" = "Close";
+"CO₂ saved (kg)" = "CO₂ saved (kg)";
+"kWh / 100km" = "kWh / 100km";
+"Charges" = "Charges";
 
 "Initial millage" = "Initial millage";
 "Current millage" = "Current millage";
