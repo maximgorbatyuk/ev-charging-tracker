@@ -81,7 +81,7 @@ struct AboutAppSubView: SwiftUICore.View {
     }
 
     private func getGithubLink() -> String {
-        return "https://\(envorinment.getGitHubRepositoryUrl())"
+        return "https://\(environment.getGitHubRepositoryUrl())"
     }
 }
 
