@@ -32,31 +32,8 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
             }
 
             if (record.when != nil || record.odometer != nil) {
-                HStack(spacing: 20) {
-
-                    if (record.when != nil) {
-                        SmallLabelView(
-                            title: L("When"),
-                            value: record.when!.formatted(date: .abbreviated, time: .omitted),
-                            color: .primary,
-                            darkSchemeColor: .white)
-                    }
-
-                    if (record.odometer != nil) {
-                        SmallLabelView(
-                            title: L("Odometer"),
-                            value: "\(record.odometer!.formatted()) km",
-                            color: .primary,
-                            darkSchemeColor: .white)
-
-                        SmallLabelView(
-                            title: L("Remain at odometer"),
-                            value: "\(record.odometer! - selectedCar.currentMileage) km",
-                            color: (record.odometer! - selectedCar.currentMileage) > 0 ? .green : .red,
-                            darkSchemeColor: (record.odometer! - selectedCar.currentMileage) > 0 ? .green : .red)
-                    }
-                }
-                .padding(.top, 8)
+                PlannedOnView(record: record, selectedCar: selectedCar)
+                    .padding(.top, 8)
             }
 
             if !record.notes.isEmpty {
@@ -79,12 +56,45 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
     }
 }
 
+struct PlannedOnView: SwiftUICore.View {
+    let record: PlannedMaintenanceItem
+    let selectedCar: Car
+
+    @State private var now = Date()
+
+    var body: some SwiftUICore.View {
+        HStack(spacing: 20) {
+            if record.when != nil {
+                SmallLabelView(
+                    title: L("When"),
+                    value: record.when!.formatted(date: .abbreviated, time: .omitted),
+                    color: now > record.when! ? Color.red : Color.primary,
+                    darkSchemeColor: now > record.when! ? Color.red : Color.primary)
+            }
+
+            if record.odometer != nil {
+                SmallLabelView(
+                    title: L("Odometer"),
+                    value: "\(record.odometer!.formatted()) km",
+                    color: Color.primary,
+                    darkSchemeColor: Color.white)
+
+                SmallLabelView(
+                    title: L("Remain at odometer"),
+                    value: "\(record.odometer! - selectedCar.currentMileage) km",
+                    color: (record.odometer! - selectedCar.currentMileage) > 0 ? Color.green : Color.red,
+                    darkSchemeColor: (record.odometer! - selectedCar.currentMileage) > 0 ? Color.green : Color.red)
+            }
+        }
+    }
+}
+
 struct SmallLabelView : SwiftUICore.View {
     
     let title: String
     let value: String
-    let color: Color = .primary
-    let darkSchemeColor: Color = .white
+    let color: Color
+    let darkSchemeColor: Color
 
     @Environment(\.colorScheme) var colorScheme
 

@@ -89,13 +89,29 @@ struct PlannedMaintenanceItem: Identifiable, Comparable {
 
       static func < (first: PlannedMaintenanceItem, second: PlannedMaintenanceItem) -> Bool {
           if (first.mileageDifference != nil && second.mileageDifference != nil) {
-                return first.mileageDifference! < second.mileageDifference!
+                return first.mileageDifference! > second.mileageDifference!
           }
 
           if (first.when != nil && second.when != nil) {
               return first.when! < second.when!
           }
-  
-        return first.createdAt < second.createdAt
+          
+          if (first.mileageDifference != nil) {
+              return true
+          }
+          
+          if (second.mileageDifference != nil) {
+              return false
+          }
+          
+          if (first.when != nil) {
+              return true
+          }
+          
+          if (second.when != nil) {
+              return false
+          }
+
+          return first.createdAt < second.createdAt
       }
 }

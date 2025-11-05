@@ -106,6 +106,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
             primaryButton: .destructive(Text(L("Delete"))) {
                 if let e = recordToDelete {
                     _ = viewModel.repository.deleteRecord(id: e.id)
+                    loadData()
                 }
                 recordToDelete = nil
             },
