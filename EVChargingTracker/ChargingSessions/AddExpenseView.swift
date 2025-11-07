@@ -170,7 +170,7 @@ struct AddExpenseView: SwiftUICore.View {
                     Button(L("Cancel")) {
                         analytics.trackEvent("button_clicked", properties: [
                                 "button_name": "cancel",
-                                "screen": "add_expence_screen",
+                                "screen": "add_expense_screen",
                                 "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
                             ])
 
@@ -182,7 +182,7 @@ struct AddExpenseView: SwiftUICore.View {
                     Button(L("Save")) {
                         analytics.trackEvent("button_clicked", properties: [
                                 "button_name": "save",
-                                "screen": "add_expence_screen",
+                                "screen": "add_expense_screen",
                                 "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
                             ])
 
@@ -192,9 +192,9 @@ struct AddExpenseView: SwiftUICore.View {
                 }
             }
             .onAppear() {
-                print("add_expence_screen")
+
                 analytics.trackScreen(
-                    "add_expence_screen", properties: [
+                    "add_expense_screen", properties: [
                         "default_expense_type": defaultExpenseType?.rawValue ?? "none"
                     ])
             }
