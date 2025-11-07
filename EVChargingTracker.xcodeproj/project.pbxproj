@@ -10,6 +10,7 @@
 		874BB5002EA265B6004AFFD5 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 874BB4FF2EA265B2004AFFD5 /* readme.md */; };
 		87756C032E963DBC0055273C /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 87756C022E963DBC0055273C /* SQLite */; };
 		87D58E522EA5036100F4454C /* privacy-policy.md in Resources */ = {isa = PBXBuildFile; fileRef = 87D58E512EA5035A00F4454C /* privacy-policy.md */; };
+		87DD139B2EBB7949005982AB /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 87DD139A2EBB7949005982AB /* FirebaseAnalytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87DD139B2EBB7949005982AB /* FirebaseAnalytics in Frameworks */,
 				87756C032E963DBC0055273C /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,6 +139,7 @@
 			name = EVChargingTracker;
 			packageProductDependencies = (
 				87756C022E963DBC0055273C /* SQLite */,
+				87DD139A2EBB7949005982AB /* FirebaseAnalytics */,
 			);
 			productName = EVChargingTracker;
 			productReference = 87756BD72E963D240055273C /* EVChargingTracker-Dev.app */;
@@ -225,6 +228,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				87756C012E963D5F0055273C /* XCRemoteSwiftPackageReference "SQLite" */,
+				87DD13992EBB7949005982AB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 87756BD82E963D240055273C /* Products */;
@@ -455,7 +459,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTrackerDebug;
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -490,7 +494,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -629,6 +633,14 @@
 				minimumVersion = 0.15.4;
 			};
 		};
+		87DD13992EBB7949005982AB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -636,6 +648,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 87756C012E963D5F0055273C /* XCRemoteSwiftPackageReference "SQLite" */;
 			productName = SQLite;
+		};
+		87DD139A2EBB7949005982AB /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 87DD13992EBB7949005982AB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

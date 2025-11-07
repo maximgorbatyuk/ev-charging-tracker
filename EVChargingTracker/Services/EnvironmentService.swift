@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class EnvironmentService: ObservableObject {
 
@@ -98,5 +99,13 @@ class EnvironmentService: ObservableObject {
 
     func isDevelopmentMode() -> Bool {
         return self.getBuildEnvironment() == "dev"
+    }
+
+    func getOsVersion() -> String {
+        return UIDevice.current.systemVersion
+    }
+
+    func getAppLanguage() -> String {
+        Locale.current.language.languageCode?.identifier ?? "unknown"
     }
 }

@@ -12,6 +12,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     let onAdd: (PlannedMaintenance) -> Void
     
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var analytics = AnalyticsService.shared
 
     @State private var when = Date()
     @State private var odometer = ""
@@ -64,12 +65,22 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "button_name": "cancel",
+                                "screen": "add_planned_maintenance_record"
+                            ])
+
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(L("Save")) {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "button_name": "save",
+                                "screen": "add_planned_maintenance_record"
+                            ])
+
                         save()
                     }
                     .fontWeight(.semibold)

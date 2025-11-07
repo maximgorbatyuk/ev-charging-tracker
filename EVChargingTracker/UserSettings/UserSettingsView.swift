@@ -17,7 +17,7 @@ struct UserSettingsView: SwiftUICore.View {
 
     @State private var showingAppAboutModal = false
 
-    @ObservedObject private var loc = LocalizationManager.shared
+    @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var environment = EnvironmentService.shared
 
@@ -36,6 +36,12 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                         .pickerStyle(MenuPickerStyle())
                         .onChange(of: viewModel.selectedLanguage) { _, newLang in
+                            analytics.trackEvent("button_clicked", properties: [
+                                    "screen": "user_settings_screen",
+                                    "button_name": "language_picker",
+                                    "new_language": newLang.rawValue
+                                ])
+
                             viewModel.saveLanguage(newLang)
                         }
                     }
@@ -59,6 +65,11 @@ struct UserSettingsView: SwiftUICore.View {
 
                             Spacer()
                             Button(L("Open settings")) {
+                                analytics.trackEvent("button_clicked", properties: [
+                                        "screen": "user_settings_screen",
+                                        "button_name": "notifications_enable_toggler"
+                                    ])
+
                                 notificationsManager.checkAndRequestPermission(
                                     completion: {
                                         openSettings()
@@ -82,6 +93,11 @@ struct UserSettingsView: SwiftUICore.View {
 
                             if (!viewModel.hasAnyExpense()) {
                                 Button(action: {
+                                    analytics.trackEvent("button_clicked", properties: [
+                                            "screen": "user_settings_screen",
+                                            "button_name": "edit_current_currency"
+                                        ])
+
                                     showEditCurrencyModal = true
                                 }) {
                                     Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
@@ -111,6 +127,11 @@ struct UserSettingsView: SwiftUICore.View {
                                 CarRecordView(
                                     car: car,
                                     onEdit: {
+                                        analytics.trackEvent("button_clicked", properties: [
+                                                "screen": "user_settings_screen",
+                                                "button_name": "car_edit"
+                                            ])
+
                                         editingCar = car
                                     })
                             }
@@ -120,6 +141,11 @@ struct UserSettingsView: SwiftUICore.View {
 
                 Section(header: Text(L("Support"))) {
                     Button(action: {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "what_is_app_about"
+                            ])
+
                         showingAppAboutModal = true
                     }) {
                         HStack {
@@ -133,6 +159,11 @@ struct UserSettingsView: SwiftUICore.View {
                     }
 
                     Button {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "request_app_rating_review"
+                            ])
+
                         requestReview()
                     } label: {
                         HStack {
@@ -145,7 +176,14 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                     }
 
-                    Link(destination: URL(string: environment.getDeveloperTelegramLink())!) {
+                    Button {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "developer_telegram_link"
+                            ])
+
+                        openWebURL(URL(string: environment.getDeveloperTelegramLink())!)
+                    } label: {
                         HStack {
                             Image(systemName: "ellipses.bubble.fill")
                                 .foregroundColor(.blue)
@@ -258,6 +296,7 @@ struct UserSettingsView: SwiftUICore.View {
                 )
             }
             .onAppear {
+                analytics.trackScreen("user_settings_screen")
                 refreshData()
             }
             .refreshable {
@@ -267,6 +306,10 @@ struct UserSettingsView: SwiftUICore.View {
                 AboutAppSubView()
             }
         }
+    }
+
+    private func openWebURL(_ url: URL) {
+        UIApplication.shared.open(url)
     }
 
     private func refreshData() -> Void {

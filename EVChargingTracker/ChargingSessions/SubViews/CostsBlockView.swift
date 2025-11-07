@@ -16,7 +16,7 @@ struct CostsBlockView: SwiftUICore.View {
     let perKilometer: Bool
 
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject private var loc = LocalizationManager.shared
+    @ObservedObject private var analytics = AnalyticsService.shared
 
     @State private var showingHelp = false
     
@@ -31,6 +31,10 @@ struct CostsBlockView: SwiftUICore.View {
                 if let hint = hint {
                     
                     Button(action: {
+                        analytics.trackEvent("hint_button_clicked", properties: [
+                                "title": title
+                            ])
+
                         showingHelp.toggle()
                     }) {
                         Image(systemName: "info.circle")
