@@ -3,7 +3,7 @@ import SwiftUI
 struct ChargingSessionsView: SwiftUICore.View {
     @StateObject private var viewModel = ChargingViewModel()
     @State private var showingAddSession = false
-    @ObservedObject private var loc = LocalizationManager.shared
+    @ObservedObject private var analytics = AnalyticsService.shared
 
     var body: some SwiftUICore.View {
         NavigationView {
@@ -122,6 +122,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                     })
             }
             .onAppear {
+                analytics.trackScreen("charging_sessions_stats_screen")
                 loadData()
             }
             .refreshable {

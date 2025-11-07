@@ -14,7 +14,8 @@ struct AddExpenseView: SwiftUICore.View {
     let onAdd: (AddExpenseViewResult) -> Void
 
     @Environment(\.dismiss) var dismiss
-    
+    @ObservedObject private var analytics = AnalyticsService.shared
+
     @State private var date = Date()
     @State private var energyCharged = ""
     @State private var chargerType: ChargerType = .home7kW
@@ -167,20 +168,39 @@ struct AddExpenseView: SwiftUICore.View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "button_name": "cancel",
+                                "screen": "add_expence_screen",
+                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                            ])
+
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(L("Save")) {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "button_name": "save",
+                                "screen": "add_expence_screen",
+                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                            ])
+
                         saveSession()
                     }
                     .fontWeight(.semibold)
                 }
             }
+            .onAppear() {
+                print("add_expence_screen")
+                analytics.trackScreen(
+                    "add_expence_screen", properties: [
+                        "default_expense_type": defaultExpenseType?.rawValue ?? "none"
+                    ])
+            }
         }
     }
-    
+
     private func saveSession() {
 
         cost = cost.replacing(",", with: ".")

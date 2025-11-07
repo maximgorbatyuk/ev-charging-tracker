@@ -15,6 +15,8 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     @State private var showingDeleteConfirmation: Bool = false
     @State private var recordToDelete: PlannedMaintenanceItem? = nil
 
+    @ObservedObject private var analytics = AnalyticsService.shared
+
     init() {
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
     }
@@ -56,6 +58,12 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                                         selectedCar: viewModel.selectedCarForExpenses!,
                                         record: record,
                                         onDelete: {
+                                            analytics.trackEvent("button_clicked", properties: [
+                                                    "button_name": "delete",
+                                                    "screen": "planned_maintenance_screen",
+                                                    "action": "delete_maintenance_record"
+                                                ])
+
                                             recordToDelete = record
                                             showingDeleteConfirmation = true
                                         })
@@ -70,6 +78,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
             .navigationTitle(L("Planned maintenance"))
             .navigationBarTitleDisplayMode(.automatic)
             .onAppear {
+                analytics.trackScreen("planned_maintenance_screen")
                 loadData()
             }
             .refreshable {
@@ -83,6 +92,11 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                 AddMaintenanceRecordView(
                     selectedCar: selectedCar,
                     onAdd: { newRecord in
+
+                        analytics.trackEvent("maintenance_record_added", properties: [
+                                "screen": "planned_maintenance_screen"
+                            ])
+
                         _ = viewModel.repository.insertRecord(newRecord)
                         loadData()
                     }

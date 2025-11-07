@@ -14,6 +14,8 @@ struct ExpensesView: SwiftUICore.View {
     @State private var showingDeleteConfirmation: Bool = false
     @State private var expenseToDelete: Expense? = nil
 
+    @ObservedObject private var analytics = AnalyticsService.shared
+
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
@@ -107,6 +109,10 @@ struct ExpensesView: SwiftUICore.View {
                     })
             }
             .onAppear {
+                analytics.trackScreen("all_expenses_screen")
+                viewModel.loadSessions()
+            }
+            .refreshable {
                 viewModel.loadSessions()
             }
             .alert(isPresented: $showingDeleteConfirmation) {
@@ -138,6 +144,12 @@ struct ExpensesView: SwiftUICore.View {
                 SessionCard(
                     session: session,
                     onDelete: {
+                        analytics.trackEvent("button_clicked", properties: [
+                                "button_name": "delete",
+                                "screen": "all_expenses_screen",
+                                "action": "delete_expense"
+                            ])
+
                         // ask for confirmation before deleting
                         expenseToDelete = session
                         showingDeleteConfirmation = true

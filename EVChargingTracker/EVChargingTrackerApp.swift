@@ -15,9 +15,14 @@ struct EVChargingTrackerApp: App {
     // For allowing notifications in foreground
     @UIApplicationDelegateAdaptor(ForegroundNotificationDelegate.self) var appDelegate
 
+    private var analytics = AnalyticsService.shared
+
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .onAppear {
+                    analytics.trackEvent("app_opened")
+                }
         }
     }
 }

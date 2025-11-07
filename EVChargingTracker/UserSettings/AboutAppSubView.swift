@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AboutAppSubView: SwiftUICore.View {
-    @ObservedObject private var loc = LocalizationManager.shared
+    @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var environment = EnvironmentService.shared
 
     @Environment(\.dismiss) var dismiss
@@ -76,6 +76,9 @@ struct AboutAppSubView: SwiftUICore.View {
                         dismiss()
                     }
                 }
+            }
+            .onAppear {
+                analytics.trackScreen("about_app_screen")
             }
         }
     }
