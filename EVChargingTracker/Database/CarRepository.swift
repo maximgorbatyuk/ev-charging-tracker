@@ -146,6 +146,7 @@ class CarRepository {
             let update = carToUpdate.update(
                 nameColumn <- car.name,
                 batteryCapacityColumn <- car.batteryCapacity,
+                initialMileageColumn <- car.initialMileage,
                 currentMileageColumn <- car.currentMileage,
                 milleageSyncedAtColumn <- car.milleageSyncedAt
             )

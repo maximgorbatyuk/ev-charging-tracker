@@ -125,4 +125,25 @@ class PlannedMaintenanceRepository {
             return false
         }
     }
+
+    func getPendingMaintenanceRecords(
+        carId: Int64,
+        currentOdometer: Int,
+        currentDate: Date) -> Int {
+        var result = 0
+
+        do {
+            result = try db.scalar(
+                table
+                    .filter(carIdColumn == carId)
+                    .filter(
+                         whenColumn != nil && whenColumn <= currentDate ||
+                         odometerColumn != nil && odometerColumn <= currentOdometer)
+                    .count)
+        } catch {
+            print("Fetch failed: \(error)")
+        }
+
+        return result
+    }
 }

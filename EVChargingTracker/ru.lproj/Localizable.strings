@@ -135,3 +135,10 @@
 "Remind by date (optional)" = "Напомнить по дате (опционально)";
 "Remind by odometer (optional)" = "Напомнить по одометру (опционально)";
 "Additional information that will be helpful" = "Дополнительная информация, о которой будет полезно напомнить";
+
+"Basic info" = "О машине";
+"Name" = "Название";
+"Car mileage" = "Пробег автомобиля";
+"Initial (km)" = "Начальный (км)";
+"Current (km)" = "Текущий (км)";
+"Remain at odometer" = "Осталось км";

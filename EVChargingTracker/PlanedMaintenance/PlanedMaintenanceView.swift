@@ -10,6 +10,8 @@ import SwiftUI
 
 struct PlanedMaintenanceView: SwiftUICore.View {
 
+    let onPlannedMaintenaceRecordsUpdated: () -> Void
+
     @StateObject private var viewModel = PlanedMaintenanceViewModel()
     @State private var showingAddMaintenanceRecord = false
     @State private var showingDeleteConfirmation: Bool = false
@@ -17,8 +19,9 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
-    init() {
+    init(onPlannedMaintenaceRecordsUpdated: @escaping () -> Void) {
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+        self.onPlannedMaintenaceRecordsUpdated = onPlannedMaintenaceRecordsUpdated
     }
 
     var body: some SwiftUICore.View {
@@ -99,6 +102,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
                         _ = viewModel.repository.insertRecord(newRecord)
                         loadData()
+                        onPlannedMaintenaceRecordsUpdated()
                     }
                 )
                     
@@ -121,6 +125,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                 if let e = recordToDelete {
                     _ = viewModel.repository.deleteRecord(id: e.id)
                     loadData()
+                    onPlannedMaintenaceRecordsUpdated()
                 }
                 recordToDelete = nil
             },
