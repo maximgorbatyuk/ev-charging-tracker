@@ -140,3 +140,9 @@
 "Remind by date (optional)" = "Күн бойынша еске салу (қосымша)";
 "Remind by odometer (optional)" = "Одометр бойынша еске салу (қосымша)";
 "Additional information that will be helpful" = "Пайдалы болатын қосымша ақпарат";
+
+"Basic info" = "Негізгі ақпарат";
+"Name" = "Атауы";
+"Car mileage" = "Көлік жүрісі";
+"Initial (km)" = "Бастапқы (км)";
+"Current (km)" = "Ағымдағы (км)";

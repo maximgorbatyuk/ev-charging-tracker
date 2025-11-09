@@ -54,7 +54,11 @@ class Car {
         return self.currentMileage - self.initialMileage
     }
     
-    func updateValues(name: String, batteryCapacity: Double?, currentMileage: Int) -> Void {
+    func updateValues(
+        name: String,
+        batteryCapacity: Double?,
+        intialMileage: Int,
+        currentMileage: Int) -> Void {
         if (!name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
             self.name = name
         }
@@ -67,5 +71,10 @@ class Car {
             self.currentMileage = currentMileage
             self.milleageSyncedAt = Date()
         }
+
+        if (intialMileage <= self.currentMileage) {
+            self.initialMileage = intialMileage
+        }
+            
     }
 }

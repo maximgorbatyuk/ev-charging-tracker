@@ -283,6 +283,7 @@ struct UserSettingsView: SwiftUICore.View {
                         carToUpdate.updateValues(
                             name: updated.name,
                             batteryCapacity: updated.batteryCapacity,
+                            intialMileage: updated.initialMileage,
                             currentMileage: updated.currentMileage)
 
                         _ = viewModel.updateCar(car: carToUpdate)

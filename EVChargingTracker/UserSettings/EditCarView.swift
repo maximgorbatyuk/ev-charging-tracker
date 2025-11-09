@@ -9,6 +9,7 @@ struct EditCarView: SwiftUICore.View {
 
     @State private var name: String
     @State private var batteryText: String
+    @State private var initialMileageText: String
     @State private var mileageText: String
     @State private var selectedForTracking: Bool
 
@@ -24,29 +25,52 @@ struct EditCarView: SwiftUICore.View {
         _name = State(initialValue: car.name)
         _batteryText = State(initialValue: car.batteryCapacity.map { String($0) } ?? "")
         _mileageText = State(initialValue: String(car.currentMileage))
+        _initialMileageText = State(initialValue: String(car.initialMileage))
         _selectedForTracking = State(initialValue: car.selectedForTracking)
     }
 
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
-                Section(header: Text(L("Car"))) {
-                    TextField(L("Name"), text: $name)
+                Section(header: Text(L("Basic info"))) {
+                    HStack {
+                        Text(L("Name"))
+                            .foregroundColor(.secondary)
+
+                        Spacer()
+                        TextField(L("Car name"), text: $name)
+                            .multilineTextAlignment(.trailing)
+                    }
+
+                    HStack {
+                        Text(L("Battery capacity (kWh)"))
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        TextField(L("e.g. 75"), text: $batteryText)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
 
-                Section(header: Text(L("Battery capacity (kWh)"))) {
-                    TextField(L("e.g. 75"), text: $batteryText)
-                        .keyboardType(.numberPad)
-                }
+                Section(header: Text(L("Car mileage"))) {
+                    
+                    HStack {
+                        Text(L("Initial (km)"))
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        TextField("", text: $initialMileageText)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                    }
 
-                Section(header: Text(L("Current mileage (km)"))) {
-                    Text(String(format: L("Minimum: %d"), car.initialMileage))
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .padding(.top, 2)
-
-                    TextField(String(format: L("Current: %d"), car.currentMileage), text: $mileageText)
-                        .keyboardType(.numberPad)
+                    HStack {
+                        Text(L("Current (km)"))
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        TextField("", text: $mileageText)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
 
                 Section(header: Text(L("Danger zone"))) {
@@ -73,9 +97,16 @@ struct EditCarView: SwiftUICore.View {
                         }
 
                         var mileageToSave = car.currentMileage
+                        var initialMileageToSave = car.initialMileage
+
                         let mileage = Int(mileageText) ?? car.currentMileage
                         if (mileage >= car.initialMileage) {
                             mileageToSave = mileage
+                        }
+                        
+                        let initialMileage = Int(initialMileageText) ?? car.initialMileage
+                        if (initialMileage <= mileageToSave) {
+                            initialMileageToSave = initialMileage
                         }
 
                         let updated = CarDto(
@@ -84,7 +115,7 @@ struct EditCarView: SwiftUICore.View {
                             selectedForTracking: selectedForTracking,
                             batteryCapacity: batteryToSave,
                             currentMileage: mileageToSave,
-                            initialMileage: car.initialMileage
+                            initialMileage: initialMileageToSave
                         )
                         onSave(updated)
                     }

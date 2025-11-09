@@ -104,12 +104,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
                 return
             }
 
-            if (odometerValue < selectedCar!.currentMileage) {
-                // TODO mgorbatyuk: show alert
-                alertMessage = L("Odometer value cannot be less than current car mileage.")
-            } else {
-                odo = odometerValue
-            }
+            odo = odometerValue
         }
 
         let record = PlannedMaintenance(

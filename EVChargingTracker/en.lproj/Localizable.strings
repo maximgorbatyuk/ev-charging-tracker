@@ -132,3 +132,9 @@
 "Remind by date (optional)" = "Remind by date (optional)";
 "Remind by odometer (optional)" = "Remind by odometer (optional)";
 "Additional information that will be helpful" = "Additional information that will be helpful";
+
+"Basic info" = "Basic info";
+"Name" = "Name";
+"Car mileage" = "Car mileage";
+"Initial (km)" = "Initial (km)";
+"Current (km)" = "Current (km)";

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MainTabView: SwiftUI.View {
+
+    private var viewModel = MainTabViewModel()
     @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUI.View {
@@ -26,7 +28,8 @@ struct MainTabView: SwiftUI.View {
                 .tabItem {
                     Label(L("Maintenance"), systemImage: "hammer.fill")
                 }
-            
+                .badge(viewModel.getPendingMaintenanceRecords()!)
+
             UserSettingsView()
                 .tabItem {
                     Label(L("Settings"), systemImage: "gear")
