@@ -14,16 +14,16 @@ class MainTabViewModel {
         self.db = DatabaseManager.shared
     }
 
-    func getPendingMaintenanceRecords() -> Int? {
+    func getPendingMaintenanceRecords() -> Int {
         let selectedCarForExpenses = db.carRepository?.getSelectedForExpensesCar()
         if (selectedCarForExpenses == nil) {
-            return nil
+            return 0
         }
 
         let result = db.plannedMaintenanceRepository?.getPendingMaintenanceRecords(
             carId: selectedCarForExpenses!.id!,
             currentOdometer: selectedCarForExpenses!.currentMileage,
-            currentDate: Date()) ?? nil
+            currentDate: Date()) ?? 0
 
         return result
     }

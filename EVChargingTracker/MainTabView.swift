@@ -10,6 +10,8 @@ import SwiftUI
 struct MainTabView: SwiftUI.View {
 
     private var viewModel = MainTabViewModel()
+
+    @State private var pendingMaintenanceRecords: Int = 0
     @ObservedObject private var loc = LocalizationManager.shared
 
     var body: some SwiftUI.View {
@@ -24,11 +26,15 @@ struct MainTabView: SwiftUI.View {
                     Label(L("Expenses"), systemImage: "dollarsign.circle")
                 }
 
-            PlanedMaintenanceView()
+            PlanedMaintenanceView(
+                onPlannedMaintenaceRecordsUpdated: {
+                    self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
+                }
+            )
                 .tabItem {
                     Label(L("Maintenance"), systemImage: "hammer.fill")
                 }
-                .badge(viewModel.getPendingMaintenanceRecords()!)
+                .badge(pendingMaintenanceRecords)
 
             UserSettingsView()
                 .tabItem {
@@ -36,6 +42,9 @@ struct MainTabView: SwiftUI.View {
                 }
         }
         .id(loc.currentLanguage.rawValue)
+        .onAppear {
+            self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
+        }
     }
 }
 

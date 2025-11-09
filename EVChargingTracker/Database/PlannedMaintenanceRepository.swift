@@ -135,9 +135,10 @@ class PlannedMaintenanceRepository {
         do {
             result = try db.scalar(
                 table
-                    .filter(whenColumn != nil && whenColumn <= currentDate)
-                    .filter(odometerColumn != nil && odometerColumn >= currentOdometer)
                     .filter(carIdColumn == carId)
+                    .filter(
+                         whenColumn != nil && whenColumn <= currentDate ||
+                         odometerColumn != nil && odometerColumn <= currentOdometer)
                     .count)
         } catch {
             print("Fetch failed: \(error)")
