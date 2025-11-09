@@ -35,6 +35,11 @@ Automatically calculate your cost per kilometer based on your charging expenses 
 View daily, weekly, and monthly summaries of your charging costs. Make informed decisions about when and where to charge your vehicle.
 Perfect for EV owners who want to understand their true cost of ownership and optimize their charging strategy for maximum savings.
 
+## App Store screenshot resolutions
+
+- 6.9: 1290 x 2796
+- 6.5: 1242 x 2688
+- 6.3: 1179 x 2556
 
 ## Development references
 
