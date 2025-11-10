@@ -101,3 +101,6 @@ iOSInjectionProject/
 *~
 *.xcuserstate
 *.xcbkptlist
+GoogleService-Info.plist
+**/GoogleService-Info.plist
+EVChargingTracker/.env
