@@ -68,32 +68,36 @@ class NotificationManager: ObservableObject {
         }
     }
 
-    func sendNotification(title: String, body: String) -> Void {
+    func cancelNotification(_ id: String) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+    }
+
+    func sendNotification(title: String, body: String) -> String {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        sendNotification(
+        return sendNotification(
             title: title,
             body: body,
             trigger: trigger)
     }
 
-    func scheduleNotification(title: String, body: String, afterSeconds: Int32) -> Void {
+    func scheduleNotification(title: String, body: String, afterSeconds: Int32) -> String {
         let seconds = TimeInterval(afterSeconds)
         let trigger = UNTimeIntervalNotificationTrigger(
             timeInterval: seconds,
             repeats: false)
 
-        sendNotification(
+        return sendNotification(
             title: title,
             body: body,
             trigger: trigger)
     }
 
-    func scheduleNotification(title: String, body: String, on date: Date) -> Void {
+    func scheduleNotification(title: String, body: String, on date: Date) -> String {
         
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
 
-        sendNotification(
+        return sendNotification(
             title: title,
             body: body,
             trigger: trigger)
@@ -112,18 +116,21 @@ class NotificationManager: ObservableObject {
         title: String,
         body: String,
         trigger: UNNotificationTrigger
-    ) -> Void {
+    ) -> String {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = .default
 
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        let identifier = UUID().uuidString
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
         }
+
+        return identifier
     }
 }

@@ -65,7 +65,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("cancel_maintenance_button_clicked", properties: [
                                 "button_name": "cancel",
                                 "screen": "add_planned_maintenance_record"
                             ])
@@ -76,7 +76,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(L("Save")) {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("save_maintenance_button_clicked", properties: [
                                 "button_name": "save",
                                 "screen": "add_planned_maintenance_record"
                             ])

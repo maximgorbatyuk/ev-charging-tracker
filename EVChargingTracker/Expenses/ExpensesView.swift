@@ -144,7 +144,7 @@ struct ExpensesView: SwiftUICore.View {
                 SessionCard(
                     session: session,
                     onDelete: {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("expense_delete_button_clicked", properties: [
                                 "button_name": "delete",
                                 "screen": "all_expenses_screen",
                                 "action": "delete_expense"

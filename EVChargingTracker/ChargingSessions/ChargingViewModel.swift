@@ -12,9 +12,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     @Published var expenses: [Expense] = []
 
     var defaultCurrency: Currency
-
-    // ICE average consumption in liters per 100 km
-    let iceLPer100 = 10.0
+    var statData: SharedStatsData?
 
     // Average fuel density in kg per gas liter
     let fuelKgPerL = 2.31
@@ -30,7 +28,6 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         self.environment = EnvironmentService.shared
         self.db = DatabaseManager.shared
         self.expensesRepository = db.expensesRepository!
-
         self.defaultCurrency = self.db.userSettingsRepository!.fetchCurrency()
 
         loadSessions()
@@ -38,6 +35,15 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     func loadSessions() {
         expenses = expensesRepository.fetchAllSessions()
+
+        statData = SharedStatsData(
+            co2Saved: getCo2Saved(),
+            avgConsumptionKWhPer100: getAvgConsumptionKWhPer100(),
+            totalChargingSessionsCount: getChargingSessionsCount(),
+            totalChargingCost: getTotalChargingCost(),
+            oneKmPriceIncludingAllExpenses: calculateOneKilometerCosts(true),
+            oneKmPriceBasedOnlyOnCharging: calculateOneKilometerCosts(false),
+            lastUpdated: Date())
     }
 
     func addExpense(_ session: Expense) {
@@ -131,13 +137,6 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         return (totalEnergy / totalDistance) * 100.0
     }
 
-    func co2SavedInKg() -> Double {
-        let icePer100 = iceLPer100 * fuelKgPerL
-        let totalDistance = self.getTotalCarDistance()
-
-        return icePer100 * (totalDistance / 100.0)
-    }
-
     var selectedCarForExpenses: Car? {
         if (_selectedCarForExpenses == nil) {
             _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
@@ -150,7 +149,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         expenses.reduce(0) { $0 + $1.energyCharged }
     }
 
-    var co2Saved: Double {
+    func getCo2Saved() -> Double {
         let co2PerKm = environment.getCo2EuropePollutionPerOneKilometer();
         let totalDistance = self.getTotalCarDistance()
         return co2PerKm * totalDistance
@@ -176,7 +175,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             .compactMap { $0.cost }.reduce(0, +)
     }
 
-    var totalChargingCost: Double {
+    func getTotalChargingCost() -> Double {
         expenses
             .filter { $0.isInitialRecord == false && $0.expenseType == .charging }
             .compactMap { $0.cost }.reduce(0, +)

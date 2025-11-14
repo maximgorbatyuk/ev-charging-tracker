@@ -13,15 +13,20 @@ class PlanedMaintenanceViewModel: ObservableObject {
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
 
     private let db: DatabaseManager
+    private let notifications: NotificationManager
+    
     let repository: PlannedMaintenanceRepository
+    let delayedNotificationsRepository: DelayedNotificationsRepository
 
     private var _selectedCarForExpenses: Car?
     
     init() {
+        self.notifications = NotificationManager.shared
         self.db = DatabaseManager.shared
         self.repository = db.plannedMaintenanceRepository!
+        self.delayedNotificationsRepository = db.delayedNotificationsRepository!
     }
-    
+
     func loadData() -> Void {
         let selectedCar = self.selectedCarForExpenses
         if (selectedCar == nil) {
@@ -36,6 +41,40 @@ class PlanedMaintenanceViewModel: ObservableObject {
         records.sort()
         DispatchQueue.main.async {
             self.maintenanceRecords = records
+        }
+    }
+    
+    func addNewMaintenanceRecord(newRecord: PlannedMaintenance) -> Void {
+        let recordId = repository.insertRecord(newRecord)
+
+        if (newRecord.when != nil) {
+            var notificationId = notifications.scheduleNotification(
+                title: L("Maintenance reminder"),
+                body: newRecord.name,
+                on: newRecord.when!)
+
+            let delayedNotification = delayedNotificationsRepository.insertRecord(
+                DelayedNotification(
+                    when: newRecord.when!,
+                    notificationId: notificationId,
+                    maintenanceRecord: recordId,
+                    carId: newRecord.carId
+                )
+            )
+        }
+    }
+
+    func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) -> Void {
+        _ = repository.deleteRecord(id: recordToDelete.id)
+        
+        if (recordToDelete.when != nil) {
+            let delayedNotification = delayedNotificationsRepository.getRecordByMaintenanceId(recordToDelete.id)
+            if (delayedNotification == nil) {
+                return
+            }
+
+            notifications.cancelNotification(delayedNotification!.notificationId)
+            _ = delayedNotificationsRepository.deleteRecord(id: delayedNotification!.id!)
         }
     }
 

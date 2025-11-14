@@ -13,6 +13,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     let onPlannedMaintenaceRecordsUpdated: () -> Void
 
     @StateObject private var viewModel = PlanedMaintenanceViewModel()
+
     @State private var showingAddMaintenanceRecord = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var recordToDelete: PlannedMaintenanceItem? = nil
@@ -61,7 +62,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                                         selectedCar: viewModel.selectedCarForExpenses!,
                                         record: record,
                                         onDelete: {
-                                            analytics.trackEvent("button_clicked", properties: [
+                                            analytics.trackEvent("delete_maintenance_button_clicked", properties: [
                                                     "button_name": "delete",
                                                     "screen": "planned_maintenance_screen",
                                                     "action": "delete_maintenance_record"
@@ -100,7 +101,8 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                                 "screen": "planned_maintenance_screen"
                             ])
 
-                        _ = viewModel.repository.insertRecord(newRecord)
+                        viewModel.addNewMaintenanceRecord(newRecord: newRecord)
+
                         loadData()
                         onPlannedMaintenaceRecordsUpdated()
                     }
@@ -123,7 +125,9 @@ struct PlanedMaintenanceView: SwiftUICore.View {
             message: message,
             primaryButton: .destructive(Text(L("Delete"))) {
                 if let e = recordToDelete {
-                    _ = viewModel.repository.deleteRecord(id: e.id)
+
+                    viewModel.deleteMaintenanceRecord(e)
+
                     loadData()
                     onPlannedMaintenaceRecordsUpdated()
                 }
