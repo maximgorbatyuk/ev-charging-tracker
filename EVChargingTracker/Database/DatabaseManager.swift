@@ -14,6 +14,7 @@ class DatabaseManager {
     static let UserSettingsTableName = "user_settings"
     static let CarsTableName = "cars"
     static let PlannedMaintenanceTableName = "planned_maintenance"
+    static let DelayedNotificationsTableName = "delayed_notifications"
 
     static let shared = DatabaseManager()
 
@@ -22,9 +23,10 @@ class DatabaseManager {
     var userSettingsRepository: UserSettingsRepository?
     var carRepository: CarRepository?
     var plannedMaintenanceRepository: PlannedMaintenanceRepository?
+    var delayedNotificationsRepository: DelayedNotificationsRepository?
 
     private var db: Connection?
-    private let latestVersion = 4
+    private let latestVersion = 5
     
     private init() {
        
@@ -45,6 +47,7 @@ class DatabaseManager {
             self.migrationRepository = MigrationsRepository(db: dbConnection, tableName: DatabaseManager.MigrationsTableName)
             self.userSettingsRepository = UserSettingsRepository(db: dbConnection, tableName: DatabaseManager.UserSettingsTableName)
             self.plannedMaintenanceRepository = PlannedMaintenanceRepository(db: dbConnection, tableName: DatabaseManager.PlannedMaintenanceTableName)
+            self.delayedNotificationsRepository = DelayedNotificationsRepository(db: dbConnection, tableName: DatabaseManager.DelayedNotificationsTableName)
 
             self.carRepository = CarRepository(
                 db: dbConnection,
@@ -89,6 +92,10 @@ class DatabaseManager {
             case 4:
                 let migration4 = Migration_20251104_CreatePlannedMaintenanceTable(db: db!)
                 migration4.execute()
+                
+            case 5:
+                let migration5 = Migration_20251114_CreateDelayedNotificationTable(db: db!)
+                migration5.execute()
 
             default:
                 break

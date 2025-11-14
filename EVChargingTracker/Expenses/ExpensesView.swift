@@ -16,6 +16,8 @@ struct ExpensesView: SwiftUICore.View {
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
@@ -44,7 +46,6 @@ struct ExpensesView: SwiftUICore.View {
                         }
                         .padding(.horizontal)
 
-                        // Total Cost
                         if viewModel.totalCost > 0 {
                             CostsBlockView(
                                 title: L("Total costs"),
@@ -54,10 +55,34 @@ struct ExpensesView: SwiftUICore.View {
                                 perKilometer: false)
                         }
 
-                        // Sessions List
                         if viewModel.expenses.isEmpty {
                             emptyStateView
                         } else {
+
+                            HStack(spacing: 8) {
+                                ForEach(viewModel.filterButtons, id: \.id) { button in
+                                    
+                                    Button(button.title) {
+                                        viewModel.executeButtonAction(button)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 2)
+                                    .padding(.vertical, 12)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                                    .animation(.easeInOut, value: button.isSelected)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .fill(button.isSelected ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 6)
+                                                    .stroke(button.isSelected ? Color.blue.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 1)
+                                            )
+                                    )
+                                }
+                            }
+                            .padding(.horizontal)
+                            
                             sessionsListView
                         }
                     }
@@ -74,42 +99,17 @@ struct ExpensesView: SwiftUICore.View {
                     defaultCurrency: viewModel.getDefaultCurrency(),
                     selectedCar: selectedCar,
                     onAdd: { newExpenseResult in
-                        var carId: Int64? = nil
-                        if (selectedCar == nil) {
-                            if (newExpenseResult.carName == nil) {
-                                
-                                // TODO mgorbatyuk: show error alert to user
-                                print("Error: First expense must have a car name!")
-                                return
-                            }
-                            
-                            let now = Date()
-                            let car = Car(
-                                id: nil,
-                                name: newExpenseResult.carName!,
-                                selectedForTracking: true,
-                                batteryCapacity: newExpenseResult.batteryCapacity,
-                                expenseCurrency: newExpenseResult.initialExpenseForNewCar!.currency,
-                                currentMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
-                                initialMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
-                                milleageSyncedAt: now,
-                                createdAt: now)
 
-                            carId = viewModel.addCar(car: car)
-                            newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
-                            viewModel.addExpense(newExpenseResult.initialExpenseForNewCar!)
-                        } else {
-                            carId = selectedCar!.id
-                            selectedCar!.updateMileage(newMileage: newExpenseResult.expense.odometer)
-                            _ = viewModel.updateMilleage(selectedCar!)
-                        }
-
-                        newExpenseResult.expense.setCarId(carId)
-                        viewModel.addExpense(newExpenseResult.expense)
+                        viewModel.saveNewExpense(newExpenseResult)
+                        analytics.trackEvent(
+                            "expense_record_added",
+                            properties: [
+                                "screen": viewModel.analyticsScreenName
+                            ])
                     })
             }
             .onAppear {
-                analytics.trackScreen("all_expenses_screen")
+                analytics.trackScreen(viewModel.analyticsScreenName)
                 viewModel.loadSessions()
             }
             .refreshable {
@@ -144,9 +144,9 @@ struct ExpensesView: SwiftUICore.View {
                 SessionCard(
                     session: session,
                     onDelete: {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("expense_delete_button_clicked", properties: [
                                 "button_name": "delete",
-                                "screen": "all_expenses_screen",
+                                "screen": viewModel.analyticsScreenName,
                                 "action": "delete_expense"
                             ])
 
@@ -170,6 +170,12 @@ struct ExpensesView: SwiftUICore.View {
             primaryButton: .destructive(Text(L("Delete"))) {
                 if let e = expenseToDelete {
                     viewModel.deleteSession(e)
+
+                    analytics.trackEvent(
+                        "expense_deleted",
+                        properties: [
+                            "screen": viewModel.analyticsScreenName
+                        ])
                 }
                 expenseToDelete = nil
             },

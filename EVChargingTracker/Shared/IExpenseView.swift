@@ -7,7 +7,7 @@
 
 protocol IExpenseView {
 
-    func addExpense(_ session: Expense)
+    func insertExpense(_ session: Expense)
 
     func getDefaultCurrency() -> Currency
 }

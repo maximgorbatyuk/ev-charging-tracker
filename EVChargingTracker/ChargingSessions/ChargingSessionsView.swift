@@ -11,68 +11,78 @@ struct ChargingSessionsView: SwiftUICore.View {
                 
                 ScrollView {
                     VStack(spacing: 20) {
-
-                        StatsBlockView(
-                            co2Saved: viewModel.co2Saved,
-                            averageEnergy: viewModel.getAvgConsumptionKWhPer100(),
-                            chargingSessionsCount: viewModel.getChargingSessionsCount()
-                        )
-                        .padding(.horizontal)
-
-                        if viewModel.totalCost > 0 {
-
-                            CostsBlockView(
-                                title: L("One kilometer price (charging only)"),
-                                hint: L("How much one kilometer costs you including only charging expenses"),
-                                currency: viewModel.defaultCurrency,
-                                costsValue: viewModel.calculateOneKilometerCosts(true),
-                                perKilometer: true
+                        
+                        if (viewModel.statData != nil) {
+                            StatsBlockView(
+                                co2Saved: viewModel.statData!.co2Saved,
+                                averageEnergy: viewModel.statData!.avgConsumptionKWhPer100,
+                                chargingSessionsCount: viewModel.statData!.totalChargingSessionsCount
                             )
+                            .padding(.horizontal)
 
-                            CostsBlockView(
-                                title: L("One kilometer price (total)"),
-                                hint: L("How much one kilometer costs you including all logged expenses"),
-                                currency: viewModel.defaultCurrency,
-                                costsValue: viewModel.calculateOneKilometerCosts(false),
-                                perKilometer: true
-                            )
+                            if viewModel.totalCost > 0 {
 
-                            CostsBlockView(
-                                title: L("Total charging costs"),
-                                hint: nil,
-                                currency: viewModel.defaultCurrency,
-                                costsValue: viewModel.totalChargingCost,
-                                perKilometer: false
-                            )
-                        }
-
-                        if viewModel.expenses.isEmpty {
-                            NoExpensesView()
-                                .padding(.top, 60)
-                        }
-
-                        Button(action: {
-                            showingAddSession = true
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text(L("Add Charging Session"))
-                                    .fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.red, Color.red.opacity(0.8)],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                                CostsBlockView(
+                                    title: L("One kilometer price (charging only)"),
+                                    hint: L("How much one kilometer costs you including only charging expenses"),
+                                    currency: viewModel.defaultCurrency,
+                                    costsValue: viewModel.statData!.oneKmPriceBasedOnlyOnCharging,
+                                    perKilometer: true
                                 )
-                            )
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
+
+                                CostsBlockView(
+                                    title: L("One kilometer price (total)"),
+                                    hint: L("How much one kilometer costs you including all logged expenses"),
+                                    currency: viewModel.defaultCurrency,
+                                    costsValue: viewModel.statData!.oneKmPriceIncludingAllExpenses,
+                                    perKilometer: true
+                                )
+
+                                CostsBlockView(
+                                    title: L("Total charging costs"),
+                                    hint: nil,
+                                    currency: viewModel.defaultCurrency,
+                                    costsValue: viewModel.statData!.totalChargingCost,
+                                    perKilometer: false
+                                )
+                            }
+
+                            if viewModel.expenses.isEmpty {
+                                NoExpensesView()
+                                    .padding(.top, 60)
+                            }
+
+                            Button(action: {
+                                showingAddSession = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "plus.circle.fill")
+                                    Text(L("Add Charging Session"))
+                                        .fontWeight(.semibold)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    LinearGradient(
+                                        colors: [Color.red, Color.red.opacity(0.8)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
+                            }
+                            .padding(.horizontal)
+
+                        } else {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .scaleEffect(1) // make it larger (optional)
                         }
-                        .padding(.horizontal)
-                    }
+                        
+
+                        
+                    } // end of VStack
                     .padding(.vertical)
                 }
             }
@@ -87,38 +97,13 @@ struct ChargingSessionsView: SwiftUICore.View {
                     selectedCar: selectedCar,
                     onAdd: { newExpenseResult in
 
-                        var carId: Int64? = nil
-                        if (selectedCar == nil) {
-                            if (newExpenseResult.carName == nil) {
+                        viewModel.saveChargingSession(newExpenseResult)
 
-                                // TODO mgorbatyuk: show error alert to user
-                                print("Error: First expense must have a car name!")
-                                return
-                            }
-
-                            let now = Date()
-                            let car = Car(
-                                id: nil,
-                                name: newExpenseResult.carName!,
-                                selectedForTracking: true,
-                                batteryCapacity: newExpenseResult.batteryCapacity,
-                                expenseCurrency: newExpenseResult.initialExpenseForNewCar!.currency,
-                                currentMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
-                                initialMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
-                                milleageSyncedAt: now,
-                                createdAt: now)
-
-                            carId = viewModel.addCar(car: car)
-                            newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
-                            viewModel.addExpense(newExpenseResult.initialExpenseForNewCar!)
-                        } else {
-                            carId = selectedCar!.id
-                            selectedCar!.updateMileage(newMileage: newExpenseResult.expense.odometer)
-                            _ = viewModel.updateMilleage(selectedCar!)
-                        }
-
-                        newExpenseResult.expense.setCarId(carId)
-                        viewModel.addExpense(newExpenseResult.expense)
+                        analytics.trackEvent(
+                            "charge_session_added",
+                            properties: [
+                                "screen": "charging_sessions_stats_screen"
+                            ])
                     })
             }
             .onAppear {

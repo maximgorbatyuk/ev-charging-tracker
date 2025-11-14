@@ -34,7 +34,11 @@ final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNU
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         // Set the delegate
         UNUserNotificationCenter.current().delegate = self
+        
+        #if DEBUG
+        #else
         FirebaseApp.configure()
+        #endif
 
         return true
     }

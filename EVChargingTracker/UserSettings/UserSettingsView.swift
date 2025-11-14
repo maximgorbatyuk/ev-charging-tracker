@@ -36,7 +36,7 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                         .pickerStyle(MenuPickerStyle())
                         .onChange(of: viewModel.selectedLanguage) { _, newLang in
-                            analytics.trackEvent("button_clicked", properties: [
+                            analytics.trackEvent("language_select_button_clicked", properties: [
                                     "screen": "user_settings_screen",
                                     "button_name": "language_picker",
                                     "new_language": newLang.rawValue
@@ -65,7 +65,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                             Spacer()
                             Button(L("Open settings")) {
-                                analytics.trackEvent("button_clicked", properties: [
+                                analytics.trackEvent("notifications_settings_button_clicked", properties: [
                                         "screen": "user_settings_screen",
                                         "button_name": "notifications_enable_toggler"
                                     ])
@@ -93,7 +93,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                             if (!viewModel.hasAnyExpense()) {
                                 Button(action: {
-                                    analytics.trackEvent("button_clicked", properties: [
+                                    analytics.trackEvent("currency_edit_button_clicked", properties: [
                                             "screen": "user_settings_screen",
                                             "button_name": "edit_current_currency"
                                         ])
@@ -127,7 +127,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 CarRecordView(
                                     car: car,
                                     onEdit: {
-                                        analytics.trackEvent("button_clicked", properties: [
+                                        analytics.trackEvent("card_edit_button_clicked", properties: [
                                                 "screen": "user_settings_screen",
                                                 "button_name": "car_edit"
                                             ])
@@ -141,7 +141,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                 Section(header: Text(L("Support"))) {
                     Button(action: {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("about_app_button_clicked", properties: [
                                 "screen": "user_settings_screen",
                                 "button_name": "what_is_app_about"
                             ])
@@ -159,7 +159,7 @@ struct UserSettingsView: SwiftUICore.View {
                     }
 
                     Button {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("app_rating_review_button_clicked", properties: [
                                 "screen": "user_settings_screen",
                                 "button_name": "request_app_rating_review"
                             ])
@@ -177,7 +177,7 @@ struct UserSettingsView: SwiftUICore.View {
                     }
 
                     Button {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("developer_tg_button_clicked", properties: [
                                 "screen": "user_settings_screen",
                                 "button_name": "developer_telegram_link"
                             ])

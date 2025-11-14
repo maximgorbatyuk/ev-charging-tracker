@@ -1,23 +1,22 @@
 //
-//  PlannedMaintenanceRepository.swift
+//  DelayedNotificationsRepository.swift
 //  EVChargingTracker
 //
-//  Created by Maxim Gorbatyuk on 04.11.2025.
+//  Created by Maxim Gorbatyuk on 14.11.2025.
 //
 
 @_exported import SQLite
 import Foundation
 
-class PlannedMaintenanceRepository {
+class DelayedNotificationsRepository {
     private let table: Table
 
     private let id = Expression<Int64>("id")
-    private let nameColumn = Expression<String>("name")
-    private let notesColumn = Expression<String>("notes")
-    private let whenColumn = Expression<Date?>("when")
-    private let odometerColumn = Expression<Int?>("odometer")
-    private let createdAtColumn = Expression<Date>("created_at")
+    private let whenColumn = Expression<Date>("when")
+    private let maintenanceRecordIdColumn = Expression<Int64?>("maintenance_record_id")
+    private let notificationIdColumn = Expression<String>("notification_id")
     private let carIdColumn = Expression<Int64>("car_id")
+    private let createdAtColumn = Expression<Date>("created_at")
 
     private var db: Connection
 
@@ -29,39 +28,25 @@ class PlannedMaintenanceRepository {
     func getCreateTableCommand() -> String {
         return table.create(ifNotExists: true) { t in
             t.column(id, primaryKey: .autoincrement)
-            t.column(nameColumn)
-            t.column(notesColumn)
             t.column(whenColumn)
-            t.column(odometerColumn)
-            t.column(createdAtColumn)
+            t.column(notificationIdColumn)
+            t.column(maintenanceRecordIdColumn)
             t.column(carIdColumn)
+            t.column(createdAtColumn)
         }
     }
 
-    func getRecordsCountForOdometerValue(carCurrentMileage: Int) -> Int {
-
-        let query = table.filter(odometerColumn != nil && odometerColumn <= carCurrentMileage).count
-
-        do {
-            return try db.scalar(query)
-        } catch {
-            print("Failed to get records count: \(error)")
-            return 0
-        }
-    }
- 
-    func getAllRecords(carId: Int64) -> [PlannedMaintenance] {
-        var recordsList: [PlannedMaintenance] = []
+    func getAllRecords(carId: Int64) -> [DelayedNotification] {
+        var recordsList: [DelayedNotification] = []
 
         do {
             for record in try db.prepare(table.filter(carIdColumn == carId).order(id.desc)) {
 
-                let recordItem = PlannedMaintenance(
+                let recordItem = DelayedNotification(
                     id: record[id],
                     when: record[whenColumn],
-                    odometer: record[odometerColumn],
-                    name: record[nameColumn],
-                    notes: record[notesColumn],
+                    notificationId: record[notificationIdColumn],
+                    maintenanceRecord: record[maintenanceRecordIdColumn],
                     carId: record[carIdColumn],
                     createdAt: record[createdAtColumn]
                 )
@@ -75,14 +60,34 @@ class PlannedMaintenanceRepository {
         return recordsList
     }
 
-    func insertRecord(_ record: PlannedMaintenance) -> Int64? {
+    func getRecordByMaintenanceId(_ maintenanceRecordId: Int64) -> DelayedNotification? {
+        let query = table.filter(maintenanceRecordIdColumn == maintenanceRecordId)
+        do {
+            if let record = try db.pluck(query) {
+                let recordItem = DelayedNotification(
+                    id: record[id],
+                    when: record[whenColumn],
+                    notificationId: record[notificationIdColumn],
+                    maintenanceRecord: record[maintenanceRecordIdColumn],
+                    carId: record[carIdColumn],
+                    createdAt: record[createdAtColumn]
+                )
+                return recordItem
+            }
+            return nil
+        } catch {
+            print("Fetch by notification ID failed: \(error)")
+            return nil
+        }
+    }
+
+    func insertRecord(_ record: DelayedNotification) -> Int64? {
         
         do {
             let insert = table.insert(
                 whenColumn <- record.when,
-                odometerColumn <- record.odometer,
-                nameColumn <- record.name,
-                notesColumn <- record.notes,
+                notificationIdColumn <- record.notificationId,
+                maintenanceRecordIdColumn <- record.maintenanceRecord,
                 carIdColumn <- record.carId,
                 createdAtColumn <- record.createdAt
             )
@@ -105,18 +110,17 @@ class PlannedMaintenanceRepository {
             return 0
         }
     }
-
-    func updateRecord(_ record: PlannedMaintenance) -> Bool {
+    
+    func updateRecord(_ record: DelayedNotification) -> Bool {
         let recordId = record.id ?? 0
         let recordToUpdate = table.filter(id == recordId)
         
         do {
             try db.run(recordToUpdate.update(
                 whenColumn <- record.when,
-                odometerColumn <- record.odometer,
-                nameColumn <- record.name,
-                notesColumn <- record.notes
+                maintenanceRecordIdColumn <- record.maintenanceRecord,
             ))
+
             print("Updated record with id: \(recordId)")
             return true
         } catch {
@@ -138,24 +142,12 @@ class PlannedMaintenanceRepository {
         }
     }
 
-    func getPendingMaintenanceRecords(
-        carId: Int64,
-        currentOdometer: Int,
-        currentDate: Date) -> Int {
-        var result = 0
-
-        do {
-            result = try db.scalar(
-                table
-                    .filter(carIdColumn == carId)
-                    .filter(
-                         whenColumn != nil && whenColumn <= currentDate ||
-                         odometerColumn != nil && odometerColumn <= currentOdometer)
-                    .count)
-        } catch {
-            print("Fetch failed: \(error)")
+    func deleteMaintenanceRelatedNotificationIfExists(maintenanceRecordId: Int64) -> Void {
+        let recordToDelete = getRecordByMaintenanceId(maintenanceRecordId)
+        if (recordToDelete == nil) {
+            return
         }
 
-        return result
+        _ = deleteRecord(id: recordToDelete!.id!)
     }
 }

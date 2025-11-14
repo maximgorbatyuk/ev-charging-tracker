@@ -168,7 +168,7 @@ struct AddExpenseView: SwiftUICore.View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("cancel_button_clicked", properties: [
                                 "button_name": "cancel",
                                 "screen": "add_expense_screen",
                                 "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
@@ -180,7 +180,7 @@ struct AddExpenseView: SwiftUICore.View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(L("Save")) {
-                        analytics.trackEvent("button_clicked", properties: [
+                        analytics.trackEvent("save_button_clicked", properties: [
                                 "button_name": "save",
                                 "screen": "add_expense_screen",
                                 "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
