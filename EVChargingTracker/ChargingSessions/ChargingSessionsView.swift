@@ -97,38 +97,13 @@ struct ChargingSessionsView: SwiftUICore.View {
                     selectedCar: selectedCar,
                     onAdd: { newExpenseResult in
 
-                        var carId: Int64? = nil
-                        if (selectedCar == nil) {
-                            if (newExpenseResult.carName == nil) {
+                        viewModel.saveChargingSession(newExpenseResult)
 
-                                // TODO mgorbatyuk: show error alert to user
-                                print("Error: First expense must have a car name!")
-                                return
-                            }
-
-                            let now = Date()
-                            let car = Car(
-                                id: nil,
-                                name: newExpenseResult.carName!,
-                                selectedForTracking: true,
-                                batteryCapacity: newExpenseResult.batteryCapacity,
-                                expenseCurrency: newExpenseResult.initialExpenseForNewCar!.currency,
-                                currentMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
-                                initialMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
-                                milleageSyncedAt: now,
-                                createdAt: now)
-
-                            carId = viewModel.addCar(car: car)
-                            newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
-                            viewModel.addExpense(newExpenseResult.initialExpenseForNewCar!)
-                        } else {
-                            carId = selectedCar!.id
-                            selectedCar!.updateMileage(newMileage: newExpenseResult.expense.odometer)
-                            _ = viewModel.updateMilleage(selectedCar!)
-                        }
-
-                        newExpenseResult.expense.setCarId(carId)
-                        viewModel.addExpense(newExpenseResult.expense)
+                        analytics.trackEvent(
+                            "charge_session_added",
+                            properties: [
+                                "screen": "charging_sessions_stats_screen"
+                            ])
                     })
             }
             .onAppear {

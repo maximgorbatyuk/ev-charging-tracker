@@ -148,3 +148,5 @@
 "Current (km)" = "Ағымдағы (км)";
 "Remain at odometer" = "Одометрдегі қалдық";
 "Maintenance reminder" = "Техникалық қызмет туралы еске салу";
+"Some maintenance tasks due" = "Кейбір техникалық қызмет тапсырмалары мерзімінде";
+"You have %d maintenance task(s) due based on your car's current mileage." = "Көлігіңіздің ағымдағы жүрісіне байланысты сізде %d техникалық қызмет тапсырмасы мерзімінде.";

@@ -15,13 +15,19 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     
     private let db: DatabaseManager
     private let chargingSessionsRepository: ExpensesRepository
+    private let plannedMaintenanceRepository: PlannedMaintenanceRepository
+    private let notifications: NotificationManager
 
     private var _selectedCarForExpenses: Car?
 
     init() {
         
         self.db = DatabaseManager.shared
+        self.notifications = NotificationManager.shared
+
         self.chargingSessionsRepository = db.expensesRepository!
+        self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
+
         self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
 
         loadSessions()
@@ -31,7 +37,65 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         expenses = chargingSessionsRepository.fetchAllSessions()
     }
 
-    func addExpense(_ session: Expense) {
+    // TODO mgorbatyuk: avoid code duplication with saveChargingSession
+    func saveNewExpense(_ newExpenseResult: AddExpenseViewResult) -> Void {
+
+        var selectedCar = self.selectedCarForExpenses
+        var carId: Int64? = nil
+        if (selectedCar == nil) {
+            if (newExpenseResult.carName == nil) {
+
+                // TODO mgorbatyuk: show error alert to user
+                print("Error: First expense must have a car name!")
+                return
+            }
+
+            let now = Date()
+            let car = Car(
+                id: nil,
+                name: newExpenseResult.carName!,
+                selectedForTracking: true,
+                batteryCapacity: newExpenseResult.batteryCapacity,
+                expenseCurrency: newExpenseResult.initialExpenseForNewCar!.currency,
+                currentMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
+                initialMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
+                milleageSyncedAt: now,
+                createdAt: now)
+
+            carId = self.addCar(car: car)
+            newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
+            self.insertExpense(newExpenseResult.initialExpenseForNewCar!)
+        } else {
+            carId = selectedCar!.id
+            selectedCar!.updateMileage(newMileage: newExpenseResult.expense.odometer)
+            _ = self.updateMilleage(selectedCar!)
+        }
+
+        newExpenseResult.expense.setCarId(carId)
+        self.insertExpense(newExpenseResult.expense)
+
+        if (newExpenseResult.expense.expenseType == .maintenance ||
+            newExpenseResult.expense.expenseType == .repair) {
+
+            selectedCar = self.reloadSelectedCarForExpenses()
+            let countOfMaintenanceRecordsToNotify = plannedMaintenanceRepository.getRecordsCountForOdometerValue(carCurrentMileage: selectedCar!.currentMileage)
+
+            if (countOfMaintenanceRecordsToNotify > 0) {
+                let notificationBody = String(format: L("You have %d maintenance task(s) due based on your car's current mileage."), countOfMaintenanceRecordsToNotify)
+                _ = notifications.scheduleNotification(
+                    title: L("Planned maintenance"),
+                    body: notificationBody,
+                    afterSeconds: 1)
+            }
+        }
+    }
+
+    func reloadSelectedCarForExpenses() -> Car? {
+        _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+        return _selectedCarForExpenses
+    }
+
+    func insertExpense(_ session: Expense) {
         if let id = chargingSessionsRepository.insertSession(session) {
             let newSession = session
             newSession.id = id
@@ -79,7 +143,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     var selectedCarForExpenses: Car? {
         if (_selectedCarForExpenses == nil) {
-            _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+            _selectedCarForExpenses = self.reloadSelectedCarForExpenses()
         }
 
         return _selectedCarForExpenses
