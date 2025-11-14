@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUICore
 
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
