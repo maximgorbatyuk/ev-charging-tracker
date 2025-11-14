@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUICore
 
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
@@ -13,6 +14,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     var defaultCurrency: Currency
     var totalCost: Double = 0.0
+
     var filterButtons: [FilterButtonItem] = []
     let analyticsScreenName = "all_expenses_screen"
 
@@ -40,7 +42,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             FilterButtonItem(
                 title: L("All"),
                 innerAction: {
-                    self.deselectAllFilters()
                     self.loadSessions([])
 
                     self.analytics.trackEvent(
@@ -54,7 +55,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             FilterButtonItem(
                 title: L("Filter.Charges"),
                 innerAction: {
-                    self.deselectAllFilters()
                     self.loadSessions([ExpenseType.charging])
                     
                     self.analytics.trackEvent(
@@ -68,7 +68,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             FilterButtonItem(
                 title: L("Filter.Repair/maintenance"),
                 innerAction: {
-                    self.deselectAllFilters()
                     self.loadSessions([ExpenseType.repair, ExpenseType.maintenance])
 
                     self.analytics.trackEvent(
@@ -82,7 +81,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             FilterButtonItem(
                 title: L("Filter.Carwash"),
                 innerAction: {
-                    self.deselectAllFilters()
                     self.loadSessions([ExpenseType.carwash])
                     
                     self.analytics.trackEvent(
@@ -96,9 +94,10 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         loadSessions()
     }
-    
-    func deselectAllFilters() {
+
+    func executeButtonAction(_ button: FilterButtonItem) {
         self.filterButtons.forEach { $0.deselect() }
+        button.action()
     }
 
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
@@ -222,8 +221,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 class FilterButtonItem: ObservableObject {
     let id: UUID = UUID()
     let title: String
-    let innerAction: () -> Void
     var isSelected = false
+    private let innerAction: () -> Void
 
     init(
         title: String,
@@ -236,12 +235,10 @@ class FilterButtonItem: ObservableObject {
 
     func action() {
         innerAction()
-
         self.isSelected = true
     }
 
     func deselect() {
         self.isSelected = false
-        print("Deselected filter: \(self.title)")
     }
 }
