@@ -97,12 +97,20 @@ class ExpensesRepository {
         }
     }
 
-    func fetchAllSessions() -> [Expense] {
+    func fetchAllSessions(_ expenseTypeFilters: [ExpenseType] = []) -> [Expense] {
         
         var sessionsList: [Expense] = []
-        
+
+        var query: QueryType
+        if (!expenseTypeFilters.isEmpty) {
+            let stringValues = expenseTypeFilters.map { $0.rawValue }
+            query = chargingSessionsTable.filter(stringValues.contains(expenseType)).order(id.desc)
+        } else {
+            query = chargingSessionsTable.order(id.desc)
+        }
+
         do {
-            for session in try db.prepare(chargingSessionsTable.order(id.desc)) {
+            for session in try db.prepare(query) {
                 let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .other
                 let currencyEnum = Currency(rawValue: session[currency]) ?? .usd
 

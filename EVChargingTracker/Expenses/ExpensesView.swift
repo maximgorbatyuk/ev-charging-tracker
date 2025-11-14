@@ -16,6 +16,8 @@ struct ExpensesView: SwiftUICore.View {
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
@@ -44,7 +46,6 @@ struct ExpensesView: SwiftUICore.View {
                         }
                         .padding(.horizontal)
 
-                        // Total Cost
                         if viewModel.totalCost > 0 {
                             CostsBlockView(
                                 title: L("Total costs"),
@@ -54,10 +55,19 @@ struct ExpensesView: SwiftUICore.View {
                                 perKilometer: false)
                         }
 
-                        // Sessions List
                         if viewModel.expenses.isEmpty {
                             emptyStateView
                         } else {
+                            
+                            HStack(spacing: 8) {
+                                ForEach(viewModel.filterButtons, id: \.id) { button in
+                                    FilterButton(
+                                        button: button
+                                    )
+                                }
+                            }
+                            .padding(.horizontal)
+                            
                             sessionsListView
                         }
                     }
@@ -79,12 +89,12 @@ struct ExpensesView: SwiftUICore.View {
                         analytics.trackEvent(
                             "expense_record_added",
                             properties: [
-                                "screen": "all_expenses_screen"
+                                "screen": viewModel.analyticsScreenName
                             ])
                     })
             }
             .onAppear {
-                analytics.trackScreen("all_expenses_screen")
+                analytics.trackScreen(viewModel.analyticsScreenName)
                 viewModel.loadSessions()
             }
             .refreshable {
@@ -121,7 +131,7 @@ struct ExpensesView: SwiftUICore.View {
                     onDelete: {
                         analytics.trackEvent("expense_delete_button_clicked", properties: [
                                 "button_name": "delete",
-                                "screen": "all_expenses_screen",
+                                "screen": viewModel.analyticsScreenName,
                                 "action": "delete_expense"
                             ])
 
@@ -149,7 +159,7 @@ struct ExpensesView: SwiftUICore.View {
                     analytics.trackEvent(
                         "expense_deleted",
                         properties: [
-                            "screen": "all_expenses_screen"
+                            "screen": viewModel.analyticsScreenName
                         ])
                 }
                 expenseToDelete = nil
@@ -157,6 +167,31 @@ struct ExpensesView: SwiftUICore.View {
             secondaryButton: .cancel {
                 expenseToDelete = nil
             }
+        )
+    }
+}
+
+struct FilterButton: SwiftUICore.View {
+
+    @Environment(\.colorScheme) var colorScheme
+
+    @ObservedObject var button: FilterButtonItem
+
+    var body: some SwiftUICore.View {
+        Button(button.title) {
+            button.action()
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .font(.system(size: 12, weight: .medium))
+        .foregroundColor(colorScheme == .dark ? .white : .black)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(button.isSelected ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(button.isSelected ? Color.blue.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 1)
+                )
         )
     }
 }

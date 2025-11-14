@@ -12,11 +12,16 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     @Published var expenses: [Expense] = []
 
     var defaultCurrency: Currency
-    
+    var totalCost: Double = 0.0
+    var filterButtons: [FilterButtonItem] = []
+    let analyticsScreenName = "all_expenses_screen"
+
     private let db: DatabaseManager
     private let chargingSessionsRepository: ExpensesRepository
     private let plannedMaintenanceRepository: PlannedMaintenanceRepository
+
     private let notifications: NotificationManager
+    private let analytics: AnalyticsService
 
     private var _selectedCarForExpenses: Car?
 
@@ -24,17 +29,81 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         
         self.db = DatabaseManager.shared
         self.notifications = NotificationManager.shared
+        self.analytics = AnalyticsService.shared
 
         self.chargingSessionsRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
 
         self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
 
+        self.filterButtons = [
+            FilterButtonItem(
+                title: L("All"),
+                innerAction: {
+                    self.deselectAllFilters()
+                    self.loadSessions([])
+
+                    self.analytics.trackEvent(
+                        "expenses_filter_all_selected",
+                        properties: [
+                            "screen": self.analyticsScreenName
+                        ])
+                },
+                isSelected: true),
+
+            FilterButtonItem(
+                title: L("Filter.Charges"),
+                innerAction: {
+                    self.deselectAllFilters()
+                    self.loadSessions([ExpenseType.charging])
+                    
+                    self.analytics.trackEvent(
+                        "expenses_filter_charges_selected",
+                        properties: [
+                            "screen": self.analyticsScreenName
+                        ])
+                },
+                isSelected: false),
+
+            FilterButtonItem(
+                title: L("Filter.Repair/maintenance"),
+                innerAction: {
+                    self.deselectAllFilters()
+                    self.loadSessions([ExpenseType.repair, ExpenseType.maintenance])
+
+                    self.analytics.trackEvent(
+                        "expenses_filter_maintenance_selected",
+                        properties: [
+                            "screen": self.analyticsScreenName
+                        ])
+                },
+                isSelected: false),
+
+            FilterButtonItem(
+                title: L("Filter.Carwash"),
+                innerAction: {
+                    self.deselectAllFilters()
+                    self.loadSessions([ExpenseType.carwash])
+                    
+                    self.analytics.trackEvent(
+                        "expenses_filter_carwash_selected",
+                        properties: [
+                            "screen": self.analyticsScreenName
+                        ])
+                },
+                isSelected: false),
+        ]
+
         loadSessions()
     }
+    
+    func deselectAllFilters() {
+        self.filterButtons.forEach { $0.deselect() }
+    }
 
-    func loadSessions() {
-        expenses = chargingSessionsRepository.fetchAllSessions()
+    func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
+        expenses = chargingSessionsRepository.fetchAllSessions(expenseTypeFilters)
+        totalCost = getTotalCost()
     }
 
     // TODO mgorbatyuk: avoid code duplication with saveChargingSession
@@ -137,8 +206,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         return db.carRepository!.insert(car)
     }
 
-    var totalCost: Double {
-        expenses.compactMap { $0.cost }.reduce(0, +)
+    func getTotalCost() -> Double {
+        return expenses.compactMap { $0.cost }.reduce(0, +)
     }
 
     var selectedCarForExpenses: Car? {
@@ -147,5 +216,32 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
 
         return _selectedCarForExpenses
+    }
+}
+
+class FilterButtonItem: ObservableObject {
+    let id: UUID = UUID()
+    let title: String
+    let innerAction: () -> Void
+    var isSelected = false
+
+    init(
+        title: String,
+        innerAction: @escaping () -> Void,
+        isSelected: Bool = false) {
+        self.title = title
+        self.innerAction = innerAction
+        self.isSelected = isSelected
+    }
+
+    func action() {
+        innerAction()
+
+        self.isSelected = true
+    }
+
+    func deselect() {
+        self.isSelected = false
+        print("Deselected filter: \(self.title)")
     }
 }
