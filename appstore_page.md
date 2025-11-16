@@ -46,6 +46,28 @@ View daily, weekly, and monthly summaries of your charging costs. Make informed 
 
 Perfect for EV owners who want to understand their true cost of ownership and optimize their charging strategy for maximum savings.
 
+### DE
+
+Verfolgen Sie Ihre EV-Ladekosten mit Präzision
+
+Behalten Sie Ihre Ausgaben für Ihr Elektrofahrzeug mit unserer intuitiven Lade-Tracking-App im Griff. Egal ob Sie zu Hause, bei der Arbeit oder an öffentlichen Ladestationen laden – erhalten Sie klare Einblicke in die tatsächlichen Betriebskosten Ihres Fahrzeugs.
+
+Hauptfunktionen:
+
+Kosten-pro-Kilometer-Analyse
+Sehen Sie genau, wie viel Sie jeder gefahrene Kilometer kostet. Vergleichen Sie Ladevorgänge und verfolgen Sie, wie Ihre Fahrweise Ihre Ausgaben im Laufe der Zeit beeinflusst.
+
+Detaillierte Ladehistorie
+Protokollieren Sie jeden Ladevorgang mit wichtigen Details wie verbrauchter Energie, Kilometerstand und Kosten. Erstellen Sie ein vollständiges Bild Ihrer Ladegewohnheiten.
+
+Intelligente Berechnungen
+Ihre Kosten pro Kilometer werden automatisch anhand Ihrer Ladeausgaben und der gefahrenen Strecke berechnet. Kein manuelles Rechnen erforderlich.
+
+Ausgabenübersichten
+Sehen Sie tägliche, wöchentliche und monatliche Zusammenfassungen Ihrer Ladekosten. Treffen Sie fundierte Entscheidungen darüber, wann und wo Sie Ihr Fahrzeug laden.
+
+Perfekt für EV-Besitzer, die ihre tatsächlichen Betriebskosten verstehen und ihre Lade­strategie für maximale Ersparnisse optimieren möchten.
+
 ### TR
 
 Elektrikli Aracınızın Şarj Maliyetlerini Hassasiyetle Takip Edin
@@ -78,6 +100,10 @@ Gerçek sahip olma maliyetini anlamak ve maksimum tasarruf için şarj stratejis
 
 Track your electric vehicle charging costs and discover your true cost per kilometer
 
+### DE
+
+Verfolgen Sie die Ladekosten Ihres Elektrofahrzeugs und entdecken Sie Ihre echten Kosten pro Kilometer
+
 ### TR
 
 Elektrikli araç şarj maliyetlerinizi takip edin ve gerçek kilometre başına maliyetinizi keşfedin
@@ -88,10 +114,6 @@ Elektrikli araç şarj maliyetlerinizi takip edin ve gerçek kilometre başına 
 
 электромобиль,зарядка,расходы,учет расходов,станция,экономия
 
-### EN
-
-electric vehicle,charging,cost,tracker,expenses,station,log,calculator,savings
-
-### TR
+### EN / DE / TR
 
 electric vehicle,charging,cost,tracker,expenses,station,log,calculator,savings
