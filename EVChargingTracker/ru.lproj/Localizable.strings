@@ -145,6 +145,9 @@
 "Maintenance reminder" = "Напоминание о сервисе";
 "You have %d maintenance task(s) due based on your car's current mileage." = "У вас есть %d задача(и) по сервису, которые необходимо выполнить";
 
+"Select currency" = "Выберите валюту";
+"Select default currency" = "Выберите валюту по умолчанию";
+
 "Filter.All" = "Все";
 "Filter.Charges" = "Зарядки";
 "Filter.Repair/maintenance" = "Сервис";

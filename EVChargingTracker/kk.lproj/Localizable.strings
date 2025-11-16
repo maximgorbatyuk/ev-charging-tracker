@@ -151,6 +151,9 @@
 "Some maintenance tasks due" = "Кейбір техникалық қызмет тапсырмалары мерзімінде";
 "You have %d maintenance task(s) due based on your car's current mileage." = "Көлігіңіздің ағымдағы жүрісіне байланысты сізде %d техникалық қызмет тапсырмасы мерзімінде.";
 
+"Select currency" = "Валютаны таңдау";
+"Select default currency" = "Әдепкі валютаны таңдау";
+
 "Filter.All" = "Барлығы";
 "Filter.Charges" = "Зарядтаулар";
 "Filter.Repair/maintenance" = "Жөндеу";
