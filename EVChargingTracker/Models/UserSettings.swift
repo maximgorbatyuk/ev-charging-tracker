@@ -13,6 +13,7 @@ enum UserSettingKey: String {
 // New: supported app languages
 enum AppLanguage: String, CaseIterable, Codable {
     case en = "en"
+    case de = "de"
     case ru = "ru"
     case kk = "kk"
     case tr = "tr"
@@ -20,6 +21,7 @@ enum AppLanguage: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
             case .en: return "🇬🇧 English"
+            case .de: return "🇩🇪 Deutsch"
             case .ru: return "🇷🇺 Русский"
             case .kk: return "🇰🇿 Қазақша"
             case .tr: return "🇹🇷 Türkçe"

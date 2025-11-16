@@ -1,0 +1,154 @@
+/* Geman localization */
+"Car" = "Auto";
+"Name" = "Name";
+"Battery capacity (kWh)" = "Batteriekapazität (kWh)";
+"e.g. 75" = "z. B. 75";
+"Current mileage (km)" = "Aktueller Kilometerstand (km)";
+"Minimum: %d" = "Minimum: %d";
+"Current: %d" = "Aktuell: %d";
+"Danger zone" = "Gefahrenzone";
+"Selected for tracking" = "Für das Tracking ausgewählt";
+"Edit car" = "Auto bearbeiten";
+"Cancel" = "Abbrechen";
+"Save" = "Speichern";
+"Close" = "Schließen";
+"CO₂ saved (kg)" = "CO₂ eingespart (kg)";
+"kWh / 100km" = "kWh / 100 km";
+"Charges" = "Ladungen";
+
+"Initial millage" = "Anfangskilometerstand";
+"Current millage" = "Aktueller Kilometerstand";
+"Battery" = "Batterie";
+"Tracking" = "Tracking";
+"Not tracking" = "Kein Tracking";
+
+"Base settings" = "Grundeinstellungen";
+"Currency" = "Währung";
+"It is recommended to set the default currency before adding any expenses." = "Es wird empfohlen, die Standardwährung festzulegen, bevor Ausgaben hinzugefügt werden.";
+"Cars" = "Autos";
+"User settings" = "Benutzereinstellungen";
+"Notifications enabled" = "Benachrichtigungen aktiviert";
+"Open settings" = "Einstellungen öffnen";
+"In case you want to change this setting, please open app settings" = "Falls Sie diese Einstellung ändern möchten, öffnen Sie bitte die App-Einstellungen";
+"About app" = "Über die App";
+"Tracking settings" = "Tracking-Einstellungen";
+"App version" = "App-Version";
+"Developer" = "Entwickler";
+"What is the app about?" = "Worum geht es in der App?";
+"Rate the app" = "App bewerten";
+"Contact developer via Telegram" = "Entwickler über Telegram kontaktieren";
+
+"Expense details" = "Ausgabendetails";
+"Car" = "Auto";
+"Date" = "Datum";
+"Energy (kWh)" = "Energie (kWh)";
+"Charger Type" = "Ladetyp";
+"Expense Type" = "Ausgabentyp";
+"Odometer (km)" = "Kilometerstand (km)";
+"Cost (%@)" = "Kosten (%@)";
+"Car name" = "Autoname";
+"Name of the car" = "Name des Autos";
+"Battery capacity (kWh)" = "Batteriekapazität (kWh)";
+"Optional" = "Optional";
+"Notes (optional)" = "Notizen (optional)";
+"Add expense" = "Ausgabe hinzufügen";
+"Price per kWh" = "Preis pro kWh";
+
+"Please select an expense type." = "Bitte wählen Sie einen Ausgabentyp aus.";
+"Please type a valid value for Energy." = "Bitte geben Sie einen gültigen Wert für die Energie ein.";
+"Please type a valid value for Odometer." = "Bitte geben Sie einen gültigen Wert für den Kilometerstand ein.";
+
+"Hint" = "Hinweis";
+"per km" = "pro km";
+
+"One kilometer price (charging only)" = "Preis pro Kilometer (nur Laden)";
+"How much one kilometer costs you including only charging expenses" = "Wie viel ein Kilometer kostet, ausschließlich der Ladekosten";
+"One kilometer price (total)" = "Preis pro Kilometer (gesamt)";
+"How much one kilometer costs you including all logged expenses" = "Wie viel ein Kilometer inklusive aller protokollierten Ausgaben kostet";
+"Total charging costs" = "Gesamte Ladekosten";
+"Add Charging Session" = "Ladevorgang hinzufügen";
+"Car stats" = "Auto-Statistiken";
+
+"Add Expense" = "Ausgabe hinzufügen";
+"Total costs" = "Gesamtkosten";
+"All car expenses" = "Alle Autoausgaben";
+"No expenses yet" = "Noch keine Ausgaben";
+"Add your first expense to start tracking" = "Fügen Sie Ihre erste Ausgabe hinzu, um mit dem Tracking zu beginnen";
+
+"Delete expense" = "Ausgabe löschen";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Ausgabe am %@ mit dem Betrag %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Delete expense on %@? This action cannot be undone." = "Ausgabe am %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Delete selected expense? This action cannot be undone." = "Ausgewählte Ausgabe löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Delete" = "Löschen";
+
+"Energy" = "Energie";
+"Expense type" = "Ausgabentyp";
+"Odometer" = "Kilometerstand";
+"Cost" = "Kosten";
+"%.1f kWh" = "%.1f kWh";
+
+"How much one kilometer costs you" = "Wie viel ein Kilometer kostet";
+
+/* ExpenseType human-friendly */
+"charging" = "Laden";
+"maintenance" = "Wartung";
+"repair" = "Reparatur";
+"carwash" = "Autowäsche";
+"other" = "Sonstiges";
+
+/* ChargerType human-friendly */
+"Home (3kW)" = "Zuhause (3 kW)";
+"Home (7kW)" = "Zuhause (7 kW)";
+"Home (11kW)" = "Zuhause (11 kW)";
+"Destination (22kW)" = "Destination (22 kW)";
+"Supercharger V2 (150kW)" = "Supercharger V2 (150 kW)";
+"Supercharger V3 (250kW)" = "Supercharger V3 (250 kW)";
+"Supercharger V4 (350kW)" = "Supercharger V4 (350 kW)";
+"Public Fast (50kW)" = "Öffentlich Schnell (50 kW)";
+"Public Rapid (100kW)" = "Öffentlich Rapid (100 kW)";
+"Other" = "Sonstiges";
+
+/* Menu */
+"Stats" = "Statistiken";
+"Expenses" = "Ausgaben";
+"Settings" = "Einstellungen";
+"About" = "Über";
+"Maintenance" = "Wartung";
+
+"Planned maintenance" = "Geplante Wartung";
+"Add maintenance" = "Wartung hinzufügen";
+"Maintenance" = "Wartung";
+"No maintenance records yet" = "Noch keine zukünftigen Wartungseinträge";
+"Add your first maintenance record" = "Fügen Sie Ihren ersten geplanten Wartungseintrag hinzu";
+"Delete maintenance record?" = "Wartungseintrag löschen?";
+"Delete selected maintenance record? This action cannot be undone." = "Ausgewählten Wartungseintrag löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Please add car first to track maintenance records" = "Bitte zuerst ein Auto hinzufügen, um Wartungseinträge zu verfolgen";
+"When" = "Wann";
+
+"Plan a maintenance" = "Wartung planen";
+"Maintenance details" = "Wartungsdetails";
+"Odometer value cannot be less than current car mileage." = "Der Kilometerstand darf nicht niedriger sein als der aktuelle Fahrzeugkilometerstand.";
+"What should be done?" = "Was soll gemacht werden?";
+"Remind by date (optional)" = "Nach Datum erinnern (optional)";
+"Remind by odometer (optional)" = "Nach Kilometerstand erinnern (optional)";
+"Additional information that will be helpful" = "Zusätzliche hilfreiche Informationen";
+
+"Basic info" = "Grundinformationen";
+"Name" = "Name";
+"Car mileage" = "Kilometerstand des Autos";
+"Initial (km)" = "Anfang (km)";
+"Current (km)" = "Aktuell (km)";
+"Remain at odometer" = "Verbleibend bis Kilometerstand";
+"Maintenance reminder" = "Wartungserinnerung";
+"Some maintenance tasks due" = "Einige Wartungsarbeiten fällig";
+"You have %d maintenance task(s) due based on your car's current mileage." = "Sie haben %d fällige Wartungsaufgabe(n) basierend auf dem aktuellen Kilometerstand Ihres Autos.";
+
+"Select currency" = "Währung auswählen";
+"Select default currency" = "Standardwährung auswählen";
+"No charging sessions yet" = "Noch keine Ladesitzungen";
+"Add your first session to start tracking" = "Fügen Sie Ihre erste Sitzung hinzu, um mit dem Tracking zu beginnen";
+
+"Filter.All" = "Alle";
+"Filter.Charges" = "Ladungen";
+"Filter.Repair/maintenance" = "Wartung";
+"Filter.Carwash" = "Autowäsche";
