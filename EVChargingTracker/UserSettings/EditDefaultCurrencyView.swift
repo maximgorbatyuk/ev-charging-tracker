@@ -17,26 +17,26 @@ struct EditDefaultCurrencyView: SwiftUICore.View {
         NavigationView {
             Form {
                 Section() {
-
-                    Picker("Select currency", selection: $selectedCurrency) {
+                    Picker(L("Select currency"), selection: $selectedCurrency) {
                         ForEach(Currency.allCases, id: \.self) { type in
-                            Text(type.rawValue).tag(type)
+                            Text(type.displayName)
+                                .tag(type)
                         }
                     }
                     
                 }
             }
-            .navigationTitle("Select default currency")
+            .navigationTitle(L("Select default currency"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(L("Cancel")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button(L("Save")) {
                         saveCurrency()
                     }
                     .fontWeight(.semibold)

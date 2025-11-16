@@ -1,0 +1,144 @@
+/* Turkish localization */
+"Car" = "Araba";
+"Name" = "İsim";
+"Battery capacity (kWh)" = "Pil kapasitesi (kWh)";
+"e.g. 75" = "ör. 75";
+"Current mileage (km)" = "Mevcut kilometre (km)";
+"Minimum: %d" = "Minimum: %d";
+"Current: %d" = "Mevcut: %d";
+"Danger zone" = "Tehlike bölgesi";
+"Selected for tracking" = "Kayıt için seçilmiş";
+"Edit car" = "Araba düzenle";
+"Cancel" = "İptal";
+"Save" = "Kaydet";
+"Close" = "Kapat";
+"CO₂ saved (kg)" = "CO₂ saved (kg)";
+"kWh / 100km" = "kWh / 100km";
+"Charges" = "Şarj";
+
+"Initial millage" = "İlk kilometre";
+"Current millage" = "Mevcut kilometre";
+"Battery" = "Pil";
+"Tracking" = "Tracking";
+"Not tracking" = "Not tracking";
+
+"Base settings" = "Temel ayarlar";
+"Currency" = "Para birimi";
+"It is recommended to set the default currency before adding any expenses." = "Herhangi bir gider eklemeden önce varsayılan para birimini ayarlamanız önerilir.";
+"Cars" = "Arabalar";
+"User settings" = "Kullanıcı ayarları";
+"Notifications enabled" = "Bildirimleri etkinleştir";
+"Open settings" = "Ayarları aç";
+"In case you want to change this setting, please open app settings" = "Bu ayarı değiştirmek isterseniz, lütfen uygulama ayarlarını açın";
+"About app" = "App hakkında";
+"Tracking settings" = "Kayıt ayarları";
+"App version" = "App sürümü";
+"Developer" = "Geliştirici";
+"What is the app about?" = "Uygulama ne hakkında?";
+"Rate the app" = "Uygulamayı puanla";
+"Contact developer via Telegram" = "Geliştirici ile Telegram'da İletişim Kur";
+
+"Expense details" = "Harcama ayrıntıları";
+"Car" = "Araba";
+"Date" = "Tarih";
+"Energy (kWh)" = "Enerji (kWh)";
+"Charger Type" = "Şarj Türü";
+"Expense Type" = "Harcama Türü";
+"Odometer (km)" = "Kilometre Sayacı (km)";
+"Cost (%@)" = "Maliyet (%@)";
+"Car name" = "Araba adı";
+"Name of the car" = "Arabanın adı";
+"Battery capacity (kWh)" = "Pil kapasitesi (kWh)";
+"Optional" = "İsteğe Bağlı";
+"Notes (optional)" = "Notlar (isteğe bağlı)";
+"Add expense" = "Harcama ekle";
+"Price per kWh" = "kWh başı fiyat";
+
+"Please select an expense type." = "Lütfen bir harcama türü seçin.";
+"Please type a valid value for Energy." = "Enerji için geçerli bir değer giriniz.";
+"Please type a valid value for Odometer." = "Kilometre sayacı için geçerli bir değer giriniz.";
+
+"Hint" = "İpucu";
+"per km" = "km'de";
+
+"One kilometer price (charging only)" = "Kilometre başı maliyet (sadece şarj)";
+"How much one kilometer costs you including only charging expenses" = "Sadece şarj masrafları dahil olan bir kilometrenin maliyeti ne kadardır?";
+"One kilometer price (total)" = "Kilometre başı maliyet (toplam)";
+"How much one kilometer costs you including all logged expenses" = "Tüm kaydedilen harcamalar dahil olan bir kilometrenin maliyeti ne kadardır";
+"Total charging costs" = "Toplam şarj maliyeti";
+"Add Charging Session" = "Şarj İşlemi Ekle";
+"Car stats" = "Araç istatistikleri";
+
+"Add Expense" = "Harcama Ekle";
+"Total costs" = "Toplam maliyetler";
+"All car expenses" = "Tüm araba harcamaları";
+"No expenses yet" = "Henüz harcama yok";
+"Add your first expense to start tracking" = "Takibe başlamak için ilk harcamanızı ekleyin";
+
+"Delete expense" = "Harcama sil";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Harcamayı %@ tarihinde %@ tutarında silmek istiyor musunuz? Bu işlem geri alınamaz.";
+"Delete expense on %@? This action cannot be undone." = "%@ tarihindeki harcamayı silmek istiyor musunuz? Bu işlem geri alınamaz.";
+"Delete selected expense? This action cannot be undone." = "Seçilen gideri silmek ister misiniz? Bu işlem geri alınamaz. <";
+"Delete" = "Sil";
+
+"Energy" = "Enerji";
+"Expense type" = "Harcama türü";
+"Odometer" = "Kilometre Sayacı";
+"Cost" = "Maliyet";
+"%.1f kWh" = "%.1f kWh";
+
+"How much one kilometer costs you" = "Bir kilometrenin size maliyeti ne kadar";
+
+/* ExpenseType human-friendly */
+"charging" = "Şarj";
+"maintenance" = "Bakım";
+"repair" = "Tamir";
+"carwash" = "Araç yıkama";
+"other" = "Diğer";
+
+/* ChargerType human-friendly */
+"Home (3kW)" = "Ev (3kW)";
+"Home (7kW)" = "Ev (7kW)";
+"Home (11kW)" = "Ev (11kW)";
+"Destination (22kW)" = "Destination (22kW)";
+"Supercharger V2 (150kW)" = "Supercharger V2 (150kW)";
+"Supercharger V3 (250kW)" = "Supercharger V3 (250kW)";
+"Supercharger V4 (350kW)" = "Supercharger V4 (350kW)";
+"Public Fast (50kW)" = "Genel Hızlı (50kW)";
+"Public Rapid (100kW)" = "Genel Yüksek Hızlı (100kW)";
+"Other" = "Diğer";
+
+/* Menu */
+"Stats" = "İstatistikler";
+"Expenses" = "Harcamalar";
+"Settings" = "Ayarlar";
+"About" = "Hakkında";
+"Maintenance" = "Bakım";
+
+"Planned maintenance" = "Planlı bakım";
+"Add maintenance" = "Bakım ekle";
+"Maintenance" = "Bakım";
+"No maintenance records yet" = "Henüz gelecek bakım kaydı yok";
+"Add your first maintenance record" = "Gelecek için ilk araç bakım kaydınızı ekleyin";
+"Delete maintenance record?" = "Bakım kaydını sil?";
+"Delete selected maintenance record? This action cannot be undone." = "Seçilen bakım kaydını silmek ister misiniz? Bu işlem geri alınamaz.";
+"Please add car first to track maintenance records" = "Lütfen bakım kayıtlarını takip etmek için önce aracı ekleyin";
+"When" = "Ne zaman";
+
+"Plan a maintenance" = "Bir bakım planla";
+"Maintenance details" = "Bakım ayrıntıları";
+"Odometer value cannot be less than current car mileage." = "Kilometre sayacı değeri, aracın mevcut kilometresinden daha az olamaz.";
+"What should be done?" = "Ne yapılacak?";
+"Remind by date (optional)" = "Tarihe göre hatırlat (isteğe bağlı)";
+"Remind by odometer (optional)" = "KM sayacına göre hatırlat (isteğe bağlı)";
+"Additional information that will be helpful" = "Yardımcı olabilecek ek bilgiler";
+
+"Select currency" = "Para birimi seç";
+"Select default currency" = "Varsayılan para birimini seç";
+"No charging sessions yet" = "Henüz şarj oturumu yok";
+"Add your first session to start tracking" = "Takibi başlatmak için ilk oturumunuzu ekleyin";
+
+"Filter.All" = "Tüm";
+"Filter.Charges" = "Ücretler";
+"Filter.Repair/maintenance" = "Onarım/bakım";
+"Filter.Carwash" = "Araba yıkama";

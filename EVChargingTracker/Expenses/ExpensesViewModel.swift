@@ -39,7 +39,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         self.filterButtons = [
             FilterButtonItem(
-                title: L("All"),
+                title: L("Filter.All"),
                 innerAction: {
                     self.loadSessions([])
 

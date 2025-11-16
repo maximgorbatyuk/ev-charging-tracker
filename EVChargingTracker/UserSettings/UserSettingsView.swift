@@ -100,7 +100,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                                     showEditCurrencyModal = true
                                 }) {
-                                    Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
+                                    Text("\(viewModel.defaultCurrency.displayName) (\(viewModel.defaultCurrency.rawValue))")
                                         .fontWeight(.semibold)
                                         .font(.system(size: 16, weight: .bold))
                                 }

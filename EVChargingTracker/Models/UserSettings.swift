@@ -15,12 +15,14 @@ enum AppLanguage: String, CaseIterable, Codable {
     case en = "en"
     case ru = "ru"
     case kk = "kk"
+    case tr = "tr"
 
     var displayName: String {
         switch self {
             case .en: return "🇬🇧 English"
             case .ru: return "🇷🇺 Русский"
             case .kk: return "🇰🇿 Қазақша"
+            case .tr: return "🇹🇷 Türkçe"
         }
     }
 }

@@ -143,6 +143,9 @@
 "Some maintenance tasks due" = "Some maintenance tasks due";
 "You have %d maintenance task(s) due based on your car's current mileage." = "You have %d maintenance task(s) due based on your car's current mileage.";
 
+"Select currency" = "Select currency";
+"Select default currency" = "Select default currency";
+
 "Filter.All" = "All";
 "Filter.Charges" = "Charges";
 "Filter.Repair/maintenance" = "Maintenance";
