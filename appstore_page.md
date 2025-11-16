@@ -46,6 +46,28 @@ View daily, weekly, and monthly summaries of your charging costs. Make informed 
 
 Perfect for EV owners who want to understand their true cost of ownership and optimize their charging strategy for maximum savings.
 
+### TR
+
+Elektrikli Aracınızın Şarj Maliyetlerini Hassasiyetle Takip Edin
+
+Kullanımı kolay şarj takip uygulamamızla elektrikli aracınızın masraflarını kontrol altına alın. İster evde, ister işte, ister halka açık şarj istasyonlarında şarj edin — aracınızı işletmenin gerçek maliyetini net bir şekilde görün.
+
+Öne Çıkan Özellikler:
+
+Kilometre Başına Maliyet Analizi
+Her bir kilometrenin size ne kadara mal olduğunu tam olarak görün. Şarj oturumlarını karşılaştırın ve sürüş verimliliğinizin zaman içinde masraflarınızı nasıl etkilediğini takip edin.
+
+Ayrıntılı Şarj Geçmişi
+Tüketilen enerji, kilometre bilgisi ve maliyet dahil tüm önemli ayrıntılarla her şarj oturumunu kaydedin. Şarj alışkanlıklarınıza dair eksiksiz bir tablo oluşturun.
+
+Akıllı Hesaplamalar
+Şarj harcamalarınıza ve kat ettiğiniz mesafeye göre kilometre başına maliyeti otomatik olarak hesaplar. Manuel hesaplama gerekmez.
+
+Gider Analizleri
+Günlük, haftalık ve aylık şarj maliyetlerinin özetlerini görüntüleyin. Aracınızı ne zaman ve nerede şarj edeceğinize dair bilinçli kararlar alın.
+
+Gerçek sahip olma maliyetini anlamak ve maksimum tasarruf için şarj stratejisini optimize etmek isteyen EV sahipleri için mükemmeldir.
+
 ## Promotional text
 
 ### RU
@@ -56,6 +78,10 @@ Perfect for EV owners who want to understand their true cost of ownership and op
 
 Track your electric vehicle charging costs and discover your true cost per kilometer
 
+### TR
+
+Elektrikli araç şarj maliyetlerinizi takip edin ve gerçek kilometre başına maliyetinizi keşfedin
+
 ## Tags
 
 ### RU
@@ -63,5 +89,9 @@ Track your electric vehicle charging costs and discover your true cost per kilom
 электромобиль,зарядка,расходы,учет расходов,станция,экономия
 
 ### EN
+
+electric vehicle,charging,cost,tracker,expenses,station,log,calculator,savings
+
+### TR
 
 electric vehicle,charging,cost,tracker,expenses,station,log,calculator,savings
