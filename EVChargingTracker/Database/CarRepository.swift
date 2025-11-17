@@ -183,6 +183,20 @@ class CarRepository {
         }
     }
 
+    func markCarAsSelectedForTracking(_ id: Int64) -> Bool {
+        let carToUpdate = table.filter(idColumn == id)
+        do {
+            let update = carToUpdate.update(
+                selectedForTrackingColumn <- true
+            )
+            let updated = try db.run(update)
+            return updated > 0
+        } catch {
+            print("Update failed: \(error)")
+            return false
+        }
+    }
+
     func delete(id: Int64) -> Bool {
         
         let carExpenses = expensesTable.filter(Expression<Int64>("car_id") == id)
@@ -214,6 +228,34 @@ class CarRepository {
             print("Failed to get cars count: \(error)")
             return 0
         }
+    }
+
+    func getLatestAddedCar() -> Car? {
+        let query = table.order(createdAtColumn.desc).limit(1)
+        do {
+            if let row = try db.pluck(query) {
+                let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
+
+                let rowId = row[idColumn]
+                return Car(
+                    id: rowId,
+                    name: row[nameColumn],
+                    selectedForTracking: row[selectedForTrackingColumn],
+                    batteryCapacity: row[batteryCapacityColumn],
+                    expenseCurrency: currency,
+                    currentMileage: row[currentMileageColumn],
+                    initialMileage: row[initialMileageColumn],
+                    milleageSyncedAt: row[milleageSyncedAtColumn],
+                    createdAt: row[createdAtColumn]
+                )
+            } else {
+                return nil
+            }
+        } catch {
+            print("Failed to fetch latest added car: \(error)")
+        }
+
+        return nil
     }
 
     func getAllCars() -> [Car] {

@@ -137,6 +137,10 @@
 "Select default currency" = "Varsayılan para birimini seç";
 "No charging sessions yet" = "Henüz şarj oturumu yok";
 "Add your first session to start tracking" = "Takibi başlatmak için ilk oturumunuzu ekleyin";
+"Add new car" = "Yeni araba ekle";
+"Delete car" = "Arabayı sil";
+"Delete selected car? This action cannot be undone." = "Seçilen aracı silmek ister misiniz? Bu işlem geri alınamaz.";
+"If you change it, then other active car will be unselected automatically." = "Değiştirirseniz, diğer aktif araç otomatik olarak seçilmez hale gelecektir.";
 
 "Filter.All" = "Tüm";
 "Filter.Charges" = "Ücretler";

@@ -147,6 +147,10 @@
 
 "Select currency" = "Выберите валюту";
 "Select default currency" = "Выберите валюту по умолчанию";
+"Add new car" = "Добавить автомобиль";
+"Delete car" = "Удалить автомобиль";
+"Delete selected car? This action cannot be undone." = "Удалить выбранный автомобиль? Это действие нельзя отменить.";
+"If you change it, then other active car will be unselected automatically." = "Если вы выберите этот автомобиль для учета, то другой активный автомобиль будет автоматически заменен.";
 
 "Filter.All" = "Все";
 "Filter.Charges" = "Зарядки";

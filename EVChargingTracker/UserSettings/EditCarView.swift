@@ -3,6 +3,7 @@ import SwiftUI
 struct EditCarView: SwiftUICore.View {
     let car: CarDto?
     let onSave: (CarDto) -> Void
+    let onDelete: (CarDto) -> Void
     let onCancel: () -> Void
 
     @ObservedObject private var loc = LocalizationManager.shared
@@ -14,15 +15,19 @@ struct EditCarView: SwiftUICore.View {
     @State private var expenseCurrency: Currency
     @State private var selectedForTracking: Bool
 
+    @State private var showDeleteConfirmation = false
+
     init(
         car: CarDto?,
         defaultCurrency: Currency,
         defaultValueForSelectedForTracking: Bool,
         onSave: @escaping (CarDto) -> Void,
+        onDelete: @escaping (CarDto) -> Void,
         onCancel: @escaping () -> Void)
     {
         self.car = car
         self.onSave = onSave
+        self.onDelete = onDelete
         self.onCancel = onCancel
 
         _name = State(initialValue: car?.name ?? "")
@@ -82,14 +87,37 @@ struct EditCarView: SwiftUICore.View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                     }
+
+                    VStack {
+                        Toggle(L("Selected for tracking"), isOn: $selectedForTracking)
+                            .padding(.bottom, 4)
+
+                        Text(L("If you change it, then other active car will be unselected automatically."))
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
 
-                Section(header: Text(L("Danger zone"))) {
-                    Toggle(L("Selected for tracking"), isOn: $selectedForTracking)
+                if (car != nil) {
+                    Section(header: Text(L("Danger zone"))) {
+                        Button(role: .destructive, action: {
+                            showDeleteConfirmation = true
+                        }) {
+                            HStack {
+                                Image(systemName: "trash")
+                                Text(L("Delete car"))
+                            }
+                        }
+                    }
                 }
             }
             .navigationTitle(L("Edit car"))
             .navigationBarTitleDisplayMode(.inline)
+            .alert(isPresented: $showDeleteConfirmation) {
+                deleteConfirmationAlert()
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(L("Cancel")) {
@@ -102,21 +130,31 @@ struct EditCarView: SwiftUICore.View {
                         
                         var batteryToSave: Double? = nil
                         if (battery != nil && battery! <= 200) {
-                            // realistic battery capacity
                             batteryToSave = battery
                         }
 
-                        var mileageToSave = car?.currentMileage ?? 0
+                        var currentMileageToSave = car?.currentMileage ?? 0
                         var initialMileageToSave = car?.initialMileage ?? 0
+                        
+                        if (car != nil) {
+                            let mileage = Int(mileageText) ?? car!.currentMileage ?? 0
+                            if (mileage >= initialMileageToSave) {
+                                currentMileageToSave = mileage
+                            }
 
-                        let mileage = Int(mileageText) ?? car?.currentMileage ?? 0
-                        if (mileage >= initialMileageToSave) {
-                            mileageToSave = mileage
-                        }
+                            let initialMileage = Int(initialMileageText) ?? car!.initialMileage ?? 0
+                            if (initialMileage <= currentMileageToSave) {
+                                initialMileageToSave = initialMileage
+                            }
+                        } else {
+                            initialMileageToSave = Int(initialMileageText) ?? 0
+                            let currentMileageValue = Int(mileageText) ?? 0
 
-                        let initialMileage = Int(initialMileageText) ?? car?.initialMileage ?? 0
-                        if (initialMileage <= mileageToSave) {
-                            initialMileageToSave = initialMileage
+                            if (currentMileageValue >= initialMileageToSave) {
+                                currentMileageToSave = currentMileageValue
+                            } else {
+                                currentMileageToSave = initialMileageToSave
+                            }
                         }
 
                         let selectedForTracking = self.selectedForTracking
@@ -126,7 +164,7 @@ struct EditCarView: SwiftUICore.View {
                             name: name,
                             selectedForTracking: selectedForTracking,
                             batteryCapacity: batteryToSave,
-                            currentMileage: mileageToSave,
+                            currentMileage: currentMileageToSave,
                             initialMileage: initialMileageToSave,
                             expenseCurrency: expenseCurrency
                         )
@@ -136,6 +174,20 @@ struct EditCarView: SwiftUICore.View {
                 }
             }
         }
+    }
+
+    private func deleteConfirmationAlert() -> Alert {
+        return Alert(
+            title: Text(L("Delete car")),
+            message: Text(L("Delete selected car? This action cannot be undone.")),
+            primaryButton: .destructive(Text(L("Delete"))) {
+                onDelete(car!)
+                showDeleteConfirmation = false
+            },
+            secondaryButton: .cancel {
+                showDeleteConfirmation = false
+            }
+        )
     }
 }
 
@@ -152,5 +204,6 @@ struct EditCarView: SwiftUICore.View {
         defaultCurrency: .usd,
         defaultValueForSelectedForTracking: true,
         onSave: { _ in },
+        onDelete: { _ in },
         onCancel: {})
 }

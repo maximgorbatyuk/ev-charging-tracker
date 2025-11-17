@@ -148,6 +148,11 @@
 "No charging sessions yet" = "Noch keine Ladesitzungen";
 "Add your first session to start tracking" = "Fügen Sie Ihre erste Sitzung hinzu, um mit dem Tracking zu beginnen";
 
+"Add new car" = "Neues Auto hinzufügen";
+"Delete car" = "Auto löschen";
+"Delete selected car? This action cannot be undone." = "Ausgewähltes Auto löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"If you change it, then other active car will be unselected automatically." = "Wenn Sie es ändern, wird das andere aktive Auto automatisch abgewählt.";
+
 "Filter.All" = "Alle";
 "Filter.Charges" = "Ladungen";
 "Filter.Repair/maintenance" = "Wartung";

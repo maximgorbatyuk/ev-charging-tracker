@@ -356,6 +356,12 @@ struct UserSettingsView: SwiftUICore.View {
                 showAddCarModal = false
                 viewModel.refetchCars()
             },
+            onDelete: { carToBeDeleted in
+                viewModel.deleteCar(carToBeDeleted.id!, selectedForTracking: carToBeDeleted.selectedForTracking)
+
+                showAddCarModal = false
+                editingCar = nil
+            },
             onCancel: {
                 editingCar = nil
                 showAddCarModal = false

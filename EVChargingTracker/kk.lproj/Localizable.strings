@@ -154,6 +154,11 @@
 "Select currency" = "Валютаны таңдау";
 "Select default currency" = "Әдепкі валютаны таңдау";
 
+"Add new car" = "Жаңа көлік қосу";
+"Delete car" = "Көлікті жою";
+"Delete selected car? This action cannot be undone." = "Таңдалған көлікті жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
+"If you change it, then other active car will be unselected automatically." = "Егер сіз оны өзгертсеңіз, басқа белсенді көлік автоматты түрде таңдалмайды.";
+
 "Filter.All" = "Барлығы";
 "Filter.Charges" = "Зарядтаулар";
 "Filter.Repair/maintenance" = "Жөндеу";

@@ -132,6 +132,21 @@ class UserSettingsViewModel: ObservableObject {
         return carUpdateSuccess && carExpensesUpdateSyccess
     }
 
+    func deleteCar(_ carId: Int64, selectedForTracking: Bool) -> Void {
+        db.expensesRepository?.deleteRecordsForCar(carId)
+        db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
+        _ = db.carRepository?.delete(id: carId)
+
+        if (selectedForTracking) {
+            let latestCar = db.carRepository?.getLatestAddedCar()
+            if (latestCar != nil) {
+                _ = db.carRepository!.markCarAsSelectedForTracking(latestCar!.id!)
+            }
+        }
+
+        refetchCars()
+    }
+
     func refetchCars() {
         DispatchQueue.main.async {
             self._allCars = self.db.carRepository?.getAllCars()

@@ -145,6 +145,10 @@
 
 "Select currency" = "Select currency";
 "Select default currency" = "Select default currency";
+"Add new car" = "Add new car";
+"Delete car" = "Delete car";
+"Delete selected car? This action cannot be undone." = "Delete selected car? This action cannot be undone.";
+"If you change it, then other active car will be unselected automatically." = "If you change it, then other active car will be unselected automatically.";
 
 "Filter.All" = "All";
 "Filter.Charges" = "Charges";

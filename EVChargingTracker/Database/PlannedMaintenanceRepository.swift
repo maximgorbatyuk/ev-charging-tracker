@@ -134,6 +134,16 @@ class PlannedMaintenanceRepository {
         }
     }
 
+    func deleteRecordsForCar(_ carId: Int64) -> Void {
+        let recordsToDelete = table.filter(carIdColumn == carId)
+        do {
+            try db.run(recordsToDelete.delete())
+            print("Deleted records for car id: \(carId)")
+        } catch {
+            print("Delete failed: \(error)")
+        }
+    }
+
     func deleteRecord(id recordId: Int64) -> Bool {
         let recordToDelete = table.filter(id == recordId)
         

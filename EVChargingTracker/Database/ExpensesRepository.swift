@@ -109,7 +109,7 @@ class ExpensesRepository {
     func fetchAllSessions() -> [Expense] {
 
         var sessionsList: [Expense] = []
-        var query = chargingSessionsTable.order(id.desc)
+        let query = chargingSessionsTable.order(id.desc)
 
         do {
             for session in try db.prepare(query) {
@@ -247,6 +247,16 @@ class ExpensesRepository {
         } catch {
             print("Failed to get session count: \(error)")
             return 0
+        }
+    }
+
+    func deleteRecordsForCar(_ carId: Int64) -> Void {
+        let recordsToDelete = chargingSessionsTable.filter(carIdColumn == carId)
+        do {
+            try db.run(recordsToDelete.delete())
+            print("Deleted records for car id: \(carId)")
+        } catch {
+            print("Delete failed: \(error)")
         }
     }
 
