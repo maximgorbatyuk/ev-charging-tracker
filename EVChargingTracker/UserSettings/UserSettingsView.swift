@@ -304,10 +304,14 @@ struct UserSettingsView: SwiftUICore.View {
 
     private func CallEditCarView(carToEdit: CarDto?) -> some SwiftUICore.View {
 
+        let hasOtherCars =
+            carToEdit != nil && viewModel.hasOtherCars(carIdToExclude: carToEdit!.id!)
+
         return EditCarView(
             car: carToEdit,
             defaultCurrency: carToEdit?.expenseCurrency ?? viewModel.getDefaultCurrency(),
-            defaultValueForSelectedForTracking: viewModel.allCars.isEmpty,
+            defaultValueForSelectedForTracking: carToEdit == nil,
+            hasOtherCars: hasOtherCars,
             onSave: { updated in
                 
                 if updated.name.trimmingCharacters(in: .whitespaces).isEmpty {

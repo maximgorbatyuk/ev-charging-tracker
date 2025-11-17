@@ -2,6 +2,7 @@ import SwiftUI
 
 struct EditCarView: SwiftUICore.View {
     let car: CarDto?
+    let hasOtherCars: Bool
     let onSave: (CarDto) -> Void
     let onDelete: (CarDto) -> Void
     let onCancel: () -> Void
@@ -21,11 +22,13 @@ struct EditCarView: SwiftUICore.View {
         car: CarDto?,
         defaultCurrency: Currency,
         defaultValueForSelectedForTracking: Bool,
+        hasOtherCars: Bool,
         onSave: @escaping (CarDto) -> Void,
         onDelete: @escaping (CarDto) -> Void,
         onCancel: @escaping () -> Void)
     {
         self.car = car
+        self.hasOtherCars = hasOtherCars
         self.onSave = onSave
         self.onDelete = onDelete
         self.onCancel = onCancel
@@ -91,6 +94,7 @@ struct EditCarView: SwiftUICore.View {
                     VStack {
                         Toggle(L("Selected for tracking"), isOn: $selectedForTracking)
                             .padding(.bottom, 4)
+                            .disabled(!hasOtherCars)
 
                         Text(L("If you change it, then other active car will be unselected automatically."))
                             .font(.footnote)
@@ -203,6 +207,7 @@ struct EditCarView: SwiftUICore.View {
             expenseCurrency: .usd),
         defaultCurrency: .usd,
         defaultValueForSelectedForTracking: true,
+        hasOtherCars: true,
         onSave: { _ in },
         onDelete: { _ in },
         onCancel: {})

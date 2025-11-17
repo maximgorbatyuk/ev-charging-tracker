@@ -16,7 +16,6 @@ final class Migration_20251104_CreatePlannedMaintenanceTable {
     }
     
     func execute() {
-        let plannedMaintenanceTable = Table(DatabaseManager.PlannedMaintenanceTableName)
         let repository = PlannedMaintenanceRepository(db: db, tableName: DatabaseManager.PlannedMaintenanceTableName)
 
         do {

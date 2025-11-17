@@ -169,6 +169,16 @@ class CarRepository {
         }
     }
 
+    func getCarsCountExcludingId(_ carIdToExclude: Int64) -> Int {
+        let carsToCount = table.filter(idColumn != carIdToExclude)
+        do {
+            return try db.scalar(carsToCount.count)
+        } catch {
+            print("Failed to get cars count excluding id \(carIdToExclude): \(error)")
+            return 0
+        }
+    }
+
     func markAllCarsAsNoTracking(carIdToExclude: Int64) -> Bool {
         let carsToUpdate = table.filter(idColumn != carIdToExclude)
         do {

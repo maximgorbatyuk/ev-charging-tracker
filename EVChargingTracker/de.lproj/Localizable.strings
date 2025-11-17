@@ -135,6 +135,7 @@
 
 "Basic info" = "Grundinformationen";
 "Name" = "Name";
+"Rides" = "Fahrten";
 "Car mileage" = "Kilometerstand des Autos";
 "Initial (km)" = "Anfang (km)";
 "Current (km)" = "Aktuell (km)";

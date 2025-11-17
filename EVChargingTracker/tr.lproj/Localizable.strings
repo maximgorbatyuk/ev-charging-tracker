@@ -80,6 +80,7 @@
 "Delete expense on %@? This action cannot be undone." = "%@ tarihindeki harcamayı silmek istiyor musunuz? Bu işlem geri alınamaz.";
 "Delete selected expense? This action cannot be undone." = "Seçilen gideri silmek ister misiniz? Bu işlem geri alınamaz. <";
 "Delete" = "Sil";
+"Rides" = "Sürüşler";
 
 "Energy" = "Enerji";
 "Expense type" = "Harcama türü";

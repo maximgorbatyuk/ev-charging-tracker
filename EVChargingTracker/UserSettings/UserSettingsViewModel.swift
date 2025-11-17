@@ -90,6 +90,10 @@ class UserSettingsViewModel: ObservableObject {
         }
     }
 
+    func hasOtherCars(carIdToExclude: Int64) -> Bool {
+        return (db.carRepository?.getCarsCountExcludingId(carIdToExclude) ?? 0) > 0
+    }
+
     func getCarsCount() -> Int {
         return db.carRepository?.getCarsCount() ?? 0
     }
@@ -139,8 +143,8 @@ class UserSettingsViewModel: ObservableObject {
 
         if (selectedForTracking) {
             let latestCar = db.carRepository?.getLatestAddedCar()
-            if (latestCar != nil) {
-                _ = db.carRepository!.markCarAsSelectedForTracking(latestCar!.id!)
+            if let latestCar = latestCar, let latestCarId = latestCar.id {
+                _ = db.carRepository!.markCarAsSelectedForTracking(latestCarId)
             }
         }
 

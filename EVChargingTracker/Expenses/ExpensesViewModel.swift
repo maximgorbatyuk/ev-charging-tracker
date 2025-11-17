@@ -98,9 +98,9 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
         let car = self.reloadSelectedCarForExpenses()
-        if (car != nil) {
+        if let car = car, let carId = car.id {
             expenses = chargingSessionsRepository.fetchCarSessions(
-                carId : car!.id!,
+                carId : carId,
                 expenseTypeFilters: expenseTypeFilters)
             totalCost = getTotalCost()
         }
