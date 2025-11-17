@@ -100,12 +100,12 @@ struct UserSettingsView: SwiftUICore.View {
 
                                     showEditCurrencyModal = true
                                 }) {
-                                    Text("\(viewModel.defaultCurrency.displayName) (\(viewModel.defaultCurrency.rawValue))")
+                                    Text(viewModel.defaultCurrency.shortName)
                                         .fontWeight(.semibold)
                                         .font(.system(size: 16, weight: .bold))
                                 }
                             } else {
-                                Text("\(viewModel.defaultCurrency.displayName) (\(viewModel.defaultCurrency.rawValue))")
+                                Text(viewModel.defaultCurrency.shortName)
                                     .fontWeight(.semibold)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.gray)
@@ -246,6 +246,13 @@ struct UserSettingsView: SwiftUICore.View {
                             )
                         }) {
                             Text("Schedule for 5 seconds")
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Button(action: {
+                            viewModel.deleteAllData()
+                        }) {
+                            Text("Delete all data")
                         }
                         .buttonStyle(.plain)
                     }

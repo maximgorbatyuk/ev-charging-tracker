@@ -104,6 +104,8 @@ struct ChargingSessionsView: SwiftUICore.View {
                             properties: [
                                 "screen": "charging_sessions_stats_screen"
                             ])
+
+                        loadData()
                     })
             }
             .onAppear {

@@ -97,6 +97,15 @@ class PlannedMaintenanceRepository {
         }
     }
 
+    func truncateTable() -> Void {
+        do {
+            try db.run(table.delete())
+            print("Table truncated successfully")
+        } catch {
+            print("Unable to truncate table: \(error)")
+        }
+    }
+
     func recordsCount() -> Int {
         do {
             return try db.scalar(table.count)

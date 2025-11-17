@@ -59,11 +59,11 @@ struct CarRecordView: SwiftUICore.View  {
                 // Safely unwrap optional batteryCapacity to avoid complex optional chaining inside interpolations
                 if let battery = car.batteryCapacity {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(L("Battery"))
+                        Text(L("Currency"))
                             .font(.caption)
                             .foregroundColor(.gray)
 
-                        Text("\(battery.formatted()) kWh")
+                        Text(car.expenseCurrency.shortName)
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(textColor)

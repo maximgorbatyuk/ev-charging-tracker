@@ -63,6 +63,15 @@ class ExpensesRepository {
         }
     }
 
+    func truncateTable() -> Void {
+        do {
+            try db.run(chargingSessionsTable.delete())
+            print("Table truncated successfully")
+        } catch {
+            print("Unable to truncate table: \(error)")
+        }
+    }
+
     func insertSession(_ session: Expense) -> Int64? {
         
         do {
@@ -201,6 +210,18 @@ class ExpensesRepository {
         } catch {
             print("Failed to get session count: \(error)")
             return 0
+        }
+    }
+
+    func updateCarExpensesCurrency(_ car: Car) -> Bool {
+        let recordToUpdateQuery = chargingSessionsTable.filter(carIdColumn == car.id)
+        do {
+            try db.run(recordToUpdateQuery.update(currency <- car.expenseCurrency.rawValue))
+            print("Updated expenses currency for car id: \(car.id ?? 0)")
+            return true
+        } catch {
+            print("Update failed: \(error)")
+            return false
         }
     }
 }

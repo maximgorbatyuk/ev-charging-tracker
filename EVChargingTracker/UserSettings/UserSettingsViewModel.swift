@@ -100,14 +100,16 @@ class UserSettingsViewModel: ObservableObject {
 
     // Update car editable fields and notify UI to refresh
     func updateCar(car: Car) -> Bool {
-        let success = db.carRepository?.updateCar(car: car) ?? false
-        if success {
+        let carUpdateSuccess = db.carRepository?.updateCar(car: car) ?? false
+        let carExpensesUpdateSyccess = db.expensesRepository?.updateCarExpensesCurrency(car) ?? false
+
+        if carUpdateSuccess && carExpensesUpdateSyccess {
             DispatchQueue.main.async {
                 self.objectWillChange.send()
             }
         }
 
-        return success
+        return carUpdateSuccess && carExpensesUpdateSyccess
     }
 
     func refetchCars() {
@@ -129,6 +131,15 @@ class UserSettingsViewModel: ObservableObject {
 
     func isDevelopmentMode() -> Bool {
         return environment.isDevelopmentMode()
+    }
+    
+    func deleteAllData() -> Void {
+        if (!isDevelopmentMode()) {
+            print("Attempt to delete all data in non-development mode. Operation aborted.")
+            return
+        }
+
+        db.deleteAllData()
     }
 
     var allCars : [CarDto] {

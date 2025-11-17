@@ -69,6 +69,15 @@ class CarRepository {
         }
     }
 
+    func truncateTable() -> Void {
+        do {
+            try db.run(table.delete())
+            print("Table truncated successfully")
+        } catch {
+            print("Unable to truncate table: \(error)")
+        }
+    }
+
     func insert(_ car: Car) -> Int64? {
         
         let currentDate = Date()
