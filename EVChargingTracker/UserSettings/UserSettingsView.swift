@@ -105,7 +105,7 @@ struct UserSettingsView: SwiftUICore.View {
                                         .font(.system(size: 16, weight: .bold))
                                 }
                             } else {
-                                Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
+                                Text("\(viewModel.defaultCurrency.displayName) (\(viewModel.defaultCurrency.rawValue))")
                                     .fontWeight(.semibold)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.gray)
@@ -284,7 +284,8 @@ struct UserSettingsView: SwiftUICore.View {
                             name: updated.name,
                             batteryCapacity: updated.batteryCapacity,
                             intialMileage: updated.initialMileage,
-                            currentMileage: updated.currentMileage)
+                            currentMileage: updated.currentMileage,
+                            expenseCurrency: updated.expenseCurrency)
 
                         _ = viewModel.updateCar(car: carToUpdate)
 

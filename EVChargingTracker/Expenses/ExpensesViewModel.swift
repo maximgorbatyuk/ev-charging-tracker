@@ -11,7 +11,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
 
-    var defaultCurrency: Currency
     var totalCost: Double = 0.0
 
     var filterButtons: [FilterButtonItem] = []
@@ -34,8 +33,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         self.chargingSessionsRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
-
-        self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
 
         self.filterButtons = [
             FilterButtonItem(
@@ -100,6 +97,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
+        self._selectedCarForExpenses = self.reloadSelectedCarForExpenses()
         expenses = chargingSessionsRepository.fetchAllSessions(expenseTypeFilters)
         totalCost = getTotalCost()
     }
@@ -191,9 +189,12 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
     }
 
-    func getDefaultCurrency() -> Currency {
-        self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
-        return defaultCurrency
+    func getAddExpenseCurrency() -> Currency {
+        if (selectedCarForExpenses != nil) {
+            return selectedCarForExpenses!.expenseCurrency
+        }
+
+        return db.userSettingsRepository!.fetchCurrency()
     }
 
     func hasAnyCar() -> Bool {

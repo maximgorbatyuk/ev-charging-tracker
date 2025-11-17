@@ -46,11 +46,12 @@ struct ExpensesView: SwiftUICore.View {
                         }
                         .padding(.horizontal)
 
-                        if viewModel.totalCost > 0 {
+                        if (viewModel.totalCost > 0 &&
+                            viewModel.selectedCarForExpenses != nil) {
                             CostsBlockView(
                                 title: L("Total costs"),
                                 hint: nil,
-                                currency: viewModel.defaultCurrency,
+                                currency: viewModel.selectedCarForExpenses!.expenseCurrency,
                                 costsValue: viewModel.totalCost,
                                 perKilometer: false)
                         }
@@ -92,11 +93,11 @@ struct ExpensesView: SwiftUICore.View {
             .navigationTitle(L("All car expenses"))
             .navigationBarTitleDisplayMode(.automatic)
             .sheet(isPresented: $showingAddSession) {
-                
+
                 let selectedCar = viewModel.selectedCarForExpenses
                 AddExpenseView(
                     defaultExpenseType: nil,
-                    defaultCurrency: viewModel.getDefaultCurrency(),
+                    defaultCurrency: viewModel.getAddExpenseCurrency(),
                     selectedCar: selectedCar,
                     onAdd: { newExpenseResult in
 

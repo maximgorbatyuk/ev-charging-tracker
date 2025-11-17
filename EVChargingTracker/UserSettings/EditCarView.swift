@@ -11,6 +11,7 @@ struct EditCarView: SwiftUICore.View {
     @State private var batteryText: String
     @State private var initialMileageText: String
     @State private var mileageText: String
+    @State private var expenseCurrency: Currency
     @State private var selectedForTracking: Bool
 
     init(
@@ -27,6 +28,7 @@ struct EditCarView: SwiftUICore.View {
         _mileageText = State(initialValue: String(car.currentMileage))
         _initialMileageText = State(initialValue: String(car.initialMileage))
         _selectedForTracking = State(initialValue: car.selectedForTracking)
+        _expenseCurrency = State(initialValue: car.expenseCurrency)
     }
 
     var body: some SwiftUICore.View {
@@ -49,6 +51,13 @@ struct EditCarView: SwiftUICore.View {
                         TextField(L("e.g. 75"), text: $batteryText)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
+                    }
+
+                    Picker(L("Select currency"), selection: $expenseCurrency) {
+                        ForEach(Currency.allCases, id: \.self) { type in
+                            Text(type.displayName)
+                                .tag(type)
+                        }
                     }
                 }
 
@@ -115,7 +124,8 @@ struct EditCarView: SwiftUICore.View {
                             selectedForTracking: selectedForTracking,
                             batteryCapacity: batteryToSave,
                             currentMileage: mileageToSave,
-                            initialMileage: initialMileageToSave
+                            initialMileage: initialMileageToSave,
+                            expenseCurrency: expenseCurrency
                         )
                         onSave(updated)
                     }
@@ -134,7 +144,8 @@ struct EditCarView: SwiftUICore.View {
             selectedForTracking: true,
             batteryCapacity: 75.5,
             currentMileage: 12345,
-            initialMileage: 0),
+            initialMileage: 0,
+            expenseCurrency: .usd),
         onSave: { _ in },
         onCancel: {})
 }

@@ -34,7 +34,8 @@ class UserSettingsViewModel: ObservableObject {
                     selectedForTracking: $0.selectedForTracking,
                     batteryCapacity: $0.batteryCapacity,
                     currentMileage: $0.currentMileage,
-                    initialMileage: $0.initialMileage)
+                    initialMileage: $0.initialMileage,
+                    expenseCurrency: $0.expenseCurrency)
             } ?? []
     }
 
@@ -83,7 +84,8 @@ class UserSettingsViewModel: ObservableObject {
                 selectedForTracking: car.selectedForTracking,
                 batteryCapacity: car.batteryCapacity,
                 currentMileage: car.currentMileage,
-                initialMileage: car.initialMileage
+                initialMileage: car.initialMileage,
+                expenseCurrency: car.expenseCurrency
             )
         }
     }
@@ -118,7 +120,8 @@ class UserSettingsViewModel: ObservableObject {
                         selectedForTracking: $0.selectedForTracking,
                         batteryCapacity: $0.batteryCapacity,
                         currentMileage: $0.currentMileage,
-                        initialMileage: $0.initialMileage)
+                        initialMileage: $0.initialMileage,
+                        expenseCurrency: $0.expenseCurrency)
                 } ?? []
             self.objectWillChange.send()
         }

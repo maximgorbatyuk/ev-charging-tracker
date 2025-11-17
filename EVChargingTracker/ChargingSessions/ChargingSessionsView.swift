@@ -25,7 +25,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 CostsBlockView(
                                     title: L("One kilometer price (charging only)"),
                                     hint: L("How much one kilometer costs you including only charging expenses"),
-                                    currency: viewModel.defaultCurrency,
+                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
                                     costsValue: viewModel.statData!.oneKmPriceBasedOnlyOnCharging,
                                     perKilometer: true
                                 )
@@ -33,7 +33,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 CostsBlockView(
                                     title: L("One kilometer price (total)"),
                                     hint: L("How much one kilometer costs you including all logged expenses"),
-                                    currency: viewModel.defaultCurrency,
+                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
                                     costsValue: viewModel.statData!.oneKmPriceIncludingAllExpenses,
                                     perKilometer: true
                                 )
@@ -41,7 +41,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 CostsBlockView(
                                     title: L("Total charging costs"),
                                     hint: nil,
-                                    currency: viewModel.defaultCurrency,
+                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
                                     costsValue: viewModel.statData!.totalChargingCost,
                                     perKilometer: false
                                 )
@@ -93,7 +93,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                 let selectedCar = viewModel.selectedCarForExpenses
                 AddExpenseView(
                     defaultExpenseType: .charging,
-                    defaultCurrency: viewModel.getDefaultCurrency(),
+                    defaultCurrency: viewModel.getAddExpenseCurrency(),
                     selectedCar: selectedCar,
                     onAdd: { newExpenseResult in
 

@@ -14,4 +14,5 @@ struct CarDto: Identifiable {
     let batteryCapacity: Double?
     let currentMileage: Int // in km
     let initialMileage: Int // in km
+    let expenseCurrency: Currency
 }

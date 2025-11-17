@@ -148,6 +148,7 @@ class CarRepository {
                 batteryCapacityColumn <- car.batteryCapacity,
                 initialMileageColumn <- car.initialMileage,
                 currentMileageColumn <- car.currentMileage,
+                expenseCurrencyColumn <- car.expenseCurrency.rawValue,
                 milleageSyncedAtColumn <- car.milleageSyncedAt
             )
             let updated = try db.run(update)
