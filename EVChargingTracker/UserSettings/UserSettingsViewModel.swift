@@ -97,11 +97,31 @@ class UserSettingsViewModel: ObservableObject {
     func getCarById(_ id: Int64) -> Car? {
         return db.carRepository?.getCarById(id)
     }
+    
+    func insertCar(_ car: Car) -> Int64? {
+        let newCarId = db.carRepository?.insert(car)
+
+        if newCarId != nil {
+            if (car.selectedForTracking) {
+                _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: newCarId!)
+            }
+
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
+
+        return newCarId
+    }
 
     // Update car editable fields and notify UI to refresh
     func updateCar(car: Car) -> Bool {
         let carUpdateSuccess = db.carRepository?.updateCar(car: car) ?? false
         let carExpensesUpdateSyccess = db.expensesRepository?.updateCarExpensesCurrency(car) ?? false
+
+        if (car.selectedForTracking) {
+            _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: car.id!)
+        }
 
         if carUpdateSuccess && carExpensesUpdateSyccess {
             DispatchQueue.main.async {

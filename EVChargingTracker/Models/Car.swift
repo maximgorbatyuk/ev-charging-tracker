@@ -59,7 +59,8 @@ class Car {
         batteryCapacity: Double?,
         intialMileage: Int,
         currentMileage: Int,
-        expenseCurrency: Currency) -> Void {
+        expenseCurrency: Currency,
+        selectedForTracking: Bool) -> Void {
         if (!name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
             self.name = name
         }
@@ -78,5 +79,6 @@ class Car {
         }
 
         self.expenseCurrency = expenseCurrency
+        self.selectedForTracking = selectedForTracking
     }
 }

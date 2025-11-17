@@ -105,17 +105,54 @@ class ExpensesRepository {
             return 0
         }
     }
+    
+    func fetchAllSessions() -> [Expense] {
 
-    func fetchAllSessions(_ expenseTypeFilters: [ExpenseType] = []) -> [Expense] {
+        var sessionsList: [Expense] = []
+        var query = chargingSessionsTable.order(id.desc)
+
+        do {
+            for session in try db.prepare(query) {
+                let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .other
+                let currencyEnum = Currency(rawValue: session[currency]) ?? .usd
+
+                let chargingSession = Expense(
+                    id: session[id],
+                    date: session[date],
+                    energyCharged: session[energyCharged],
+                    chargerType: chargerTypeEnum,
+                    odometer: session[odometer],
+                    cost: session[cost],
+                    notes: session[notes],
+                    isInitialRecord: session[isInitialRecord],
+                    expenseType: ExpenseType(rawValue: session[expenseType]) ?? .other,
+                    currency: currencyEnum,
+                    carId: session[carIdColumn]
+                )
+
+                sessionsList.append(chargingSession)
+            }
+        } catch {
+            print("Fetch failed: \(error)")
+        }
         
+        return sessionsList
+    }
+
+    func fetchCarSessions(carId: Int64?, expenseTypeFilters: [ExpenseType] = []) -> [Expense] {
+
         var sessionsList: [Expense] = []
 
         var query: QueryType
         if (!expenseTypeFilters.isEmpty) {
             let stringValues = expenseTypeFilters.map { $0.rawValue }
-            query = chargingSessionsTable.filter(stringValues.contains(expenseType)).order(id.desc)
+            query = chargingSessionsTable
+                .filter(carIdColumn == carId)
+                .filter(stringValues.contains(expenseType)).order(id.desc)
         } else {
-            query = chargingSessionsTable.order(id.desc)
+            query = chargingSessionsTable
+                .filter(carIdColumn == carId)
+                .order(id.desc)
         }
 
         do {

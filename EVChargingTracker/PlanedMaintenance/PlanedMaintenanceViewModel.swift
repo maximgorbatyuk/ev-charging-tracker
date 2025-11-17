@@ -9,15 +9,15 @@
 import Foundation
 
 class PlanedMaintenanceViewModel: ObservableObject {
-
+    
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
-
+    
     private let db: DatabaseManager
     private let notifications: NotificationManager
     
     let repository: PlannedMaintenanceRepository
     let delayedNotificationsRepository: DelayedNotificationsRepository
-
+    
     private var _selectedCarForExpenses: Car?
     
     init() {
@@ -25,10 +25,12 @@ class PlanedMaintenanceViewModel: ObservableObject {
         self.db = DatabaseManager.shared
         self.repository = db.plannedMaintenanceRepository!
         self.delayedNotificationsRepository = db.delayedNotificationsRepository!
-    }
 
+        loadData()
+    }
+    
     func loadData() -> Void {
-        let selectedCar = self.selectedCarForExpenses
+        let selectedCar = self.reloadSelectedCarForExpenses()
         if (selectedCar == nil) {
             return
         }
@@ -37,7 +39,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
         var records = repository.getAllRecords(carId: selectedCar!.id!).map { dbRecord in
             PlannedMaintenanceItem(maintenance: dbRecord, car: selectedCar, now: now)
         }
-
+        
         records.sort()
         DispatchQueue.main.async {
             self.maintenanceRecords = records
@@ -46,13 +48,13 @@ class PlanedMaintenanceViewModel: ObservableObject {
     
     func addNewMaintenanceRecord(newRecord: PlannedMaintenance) -> Void {
         let recordId = repository.insertRecord(newRecord)
-
+        
         if (newRecord.when != nil) {
             var notificationId = notifications.scheduleNotification(
                 title: L("Maintenance reminder"),
                 body: newRecord.name,
                 on: newRecord.when!)
-
+            
             let delayedNotification = delayedNotificationsRepository.insertRecord(
                 DelayedNotification(
                     when: newRecord.when!,
@@ -63,7 +65,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
             )
         }
     }
-
+    
     func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) -> Void {
         _ = repository.deleteRecord(id: recordToDelete.id)
         
@@ -72,15 +74,20 @@ class PlanedMaintenanceViewModel: ObservableObject {
             if (delayedNotification == nil) {
                 return
             }
-
+            
             notifications.cancelNotification(delayedNotification!.notificationId)
             _ = delayedNotificationsRepository.deleteRecord(id: delayedNotification!.id!)
         }
     }
 
+    func reloadSelectedCarForExpenses() -> Car? {
+        _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+        return _selectedCarForExpenses
+    }
+
     var selectedCarForExpenses: Car? {
         if (_selectedCarForExpenses == nil) {
-            _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+            _selectedCarForExpenses = reloadSelectedCarForExpenses()
         }
 
         return _selectedCarForExpenses

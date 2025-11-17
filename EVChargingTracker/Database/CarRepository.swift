@@ -121,7 +121,7 @@ class CarRepository {
             return false
         }
     }
-    
+
     func getCarById(_ id: Int64) -> Car? {
         do {
             let query = table.filter(idColumn == id).limit(1)
@@ -158,7 +158,22 @@ class CarRepository {
                 initialMileageColumn <- car.initialMileage,
                 currentMileageColumn <- car.currentMileage,
                 expenseCurrencyColumn <- car.expenseCurrency.rawValue,
-                milleageSyncedAtColumn <- car.milleageSyncedAt
+                milleageSyncedAtColumn <- car.milleageSyncedAt,
+                selectedForTrackingColumn <- car.selectedForTracking
+            )
+            let updated = try db.run(update)
+            return updated > 0
+        } catch {
+            print("Update failed: \(error)")
+            return false
+        }
+    }
+
+    func markAllCarsAsNoTracking(carIdToExclude: Int64) -> Bool {
+        let carsToUpdate = table.filter(idColumn != carIdToExclude)
+        do {
+            let update = carsToUpdate.update(
+                selectedForTrackingColumn <- false
             )
             let updated = try db.run(update)
             return updated > 0

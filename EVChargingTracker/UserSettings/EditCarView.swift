@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EditCarView: SwiftUICore.View {
-    let car: CarDto
+    let car: CarDto?
     let onSave: (CarDto) -> Void
     let onCancel: () -> Void
 
@@ -15,7 +15,9 @@ struct EditCarView: SwiftUICore.View {
     @State private var selectedForTracking: Bool
 
     init(
-        car: CarDto,
+        car: CarDto?,
+        defaultCurrency: Currency,
+        defaultValueForSelectedForTracking: Bool,
         onSave: @escaping (CarDto) -> Void,
         onCancel: @escaping () -> Void)
     {
@@ -23,12 +25,12 @@ struct EditCarView: SwiftUICore.View {
         self.onSave = onSave
         self.onCancel = onCancel
 
-        _name = State(initialValue: car.name)
-        _batteryText = State(initialValue: car.batteryCapacity.map { String($0) } ?? "")
-        _mileageText = State(initialValue: String(car.currentMileage))
-        _initialMileageText = State(initialValue: String(car.initialMileage))
-        _selectedForTracking = State(initialValue: car.selectedForTracking)
-        _expenseCurrency = State(initialValue: car.expenseCurrency)
+        _name = State(initialValue: car?.name ?? "")
+        _batteryText = State(initialValue: car?.batteryCapacity.map { String($0) } ?? "")
+        _mileageText = State(initialValue: car != nil ? String(car!.currentMileage) : "")
+        _initialMileageText = State(initialValue: car != nil ? String(car!.initialMileage) : "")
+        _selectedForTracking = State(initialValue: car?.selectedForTracking ?? defaultValueForSelectedForTracking)
+        _expenseCurrency = State(initialValue: car?.expenseCurrency ?? defaultCurrency)
     }
 
     var body: some SwiftUICore.View {
@@ -84,7 +86,6 @@ struct EditCarView: SwiftUICore.View {
 
                 Section(header: Text(L("Danger zone"))) {
                     Toggle(L("Selected for tracking"), isOn: $selectedForTracking)
-                        .disabled(true)
                 }
             }
             .navigationTitle(L("Edit car"))
@@ -105,21 +106,23 @@ struct EditCarView: SwiftUICore.View {
                             batteryToSave = battery
                         }
 
-                        var mileageToSave = car.currentMileage
-                        var initialMileageToSave = car.initialMileage
+                        var mileageToSave = car?.currentMileage ?? 0
+                        var initialMileageToSave = car?.initialMileage ?? 0
 
-                        let mileage = Int(mileageText) ?? car.currentMileage
-                        if (mileage >= car.initialMileage) {
+                        let mileage = Int(mileageText) ?? car?.currentMileage ?? 0
+                        if (mileage >= initialMileageToSave) {
                             mileageToSave = mileage
                         }
-                        
-                        let initialMileage = Int(initialMileageText) ?? car.initialMileage
+
+                        let initialMileage = Int(initialMileageText) ?? car?.initialMileage ?? 0
                         if (initialMileage <= mileageToSave) {
                             initialMileageToSave = initialMileage
                         }
 
+                        let selectedForTracking = self.selectedForTracking
+
                         let updated = CarDto(
-                            id: car.id,
+                            id: car?.id,
                             name: name,
                             selectedForTracking: selectedForTracking,
                             batteryCapacity: batteryToSave,
@@ -146,6 +149,8 @@ struct EditCarView: SwiftUICore.View {
             currentMileage: 12345,
             initialMileage: 0,
             expenseCurrency: .usd),
+        defaultCurrency: .usd,
+        defaultValueForSelectedForTracking: true,
         onSave: { _ in },
         onCancel: {})
 }

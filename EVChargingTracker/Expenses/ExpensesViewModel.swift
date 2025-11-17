@@ -97,9 +97,13 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
-        self._selectedCarForExpenses = self.reloadSelectedCarForExpenses()
-        expenses = chargingSessionsRepository.fetchAllSessions(expenseTypeFilters)
-        totalCost = getTotalCost()
+        let car = self.reloadSelectedCarForExpenses()
+        if (car != nil) {
+            expenses = chargingSessionsRepository.fetchCarSessions(
+                carId : car!.id!,
+                expenseTypeFilters: expenseTypeFilters)
+            totalCost = getTotalCost()
+        }
     }
 
     // TODO mgorbatyuk: avoid code duplication with saveChargingSession
