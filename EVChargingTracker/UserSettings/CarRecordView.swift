@@ -32,7 +32,7 @@ struct CarRecordView: SwiftUICore.View  {
             HStack(spacing: 20) {
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(L("Current millage"))
+                    Text(L("Current mileage"))
                         .font(.caption)
                         .foregroundColor(.gray)
 

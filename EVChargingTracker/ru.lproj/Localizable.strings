@@ -17,8 +17,8 @@
 "kWh / 100km" = "кВт / 100км";
 "Charges" = "Зарядок";
 
-"Initial millage" = "Начальный пробег";
-"Current millage" = "Текущий пробег";
+"Initial mileage" = "Начальный пробег";
+"Current mileage" = "Текущий пробег";
 "Battery" = "Батарея";
 "Tracking" = "Ведется учет";
 "Not tracking" = "Не выбран для учета";

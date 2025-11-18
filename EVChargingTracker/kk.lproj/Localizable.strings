@@ -13,12 +13,12 @@
 "Save" = "Сақтау";
 "Close" = "Жабу";
 
-"CO₂ saved (kg)" = "Жинақталған CO₂";
+"CO₂ saved (kg)" = "Үнемделген CO₂";
 "kWh / 100km" = "кВт / 100км";
-"Charges" = "Зарядтаулар";
+"Charges" = "Зарядтар";
 
-"Initial millage" = "Бастапқы жүріс";
-"Current millage" = "Ағымдағы жүріс";
+"Initial mileage" = "Бастапқы жүріс";
+"Current mileage" = "Ағымдағы жүріс";
 "Battery" = "Батарея";
 "Tracking" = "Бақылау";
 "Not tracking" = "Бақылаусыз";
@@ -28,19 +28,19 @@
 
 "Base settings" = "Негізгі баптаулар";
 "Currency" = "Валюта";
-"It is recommended to set the default currency before adding any expenses." = "Шығындар қоспай тұрып әдепкі валютаны орнату ұсынылады.";
+"It is recommended to set the default currency before adding any expenses." = "Шығындарды қоспай тұрып әдепкі валютаны орнату ұсынылады.";
 "Cars" = "Көліктер";
 "User settings" = "Пайдаланушы баптаулары";
 "Notifications enabled" = "Хабарламалар қосылған";
 "Open settings" = "Баптауларды ашу";
-"In case you want to change this setting, please open app settings" = "Осы баптауды өзгерткіңіз келсе, бағдарлама баптауларын ашыңыз";
-"About app" = "Бағдарлама туралы";
+"In case you want to change this setting, please open app settings" = "Осы баптауды өзгерткіңіз келсе, қосымша баптауларын ашыңыз";
+"About app" = "Қосымша туралы";
 "Tracking settings" = "Бақылау баптаулары";
-"App version" = "Сборка нұсқасы";
-"Developer" = "Бағдарламашы";
-"What is the app about?" = "Бағдарлама не туралы?";
-"Rate the app" = "Бағдарламаны App Store-да бағалау";
-"Contact developer via Telegram" = "Бағдарламашымен Telegram арқылы байланысу";
+"App version" = "Қосымша нұсқасы";
+"Developer" = "Әзірлеуші";
+"What is the app about?" = "Қосымша не туралы?";
+"Rate the app" = "Қосымшаны App Store-да бағалау";
+"Contact developer via Telegram" = "Әзірлеушімен Telegram арқылы байланысу";
 
 "Expense details" = "Шығын туралы мәліметтер";
 "Car" = "Көлік";
@@ -53,22 +53,22 @@
 "Car name" = "Көлік атауы";
 "Name of the car" = "Көлік атауы";
 "Battery capacity (kWh)" = "Батарея сыйымдылығы (кВт⋅сағ)";
-"Optional" = "Қосымша";
-"Notes (optional)" = "Ескертпе (қосымша)";
+"Optional" = "Міндетті емес";
+"Notes (optional)" = "Ескертпе (Міндетті емес)";
 "Add expense" = "Шығын қосу";
 "Price per kWh" = "1 kWh бағасы";
 
 "Please select an expense type." = "Шығын түрін таңдаңыз.";
-"Please type a valid value for Energy." = "Энергия үшін дұрыс мән енгізіңіз.";
-"Please type a valid value for Odometer." = "Одометр үшін дұрыс мән енгізіңіз.";
+"Please type a valid value for Energy." = "Энергия үшін жарамды мән енгізіңіз.";
+"Please type a valid value for Odometer." = "Одометр үшін жарамды мән енгізіңіз.";
 
 "Hint" = "Кеңес";
 "per km" = "км сайын";
 
 "One kilometer price (charging only)" = "1 км бағасы (тек зарядтау)";
-"How much one kilometer costs you including only charging expenses" = "1 км тек зарядтау шығындарын қоса есептегендегі құны";
+"How much one kilometer costs you including only charging expenses" = "Тек зарядтау шығындарын қоса есептегендегі 1 км құны";
 "One kilometer price (total)" = "1 км бағасы (барлығы)";
-"How much one kilometer costs you including all logged expenses" = "1 км барлық тіркелген шығындарды қоса есептегендегі құны";
+"How much one kilometer costs you including all logged expenses" = "Барлық тіркелген шығындарды қоса есептегендегі 1 км құны";
 "Total charging costs" = "Зарядтау бойынша жалпы шығындар";
 "Add Charging Session" = "Зарядтау сессиясын қосу";
 "Car stats" = "Көлік статистикасы";
@@ -104,24 +104,24 @@
 "Home (3kW)" = "Үйдегі (3 кВт)";
 "Home (7kW)" = "Үйдегі (7 кВт)";
 "Home (11kW)" = "Үйдегі (11 кВт)";
-"Destination (22kW)" = "Мекенжайлық (22 кВт)";
+"Destination (22kW)" = "Баратын жер (22 кВт)";
 "Supercharger V2 (150kW)" = "Суперчарджер V2 (150 кВт)";
 "Supercharger V3 (250kW)" = "Суперчарджер V3 (250 кВт)";
 "Supercharger V4 (350kW)" = "Суперчарджер V4 (350 кВт)";
-"Public Fast (50kW)" = "Қоғамдық жылдам (50 кВт)";
-"Public Rapid (100kW)" = "Қоғамдық жоғары жылдам (100 кВт)";
+"Public Fast (50kW)" = "Қоғамдық-Жылдам (50 кВт)";
+"Public Rapid (100kW)" = "Қоғамдық-Шапшаң (100 кВт)";
 "Other" = "Басқа";
 
 /* Menu */
 "Stats" = "Статистика";
 "Expenses" = "Шығындар";
 "Settings" = "Баптаулар";
-"About" = "Бағдарлама туралы";
+"About" = "Қосымша туралы";
 "Maintenance" = "Техникалық қызмет";
 
-"Track your electric vehicle charging costs and discover your true cost per kilometer." = "Электрлік көлігіңіздің зарядтау шығындарын қадағалаңыз және шынайы километр басына шығыныңызды анықтаңыз.";
-"Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Зарядтау сеанстарын тіркеңіз, шығындарды талдаңыз және толық ақпарат пен автоматты есептеулер арқылы электрлік көлігіңіздің зарядтау стратегиясын оңтайландырыңыз.";
-"If you have any questions or suggestions, feel free to create an issue on Github:" = "Егер сұрақтарыңыз немесе ұсыныстарыңыз болса, Github-та еркін мәселе жасаңыз:";
+"Track your electric vehicle charging costs and discover your true cost per kilometer." = "Электр көлігіңіздің зарядтау шығындарын бақылаңыз және 1 километрге шаққандағы нақты құнын анықтаңыз.";
+"Log charging sessions, analyze expenses, and optimize your EV charging strategy with detailed insights and automatic calculations." = "Толық ақпарат пен автоматты есептеулер арқылы зарядтау сеанстарын тіркеңіз, шығындарды талдаңыз және электромобильді зарядтау стратегияңызды оңтайландырыңыз.";
+"If you have any questions or suggestions, feel free to create an issue on Github:" = "Егер сізде қандай да бір сұрақтар немесе ұсыныстар болса, Github-та мәселе тудырудан тартынбаңыз:";
 
 "Planned maintenance" = "Жоспарланған техникалық қызмет";
 "Add maintenance" = "Техникалық қызметті қосу";
@@ -134,23 +134,23 @@
 "When" = "Қашан";
 
 "Plan a maintenance" = "Техникалық қызметті жоспарлау";
-"Maintenance details" = "Техникалық қызмет туралы мәліметтер";
+"Maintenance details" = "Техникалық қызмет туралы толығырақ";
 "Odometer value cannot be less than current car mileage." = "Одометр мәні ағымдағы көлік жүрісінен аз болмауы керек.";
 "What should be done?" = "Не істеу керек?";
-"Remind by date (optional)" = "Күн бойынша еске салу (қосымша)";
-"Remind by odometer (optional)" = "Одометр бойынша еске салу (қосымша)";
+"Remind by date (optional)" = "Күн бойынша еске салу (міндетті емес)";
+"Remind by odometer (optional)" = "Одометр бойынша еске салу (міндетті емес)";
 "Additional information that will be helpful" = "Пайдалы болатын қосымша ақпарат";
 
 "Basic info" = "Негізгі ақпарат";
 "Name" = "Атауы";
-"Rides" = "Жүрістер";
+"Rides" = "Сапарлар";
 "Car mileage" = "Көлік жүрісі";
 "Initial (km)" = "Бастапқы (км)";
 "Current (km)" = "Ағымдағы (км)";
 "Remain at odometer" = "Одометрдегі қалдық";
 "Maintenance reminder" = "Техникалық қызмет туралы еске салу";
-"Some maintenance tasks due" = "Кейбір техникалық қызмет тапсырмалары мерзімінде";
-"You have %d maintenance task(s) due based on your car's current mileage." = "Көлігіңіздің ағымдағы жүрісіне байланысты сізде %d техникалық қызмет тапсырмасы мерзімінде.";
+"Some maintenance tasks due" = "Қызмет көрсету жайында бірнеше жазбалар бар";
+"You have %d maintenance task(s) due based on your car's current mileage." = "Көлігіңіздің ағымдағы жүрісіне байланысты сізде техникалық қызмет көрсету жайында %d жазба бар";
 
 "Select currency" = "Валютаны таңдау";
 "Select default currency" = "Әдепкі валютаны таңдау";
@@ -158,9 +158,9 @@
 "Add new car" = "Жаңа көлік қосу";
 "Delete car" = "Көлікті жою";
 "Delete selected car? This action cannot be undone." = "Таңдалған көлікті жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
-"If you change it, then other active car will be unselected automatically." = "Егер сіз оны өзгертсеңіз, басқа белсенді көлік автоматты түрде таңдалмайды.";
+"If you change it, then other active car will be unselected automatically." = "Егер сіз бұны өзгертсеңіз, басқа белсенді көліктен таңдау автоматты түрде алынып тастайды.";
 
 "Filter.All" = "Барлығы";
 "Filter.Charges" = "Зарядтаулар";
-"Filter.Repair/maintenance" = "Жөндеу";
+"Filter.Repair/maintenance" = "Жөндеу/қызмет көрсету";
 "Filter.Carwash" = "Көлік жуу";

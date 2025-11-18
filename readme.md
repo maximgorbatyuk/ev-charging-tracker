@@ -54,7 +54,9 @@ Perfect for EV owners who want to understand their true cost of ownership and op
 ## Contributors
 
 - [@maximgorbatyuk](https://github.com/maximgorbatyuk) - Product ownership, iOS development
-- [@tolgasanci](https://github.com/tolgasanci) - Contributor (Turkish translation)
+- [@tolgasanci](https://github.com/tolgasanci) - Turkish translation
+- @aamiirkaa - German translation
+- @shyngysn - Kazakh translation
 
 ## Development references
 

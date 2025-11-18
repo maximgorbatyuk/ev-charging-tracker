@@ -16,8 +16,8 @@
 "kWh / 100km" = "kWh / 100km";
 "Charges" = "Şarj";
 
-"Initial millage" = "İlk kilometre";
-"Current millage" = "Mevcut kilometre";
+"Initial mileage" = "İlk kilometre";
+"Current mileage" = "Mevcut kilometre";
 "Battery" = "Pil";
 "Tracking" = "Tracking";
 "Not tracking" = "Not tracking";

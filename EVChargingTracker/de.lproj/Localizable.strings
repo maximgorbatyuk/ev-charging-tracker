@@ -14,10 +14,10 @@
 "Close" = "Schließen";
 "CO₂ saved (kg)" = "CO₂ eingespart (kg)";
 "kWh / 100km" = "kWh / 100 km";
-"Charges" = "Ladungen";
+"Charges" = "Ladevorgänge";
 
-"Initial millage" = "Anfangskilometerstand";
-"Current millage" = "Aktueller Kilometerstand";
+"Initial mileage" = "Anfangskilometerstand";
+"Current mileage" = "Aktueller Kilometerstand";
 "Battery" = "Batterie";
 "Tracking" = "Tracking";
 "Not tracking" = "Kein Tracking";
@@ -38,7 +38,7 @@
 "Rate the app" = "App bewerten";
 "Contact developer via Telegram" = "Entwickler über Telegram kontaktieren";
 
-"Expense details" = "Ausgabendetails";
+"Expense details" = "Details zur Ausgabe";
 "Car" = "Auto";
 "Date" = "Datum";
 "Energy (kWh)" = "Energie (kWh)";
@@ -62,7 +62,7 @@
 "per km" = "pro km";
 
 "One kilometer price (charging only)" = "Preis pro Kilometer (nur Laden)";
-"How much one kilometer costs you including only charging expenses" = "Wie viel ein Kilometer kostet, ausschließlich der Ladekosten";
+"How much one kilometer costs you including only charging expenses" = "Wie viel ein Kilometer kostet, wenn nur die Ladekosten berücksichtigt werden";
 "One kilometer price (total)" = "Preis pro Kilometer (gesamt)";
 "How much one kilometer costs you including all logged expenses" = "Wie viel ein Kilometer inklusive aller protokollierten Ausgaben kostet";
 "Total charging costs" = "Gesamte Ladekosten";
@@ -73,11 +73,11 @@
 "Total costs" = "Gesamtkosten";
 "All car expenses" = "Alle Autoausgaben";
 "No expenses yet" = "Noch keine Ausgaben";
-"Add your first expense to start tracking" = "Fügen Sie Ihre erste Ausgabe hinzu, um mit dem Tracking zu beginnen";
+"Add your first expense to start tracking" = "Fügen Sie Ihre erste Ausgabe hinzu, um das Tracking zu starten";
 
 "Delete expense" = "Ausgabe löschen";
-"Delete expense on %@ with amount %@? This action cannot be undone." = "Ausgabe am %@ mit dem Betrag %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
-"Delete expense on %@? This action cannot be undone." = "Ausgabe am %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Ausgabe vom %@ mit dem Betrag %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Delete expense on %@? This action cannot be undone." = "Ausgabe vom %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
 "Delete selected expense? This action cannot be undone." = "Ausgewählte Ausgabe löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
 "Delete" = "Löschen";
 
@@ -105,7 +105,7 @@
 "Supercharger V3 (250kW)" = "Supercharger V3 (250 kW)";
 "Supercharger V4 (350kW)" = "Supercharger V4 (350 kW)";
 "Public Fast (50kW)" = "Öffentlich Schnell (50 kW)";
-"Public Rapid (100kW)" = "Öffentlich Rapid (100 kW)";
+"Public Rapid (100kW)" = "Öffentlich Ultraschnell (100 kW)";
 "Other" = "Sonstiges";
 
 /* Menu */
@@ -118,15 +118,15 @@
 "Planned maintenance" = "Geplante Wartung";
 "Add maintenance" = "Wartung hinzufügen";
 "Maintenance" = "Wartung";
-"No maintenance records yet" = "Noch keine zukünftigen Wartungseinträge";
-"Add your first maintenance record" = "Fügen Sie Ihren ersten geplanten Wartungseintrag hinzu";
+"No maintenance records yet" = "Noch keine Wartungseinträge";
+"Add your first maintenance record" = "Fügen Sie Ihren ersten Wartungseintrag hinzu";
 "Delete maintenance record?" = "Wartungseintrag löschen?";
 "Delete selected maintenance record? This action cannot be undone." = "Ausgewählten Wartungseintrag löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
 "Please add car first to track maintenance records" = "Bitte zuerst ein Auto hinzufügen, um Wartungseinträge zu verfolgen";
 "When" = "Wann";
 
 "Plan a maintenance" = "Wartung planen";
-"Maintenance details" = "Wartungsdetails";
+"Maintenance details" = "Details der Wartung";
 "Odometer value cannot be less than current car mileage." = "Der Kilometerstand darf nicht niedriger sein als der aktuelle Fahrzeugkilometerstand.";
 "What should be done?" = "Was soll gemacht werden?";
 "Remind by date (optional)" = "Nach Datum erinnern (optional)";
@@ -139,9 +139,9 @@
 "Car mileage" = "Kilometerstand des Autos";
 "Initial (km)" = "Anfang (km)";
 "Current (km)" = "Aktuell (km)";
-"Remain at odometer" = "Verbleibend bis Kilometerstand";
+"Remain at odometer" = "Verbleibend bis zum Kilometerstand";
 "Maintenance reminder" = "Wartungserinnerung";
-"Some maintenance tasks due" = "Einige Wartungsarbeiten fällig";
+"Some maintenance tasks due" = "Einige Wartungsarbeiten sind fällig";
 "You have %d maintenance task(s) due based on your car's current mileage." = "Sie haben %d fällige Wartungsaufgabe(n) basierend auf dem aktuellen Kilometerstand Ihres Autos.";
 
 "Select currency" = "Währung auswählen";
@@ -156,5 +156,5 @@
 
 "Filter.All" = "Alle";
 "Filter.Charges" = "Ladungen";
-"Filter.Repair/maintenance" = "Wartung";
+"Filter.Repair/maintenance" = "Reparatur/Wartung";
 "Filter.Carwash" = "Autowäsche";
