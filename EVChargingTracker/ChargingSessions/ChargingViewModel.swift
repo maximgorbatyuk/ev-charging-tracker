@@ -40,7 +40,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     func loadSessions() {
         self._selectedCarForExpenses = self.reloadSelectedCarForExpenses()
         if let car = self._selectedCarForExpenses, let carId = car.id {
-            expenses = expensesRepository.fetchAllSessions(car.id!)
+            expenses = expensesRepository.fetchAllSessions(carId)
             totalCost = getTotalCost()
         } else {
             expenses = []
