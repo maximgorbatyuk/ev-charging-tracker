@@ -39,8 +39,13 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     func loadSessions() {
         self._selectedCarForExpenses = self.reloadSelectedCarForExpenses()
-        expenses = expensesRepository.fetchAllSessions()
-        totalCost = getTotalCost()
+        if let car = self._selectedCarForExpenses, let carId = car.id {
+            expenses = expensesRepository.fetchAllSessions(car.id!)
+            totalCost = getTotalCost()
+        } else {
+            expenses = []
+            totalCost = 0
+        }
 
         statData = SharedStatsData(
             co2Saved: getCo2Saved(),

@@ -109,10 +109,12 @@ class ExpensesRepository {
         }
     }
     
-    func fetchAllSessions() -> [Expense] {
+    func fetchAllSessions(_ carId: Int64? = nil) -> [Expense] {
 
         var sessionsList: [Expense] = []
-        let query = chargingSessionsTable.order(id.desc)
+        let query = carId != nil
+            ? chargingSessionsTable.filter(carIdColumn == carId).order(id.desc)
+            : chargingSessionsTable.order(id.desc)
 
         do {
             for session in try db.prepare(query) {
