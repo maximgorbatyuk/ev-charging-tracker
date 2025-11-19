@@ -39,8 +39,8 @@ class UserSettingsViewModel: ObservableObject {
             } ?? []
     }
 
-    func hasAnyExpense() -> Bool {
-        return expensesRepository.expensesCount() > 0
+    func hasAnyExpense(_ carId: Int64? = nil) -> Bool {
+        return expensesRepository.expensesCount(carId) > 0
     }
 
     func getDefaultCurrency() -> Currency {

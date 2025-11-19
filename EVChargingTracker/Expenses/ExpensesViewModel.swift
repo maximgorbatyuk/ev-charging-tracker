@@ -12,6 +12,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     @Published var expenses: [Expense] = []
 
     var totalCost: Double = 0.0
+    var hasAnyExpense = false
 
     var filterButtons: [FilterButtonItem] = []
     let analyticsScreenName = "all_expenses_screen"
@@ -99,10 +100,15 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
         let car = self.reloadSelectedCarForExpenses()
         if let car = car, let carId = car.id {
+            hasAnyExpense = (db.expensesRepository?.expensesCount(carId) ?? 0) > 0
+
             expenses = chargingSessionsRepository.fetchCarSessions(
                 carId : carId,
                 expenseTypeFilters: expenseTypeFilters)
             totalCost = getTotalCost()
+        } else {
+            hasAnyExpense = false
+            expenses = []
         }
     }
 

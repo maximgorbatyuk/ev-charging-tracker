@@ -73,6 +73,7 @@
 "Total costs" = "Toplam maliyetler";
 "All car expenses" = "Tüm araba harcamaları";
 "No expenses yet" = "Henüz harcama yok";
+"No expenses of this type yet" = "Henüz bu türden harcama yok";
 "Add your first expense to start tracking" = "Takibe başlamak için ilk harcamanızı ekleyin";
 
 "Delete expense" = "Harcama sil";

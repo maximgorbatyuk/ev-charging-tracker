@@ -76,6 +76,7 @@
 "Total costs" = "Общие расходы";
 "All car expenses" = "Все расходы";
 "No expenses yet" = "Пока нет записей";
+"No expenses of this type yet" = "Пока нет записей этого типа";
 "Add your first expense to start tracking" = "Добавьте первую запись расхода, чтобы начать учет";
 
 "Delete expense" = "Удалить расход";

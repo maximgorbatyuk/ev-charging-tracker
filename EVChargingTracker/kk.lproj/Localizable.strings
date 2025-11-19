@@ -77,6 +77,7 @@
 "Total costs" = "Жалпы шығындар";
 "All car expenses" = "Барлық шығындары";
 "No expenses yet" = "Әзірге шығындар жоқ";
+"No expenses of this type yet" = "Әзірге осы типтегі шығындар жоқ";
 "Add your first expense to start tracking" = "Бақылауды бастау үшін алғашқы шығыныңызды қосыңыз";
 
 "Delete expense" = "Шығынды жою";

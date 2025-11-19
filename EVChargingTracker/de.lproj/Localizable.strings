@@ -73,6 +73,7 @@
 "Total costs" = "Gesamtkosten";
 "All car expenses" = "Alle Autoausgaben";
 "No expenses yet" = "Noch keine Ausgaben";
+"No expenses of this type yet" = "Noch keine Ausgaben dieses Typs";
 "Add your first expense to start tracking" = "Fügen Sie Ihre erste Ausgabe hinzu, um das Tracking zu starten";
 
 "Delete expense" = "Ausgabe löschen";

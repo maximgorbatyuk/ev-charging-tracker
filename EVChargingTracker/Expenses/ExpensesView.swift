@@ -46,19 +46,18 @@ struct ExpensesView: SwiftUICore.View {
                         }
                         .padding(.horizontal)
 
-                        if (viewModel.totalCost > 0 &&
-                            viewModel.selectedCarForExpenses != nil) {
-                            CostsBlockView(
-                                title: L("Total costs"),
-                                hint: nil,
-                                currency: viewModel.selectedCarForExpenses!.expenseCurrency,
-                                costsValue: viewModel.totalCost,
-                                perKilometer: false)
-                        }
-
-                        if viewModel.expenses.isEmpty {
+                        if (!viewModel.hasAnyExpense) {
                             emptyStateView
                         } else {
+
+                            if (viewModel.selectedCarForExpenses != nil) {
+                                CostsBlockView(
+                                    title: L("Total costs"),
+                                    hint: nil,
+                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
+                                    costsValue: viewModel.totalCost,
+                                    perKilometer: false)
+                            }
 
                             HStack(spacing: 8) {
                                 ForEach(viewModel.filterButtons, id: \.id) { button in
@@ -83,9 +82,15 @@ struct ExpensesView: SwiftUICore.View {
                                 }
                             }
                             .padding(.horizontal)
-                            
-                            sessionsListView
+
+                            if viewModel.expenses.isEmpty {
+                                emptyStateForThisTypeView
+                            } else {
+                                sessionsListView
+                            }
                         }
+
+                        
                     }
                     .padding(.vertical)
                 }
@@ -138,6 +143,19 @@ struct ExpensesView: SwiftUICore.View {
         }
         .padding(.top, 60)
     }
+
+    private var emptyStateForThisTypeView: some SwiftUICore.View {
+       VStack(spacing: 16) {
+           Image(systemName: "dollarsign.circle.fill")
+               .font(.system(size: 64))
+               .foregroundColor(.gray.opacity(0.5))
+
+           Text(L("No expenses of this type yet"))
+               .font(.title3)
+               .foregroundColor(.gray)
+       }
+       .padding(.top, 60)
+   }
     
     private var sessionsListView: some SwiftUICore.View {
         LazyVStack(spacing: 12) {

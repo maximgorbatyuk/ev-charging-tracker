@@ -97,9 +97,12 @@ class ExpensesRepository {
         }
     }
 
-    func expensesCount() -> Int {
+    func expensesCount(_ carId: Int64? = nil) -> Int {
         do {
-            return try db.scalar(chargingSessionsTable.count)
+            let query = carId != nil
+                ? chargingSessionsTable.filter(carIdColumn == carId)
+                : chargingSessionsTable
+            return try db.scalar(query.count)
         } catch {
             print("Failed to get expenses count: \(error)")
             return 0
