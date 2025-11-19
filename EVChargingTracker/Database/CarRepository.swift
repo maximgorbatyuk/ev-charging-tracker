@@ -69,6 +69,15 @@ class CarRepository {
         }
     }
 
+    func truncateTable() -> Void {
+        do {
+            try db.run(table.delete())
+            print("Table truncated successfully")
+        } catch {
+            print("Unable to truncate table: \(error)")
+        }
+    }
+
     func insert(_ car: Car) -> Int64? {
         
         let currentDate = Date()
@@ -112,7 +121,7 @@ class CarRepository {
             return false
         }
     }
-    
+
     func getCarById(_ id: Int64) -> Car? {
         do {
             let query = table.filter(idColumn == id).limit(1)
@@ -148,7 +157,47 @@ class CarRepository {
                 batteryCapacityColumn <- car.batteryCapacity,
                 initialMileageColumn <- car.initialMileage,
                 currentMileageColumn <- car.currentMileage,
-                milleageSyncedAtColumn <- car.milleageSyncedAt
+                expenseCurrencyColumn <- car.expenseCurrency.rawValue,
+                milleageSyncedAtColumn <- car.milleageSyncedAt,
+                selectedForTrackingColumn <- car.selectedForTracking
+            )
+            let updated = try db.run(update)
+            return updated > 0
+        } catch {
+            print("Update failed: \(error)")
+            return false
+        }
+    }
+
+    func getCarsCountExcludingId(_ carIdToExclude: Int64) -> Int {
+        let carsToCount = table.filter(idColumn != carIdToExclude)
+        do {
+            return try db.scalar(carsToCount.count)
+        } catch {
+            print("Failed to get cars count excluding id \(carIdToExclude): \(error)")
+            return 0
+        }
+    }
+
+    func markAllCarsAsNoTracking(carIdToExclude: Int64) -> Bool {
+        let carsToUpdate = table.filter(idColumn != carIdToExclude)
+        do {
+            let update = carsToUpdate.update(
+                selectedForTrackingColumn <- false
+            )
+            let updated = try db.run(update)
+            return updated > 0
+        } catch {
+            print("Update failed: \(error)")
+            return false
+        }
+    }
+
+    func markCarAsSelectedForTracking(_ id: Int64) -> Bool {
+        let carToUpdate = table.filter(idColumn == id)
+        do {
+            let update = carToUpdate.update(
+                selectedForTrackingColumn <- true
             )
             let updated = try db.run(update)
             return updated > 0
@@ -189,6 +238,34 @@ class CarRepository {
             print("Failed to get cars count: \(error)")
             return 0
         }
+    }
+
+    func getLatestAddedCar() -> Car? {
+        let query = table.order(createdAtColumn.desc).limit(1)
+        do {
+            if let row = try db.pluck(query) {
+                let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
+
+                let rowId = row[idColumn]
+                return Car(
+                    id: rowId,
+                    name: row[nameColumn],
+                    selectedForTracking: row[selectedForTrackingColumn],
+                    batteryCapacity: row[batteryCapacityColumn],
+                    expenseCurrency: currency,
+                    currentMileage: row[currentMileageColumn],
+                    initialMileage: row[initialMileageColumn],
+                    milleageSyncedAt: row[milleageSyncedAtColumn],
+                    createdAt: row[createdAtColumn]
+                )
+            } else {
+                return nil
+            }
+        } catch {
+            print("Failed to fetch latest added car: \(error)")
+        }
+
+        return nil
     }
 
     func getAllCars() -> [Car] {

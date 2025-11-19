@@ -11,7 +11,6 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
 
-    var defaultCurrency: Currency
     var statData: SharedStatsData?
     var totalCost: Double = 0.0
 
@@ -35,14 +34,18 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         self.expensesRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
 
-        self.defaultCurrency = self.db.userSettingsRepository!.fetchCurrency()
-
         loadSessions()
     }
 
     func loadSessions() {
-        expenses = expensesRepository.fetchAllSessions()
-        totalCost = getTotalCost()
+        self._selectedCarForExpenses = self.reloadSelectedCarForExpenses()
+        if let car = self._selectedCarForExpenses, let carId = car.id {
+            expenses = expensesRepository.fetchAllSessions(carId)
+            totalCost = getTotalCost()
+        } else {
+            expenses = []
+            totalCost = 0
+        }
 
         statData = SharedStatsData(
             co2Saved: getCo2Saved(),
@@ -57,7 +60,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     // TODO mgorbatyuk: avoid code duplication with saveNewExpense
     func saveChargingSession(_ chargingSessionResult: AddExpenseViewResult) -> Void {
 
-        var selectedCar = self.selectedCarForExpenses
+        let selectedCar = self.selectedCarForExpenses
         var carId: Int64? = nil
 
         if (selectedCar == nil) {
@@ -153,9 +156,12 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         return totalCost / Double(totalDistance)
     }
 
-    func getDefaultCurrency() -> Currency {
-        self.defaultCurrency = self.db.userSettingsRepository!.fetchCurrency()
-        return defaultCurrency
+    func getAddExpenseCurrency() -> Currency {
+        if selectedCarForExpenses != nil {
+            return selectedCarForExpenses!.expenseCurrency
+        }
+
+        return self.db.userSettingsRepository!.fetchCurrency()
     }
     
     func getChargingSessionsCount() -> Int {

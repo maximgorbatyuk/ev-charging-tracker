@@ -16,6 +16,7 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var isNotificationsEnabled: Bool = false
 
     @State private var showingAppAboutModal = false
+    @State private var showAddCarModal = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -100,12 +101,12 @@ struct UserSettingsView: SwiftUICore.View {
 
                                     showEditCurrencyModal = true
                                 }) {
-                                    Text("\(viewModel.defaultCurrency.displayName) (\(viewModel.defaultCurrency.rawValue))")
+                                    Text(viewModel.defaultCurrency.shortName)
                                         .fontWeight(.semibold)
                                         .font(.system(size: 16, weight: .bold))
                                 }
                             } else {
-                                Text("\(String(describing: viewModel.defaultCurrency).uppercased()) (\(viewModel.defaultCurrency.rawValue))")
+                                Text(viewModel.defaultCurrency.shortName)
                                     .fontWeight(.semibold)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.gray)
@@ -120,21 +121,36 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                 }
 
-                if (viewModel.getCarsCount() > 0) {
-                    Section(header: Text(L("Cars"))) {
-                        VStack(alignment: .leading) {
-                            ForEach(viewModel.allCars) { car in
-                                CarRecordView(
-                                    car: car,
-                                    onEdit: {
-                                        analytics.trackEvent("card_edit_button_clicked", properties: [
-                                                "screen": "user_settings_screen",
-                                                "button_name": "car_edit"
-                                            ])
+                Section(header: Text(L("Cars"))) {
+                    ForEach(viewModel.allCars) { car in
+                        Button(action: {
+                            analytics.trackEvent("car_edit_button_clicked", properties: [
+                                    "screen": "user_settings_screen",
+                                    "button_name": "car_edit"
+                                ])
 
-                                        editingCar = car
-                                    })
-                            }
+                            self.editingCar = car
+                        }) {
+                            CarRecordView(car: car)
+                        }
+                    }
+
+                    Button(action: {
+                        analytics.trackEvent("add_car_button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "Add new car"
+                            ])
+
+                        self.editingCar = nil
+                        showAddCarModal = true
+                    }) {
+                        HStack {
+                            Image(systemName: "car.2.fill")
+                                .foregroundColor(.green)
+
+                            Text(L("Add new car"))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
                         }
                     }
                 }
@@ -229,7 +245,7 @@ struct UserSettingsView: SwiftUICore.View {
                         .buttonStyle(.plain)
 
                         Button(action: {
-                            NotificationManager.shared.sendNotification(
+                            _ = NotificationManager.shared.sendNotification(
                                 title: "Hello!",
                                 body: "This is a test notification"
                             )
@@ -239,13 +255,20 @@ struct UserSettingsView: SwiftUICore.View {
                         .buttonStyle(.plain)
 
                         Button(action: {
-                            NotificationManager.shared.scheduleNotification(
+                            _ = NotificationManager.shared.scheduleNotification(
                                 title: "Reminder",
                                 body: "5 seconds have passed!",
                                 afterSeconds: 5
                             )
                         }) {
                             Text("Schedule for 5 seconds")
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Button(action: {
+                            viewModel.deleteAllData()
+                        }) {
+                            Text("Delete all data")
                         }
                         .buttonStyle(.plain)
                     }
@@ -260,41 +283,11 @@ struct UserSettingsView: SwiftUICore.View {
                         viewModel.saveDefaultCurrency(newCurrency)
                     })
             }
+            .sheet(isPresented: $showAddCarModal) {
+                CallEditCarView(carToEdit: nil)
+            }
             .sheet(item: $editingCar) { car in
-                EditCarView(
-                    car: car,
-                    onSave: { updated in
-                        
-                        if updated.name.trimmingCharacters(in: .whitespaces).isEmpty {
-                            // TODO mgorbatyuk: show alert
-                            return
-                        }
-
-                        if let batteryCapacity = updated.batteryCapacity, batteryCapacity < 0 {
-                            // TODO mgorbatyuk: show alert
-                            return
-                        }
-
-                        guard let carToUpdate = viewModel.getCarById(car.id) else {
-                            // TODO mgorbatyuk: alert that car was not found
-                            return
-                        }
-
-                        carToUpdate.updateValues(
-                            name: updated.name,
-                            batteryCapacity: updated.batteryCapacity,
-                            intialMileage: updated.initialMileage,
-                            currentMileage: updated.currentMileage)
-
-                        _ = viewModel.updateCar(car: carToUpdate)
-
-                        editingCar = nil
-                        viewModel.refetchCars()
-                    },
-                    onCancel: {
-                        editingCar = nil
-                    }
-                )
+                CallEditCarView(carToEdit: car)
             }
             .onAppear {
                 analytics.trackScreen("user_settings_screen")
@@ -307,6 +300,77 @@ struct UserSettingsView: SwiftUICore.View {
                 AboutAppSubView()
             }
         }
+    }
+
+    private func CallEditCarView(carToEdit: CarDto?) -> some SwiftUICore.View {
+
+        let hasOtherCars =
+            carToEdit != nil && viewModel.hasOtherCars(carIdToExclude: carToEdit!.id!)
+
+        return EditCarView(
+            car: carToEdit,
+            defaultCurrency: carToEdit?.expenseCurrency ?? viewModel.getDefaultCurrency(),
+            defaultValueForSelectedForTracking: carToEdit == nil,
+            hasOtherCars: hasOtherCars,
+            onSave: { updated in
+                
+                if updated.name.trimmingCharacters(in: .whitespaces).isEmpty {
+                    // TODO mgorbatyuk: show alert
+                    return
+                }
+
+                if let batteryCapacity = updated.batteryCapacity, batteryCapacity < 0 {
+                    // TODO mgorbatyuk: show alert
+                    return
+                }
+                
+                if (editingCar != nil) {
+                    guard let carToUpdate = viewModel.getCarById(carToEdit!.id!) else {
+                        // TODO mgorbatyuk: alert that car was not found
+                        return
+                    }
+
+                    carToUpdate.updateValues(
+                        name: updated.name,
+                        batteryCapacity: updated.batteryCapacity,
+                        intialMileage: updated.initialMileage,
+                        currentMileage: updated.currentMileage,
+                        expenseCurrency: updated.expenseCurrency,
+                        selectedForTracking: updated.selectedForTracking)
+
+                    _ = viewModel.updateCar(car: carToUpdate)
+
+                    editingCar = nil
+                } else {
+                    let newCar = Car(
+                        name: updated.name,
+                        selectedForTracking: updated.selectedForTracking,
+                        batteryCapacity: updated.batteryCapacity,
+                        expenseCurrency: updated.expenseCurrency,
+                        currentMileage: updated.currentMileage,
+                        initialMileage: updated.initialMileage,
+                        milleageSyncedAt: Date(),
+                        createdAt: Date()
+                    )
+
+                    _ = viewModel.insertCar(newCar)
+                }
+
+                editingCar = nil
+                showAddCarModal = false
+                viewModel.refetchCars()
+            },
+            onDelete: { carToBeDeleted in
+                viewModel.deleteCar(carToBeDeleted.id!, selectedForTracking: carToBeDeleted.selectedForTracking)
+
+                showAddCarModal = false
+                editingCar = nil
+            },
+            onCancel: {
+                editingCar = nil
+                showAddCarModal = false
+            }
+        )
     }
 
     private func openWebURL(_ url: URL) {

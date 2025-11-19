@@ -11,8 +11,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
 
-    var defaultCurrency: Currency
     var totalCost: Double = 0.0
+    var hasAnyExpense = false
 
     var filterButtons: [FilterButtonItem] = []
     let analyticsScreenName = "all_expenses_screen"
@@ -34,8 +34,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         self.chargingSessionsRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
-
-        self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
 
         self.filterButtons = [
             FilterButtonItem(
@@ -100,8 +98,18 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
-        expenses = chargingSessionsRepository.fetchAllSessions(expenseTypeFilters)
-        totalCost = getTotalCost()
+        let car = self.reloadSelectedCarForExpenses()
+        if let car = car, let carId = car.id {
+            hasAnyExpense = (db.expensesRepository?.expensesCount(carId) ?? 0) > 0
+
+            expenses = chargingSessionsRepository.fetchCarSessions(
+                carId : carId,
+                expenseTypeFilters: expenseTypeFilters)
+            totalCost = getTotalCost()
+        } else {
+            hasAnyExpense = false
+            expenses = []
+        }
     }
 
     // TODO mgorbatyuk: avoid code duplication with saveChargingSession
@@ -191,9 +199,12 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
     }
 
-    func getDefaultCurrency() -> Currency {
-        self.defaultCurrency = db.userSettingsRepository!.fetchCurrency()
-        return defaultCurrency
+    func getAddExpenseCurrency() -> Currency {
+        if (selectedCarForExpenses != nil) {
+            return selectedCarForExpenses!.expenseCurrency
+        }
+
+        return db.userSettingsRepository!.fetchCurrency()
     }
 
     func hasAnyCar() -> Bool {

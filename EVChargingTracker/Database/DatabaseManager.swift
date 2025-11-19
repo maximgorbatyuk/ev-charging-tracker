@@ -104,4 +104,11 @@ class DatabaseManager {
             migrationRepository!.addMigrationVersion()
         }
     }
+
+    func deleteAllData() -> Void {
+        expensesRepository!.truncateTable()
+        plannedMaintenanceRepository!.truncateTable()
+        delayedNotificationsRepository!.truncateTable()
+        carRepository!.truncateTable()
+    }
 }

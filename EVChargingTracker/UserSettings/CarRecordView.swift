@@ -13,7 +13,6 @@ struct CarRecordView: SwiftUICore.View  {
     @ObservedObject private var loc = LocalizationManager.shared
 
     let car: CarDto
-    let onEdit: () -> Void
 
     var body: some SwiftUICore.View {
         // compute common values up front to simplify chained expressions
@@ -26,27 +25,14 @@ struct CarRecordView: SwiftUICore.View  {
                     .foregroundColor(.gray)
                 Spacer()
 
-                Button(action: onEdit) {
-                    Image(systemName: "pencil")
-                        .foregroundColor(.gray.opacity(0.7))
-                }
+                Image(systemName: "pencil")
+                    .foregroundColor(.gray.opacity(0.7))
             }
             
             HStack(spacing: 20) {
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(L("Initial millage"))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-
-                    Text("\(car.initialMileage.formatted()) km")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(textColor)
-                }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(L("Current millage"))
+                    Text(L("Current mileage"))
                         .font(.caption)
                         .foregroundColor(.gray)
 
@@ -56,18 +42,26 @@ struct CarRecordView: SwiftUICore.View  {
                         .foregroundColor(textColor)
                 }
 
-                // Safely unwrap optional batteryCapacity to avoid complex optional chaining inside interpolations
-                if let battery = car.batteryCapacity {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L("Battery"))
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L("Rides"))
+                        .font(.caption)
+                        .foregroundColor(.gray)
 
-                        Text("\(battery.formatted()) kWh")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(textColor)
-                    }
+                    Text("\((car.currentMileage - car.initialMileage).formatted()) km")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(textColor)
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L("Currency"))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+
+                    Text(car.expenseCurrency.shortName)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(textColor)
                 }
             }
 

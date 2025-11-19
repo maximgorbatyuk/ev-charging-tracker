@@ -97,6 +97,15 @@ class PlannedMaintenanceRepository {
         }
     }
 
+    func truncateTable() -> Void {
+        do {
+            try db.run(table.delete())
+            print("Table truncated successfully")
+        } catch {
+            print("Unable to truncate table: \(error)")
+        }
+    }
+
     func recordsCount() -> Int {
         do {
             return try db.scalar(table.count)
@@ -122,6 +131,16 @@ class PlannedMaintenanceRepository {
         } catch {
             print("Update failed: \(error)")
             return false
+        }
+    }
+
+    func deleteRecordsForCar(_ carId: Int64) -> Void {
+        let recordsToDelete = table.filter(carIdColumn == carId)
+        do {
+            try db.run(recordsToDelete.delete())
+            print("Deleted records for car id: \(carId)")
+        } catch {
+            print("Delete failed: \(error)")
         }
     }
 

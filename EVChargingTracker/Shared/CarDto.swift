@@ -8,10 +8,11 @@
 import Foundation
 
 struct CarDto: Identifiable {
-    let id: Int64
+    let id: Int64?
     let name: String
     let selectedForTracking: Bool
     let batteryCapacity: Double?
     let currentMileage: Int // in km
     let initialMileage: Int // in km
+    let expenseCurrency: Currency
 }

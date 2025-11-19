@@ -51,6 +51,13 @@ Perfect for EV owners who want to understand their true cost of ownership and op
 - 6.5: 1242 x 2688
 - 6.3: 1179 x 2556
 
+## Contributors
+
+- [@maximgorbatyuk](https://github.com/maximgorbatyuk) - Product ownership, iOS development
+- [@tolgasanci](https://github.com/tolgasanci) - Turkish translation
+- @aamiirkaa - German translation
+- @shyngysn - Kazakh translation
+
 ## Development references
 
 - [Swift UI icons](https://github.com/andrewtavis/sf-symbols-online/blob/master/README.md)

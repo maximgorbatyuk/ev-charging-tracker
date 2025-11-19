@@ -34,12 +34,13 @@ class UserSettingsViewModel: ObservableObject {
                     selectedForTracking: $0.selectedForTracking,
                     batteryCapacity: $0.batteryCapacity,
                     currentMileage: $0.currentMileage,
-                    initialMileage: $0.initialMileage)
+                    initialMileage: $0.initialMileage,
+                    expenseCurrency: $0.expenseCurrency)
             } ?? []
     }
 
-    func hasAnyExpense() -> Bool {
-        return expensesRepository.expensesCount() > 0
+    func hasAnyExpense(_ carId: Int64? = nil) -> Bool {
+        return expensesRepository.expensesCount(carId) > 0
     }
 
     func getDefaultCurrency() -> Currency {
@@ -83,9 +84,14 @@ class UserSettingsViewModel: ObservableObject {
                 selectedForTracking: car.selectedForTracking,
                 batteryCapacity: car.batteryCapacity,
                 currentMileage: car.currentMileage,
-                initialMileage: car.initialMileage
+                initialMileage: car.initialMileage,
+                expenseCurrency: car.expenseCurrency
             )
         }
+    }
+
+    func hasOtherCars(carIdToExclude: Int64) -> Bool {
+        return (db.carRepository?.getCarsCountExcludingId(carIdToExclude) ?? 0) > 0
     }
 
     func getCarsCount() -> Int {
@@ -95,17 +101,54 @@ class UserSettingsViewModel: ObservableObject {
     func getCarById(_ id: Int64) -> Car? {
         return db.carRepository?.getCarById(id)
     }
+    
+    func insertCar(_ car: Car) -> Int64? {
+        let newCarId = db.carRepository?.insert(car)
 
-    // Update car editable fields and notify UI to refresh
-    func updateCar(car: Car) -> Bool {
-        let success = db.carRepository?.updateCar(car: car) ?? false
-        if success {
+        if newCarId != nil {
+            if (car.selectedForTracking) {
+                _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: newCarId!)
+            }
+
             DispatchQueue.main.async {
                 self.objectWillChange.send()
             }
         }
 
-        return success
+        return newCarId
+    }
+
+    // Update car editable fields and notify UI to refresh
+    func updateCar(car: Car) -> Bool {
+        let carUpdateSuccess = db.carRepository?.updateCar(car: car) ?? false
+        let carExpensesUpdateSyccess = db.expensesRepository?.updateCarExpensesCurrency(car) ?? false
+
+        if (car.selectedForTracking) {
+            _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: car.id!)
+        }
+
+        if carUpdateSuccess && carExpensesUpdateSyccess {
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
+
+        return carUpdateSuccess && carExpensesUpdateSyccess
+    }
+
+    func deleteCar(_ carId: Int64, selectedForTracking: Bool) -> Void {
+        db.expensesRepository?.deleteRecordsForCar(carId)
+        db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
+        _ = db.carRepository?.delete(id: carId)
+
+        if (selectedForTracking) {
+            let latestCar = db.carRepository?.getLatestAddedCar()
+            if let latestCar = latestCar, let latestCarId = latestCar.id {
+                _ = db.carRepository!.markCarAsSelectedForTracking(latestCarId)
+            }
+        }
+
+        refetchCars()
     }
 
     func refetchCars() {
@@ -118,7 +161,8 @@ class UserSettingsViewModel: ObservableObject {
                         selectedForTracking: $0.selectedForTracking,
                         batteryCapacity: $0.batteryCapacity,
                         currentMileage: $0.currentMileage,
-                        initialMileage: $0.initialMileage)
+                        initialMileage: $0.initialMileage,
+                        expenseCurrency: $0.expenseCurrency)
                 } ?? []
             self.objectWillChange.send()
         }
@@ -126,6 +170,15 @@ class UserSettingsViewModel: ObservableObject {
 
     func isDevelopmentMode() -> Bool {
         return environment.isDevelopmentMode()
+    }
+    
+    func deleteAllData() -> Void {
+        if (!isDevelopmentMode()) {
+            print("Attempt to delete all data in non-development mode. Operation aborted.")
+            return
+        }
+
+        db.deleteAllData()
     }
 
     var allCars : [CarDto] {

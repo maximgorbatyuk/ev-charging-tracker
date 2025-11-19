@@ -16,8 +16,8 @@
 "kWh / 100km" = "kWh / 100km";
 "Charges" = "Charges";
 
-"Initial millage" = "Initial millage";
-"Current millage" = "Current millage";
+"Initial mileage" = "Initial mileage";
+"Current mileage" = "Current mileage";
 "Battery" = "Battery";
 "Tracking" = "Tracking";
 "Not tracking" = "Not tracking";
@@ -73,6 +73,7 @@
 "Total costs" = "Total costs";
 "All car expenses" = "All car expenses";
 "No expenses yet" = "No expenses yet";
+"No expenses of this type yet" = "No expenses of this type yet";
 "Add your first expense to start tracking" = "Add your first expense to start tracking";
 
 "Delete expense" = "Delete expense";
@@ -135,6 +136,7 @@
 
 "Basic info" = "Basic info";
 "Name" = "Name";
+"Rides" = "Rides";
 "Car mileage" = "Car mileage";
 "Initial (km)" = "Initial (km)";
 "Current (km)" = "Current (km)";
@@ -145,6 +147,10 @@
 
 "Select currency" = "Select currency";
 "Select default currency" = "Select default currency";
+"Add new car" = "Add new car";
+"Delete car" = "Delete car";
+"Delete selected car? This action cannot be undone." = "Delete selected car? This action cannot be undone.";
+"If you change it, then other active car will be unselected automatically." = "If you change it, then other active car will be unselected automatically.";
 
 "Filter.All" = "All";
 "Filter.Charges" = "Charges";

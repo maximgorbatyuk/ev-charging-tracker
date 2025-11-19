@@ -12,12 +12,12 @@
 "Cancel" = "İptal";
 "Save" = "Kaydet";
 "Close" = "Kapat";
-"CO₂ saved (kg)" = "CO₂ saved (kg)";
+"CO₂ saved (kg)" = "CO₂ tasarrufu (kg)";
 "kWh / 100km" = "kWh / 100km";
 "Charges" = "Şarj";
 
-"Initial millage" = "İlk kilometre";
-"Current millage" = "Mevcut kilometre";
+"Initial mileage" = "İlk kilometre";
+"Current mileage" = "Mevcut kilometre";
 "Battery" = "Pil";
 "Tracking" = "Tracking";
 "Not tracking" = "Not tracking";
@@ -73,13 +73,15 @@
 "Total costs" = "Toplam maliyetler";
 "All car expenses" = "Tüm araba harcamaları";
 "No expenses yet" = "Henüz harcama yok";
+"No expenses of this type yet" = "Henüz bu türden harcama yok";
 "Add your first expense to start tracking" = "Takibe başlamak için ilk harcamanızı ekleyin";
 
 "Delete expense" = "Harcama sil";
-"Delete expense on %@ with amount %@? This action cannot be undone." = "Harcamayı %@ tarihinde %@ tutarında silmek istiyor musunuz? Bu işlem geri alınamaz.";
-"Delete expense on %@? This action cannot be undone." = "%@ tarihindeki harcamayı silmek istiyor musunuz? Bu işlem geri alınamaz.";
-"Delete selected expense? This action cannot be undone." = "Seçilen gideri silmek ister misiniz? Bu işlem geri alınamaz. <";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Delete expense on %@ with amount %@? This action cannot be undone.";
+"Delete expense on %@? This action cannot be undone." = "Delete expense on %@? This action cannot be undone.";
+"Delete selected expense? This action cannot be undone." = "Seçilen harcamayı silmek ister misiniz? Bu işlem geri alınamaz.";
 "Delete" = "Sil";
+"Rides" = "Sürüşler";
 
 "Energy" = "Enerji";
 "Expense type" = "Harcama türü";
@@ -134,11 +136,25 @@
 "Additional information that will be helpful" = "Yardımcı olabilecek ek bilgiler";
 
 "Select currency" = "Para birimi seç";
-"Select default currency" = "Varsayılan para birimini seç";
+"Select default currency" = "Varsayılan para birimini seçin";
 "No charging sessions yet" = "Henüz şarj oturumu yok";
 "Add your first session to start tracking" = "Takibi başlatmak için ilk oturumunuzu ekleyin";
+"Add new car" = "Yeni araba ekle";
+"Delete car" = "Arabayı sil";
+"Delete selected car? This action cannot be undone." = "Seçilen aracı silmek ister misiniz? Bu işlem geri alınamaz.";
+"If you change it, then other active car will be unselected automatically." = "Değiştirirseniz, diğer aktif araç otomatik olarak seçilmez hale gelecektir.";
 
-"Filter.All" = "Tüm";
-"Filter.Charges" = "Ücretler";
-"Filter.Repair/maintenance" = "Onarım/bakım";
-"Filter.Carwash" = "Araba yıkama";
+"Basic info" = "Temel bilgi";
+"Name" = "İsim";
+"Car mileage" = "Araba kilometresi";
+"Initial (km)" = "İlk (km)";
+"Current (km)" = "Mevcut (km)";
+"Remain at odometer" = "Kilometrede hatırlat";
+"Maintenance reminder" = "Bakım hatırlatıcı";
+"Some maintenance tasks due" = "Some maintenance tasks due";
+"You have %d maintenance task(s) due based on your car's current mileage." = "You have %d maintenance task(s) due based on your car's current mileage.";
+
+"Filter.All" = "Tümü";
+"Filter.Charges" = "Şarj";
+"Filter.Repair/maintenance" = "Bakım";
+"Filter.Carwash" = "Araba Yıkama";

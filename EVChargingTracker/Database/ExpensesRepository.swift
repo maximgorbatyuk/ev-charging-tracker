@@ -63,6 +63,15 @@ class ExpensesRepository {
         }
     }
 
+    func truncateTable() -> Void {
+        do {
+            try db.run(chargingSessionsTable.delete())
+            print("Table truncated successfully")
+        } catch {
+            print("Unable to truncate table: \(error)")
+        }
+    }
+
     func insertSession(_ session: Expense) -> Int64? {
         
         do {
@@ -88,25 +97,67 @@ class ExpensesRepository {
         }
     }
 
-    func expensesCount() -> Int {
+    func expensesCount(_ carId: Int64? = nil) -> Int {
         do {
-            return try db.scalar(chargingSessionsTable.count)
+            let query = carId != nil
+                ? chargingSessionsTable.filter(carIdColumn == carId)
+                : chargingSessionsTable
+            return try db.scalar(query.count)
         } catch {
             print("Failed to get expenses count: \(error)")
             return 0
         }
     }
+    
+    func fetchAllSessions(_ carId: Int64? = nil) -> [Expense] {
 
-    func fetchAllSessions(_ expenseTypeFilters: [ExpenseType] = []) -> [Expense] {
+        var sessionsList: [Expense] = []
+        let query = carId != nil
+            ? chargingSessionsTable.filter(carIdColumn == carId).order(id.desc)
+            : chargingSessionsTable.order(id.desc)
+
+        do {
+            for session in try db.prepare(query) {
+                let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .other
+                let currencyEnum = Currency(rawValue: session[currency]) ?? .usd
+
+                let chargingSession = Expense(
+                    id: session[id],
+                    date: session[date],
+                    energyCharged: session[energyCharged],
+                    chargerType: chargerTypeEnum,
+                    odometer: session[odometer],
+                    cost: session[cost],
+                    notes: session[notes],
+                    isInitialRecord: session[isInitialRecord],
+                    expenseType: ExpenseType(rawValue: session[expenseType]) ?? .other,
+                    currency: currencyEnum,
+                    carId: session[carIdColumn]
+                )
+
+                sessionsList.append(chargingSession)
+            }
+        } catch {
+            print("Fetch failed: \(error)")
+        }
         
+        return sessionsList
+    }
+
+    func fetchCarSessions(carId: Int64?, expenseTypeFilters: [ExpenseType] = []) -> [Expense] {
+
         var sessionsList: [Expense] = []
 
         var query: QueryType
         if (!expenseTypeFilters.isEmpty) {
             let stringValues = expenseTypeFilters.map { $0.rawValue }
-            query = chargingSessionsTable.filter(stringValues.contains(expenseType)).order(id.desc)
+            query = chargingSessionsTable
+                .filter(carIdColumn == carId)
+                .filter(stringValues.contains(expenseType)).order(id.desc)
         } else {
-            query = chargingSessionsTable.order(id.desc)
+            query = chargingSessionsTable
+                .filter(carIdColumn == carId)
+                .order(id.desc)
         }
 
         do {
@@ -201,6 +252,28 @@ class ExpensesRepository {
         } catch {
             print("Failed to get session count: \(error)")
             return 0
+        }
+    }
+
+    func deleteRecordsForCar(_ carId: Int64) -> Void {
+        let recordsToDelete = chargingSessionsTable.filter(carIdColumn == carId)
+        do {
+            try db.run(recordsToDelete.delete())
+            print("Deleted records for car id: \(carId)")
+        } catch {
+            print("Delete failed: \(error)")
+        }
+    }
+
+    func updateCarExpensesCurrency(_ car: Car) -> Bool {
+        let recordToUpdateQuery = chargingSessionsTable.filter(carIdColumn == car.id)
+        do {
+            try db.run(recordToUpdateQuery.update(currency <- car.expenseCurrency.rawValue))
+            print("Updated expenses currency for car id: \(car.id ?? 0)")
+            return true
+        } catch {
+            print("Update failed: \(error)")
+            return false
         }
     }
 }

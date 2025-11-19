@@ -142,6 +142,15 @@ class DelayedNotificationsRepository {
         }
     }
 
+    func truncateTable() -> Void {
+        do {
+            try db.run(table.delete())
+            print("Table truncated successfully")
+        } catch {
+            print("Unable to truncate table: \(error)")
+        }
+    }
+
     func deleteMaintenanceRelatedNotificationIfExists(maintenanceRecordId: Int64) -> Void {
         let recordToDelete = getRecordByMaintenanceId(maintenanceRecordId)
         if (recordToDelete == nil) {

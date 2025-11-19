@@ -17,8 +17,8 @@
 "kWh / 100km" = "кВт / 100км";
 "Charges" = "Зарядок";
 
-"Initial millage" = "Начальный пробег";
-"Current millage" = "Текущий пробег";
+"Initial mileage" = "Начальный пробег";
+"Current mileage" = "Текущий пробег";
 "Battery" = "Батарея";
 "Tracking" = "Ведется учет";
 "Not tracking" = "Не выбран для учета";
@@ -76,6 +76,7 @@
 "Total costs" = "Общие расходы";
 "All car expenses" = "Все расходы";
 "No expenses yet" = "Пока нет записей";
+"No expenses of this type yet" = "Пока нет записей этого типа";
 "Add your first expense to start tracking" = "Добавьте первую запись расхода, чтобы начать учет";
 
 "Delete expense" = "Удалить расход";
@@ -138,6 +139,7 @@
 
 "Basic info" = "О машине";
 "Name" = "Название";
+"Rides" = "Поездки";
 "Car mileage" = "Пробег автомобиля";
 "Initial (km)" = "Начальный (км)";
 "Current (km)" = "Текущий (км)";
@@ -147,6 +149,10 @@
 
 "Select currency" = "Выберите валюту";
 "Select default currency" = "Выберите валюту по умолчанию";
+"Add new car" = "Добавить автомобиль";
+"Delete car" = "Удалить автомобиль";
+"Delete selected car? This action cannot be undone." = "Удалить выбранный автомобиль? Это действие нельзя отменить.";
+"If you change it, then other active car will be unselected automatically." = "Если вы выберите этот автомобиль для учета, то другой активный автомобиль будет автоматически заменен.";
 
 "Filter.All" = "Все";
 "Filter.Charges" = "Зарядки";

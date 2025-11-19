@@ -53,12 +53,14 @@ class Car {
     func getTotalMileage() -> Int {
         return self.currentMileage - self.initialMileage
     }
-    
+
     func updateValues(
         name: String,
         batteryCapacity: Double?,
         intialMileage: Int,
-        currentMileage: Int) -> Void {
+        currentMileage: Int,
+        expenseCurrency: Currency,
+        selectedForTracking: Bool) -> Void {
         if (!name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
             self.name = name
         }
@@ -75,6 +77,8 @@ class Car {
         if (intialMileage <= self.currentMileage) {
             self.initialMileage = intialMileage
         }
-            
+
+        self.expenseCurrency = expenseCurrency
+        self.selectedForTracking = selectedForTracking
     }
 }
