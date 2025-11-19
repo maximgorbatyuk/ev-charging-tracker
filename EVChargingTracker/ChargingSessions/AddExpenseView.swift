@@ -11,6 +11,7 @@ struct AddExpenseView: SwiftUICore.View {
     let defaultExpenseType: ExpenseType?
     let defaultCurrency: Currency
     let selectedCar: Car?
+    let allCars: [Car]
     let onAdd: (AddExpenseViewResult) -> Void
 
     @Environment(\.dismiss) var dismiss
@@ -27,24 +28,53 @@ struct AddExpenseView: SwiftUICore.View {
     @State private var showingAlert = false
     @State private var carName = ""
     @State private var batteryCapacity = ""
+    @State private var carId: Int64? = nil
 
     @State private var alertMessage: String? = nil
+    @State private var selectedCardForExpense: Car? = nil
 
     @FocusState private var isPricePerKWhFocused: Bool
     @FocusState private var isCostFocused: Bool
+
+    init(
+        defaultExpenseType: ExpenseType?,
+        defaultCurrency: Currency,
+        selectedCar: Car?,
+        allCars: [Car],
+        onAdd: @escaping (AddExpenseViewResult) -> Void) {
+        self.defaultExpenseType = defaultExpenseType
+        self.defaultCurrency = defaultCurrency
+        self.selectedCar = selectedCar
+        self.allCars = allCars
+        self.onAdd = onAdd
+    
+        _carId = State(initialValue: self.selectedCar?.id)
+        _selectedCardForExpense = State(initialValue: self.selectedCar)
+    }
 
     var body: some SwiftUICore.View {
         NavigationView {
                       
             Form {
                 Section(header: Text(L("Expense details"))) {
-                    
-                    if (selectedCar != nil) {
-                        HStack {
-                            Text(L("Car"))
-                            Spacer()
-                            Text(selectedCar!.name)
-                                .disabled(true)
+
+                    if (selectedCardForExpense != nil) {
+
+                        Picker(L("Car"), selection: $carId) {
+                            ForEach(allCars, id: \.self.id) { optionCar in
+                                Text(optionCar.name)
+                                    .tag(optionCar.id)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .onChange(of: carId) { _, newCarId in
+                            analytics.trackEvent("car_select_button_clicked", properties: [
+                                    "screen": "add_expense_screen",
+                                    "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none"),
+                                    "button_name": "car_picker"
+                                ])
+
+                            selectedCardForExpense = allCars.first { $0.id == newCarId }
                         }
                     }
 
@@ -103,7 +133,7 @@ struct AddExpenseView: SwiftUICore.View {
                     HStack {
                         Text(L("Odometer (km)"))
                         Spacer()
-                        TextField(selectedCar?.currentMileage.formatted() ?? "", text: $odometer)
+                        TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                     }
@@ -138,7 +168,7 @@ struct AddExpenseView: SwiftUICore.View {
 
                     
 
-                    if (selectedCar == nil) {
+                    if (selectedCardForExpense == nil) {
                         HStack {
                             Text(L("Car name"))
                             Spacer()
@@ -247,12 +277,12 @@ struct AddExpenseView: SwiftUICore.View {
             isInitialRecord: false,
             expenseType: expenseTypeUnwrapped,
             currency: defaultCurrency,
-            carId: nil
+            carId: selectedCardForExpense?.id
         )
 
         var initialExpenseForNewCar: Expense? = nil
 
-        if (selectedCar == nil) {
+        if (selectedCardForExpense == nil) {
             initialExpenseForNewCar = Expense(
                 date: date,
                 energyCharged: 0.0,
@@ -267,7 +297,7 @@ struct AddExpenseView: SwiftUICore.View {
             )
         }
 
-        var carNameValue = selectedCar?.name
+        var carNameValue = selectedCardForExpense?.name
         if (carNameValue == nil) {
             carNameValue = carName.isEmpty ? nil : carName
         }
@@ -278,6 +308,7 @@ struct AddExpenseView: SwiftUICore.View {
             AddExpenseViewResult(
                 expense: expense,
                 carName: carNameValue,
+                carId: carId,
                 initialOdometr: odo,
                 batteryCapacity: batteryCapacityValue,
                 initialExpenseForNewCar: initialExpenseForNewCar))
@@ -288,6 +319,7 @@ struct AddExpenseView: SwiftUICore.View {
 struct AddExpenseViewResult {
     let expense: Expense
     let carName: String?
+    let carId: Int64?
     let initialOdometr: Int
     let batteryCapacity: Double?
     let initialExpenseForNewCar: Expense?
@@ -298,6 +330,7 @@ struct AddExpenseViewResult {
         defaultExpenseType: nil,
         defaultCurrency: .usd,
         selectedCar: nil,
+        allCars: [],
         onAdd: { session in
             print("Added session: \(session)")
         })

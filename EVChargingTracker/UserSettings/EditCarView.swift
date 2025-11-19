@@ -141,15 +141,8 @@ struct EditCarView: SwiftUICore.View {
                         var initialMileageToSave = car?.initialMileage ?? 0
                         
                         if (car != nil) {
-                            let mileage = Int(mileageText) ?? car!.currentMileage ?? 0
-                            if (mileage >= initialMileageToSave) {
-                                currentMileageToSave = mileage
-                            }
-
-                            let initialMileage = Int(initialMileageText) ?? car!.initialMileage ?? 0
-                            if (initialMileage <= currentMileageToSave) {
-                                initialMileageToSave = initialMileage
-                            }
+                            currentMileageToSave = Int(mileageText) ?? car!.currentMileage
+                            initialMileageToSave = Int(initialMileageText) ?? car!.initialMileage
                         } else {
                             initialMileageToSave = Int(initialMileageText) ?? 0
                             let currentMileageValue = Int(mileageText) ?? 0

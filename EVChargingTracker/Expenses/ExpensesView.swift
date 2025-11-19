@@ -104,6 +104,7 @@ struct ExpensesView: SwiftUICore.View {
                     defaultExpenseType: nil,
                     defaultCurrency: viewModel.getAddExpenseCurrency(),
                     selectedCar: selectedCar,
+                    allCars: viewModel.getAllCars(),
                     onAdd: { newExpenseResult in
 
                         viewModel.saveNewExpense(newExpenseResult)

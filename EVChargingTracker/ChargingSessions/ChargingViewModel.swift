@@ -60,10 +60,19 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     // TODO mgorbatyuk: avoid code duplication with saveNewExpense
     func saveChargingSession(_ chargingSessionResult: AddExpenseViewResult) -> Void {
 
-        let selectedCar = self.selectedCarForExpenses
         var carId: Int64? = nil
+        let allCars = self.getAllCars()
+        let selectedCar = self.selectedCarForExpenses
+        var selectedCarForExpense = selectedCar
 
-        if (selectedCar == nil) {
+        if (chargingSessionResult.carId != nil &&
+            selectedCar != nil &&
+            chargingSessionResult.carId != selectedCar!.id) {
+            carId = chargingSessionResult.carId
+            selectedCarForExpense = allCars.first(where: { $0.id == carId })
+        }
+
+        if (selectedCarForExpense == nil) {
             if (chargingSessionResult.carName == nil) {
 
                 // TODO mgorbatyuk: show error alert to user
@@ -87,9 +96,9 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             chargingSessionResult.initialExpenseForNewCar!.setCarId(carId!)
             self.insertExpense(chargingSessionResult.initialExpenseForNewCar!)
         } else {
-            carId = selectedCar!.id
-            selectedCar!.updateMileage(newMileage: chargingSessionResult.expense.odometer)
-            _ = db.carRepository!.updateMilleage(selectedCar!)
+            carId = selectedCarForExpense!.id
+            selectedCarForExpense!.updateMileage(newMileage: chargingSessionResult.expense.odometer)
+            _ = db.carRepository!.updateMilleage(selectedCarForExpense!)
         }
 
         chargingSessionResult.expense.setCarId(carId)
@@ -154,6 +163,10 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             .compactMap { $0.cost }.reduce(0.0, +)
 
         return totalCost / Double(totalDistance)
+    }
+
+    func getAllCars() -> [Car] {
+        return db.carRepository!.getAllCars()
     }
 
     func getAddExpenseCurrency() -> Currency {

@@ -95,6 +95,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                     defaultExpenseType: .charging,
                     defaultCurrency: viewModel.getAddExpenseCurrency(),
                     selectedCar: selectedCar,
+                    allCars: viewModel.getAllCars(),
                     onAdd: { newExpenseResult in
 
                         viewModel.saveChargingSession(newExpenseResult)

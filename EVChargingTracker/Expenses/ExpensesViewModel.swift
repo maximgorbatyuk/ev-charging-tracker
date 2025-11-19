@@ -112,12 +112,28 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
     }
 
+    func getAllCars() -> [Car] {
+        return db.carRepository!.getAllCars()
+    }
+
     // TODO mgorbatyuk: avoid code duplication with saveChargingSession
     func saveNewExpense(_ newExpenseResult: AddExpenseViewResult) -> Void {
 
-        var selectedCar = self.selectedCarForExpenses
         var carId: Int64? = nil
-        if (selectedCar == nil) {
+        let allCars = self.getAllCars()
+
+        var selectedCar = self.selectedCarForExpenses
+        var selectedCarForExpense = selectedCar
+
+        if (newExpenseResult.carId != nil &&
+            selectedCar != nil &&
+            newExpenseResult.carId != selectedCar!.id) {
+
+            carId = newExpenseResult.carId
+            selectedCarForExpense = allCars.first(where: { $0.id == carId })
+        }
+
+        if (selectedCarForExpense == nil) {
             if (newExpenseResult.carName == nil) {
 
                 // TODO mgorbatyuk: show error alert to user
@@ -141,13 +157,15 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
             self.insertExpense(newExpenseResult.initialExpenseForNewCar!)
         } else {
-            carId = selectedCar!.id
-            selectedCar!.updateMileage(newMileage: newExpenseResult.expense.odometer)
-            _ = self.updateMilleage(selectedCar!)
+            carId = selectedCarForExpense!.id
+            selectedCarForExpense!.updateMileage(newMileage: newExpenseResult.expense.odometer)
+            _ = self.updateMilleage(selectedCarForExpense!)
         }
 
         newExpenseResult.expense.setCarId(carId)
         self.insertExpense(newExpenseResult.expense)
+
+        loadSessions()
 
         if (newExpenseResult.expense.expenseType == .maintenance ||
             newExpenseResult.expense.expenseType == .repair) {
@@ -171,11 +189,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func insertExpense(_ session: Expense) {
-        if let id = chargingSessionsRepository.insertSession(session) {
-            let newSession = session
-            newSession.id = id
-            expenses.insert(newSession, at: 0)
-        }
+        _ = chargingSessionsRepository.insertSession(session)
     }
     
     func updateMilleage(_ car: Car) -> Bool {
