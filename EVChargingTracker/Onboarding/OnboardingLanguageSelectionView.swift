@@ -9,9 +9,12 @@ import SwiftUI
 
 struct OnboardingLanguageSelectionView: SwiftUICore.View {
 
+    let onCurrentLanguageSelected: (_ selectedLanguage: AppLanguage) -> Void
+    
     @ObservedObject var localizationManager: LocalizationManager = .shared
     @ObservedObject var analytics: AnalyticsService = .shared
-    @SwiftUICore.Binding var selectedLanguage: AppLanguage
+
+    @State var selectedLanguage: AppLanguage
 
     var body: some SwiftUICore.View {
         VStack(spacing: 20) {
@@ -50,6 +53,8 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
                         withAnimation(.spring()) {
                             selectedLanguage = language
                             localizationManager.setLanguage(language)
+                            onCurrentLanguageSelected(language)
+
                             analytics.trackEvent("language_selected", properties: [
                                 "language": language.rawValue,
                                 "screen": "onboarding_language_selection"

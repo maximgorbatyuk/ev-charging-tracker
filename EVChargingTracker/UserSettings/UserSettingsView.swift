@@ -175,7 +175,7 @@ struct UserSettingsView: SwiftUICore.View {
                     }
 
                     Button(action: {
-                        UserDefaults.standard.removeObject(forKey: "isOnboardingComplete")
+                        UserDefaults.standard.removeObject(forKey: UserSettingsViewModel.onboardingCompletedKey)
                         analytics.trackEvent("start_onboarding_again_button_clicked", properties: [
                                 "screen": "user_settings_screen",
                                 "button_name": "start_onboarding_again"

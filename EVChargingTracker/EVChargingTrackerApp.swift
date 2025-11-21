@@ -24,7 +24,7 @@ struct EVChargingTrackerApp: App {
                 OnboardingView(
                     onOnboardingSkipped: {
                         isOnboardingComplete = true
-                        analytics.trackEvent("onboarding_skipped")
+                        
                     },
                     onOnboardingCompleted: {
                         isOnboardingComplete = true

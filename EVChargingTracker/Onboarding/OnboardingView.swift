@@ -11,51 +11,19 @@ struct OnboardingView: SwiftUI.View {
 
     let onOnboardingSkipped: () -> Void
     let onOnboardingCompleted: () -> Void
-    
-    private var languageManager = LocalizationManager.shared
 
-    @State private var selectedLanguage: AppLanguage
-    @State private var currentPage: Int
-    private var pages: [OnboardingPageViewModelItem]
-    private var totalPages: Int
-    
+    @StateObject private var viewModel = OnboardingViewModel()
+    @State private var currentPage = 0
+    @State private var continueButtonAsProp = "Continue"
+
+    private var analytics = AnalyticsService.shared
+
     init(
         onOnboardingSkipped: @escaping () -> Void,
         onOnboardingCompleted: @escaping () -> Void) {
             
         self.onOnboardingSkipped = onOnboardingSkipped
         self.onOnboardingCompleted = onOnboardingCompleted
-
-        languageManager = LocalizationManager.shared
-        selectedLanguage = .en
-        currentPage = 0
-        pages = [
-            OnboardingPageViewModelItem(
-                icon: "battery.100percent.bolt",
-                title: L("onboarding.track_your_chargings"),
-                description: L("onboarding.track_your_chargings__subtitle"),
-                color: .orange
-            ),
-            OnboardingPageViewModelItem(
-                icon: "dollarsign.circle.fill",
-                title: L("onboarding.monitor_costs"),
-                description: L("onboarding.monitor_costs__subtitle"),
-                color: .green
-            ),
-            OnboardingPageViewModelItem(
-                icon: "hammer.fill",
-                title: L("onboarding.plan_maintenance"),
-                description: L("onboarding.plan_maintenance__subtitle"),
-                color: .blue
-            ),
-            OnboardingPageViewModelItem(
-                icon: "chart.line.uptrend.xyaxis",
-                title: L("onboarding.view_stats"),
-                description: L("onboarding.view_stats__subtitle"),
-                color: .cyan
-            ),
-        ]
-        totalPages = 1 + pages.count
     }
 
     var body: some SwiftUI.View {
@@ -74,11 +42,11 @@ struct OnboardingView: SwiftUI.View {
             } else {
                 // Content pages - use page-specific color
                 let pageIndex = currentPage - 1
-                if pageIndex < pages.count {
+                if pageIndex < viewModel.pages.count {
                     LinearGradient(
                         colors: [
-                            pages[pageIndex].color.opacity(0.3),
-                            pages[pageIndex].color.opacity(0.1)
+                            viewModel.pages[pageIndex].color.opacity(0.3),
+                            viewModel.pages[pageIndex].color.opacity(0.1)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -91,8 +59,14 @@ struct OnboardingView: SwiftUI.View {
                 // Skip button (only show after language selection)
                 HStack {
                     Spacer()
-                    if currentPage > 0 && currentPage < totalPages - 1 {
-                        Button(L("Skip", language: selectedLanguage)) {
+                    if currentPage > 0 && currentPage < viewModel.totalPages - 1 {
+                        Button(L("Skip")) {
+                            analytics.trackEvent(
+                                "onboarding_skipped_button_clicked",
+                                properties: [
+                                    "screen": "onboarding_screen"
+                                ])
+
                             onOnboardingSkipped()
                         }
                         .foregroundColor(.secondary)
@@ -102,26 +76,35 @@ struct OnboardingView: SwiftUI.View {
 
                 // Page content
                 TabView(selection: $currentPage) {
-                    // Language selection page (page 0)
+
                     OnboardingLanguageSelectionView(
-                        localizationManager: languageManager,
-                        selectedLanguage: $selectedLanguage
+                        onCurrentLanguageSelected: { selectedLanguage in
+                            viewModel.setLanguage(selectedLanguage)
+                            continueButtonAsProp = viewModel.getLocalizedString("Continue")
+                            analytics.trackEvent(
+                                "onboarding_language_changed",
+                                properties: [
+                                    "screen": "onboarding_screen"
+                                ])
+                        },
+                        localizationManager: viewModel.languageManager,
+                        selectedLanguage: viewModel.selectedLanguage
                     )
                     .tag(0)
                     
                     // Content pages (pages 1+)
-                    ForEach(Array(pages.enumerated()), id: \.element.id) { index, page in
+                    ForEach(Array(viewModel.pages.enumerated()), id: \.element.id) { index, page in
                         OnboardingPageView(page: page)
                             .tag(index + 1)
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-                
+
                 // Custom page indicator
                 PageIndicator(
                     currentPage: currentPage,
-                    totalPages: totalPages,
-                    color: currentPage == 0 ? .blue : pages[min(currentPage - 1, pages.count - 1)].color
+                    totalPages: viewModel.totalPages,
+                    color: currentPage == 0 ? .blue : viewModel.pages[min(currentPage - 1, viewModel.pages.count - 1)].color
                 )
                 .padding(.bottom, 8)
 
@@ -134,26 +117,42 @@ struct OnboardingView: SwiftUI.View {
                                 currentPage += 1
                             }
                         }) {
-                            Text(L("Continue", language: selectedLanguage))
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(12)
+                            if (currentPage == 0) {
+                                Image(systemName: "arrow.forward")
+                                    .font(.system(size: 21, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(12)
+                            } else {
+                                Text(continueButtonAsProp)
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(12)
+                            }
                         }
                         .padding(.horizontal)
-                    } else if currentPage == totalPages - 1 {
+                    } else if currentPage == viewModel.totalPages - 1 {
                         // Get Started button on last page
                         Button(action: {
+                            analytics.trackEvent(
+                                "onboarding_finished",
+                                properties: [
+                                    "screen": "onboarding_screen"
+                                ])
+
                             onOnboardingCompleted()
                         }) {
-                            Text(L("Get started", language: selectedLanguage))
+                            Text(L("Get started"))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(pages[currentPage - 1].color)
+                                .background(viewModel.pages[currentPage - 1].color)
                                 .cornerRadius(12)
                         }
                         .padding(.horizontal)
@@ -164,12 +163,12 @@ struct OnboardingView: SwiftUI.View {
                                 currentPage += 1
                             }
                         }) {
-                            Text(L("Next", language: selectedLanguage))
+                            Text(L("Next"))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(pages[currentPage - 1].color)
+                                .background(viewModel.pages[currentPage - 1].color)
                                 .cornerRadius(12)
                         }
                         .padding(.horizontal)
@@ -180,7 +179,7 @@ struct OnboardingView: SwiftUI.View {
 
         } // end of ZStack
         .onAppear {
-            selectedLanguage = languageManager.currentLanguage
+            analytics.trackScreen("onboarding_screen")
         }
     }
 }
