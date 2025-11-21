@@ -24,11 +24,21 @@ struct EVChargingTrackerApp: App {
                 OnboardingView(
                     onOnboardingSkipped: {
                         isOnboardingComplete = true
-                        
+                        UserDefaults.standard.set(true, forKey: UserSettingsViewModel.onboardingCompletedKey)
+                        analytics.trackEvent(
+                            "onboarding_skipped",
+                            properties: [
+                                "screen": "main_screen"
+                            ])
                     },
                     onOnboardingCompleted: {
                         isOnboardingComplete = true
-                        analytics.trackEvent("onboarding_completed")
+                        UserDefaults.standard.set(true, forKey: UserSettingsViewModel.onboardingCompletedKey)
+                        analytics.trackEvent(
+                            "onboarding_completed",
+                            properties: [
+                                "screen": "main_screen"
+                            ])
                     })
                 .onAppear {
                     analytics.trackEvent("app_opened")

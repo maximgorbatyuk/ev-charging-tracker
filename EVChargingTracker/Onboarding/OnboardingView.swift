@@ -14,7 +14,6 @@ struct OnboardingView: SwiftUI.View {
 
     @StateObject private var viewModel = OnboardingViewModel()
     @State private var currentPage = 0
-    @State private var continueButtonAsProp = "Continue"
 
     private var analytics = AnalyticsService.shared
 
@@ -53,7 +52,7 @@ struct OnboardingView: SwiftUI.View {
                     )
                     .ignoresSafeArea()
                 }
-            } // end of if..else bock with language
+            } // end of if..else block with language
             
             VStack {
                 // Skip button (only show after language selection)
@@ -80,7 +79,6 @@ struct OnboardingView: SwiftUI.View {
                     OnboardingLanguageSelectionView(
                         onCurrentLanguageSelected: { selectedLanguage in
                             viewModel.setLanguage(selectedLanguage)
-                            continueButtonAsProp = viewModel.getLocalizedString("Continue")
                             analytics.trackEvent(
                                 "onboarding_language_changed",
                                 properties: [
@@ -117,23 +115,13 @@ struct OnboardingView: SwiftUI.View {
                                 currentPage += 1
                             }
                         }) {
-                            if (currentPage == 0) {
-                                Image(systemName: "arrow.forward")
-                                    .font(.system(size: 21, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .cornerRadius(12)
-                            } else {
-                                Text(continueButtonAsProp)
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .cornerRadius(12)
-                            }
+                            Image(systemName: "arrow.forward")
+                                .font(.system(size: 21, weight: .bold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(12)
                         }
                         .padding(.horizontal)
                     } else if currentPage == viewModel.totalPages - 1 {

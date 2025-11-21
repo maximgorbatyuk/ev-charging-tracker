@@ -1,5 +1,5 @@
 //
-//  OnboardingPageViewModel.swift
+//  OnboardingPageViewModelItem.swift
 //  EVChargingTracker
 //
 //  Created by Maxim Gorbatyuk on 21.11.2025.

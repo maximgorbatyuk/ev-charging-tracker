@@ -22,9 +22,6 @@ final class LocalizationManager: ObservableObject {
     func setLanguage(_ language: AppLanguage) {
         guard language != currentLanguage else { return }
         currentLanguage = language
-        // Persisting to DB is handled by the viewModel (caller).
-        // Send a notification so views can react if they observe this object.
-        // Observers will see `currentLanguage` change via @Published.
 
         let success = DatabaseManager.shared.userSettingsRepository?.upsertLanguage(language.rawValue) ?? false
         if !success {

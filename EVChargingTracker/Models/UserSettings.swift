@@ -27,16 +27,6 @@ enum AppLanguage: String, CaseIterable, Codable {
             case .tr: return "🇹🇷 Türkçe"
         }
     }
-
-    var flag: String {
-        switch self {
-            case .en: return "🇬🇧"
-            case .de: return "🇩🇪"
-            case .ru: return "🇷🇺"
-            case .kk: return "🇰🇿"
-            case .tr: return "🇹🇷"
-        }
-    }
 }
 
 // Add key constant for language

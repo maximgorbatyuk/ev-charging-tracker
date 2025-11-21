@@ -16,9 +16,7 @@ class OnboardingViewModel: ObservableObject {
     var totalPages: Int = 0
 
     init() {
-        languageManager = .shared
         selectedLanguage = languageManager.currentLanguage
-
         recreatePages()
     }
 
