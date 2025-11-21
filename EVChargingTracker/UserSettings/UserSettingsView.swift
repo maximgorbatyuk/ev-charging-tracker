@@ -166,9 +166,26 @@ struct UserSettingsView: SwiftUICore.View {
                     }) {
                         HStack {
                             Image(systemName: "questionmark.circle.fill")
-                                .foregroundColor(.green)
+                                .foregroundColor(.purple)
 
                             Text(L("What is the app about?"))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+
+                    Button(action: {
+                        UserDefaults.standard.removeObject(forKey: "isOnboardingComplete")
+                        analytics.trackEvent("start_onboarding_again_button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "start_onboarding_again"
+                            ])
+                    }) {
+                        HStack {
+                            Image(systemName: "figure.wave")
+                                .foregroundColor(.green)
+
+                            Text(L("Start onboarding again"))
                                 .padding(.leading, 4)
                                 .foregroundColor(.primary)
                         }
@@ -216,12 +233,6 @@ struct UserSettingsView: SwiftUICore.View {
                         Label(L("App version"), systemImage: "info.circle")
                         Spacer()
                         Text(environment.getAppVisibleVersion())
-                    }
-
-                    Button(action: {
-                        UserDefaults.standard.removeObject(forKey: "isOnboardingComplete")
-                    }) {
-                        Label(L("Start onboarding again"), systemImage: "figure.wave")
                     }
 
                     HStack {

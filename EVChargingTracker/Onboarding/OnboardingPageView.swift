@@ -19,8 +19,7 @@ struct OnboardingPageView: SwiftUICore.View {
                 .font(.system(size: 100))
                 .foregroundColor(page.color)
                 .symbolEffect(.bounce, options: .repeating)
-            
-            // Title
+
             Text(page.title)
                 .font(.largeTitle)
                 .bold()

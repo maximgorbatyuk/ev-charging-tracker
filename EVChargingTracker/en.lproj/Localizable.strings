@@ -156,3 +156,20 @@
 "Filter.Charges" = "Charges";
 "Filter.Repair/maintenance" = "Maintenance";
 "Filter.Carwash" = "Car wash";
+
+/* Onboarding pages */
+"Welcome to" = "Welcome to";
+"Select your language" = "Select your language";
+"Continue" = "Continue";
+"Next" = "Next";
+"Skip" = "Skip";
+"Get started" = "Get started";
+"Start onboarding again" = "Start onboarding again";
+"onboarding.track_your_chargings" = "Track your chargings";
+"onboarding.track_your_chargings__subtitle" = "Keep track of all your EV charging sessions in one place";
+"onboarding.monitor_costs" = "Monitor costs";
+"onboarding.monitor_costs__subtitle" = "See how much you spend on your EV car including power and other expenses";
+"onboarding.plan_maintenance" = "Plan maintenance";
+"onboarding.plan_maintenance__subtitle" = "Schedule and get reminders for your EV maintenance tasks";
+"onboarding.view_stats" = "View Stats";
+"onboarding.view_stats__subtitle" = "Get insights how much money does your EV cost per 1 kilometer and CO₂ you have saved by driving an EV";

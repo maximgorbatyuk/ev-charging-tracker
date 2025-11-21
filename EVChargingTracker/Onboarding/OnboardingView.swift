@@ -31,22 +31,28 @@ struct OnboardingView: SwiftUI.View {
         currentPage = 0
         pages = [
             OnboardingPageViewModelItem(
-                icon: "bolt.car.fill",
-                title: L("Track Your Charging"),
-                description: L("Keep track of all your EV charging sessions in one place"),
-                color: .green
+                icon: "battery.100percent.bolt",
+                title: L("onboarding.track_your_chargings"),
+                description: L("onboarding.track_your_chargings__subtitle"),
+                color: .orange
             ),
             OnboardingPageViewModelItem(
                 icon: "dollarsign.circle.fill",
-                title: L("Monitor Costs"),
-                description: L("See how much you spend on charging and optimize your expenses"),
+                title: L("onboarding.monitor_costs"),
+                description: L("onboarding.monitor_costs__subtitle"),
+                color: .green
+            ),
+            OnboardingPageViewModelItem(
+                icon: "hammer.fill",
+                title: L("onboarding.plan_maintenance"),
+                description: L("onboarding.plan_maintenance__subtitle"),
                 color: .blue
             ),
             OnboardingPageViewModelItem(
                 icon: "chart.line.uptrend.xyaxis",
-                title: L("View Statistics"),
-                description: L("Analyze your charging patterns with detailed statistics and insights"),
-                color: .orange
+                title: L("onboarding.view_stats"),
+                description: L("onboarding.view_stats__subtitle"),
+                color: .cyan
             ),
         ]
         totalPages = 1 + pages.count
@@ -86,7 +92,7 @@ struct OnboardingView: SwiftUI.View {
                 HStack {
                     Spacer()
                     if currentPage > 0 && currentPage < totalPages - 1 {
-                        Button(L("Skip")) {
+                        Button(L("Skip", language: selectedLanguage)) {
                             onOnboardingSkipped()
                         }
                         .foregroundColor(.secondary)
@@ -128,7 +134,7 @@ struct OnboardingView: SwiftUI.View {
                                 currentPage += 1
                             }
                         }) {
-                            Text(L("Continue"))
+                            Text(L("Continue", language: selectedLanguage))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -142,7 +148,7 @@ struct OnboardingView: SwiftUI.View {
                         Button(action: {
                             onOnboardingCompleted()
                         }) {
-                            Text(L("Get Started"))
+                            Text(L("Get started", language: selectedLanguage))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -158,7 +164,7 @@ struct OnboardingView: SwiftUI.View {
                                 currentPage += 1
                             }
                         }) {
-                            Text(L("Next"))
+                            Text(L("Next", language: selectedLanguage))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)

@@ -10,24 +10,21 @@ import SwiftUI
 struct OnboardingLanguageSelectionView: SwiftUICore.View {
 
     @ObservedObject var localizationManager: LocalizationManager = .shared
+    @ObservedObject var analytics: AnalyticsService = .shared
     @SwiftUICore.Binding var selectedLanguage: AppLanguage
 
     var body: some SwiftUICore.View {
-        VStack(spacing: 32) {
+        VStack(spacing: 20) {
             Spacer()
-            
-            // App icon or logo
-            Image(systemName: "bolt.car.circle.fill")
-                .font(.system(size: 100))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [.green, .blue],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
 
-            VStack(spacing: 12) {
+            Image("BackgroundImage")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 130, height: 130) // Adjust size as needed
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .shadow(radius: 10)
+
+            VStack(spacing: 8) {
                 Text(L("Welcome to"))
                     .font(.title2)
                     .foregroundColor(.secondary)
@@ -41,10 +38,10 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
             Text(L("Select your language"))
                 .font(.headline)
                 .foregroundColor(.secondary)
-                .padding(.top, 20)
+                .padding(.top, 5)
 
             // Language options
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
                 ForEach(AppLanguage.allCases, id: \.self) { language in
                     LanguageButton(
                         language: language,
@@ -53,6 +50,10 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
                         withAnimation(.spring()) {
                             selectedLanguage = language
                             localizationManager.setLanguage(language)
+                            analytics.trackEvent("language_selected", properties: [
+                                "language": language.rawValue,
+                                "screen": "onboarding_language_selection"
+                            ])
                         }
                     }
                 }
@@ -73,13 +74,10 @@ struct LanguageButton: SwiftUICore.View {
     var body: some SwiftUICore.View {
         Button(action: action) {
             HStack {
-                Text(language.flag)
-                    .font(.largeTitle)
-                
                 Text(language.displayName)
                     .font(.headline)
                     .foregroundColor(isSelected ? .white : .primary)
-                
+
                 Spacer()
                 
                 if isSelected {
