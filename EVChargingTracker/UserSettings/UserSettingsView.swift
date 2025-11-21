@@ -218,6 +218,12 @@ struct UserSettingsView: SwiftUICore.View {
                         Text(environment.getAppVisibleVersion())
                     }
 
+                    Button(action: {
+                        UserDefaults.standard.removeObject(forKey: "isOnboardingComplete")
+                    }) {
+                        Label(L("Start onboarding again"), systemImage: "figure.wave")
+                    }
+
                     HStack {
                         Label(L("Developer"), systemImage: "person")
                         Spacer()

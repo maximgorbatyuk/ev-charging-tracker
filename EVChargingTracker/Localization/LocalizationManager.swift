@@ -25,6 +25,11 @@ final class LocalizationManager: ObservableObject {
         // Persisting to DB is handled by the viewModel (caller).
         // Send a notification so views can react if they observe this object.
         // Observers will see `currentLanguage` change via @Published.
+
+        let success = DatabaseManager.shared.userSettingsRepository?.upsertLanguage(language.rawValue) ?? false
+        if !success {
+            print("Failed to save selected language to DB")
+        }
     }
 
     // Return localized string for a given key using the language-specific bundle

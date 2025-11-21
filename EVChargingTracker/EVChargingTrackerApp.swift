@@ -14,15 +14,32 @@ struct EVChargingTrackerApp: App {
 
     // For allowing notifications in foreground
     @UIApplicationDelegateAdaptor(ForegroundNotificationDelegate.self) var appDelegate
+    @AppStorage(UserSettingsViewModel.onboardingCompletedKey) private var isOnboardingComplete = false
 
     private var analytics = AnalyticsService.shared
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            if !isOnboardingComplete {
+                OnboardingView(
+                    onOnboardingSkipped: {
+                        isOnboardingComplete = true
+                        analytics.trackEvent("onboarding_skipped")
+                    },
+                    onOnboardingCompleted: {
+                        isOnboardingComplete = true
+                        analytics.trackEvent("onboarding_completed")
+                    })
                 .onAppear {
                     analytics.trackEvent("app_opened")
                 }
+                    
+            } else {
+                MainTabView()
+                    .onAppear {
+                        analytics.trackEvent("app_opened")
+                    }
+            }
         }
     }
 }
