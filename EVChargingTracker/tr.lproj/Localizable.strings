@@ -158,3 +158,19 @@
 "Filter.Charges" = "Şarj";
 "Filter.Repair/maintenance" = "Bakım";
 "Filter.Carwash" = "Araba Yıkama";
+
+/* Onboarding pages */
+"Welcome to" = "Hoş geldiniz";
+"Select your language" = "Dil seçin";
+"Continue" = "Devam et";
+"Next" = "Sonraki";
+"Skip" = "Atla";
+"Start onboarding again" = "Tanıtımı yeniden başlat";
+"onboarding.track_your_chargings" = "Şarjlarınızı takip edin";
+"onboarding.track_your_chargings__subtitle" = "Tüm elektrikli araç şarj oturumlarınızı tek bir yerde takip edin";
+"onboarding.monitor_costs" = "Maliyetleri izleyin";
+"onboarding.monitor_costs__subtitle" = "Elektrikli aracınıza elektrik ve diğer masraflar dahil ne kadar harcadığınızı görün";
+"onboarding.plan_maintenance" = "Bakım planlayın";
+"onboarding.plan_maintenance__subtitle" = "Elektrikli aracınızın bakım görevlerini planlayın ve hatırlatıcılar alın";
+"onboarding.view_stats" = "İstatistikleri görüntüle";
+"onboarding.view_stats__subtitle" = "Elektrikli aracınızın kilometre başına ne kadara mal olduğunu ve elektrikli araç kullanarak tasarruf ettiğiniz CO₂ miktarını görün";

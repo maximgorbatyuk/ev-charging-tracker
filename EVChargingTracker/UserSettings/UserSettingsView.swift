@@ -166,7 +166,7 @@ struct UserSettingsView: SwiftUICore.View {
                     }) {
                         HStack {
                             Image(systemName: "questionmark.circle.fill")
-                                .foregroundColor(.purple)
+                                .foregroundColor(.cyan)
 
                             Text(L("What is the app about?"))
                                 .padding(.leading, 4)

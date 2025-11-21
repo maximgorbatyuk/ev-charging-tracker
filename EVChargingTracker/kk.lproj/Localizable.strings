@@ -165,3 +165,19 @@
 "Filter.Charges" = "Зарядтаулар";
 "Filter.Repair/maintenance" = "Жөндеу/қызмет көрсету";
 "Filter.Carwash" = "Көлік жуу";
+
+/* Onboarding pages */
+"Welcome to" = "Қош келдіңіз";
+"Select your language" = "Тіліңізді таңдаңыз";
+"Continue" = "Жалғастыру";
+"Next" = "Келесі";
+"Skip" = "Өту";
+"Start onboarding again" = "Кіріспені қайта бастау";
+"onboarding.track_your_chargings" = "Зарядтауларды қадағалау";
+"onboarding.track_your_chargings__subtitle" = "Электромобиліңіздің барлық зарядтау сеанстарын бір жерде қадағалаңыз";
+"onboarding.monitor_costs" = "Шығындарды бақылау";
+"onboarding.monitor_costs__subtitle" = "Электромобиліңізге қанша жұмсайтыныңызды, соның ішінде электр энергиясы мен басқа шығындарды көріңіз";
+"onboarding.plan_maintenance" = "Техқызметті жоспарлау";
+"onboarding.plan_maintenance__subtitle" = "Электромобиліңіздің техникалық қызмет көрсету тапсырмаларын жоспарлаңыз және еске салғыштар алыңыз";
+"onboarding.view_stats" = "Статистиканы қарау";
+"onboarding.view_stats__subtitle" = "Электромобиліңіз 1 шақырымға қанша тұратынын және электромобильді басқару арқылы үнемделген CO₂ көлемін біліңіз";
