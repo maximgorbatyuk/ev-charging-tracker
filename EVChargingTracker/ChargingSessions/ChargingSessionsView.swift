@@ -64,7 +64,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 .padding()
                                 .background(
                                     LinearGradient(
-                                        colors: [Color.red, Color.red.opacity(0.8)],
+                                        colors: [Color.orange, Color.red.opacity(0.8)],
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )

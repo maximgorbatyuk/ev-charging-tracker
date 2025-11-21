@@ -8,6 +8,9 @@
 import Foundation
 
 class UserSettingsViewModel: ObservableObject {
+
+    static let onboardingCompletedKey = "isOnboardingComplete"
+
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
 
@@ -64,11 +67,6 @@ class UserSettingsViewModel: ObservableObject {
     func saveLanguage(_ language: AppLanguage) {
         DispatchQueue.main.async {
             self.selectedLanguage = language
-        }
-
-        let success = userSettingsRepository?.upsertLanguage(language.rawValue) ?? false
-        if !success {
-            print("Failed to save selected language to DB")
         }
 
         // Update runtime localization manager so UI can react immediately

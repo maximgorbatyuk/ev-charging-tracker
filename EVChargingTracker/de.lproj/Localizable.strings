@@ -159,3 +159,20 @@
 "Filter.Charges" = "Ladungen";
 "Filter.Repair/maintenance" = "Reparatur/Wartung";
 "Filter.Carwash" = "Autowäsche";
+
+/* Onboarding pages */
+"Welcome to" = "Willkommen bei";
+"Select your language" = "Wählen Sie Ihre Sprache";
+"Continue" = "Weiter";
+"Next" = "Weiter";
+"Skip" = "Überspringen";
+"Get started" = "Loslegen";
+"Start onboarding again" = "Einführung erneut starten";
+"onboarding.track_your_chargings" = "Ladevorgänge verfolgen";
+"onboarding.track_your_chargings__subtitle" = "Behalten Sie alle Ladevorgänge Ihres Elektrofahrzeugs an einem Ort im Blick";
+"onboarding.monitor_costs" = "Kosten überwachen";
+"onboarding.monitor_costs__subtitle" = "Sehen Sie, wie viel Sie für Ihr Elektrofahrzeug ausgeben, einschließlich Strom und anderer Ausgaben";
+"onboarding.plan_maintenance" = "Wartung planen";
+"onboarding.plan_maintenance__subtitle" = "Planen Sie Wartungsaufgaben für Ihr Elektrofahrzeug und erhalten Sie Erinnerungen";
+"onboarding.view_stats" = "Statistiken anzeigen";
+"onboarding.view_stats__subtitle" = "Erfahren Sie, wie viel Ihr Elektrofahrzeug pro Kilometer kostet und wie viel CO₂ Sie durch das Fahren eines Elektrofahrzeugs eingespart haben";
