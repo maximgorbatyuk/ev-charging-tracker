@@ -5,7 +5,7 @@
 //  Created by Maxim Gorbatyuk on 21.11.2025.
 //
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 struct OnboardingPageViewModelItem: Identifiable {
     let id = UUID()
