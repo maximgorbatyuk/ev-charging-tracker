@@ -13,37 +13,40 @@ struct MainTabView: SwiftUI.View {
 
     @State private var pendingMaintenanceRecords: Int = 0
     @ObservedObject private var loc = LocalizationManager.shared
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some SwiftUI.View {
-        TabView {
-            ChargingSessionsView()
-                .tabItem {
-                    Label(L("Stats"), systemImage: "bolt.car.fill")
-                }
-            
-            ExpensesView()
-                .tabItem {
-                    Label(L("Expenses"), systemImage: "dollarsign.circle")
-                }
+        ZStack {
+            TabView {
+                ChargingSessionsView()
+                    .tabItem {
+                        Label(L("Stats"), systemImage: "bolt.car.fill")
+                    }
+                
+                ExpensesView()
+                    .tabItem {
+                        Label(L("Expenses"), systemImage: "dollarsign.circle")
+                    }
 
-            PlanedMaintenanceView(
-                onPlannedMaintenaceRecordsUpdated: {
-                    self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
-                }
-            )
-                .tabItem {
-                    Label(L("Maintenance"), systemImage: "hammer.fill")
-                }
-                .badge(pendingMaintenanceRecords)
+                PlanedMaintenanceView(
+                    onPlannedMaintenaceRecordsUpdated: {
+                        self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
+                    }
+                )
+                    .tabItem {
+                        Label(L("Maintenance"), systemImage: "hammer.fill")
+                    }
+                    .badge(pendingMaintenanceRecords)
 
-            UserSettingsView()
-                .tabItem {
-                    Label(L("Settings"), systemImage: "gear")
-                }
-        }
-        .id(loc.currentLanguage.rawValue)
-        .onAppear {
-            self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
+                UserSettingsView()
+                    .tabItem {
+                        Label(L("Settings"), systemImage: "gear")
+                    }
+            }
+            .id(loc.currentLanguage.rawValue)
+            .onAppear {
+                self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
+            }
         }
     }
 }

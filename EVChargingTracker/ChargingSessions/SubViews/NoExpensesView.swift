@@ -10,7 +10,7 @@ import SwiftUI
 struct NoExpensesView: SwiftUICore.View {
 
     var body: some SwiftUICore.View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Image(systemName: "battery.100.bolt")
                 .font(.system(size: 64))
                 .foregroundColor(.gray.opacity(0.5))

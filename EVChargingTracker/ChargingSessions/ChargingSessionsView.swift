@@ -4,14 +4,13 @@ struct ChargingSessionsView: SwiftUICore.View {
     @StateObject private var viewModel = ChargingViewModel()
     @State private var showingAddSession = false
     @ObservedObject private var analytics = AnalyticsService.shared
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some SwiftUICore.View {
-        NavigationView {
-            ZStack {
-                
+        ZStack {
+            NavigationView {
                 ScrollView {
-                    VStack(spacing: 20) {
-                        
+                    VStack(spacing: 16) {
                         if (viewModel.statData != nil) {
                             StatsBlockView(
                                 co2Saved: viewModel.statData!.co2Saved,
@@ -68,6 +67,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )
+                                    .background(.black)
                                 )
                                 .foregroundColor(.white)
                                 .cornerRadius(12)
@@ -79,44 +79,47 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 .progressViewStyle(CircularProgressViewStyle())
                                 .scaleEffect(1) // make it larger (optional)
                         }
-                        
-
-                        
                     } // end of VStack
                     .padding(.vertical)
+                } // end of ScrollView
+                .navigationTitle(L("Car stats"))
+                .navigationBarTitleDisplayMode(.automatic)
+                .sheet(isPresented: $showingAddSession) {
+
+                    let selectedCar = viewModel.selectedCarForExpenses
+                    AddExpenseView(
+                        defaultExpenseType: .charging,
+                        defaultCurrency: viewModel.getAddExpenseCurrency(),
+                        selectedCar: selectedCar,
+                        allCars: viewModel.getAllCars(),
+                        onAdd: { newExpenseResult in
+
+                            viewModel.saveChargingSession(newExpenseResult)
+
+                            analytics.trackEvent(
+                                "charge_session_added",
+                                properties: [
+                                    "screen": "charging_sessions_stats_screen"
+                                ])
+
+                            loadData()
+                        })
+                }
+                .onAppear {
+                    analytics.trackScreen("charging_sessions_stats_screen")
+                    loadData()
+                }
+                .refreshable {
+                    loadData()
                 }
             }
-            .navigationTitle(L("Car stats"))
-            .navigationBarTitleDisplayMode(.automatic)
-            .sheet(isPresented: $showingAddSession) {
-
-                let selectedCar = viewModel.selectedCarForExpenses
-                AddExpenseView(
-                    defaultExpenseType: .charging,
-                    defaultCurrency: viewModel.getAddExpenseCurrency(),
-                    selectedCar: selectedCar,
-                    allCars: viewModel.getAllCars(),
-                    onAdd: { newExpenseResult in
-
-                        viewModel.saveChargingSession(newExpenseResult)
-
-                        analytics.trackEvent(
-                            "charge_session_added",
-                            properties: [
-                                "screen": "charging_sessions_stats_screen"
-                            ])
-
-                        loadData()
-                    })
-            }
-            .onAppear {
-                analytics.trackScreen("charging_sessions_stats_screen")
-                loadData()
-            }
-            .refreshable {
-                loadData()
-            }
         }
+        // .overlay {
+        //     if !viewModel.expenses.isEmpty {
+        //         AppImageBackground()
+        //             .allowsHitTesting(false) // Makes sure it doesn't block touches
+        //     }
+        // }
     }
     
     private func loadData() -> Void {

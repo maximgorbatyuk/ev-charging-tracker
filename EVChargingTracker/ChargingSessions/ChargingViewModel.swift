@@ -52,8 +52,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             avgConsumptionKWhPer100: getAvgConsumptionKWhPer100(),
             totalChargingSessionsCount: getChargingSessionsCount(),
             totalChargingCost: getTotalChargingCost(),
-            oneKmPriceIncludingAllExpenses: calculateOneKilometerCosts(true),
-            oneKmPriceBasedOnlyOnCharging: calculateOneKilometerCosts(false),
+            oneKmPriceIncludingAllExpenses: calculateOneKilometerCosts(false),
+            oneKmPriceBasedOnlyOnCharging: calculateOneKilometerCosts(true),
             lastUpdated: Date())
     }
 
