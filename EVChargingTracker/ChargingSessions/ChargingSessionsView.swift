@@ -113,7 +113,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                 }
             }
         }
-        .overlay{
+        .overlay {
             if !viewModel.expenses.isEmpty {
                 AppImageBackground()
                     .allowsHitTesting(false) // Makes sure it doesn't block touches
