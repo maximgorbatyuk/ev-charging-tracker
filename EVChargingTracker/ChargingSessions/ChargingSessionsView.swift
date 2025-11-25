@@ -67,6 +67,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )
+                                    .background(.black)
                                 )
                                 .foregroundColor(.white)
                                 .cornerRadius(12)
@@ -113,12 +114,12 @@ struct ChargingSessionsView: SwiftUICore.View {
                 }
             }
         }
-        .overlay {
-            if !viewModel.expenses.isEmpty {
-                AppImageBackground()
-                    .allowsHitTesting(false) // Makes sure it doesn't block touches
-            }
-        }
+        // .overlay {
+        //     if !viewModel.expenses.isEmpty {
+        //         AppImageBackground()
+        //             .allowsHitTesting(false) // Makes sure it doesn't block touches
+        //     }
+        // }
     }
     
     private func loadData() -> Void {
