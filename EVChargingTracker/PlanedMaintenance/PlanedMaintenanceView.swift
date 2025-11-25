@@ -42,10 +42,11 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             .padding()
                             .background(
                                 LinearGradient(
-                                    colors: [Color.blue, Color.blue.opacity(0.8)],
+                                    colors: [Color.cyan, Color.blue.opacity(0.8)],
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
+                                .background(.black)
                             )
                             .foregroundColor(.white)
                             .cornerRadius(12)

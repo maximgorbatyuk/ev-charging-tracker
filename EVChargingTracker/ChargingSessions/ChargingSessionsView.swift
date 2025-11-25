@@ -10,8 +10,7 @@ struct ChargingSessionsView: SwiftUICore.View {
         ZStack {
             NavigationView {
                 ScrollView {
-                    VStack(spacing: 20) {
-                        
+                    VStack(spacing: 16) {
                         if (viewModel.statData != nil) {
                             StatsBlockView(
                                 co2Saved: viewModel.statData!.co2Saved,
@@ -112,6 +111,12 @@ struct ChargingSessionsView: SwiftUICore.View {
                 .refreshable {
                     loadData()
                 }
+            }
+        }
+        .overlay{
+            if !viewModel.expenses.isEmpty {
+                AppImageBackground()
+                    .allowsHitTesting(false) // Makes sure it doesn't block touches
             }
         }
     }

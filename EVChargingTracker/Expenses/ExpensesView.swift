@@ -40,6 +40,7 @@ struct ExpensesView: SwiftUICore.View {
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
+                                .background(.black)
                             )
                             .foregroundColor(.white)
                             .cornerRadius(12)
