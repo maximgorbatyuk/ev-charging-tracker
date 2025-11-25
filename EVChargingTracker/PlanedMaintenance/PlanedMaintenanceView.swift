@@ -26,8 +26,8 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     }
 
     var body: some SwiftUICore.View {
-        NavigationView {
-            ZStack {
+        ZStack {
+            NavigationView {
                 ScrollView {
                     VStack(spacing: 20) {
                         Button(action: {
@@ -76,40 +76,41 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             .padding(.horizontal)
                         }
                     }
+                    // end of VStack
                     .padding(.vertical)
+                } // end of ScrollView
+                .navigationTitle(L("Planned maintenance"))
+                .navigationBarTitleDisplayMode(.automatic)
+                .onAppear {
+                    analytics.trackScreen("planned_maintenance_screen")
+                    loadData()
                 }
-            } // end of ZStack
-            .navigationTitle(L("Planned maintenance"))
-            .navigationBarTitleDisplayMode(.automatic)
-            .onAppear {
-                analytics.trackScreen("planned_maintenance_screen")
-                loadData()
-            }
-            .refreshable {
-                loadData()
-            }
-            .alert(isPresented: $showingDeleteConfirmation) {
-                deleteConfirmationAlert()
-            }
-            .sheet(isPresented: $showingAddMaintenanceRecord) {
-                let selectedCar = viewModel.selectedCarForExpenses!
-                AddMaintenanceRecordView(
-                    selectedCar: selectedCar,
-                    onAdd: { newRecord in
+                .refreshable {
+                    loadData()
+                }
+                .alert(isPresented: $showingDeleteConfirmation) {
+                    deleteConfirmationAlert()
+                }
+                .sheet(isPresented: $showingAddMaintenanceRecord) {
+                    let selectedCar = viewModel.selectedCarForExpenses!
+                    AddMaintenanceRecordView(
+                        selectedCar: selectedCar,
+                        onAdd: { newRecord in
 
-                        analytics.trackEvent("maintenance_record_added", properties: [
-                                "screen": "planned_maintenance_screen"
-                            ])
+                            analytics.trackEvent("maintenance_record_added", properties: [
+                                    "screen": "planned_maintenance_screen"
+                                ])
 
-                        viewModel.addNewMaintenanceRecord(newRecord: newRecord)
+                            viewModel.addNewMaintenanceRecord(newRecord: newRecord)
 
-                        loadData()
-                        onPlannedMaintenaceRecordsUpdated()
-                    }
-                )
-                    
-            }
-        }
+                            loadData()
+                            onPlannedMaintenaceRecordsUpdated()
+                        }
+                    )
+                        
+                }
+            } // end of NavigationView
+        } // end of ZStack
     }
 
     private func loadData() {

@@ -4,11 +4,11 @@ struct ChargingSessionsView: SwiftUICore.View {
     @StateObject private var viewModel = ChargingViewModel()
     @State private var showingAddSession = false
     @ObservedObject private var analytics = AnalyticsService.shared
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some SwiftUICore.View {
-        NavigationView {
-            ZStack {
-                
+        ZStack {
+            NavigationView {
                 ScrollView {
                     VStack(spacing: 20) {
                         
@@ -79,42 +79,39 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 .progressViewStyle(CircularProgressViewStyle())
                                 .scaleEffect(1) // make it larger (optional)
                         }
-                        
-
-                        
                     } // end of VStack
                     .padding(.vertical)
+                } // end of ScrollView
+                .navigationTitle(L("Car stats"))
+                .navigationBarTitleDisplayMode(.automatic)
+                .sheet(isPresented: $showingAddSession) {
+
+                    let selectedCar = viewModel.selectedCarForExpenses
+                    AddExpenseView(
+                        defaultExpenseType: .charging,
+                        defaultCurrency: viewModel.getAddExpenseCurrency(),
+                        selectedCar: selectedCar,
+                        allCars: viewModel.getAllCars(),
+                        onAdd: { newExpenseResult in
+
+                            viewModel.saveChargingSession(newExpenseResult)
+
+                            analytics.trackEvent(
+                                "charge_session_added",
+                                properties: [
+                                    "screen": "charging_sessions_stats_screen"
+                                ])
+
+                            loadData()
+                        })
                 }
-            }
-            .navigationTitle(L("Car stats"))
-            .navigationBarTitleDisplayMode(.automatic)
-            .sheet(isPresented: $showingAddSession) {
-
-                let selectedCar = viewModel.selectedCarForExpenses
-                AddExpenseView(
-                    defaultExpenseType: .charging,
-                    defaultCurrency: viewModel.getAddExpenseCurrency(),
-                    selectedCar: selectedCar,
-                    allCars: viewModel.getAllCars(),
-                    onAdd: { newExpenseResult in
-
-                        viewModel.saveChargingSession(newExpenseResult)
-
-                        analytics.trackEvent(
-                            "charge_session_added",
-                            properties: [
-                                "screen": "charging_sessions_stats_screen"
-                            ])
-
-                        loadData()
-                    })
-            }
-            .onAppear {
-                analytics.trackScreen("charging_sessions_stats_screen")
-                loadData()
-            }
-            .refreshable {
-                loadData()
+                .onAppear {
+                    analytics.trackScreen("charging_sessions_stats_screen")
+                    loadData()
+                }
+                .refreshable {
+                    loadData()
+                }
             }
         }
     }

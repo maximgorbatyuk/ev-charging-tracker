@@ -19,8 +19,8 @@ struct ExpensesView: SwiftUICore.View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some SwiftUICore.View {
-        NavigationView {
-            ZStack {
+        ZStack {
+            NavigationView {
                 ScrollView {
                     VStack(spacing: 20) {
 
@@ -92,38 +92,39 @@ struct ExpensesView: SwiftUICore.View {
 
                         
                     }
+                    // end of VStack
                     .padding(.vertical)
+                } // end of ScrollView
+                .navigationTitle(L("All car expenses"))
+                .navigationBarTitleDisplayMode(.automatic)
+                .sheet(isPresented: $showingAddSession) {
+
+                    let selectedCar = viewModel.selectedCarForExpenses
+                    AddExpenseView(
+                        defaultExpenseType: nil,
+                        defaultCurrency: viewModel.getAddExpenseCurrency(),
+                        selectedCar: selectedCar,
+                        allCars: viewModel.getAllCars(),
+                        onAdd: { newExpenseResult in
+
+                            viewModel.saveNewExpense(newExpenseResult)
+                            analytics.trackEvent(
+                                "expense_record_added",
+                                properties: [
+                                    "screen": viewModel.analyticsScreenName
+                                ])
+                        })
                 }
-            }
-            .navigationTitle(L("All car expenses"))
-            .navigationBarTitleDisplayMode(.automatic)
-            .sheet(isPresented: $showingAddSession) {
-
-                let selectedCar = viewModel.selectedCarForExpenses
-                AddExpenseView(
-                    defaultExpenseType: nil,
-                    defaultCurrency: viewModel.getAddExpenseCurrency(),
-                    selectedCar: selectedCar,
-                    allCars: viewModel.getAllCars(),
-                    onAdd: { newExpenseResult in
-
-                        viewModel.saveNewExpense(newExpenseResult)
-                        analytics.trackEvent(
-                            "expense_record_added",
-                            properties: [
-                                "screen": viewModel.analyticsScreenName
-                            ])
-                    })
-            }
-            .onAppear {
-                analytics.trackScreen(viewModel.analyticsScreenName)
-                viewModel.loadSessions()
-            }
-            .refreshable {
-                viewModel.loadSessions()
-            }
-            .alert(isPresented: $showingDeleteConfirmation) {
-                deleteConfirmationAlert()
+                .onAppear {
+                    analytics.trackScreen(viewModel.analyticsScreenName)
+                    viewModel.loadSessions()
+                }
+                .refreshable {
+                    viewModel.loadSessions()
+                }
+                .alert(isPresented: $showingDeleteConfirmation) {
+                    deleteConfirmationAlert()
+                }
             }
          }
      }
