@@ -3,6 +3,7 @@
 - Website: [mgorbatyuk.dev/ev-charging-tracker](https://mgorbatyuk.dev/ev-charging-tracker/)
 - App Store: [EV Charge Tracker](https://apps.apple.com/app/id6754165643)
 
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/maximgorbatyuk/ev-charging-tracker?utm_source=oss&utm_medium=github&utm_campaign=maximgorbatyuk%2Fev-charging-tracker&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ## Description
 
