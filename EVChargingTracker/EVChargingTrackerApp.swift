@@ -43,7 +43,7 @@ struct EVChargingTrackerApp: App {
                 .onAppear {
                     analytics.trackEvent("app_opened")
                 }
-                    
+
             } else {
                 MainTabView()
                     .onAppear {
@@ -61,7 +61,7 @@ final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNU
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         // Set the delegate
         UNUserNotificationCenter.current().delegate = self
-        
+
         #if DEBUG
         #else
         FirebaseApp.configure()
@@ -76,7 +76,7 @@ final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNU
                                 withCompletionHandler completion: @escaping (UNNotificationPresentationOptions) -> Void) {
         completion([.banner, .list, .sound])
     }
-    
+
     // Handle taps / actions
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,

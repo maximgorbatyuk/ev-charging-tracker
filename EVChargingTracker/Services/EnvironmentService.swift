@@ -21,7 +21,7 @@ class EnvironmentService: ObservableObject {
     static let shared = EnvironmentService()
 
     func getAppVisibleVersion() -> String {
-        
+
         if _appVisibleVersion != nil {
             return _appVisibleVersion!
         }
@@ -59,7 +59,7 @@ class EnvironmentService: ObservableObject {
         _buildEnvironment = Bundle.main.object(forInfoDictionaryKey: "BuildEnvironment") as? String ?? "-"
         return _buildEnvironment!
     }
-    
+
     func getDeveloperTelegramLink() -> String {
         if _developerTelegramLink != nil {
             return _developerTelegramLink!
@@ -85,7 +85,7 @@ class EnvironmentService: ObservableObject {
 
         return _appStoreAppLink!
     }
-    
+
     func getCo2EuropePollutionPerOneKilometer() -> Double {
         if _co2EuropePollutionPerOneKilometer != nil {
             return _co2EuropePollutionPerOneKilometer!

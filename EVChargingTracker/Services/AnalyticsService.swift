@@ -44,7 +44,7 @@ class AnalyticsService: ObservableObject {
         var mergedParams = mergeProperties(properties)
         mergedParams[AnalyticsParameterScreenName] = screenName
         mergedParams[AnalyticsParameterScreenClass] = screenName
-        
+
         if (environment.isDevelopmentMode()) {
             print("Analytics Screen View: \(screenName), properties: \(String(describing: mergedParams))")
         }
@@ -57,7 +57,7 @@ class AnalyticsService: ObservableObject {
             "button_name": buttonName,
             "screen": screen
         ]
-        
+
         params.merge(additionalParams ?? [:]) { _, new in new }
 
         trackEvent("button_tapped", properties: params)
@@ -65,11 +65,11 @@ class AnalyticsService: ObservableObject {
 
     private func mergeProperties(_ parameters: [String: Any]?) -> [String: Any] {
         var merged = getGlobalProperties()
-        
+
         if let params = parameters {
             merged.merge(params) { current, new in new } // new value takes precedence
         }
-        
+
         return merged
     }
 
