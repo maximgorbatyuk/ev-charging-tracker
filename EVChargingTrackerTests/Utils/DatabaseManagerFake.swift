@@ -6,7 +6,6 @@
 //
 
 import Foundation
-@testable import EVChargingTracker
 
 class DatabaseManagerFake : DatabaseManagerProtocol {
     

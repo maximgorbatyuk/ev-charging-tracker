@@ -6,7 +6,6 @@
 //
 
 import Foundation
-@testable import EVChargingTracker
 
 class MockPlannedMaintenanceRepository: PlannedMaintenanceRepositoryProtocol {
     var records: [PlannedMaintenance] = []

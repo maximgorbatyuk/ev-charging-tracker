@@ -6,7 +6,6 @@
 //
 
 import Foundation
-@testable import EVChargingTracker
 
 class MockDelayedNotificationsRepository: DelayedNotificationsRepositoryProtocol {
     var notifications: [DelayedNotification] = []

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-@testable import EVChargingTracker
 
 class MockNotificationManager: NotificationManagerProtocol {
     var scheduledNotifications: [(title: String, body: String, date: Date)] = []

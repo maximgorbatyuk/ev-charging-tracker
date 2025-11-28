@@ -6,7 +6,6 @@
 //
 
 import Foundation
-@testable import EVChargingTracker
 
 func createTestCar(
     id: Int64 = 1,

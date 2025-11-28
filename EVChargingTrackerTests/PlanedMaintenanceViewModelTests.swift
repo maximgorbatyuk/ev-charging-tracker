@@ -8,8 +8,6 @@
 import Testing
 @testable import EVChargingTracker
 
-// MARK: - Tests
-
 struct PlanedMaintenanceViewModelTests {
     
     @Test func loadData_whenNoSelectedCar_doesNotLoadRecords() async throws {
@@ -308,12 +306,12 @@ struct PlanedMaintenanceViewModelTests {
         mockCarRepo.selectedCar = testCar
         
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         // Act
         let result = viewModel.selectedCarForExpenses
