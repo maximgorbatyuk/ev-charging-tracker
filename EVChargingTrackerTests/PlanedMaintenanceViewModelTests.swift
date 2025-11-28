@@ -67,8 +67,6 @@ struct PlanedMaintenanceViewModelTests {
         #expect(viewModel.maintenanceRecords.count == 2)
         #expect(viewModel.maintenanceRecords.allSatisfy { $0.carId == 1 })
     }
-
-    // MARK: - addNewMaintenanceRecord Tests
     
     @Test func addNewMaintenanceRecord_withoutDate_insertsRecordWithoutNotification() async throws {
         // Arrange
@@ -136,8 +134,6 @@ struct PlanedMaintenanceViewModelTests {
         #expect(mockNotificationManager.scheduledNotifications.first?.body == "Scheduled Maintenance")
         #expect(mockDelayedRepo.insertedNotifications.count == 1)
     }
-
-    // MARK: - deleteMaintenanceRecord Tests
     
     @Test func deleteMaintenanceRecord_withoutDate_deletesRecordOnly() async throws {
         // Arrange
@@ -239,8 +235,6 @@ struct PlanedMaintenanceViewModelTests {
         #expect(mockNotificationManager.cancelledNotificationIds.isEmpty)
         #expect(mockDelayedRepo.deletedNotificationIds.isEmpty)
     }
-
-    // MARK: - reloadSelectedCarForExpenses Tests
     
     @Test func reloadSelectedCarForExpenses_returnsCarFromRepository() async throws {
         // Arrange
@@ -292,8 +286,6 @@ struct PlanedMaintenanceViewModelTests {
         // Assert
         #expect(result == nil)
     }
-
-    // MARK: - selectedCarForExpenses Property Tests
     
     @Test func selectedCarForExpenses_whenNotCached_callsReload() async throws {
         // Arrange
