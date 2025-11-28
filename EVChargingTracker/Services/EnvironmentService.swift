@@ -17,6 +17,7 @@ class EnvironmentService: ObservableObject {
     var _developerTelegramLink: String? = nil
     var _appStoreAppLink : String? = nil
     var _co2EuropePollutionPerOneKilometer: Double? = nil
+    var _appBundleId: String? = nil
 
     static let shared = EnvironmentService()
 
@@ -31,6 +32,15 @@ class EnvironmentService: ObservableObject {
         self._appVisibleVersion = "\(version) (\(build))"
 
         return _appVisibleVersion!
+    }
+
+    func getAppBundleId() -> String? {
+        if _appBundleId != nil {
+            return _appBundleId!
+        }
+   
+        _appBundleId = Bundle.main.bundleIdentifier
+        return _appBundleId
     }
 
     func getDeveloperName() -> String {

@@ -22,6 +22,9 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     private let expensesRepository: ExpensesRepository
     private let plannedMaintenanceRepository: PlannedMaintenanceRepository
     private let notifications: NotificationManager
+    private let appVersionChecker: AppVersionChecker
+
+	private var _checkedAppVersionForAppUpdates: Bool? = nil
 
     private var _selectedCarForExpenses: Car?
 
@@ -36,6 +39,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
         self.expensesRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
+        self.appVersionChecker = AppVersionChecker(environment: self.environment)
 
         loadSessions()
     }
@@ -245,5 +249,17 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         return expenses
             .filter { $0.isInitialRecord == false && $0.expenseType == .charging }
             .compactMap { $0.cost }.reduce(0, +)
+    }
+
+    func tryCheckAppUpdates() -> Void {
+        if (_checkedAppVersionForAppUpdates == true) {
+            return
+        }
+
+        self.appVersionChecker.checkAppStoreVersion() { isUpdateAvailable in
+            if (isUpdateAvailable) {
+                self.notifications.scheduleAppUpdateNotification()
+            }
+        }
     }
 }
