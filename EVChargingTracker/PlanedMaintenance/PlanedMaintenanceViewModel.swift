@@ -20,9 +20,12 @@ class PlanedMaintenanceViewModel: ObservableObject {
     
     private var _selectedCarForExpenses: Car?
     
-    init() {
-        self.notifications = NotificationManager.shared
-        self.db = DatabaseManager.shared
+    init(
+        notifications: NotificationManager = .shared,
+        db: DatabaseManager = .shared
+    ) {
+        self.notifications = notifications
+        self.db = db
         self.repository = db.plannedMaintenanceRepository!
         self.delayedNotificationsRepository = db.delayedNotificationsRepository!
 
