@@ -41,6 +41,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		87171B3F2ED9B1240084F6D7 /* BusinessLogic */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BusinessLogic;
+			sourceTree = "<group>";
+		};
 		87756BD92E963D240055273C /* EVChargingTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -79,6 +84,7 @@
 		87756BCE2E963D230055273C = {
 			isa = PBXGroup;
 			children = (
+				87171B3F2ED9B1240084F6D7 /* BusinessLogic */,
 				87D58E512EA5035A00F4454C /* privacy-policy.md */,
 				874BB4FF2EA265B2004AFFD5 /* readme.md */,
 				87756BD92E963D240055273C /* EVChargingTracker */,
@@ -112,6 +118,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				87171B3F2ED9B1240084F6D7 /* BusinessLogic */,
 				87756BD92E963D240055273C /* EVChargingTracker */,
 			);
 			name = EVChargingTracker;
@@ -392,7 +399,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTrackerDebug;
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -427,7 +434,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
