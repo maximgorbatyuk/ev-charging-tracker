@@ -12,24 +12,51 @@ class PlanedMaintenanceViewModel: ObservableObject {
     
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
     
-    private let db: DatabaseManager
-    private let notifications: NotificationManager
-    
-    let repository: PlannedMaintenanceRepository
-    let delayedNotificationsRepository: DelayedNotificationsRepository
+    private let notificationsService: NotificationManagerProtocol
+    private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol
+    private let delayedNotificationsRepo: DelayedNotificationsRepositoryProtocol
+    private let carRepo: CarRepositoryProtocol
     
     private var _selectedCarForExpenses: Car?
     
+    // MARK: - Convenience properties for backward compatibility
+    var repository: PlannedMaintenanceRepositoryProtocol {
+        return maintenanceRepository
+    }
+    
+    var delayedNotificationsRepository: DelayedNotificationsRepositoryProtocol {
+        return delayedNotificationsRepo
+    }
+    
+    // MARK: - Production initializer
     init(
         notifications: NotificationManager = .shared,
         db: DatabaseManager = .shared
     ) {
-        self.notifications = notifications
-        self.db = db
-        self.repository = db.plannedMaintenanceRepository!
-        self.delayedNotificationsRepository = db.delayedNotificationsRepository!
+        self.notificationsService = notifications
+        self.maintenanceRepository = db.plannedMaintenanceRepository!
+        self.delayedNotificationsRepo = db.delayedNotificationsRepository!
+        self.carRepo = db.carRepository!
 
         loadData()
+    }
+    
+    // MARK: - Testing initializer
+    init(
+        notificationsService: NotificationManagerProtocol,
+        maintenanceRepository: PlannedMaintenanceRepositoryProtocol,
+        delayedNotificationsRepository: DelayedNotificationsRepositoryProtocol,
+        carRepository: CarRepositoryProtocol,
+        loadDataOnInit: Bool = true
+    ) {
+        self.notificationsService = notificationsService
+        self.maintenanceRepository = maintenanceRepository
+        self.delayedNotificationsRepo = delayedNotificationsRepository
+        self.carRepo = carRepository
+        
+        if loadDataOnInit {
+            loadData()
+        }
     }
     
     func loadData() -> Void {
@@ -39,7 +66,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
         }
 
         let now = Date()
-        var records = repository.getAllRecords(carId: selectedCar!.id!).map { dbRecord in
+        var records = maintenanceRepository.getAllRecords(carId: selectedCar!.id!).map { dbRecord in
             PlannedMaintenanceItem(maintenance: dbRecord, car: selectedCar, now: now)
         }
         
@@ -50,15 +77,15 @@ class PlanedMaintenanceViewModel: ObservableObject {
     }
     
     func addNewMaintenanceRecord(newRecord: PlannedMaintenance) -> Void {
-        let recordId = repository.insertRecord(newRecord)
+        let recordId = maintenanceRepository.insertRecord(newRecord)
         
         if (newRecord.when != nil) {
-            var notificationId = notifications.scheduleNotification(
+            let notificationId = notificationsService.scheduleNotification(
                 title: L("Maintenance reminder"),
                 body: newRecord.name,
                 on: newRecord.when!)
             
-            let delayedNotification = delayedNotificationsRepository.insertRecord(
+            _ = delayedNotificationsRepo.insertRecord(
                 DelayedNotification(
                     when: newRecord.when!,
                     notificationId: notificationId,
@@ -70,21 +97,21 @@ class PlanedMaintenanceViewModel: ObservableObject {
     }
     
     func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) -> Void {
-        _ = repository.deleteRecord(id: recordToDelete.id)
+        _ = maintenanceRepository.deleteRecord(id: recordToDelete.id)
         
         if (recordToDelete.when != nil) {
-            let delayedNotification = delayedNotificationsRepository.getRecordByMaintenanceId(recordToDelete.id)
+            let delayedNotification = delayedNotificationsRepo.getRecordByMaintenanceId(recordToDelete.id)
             if (delayedNotification == nil) {
                 return
             }
             
-            notifications.cancelNotification(delayedNotification!.notificationId)
-            _ = delayedNotificationsRepository.deleteRecord(id: delayedNotification!.id!)
+            notificationsService.cancelNotification(delayedNotification!.notificationId)
+            _ = delayedNotificationsRepo.deleteRecord(id: delayedNotification!.id!)
         }
     }
 
     func reloadSelectedCarForExpenses() -> Car? {
-        _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+        _selectedCarForExpenses = carRepo.getSelectedForExpensesCar()
         return _selectedCarForExpenses
     }
 
