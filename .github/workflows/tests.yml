@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-15
 
     env:
-      SCHEME: "EV Charging Tracker"
+      SCHEME: "EVChargingTracker"
       DESTINATION: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
 
     steps:
