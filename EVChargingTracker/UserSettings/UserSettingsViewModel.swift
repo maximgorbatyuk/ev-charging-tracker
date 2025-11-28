@@ -21,9 +21,12 @@ class UserSettingsViewModel: ObservableObject {
 
     private var _allCars: [CarDto] = []
 
-    init() {
-        self.environment = EnvironmentService.shared
-        self.db = DatabaseManager.shared
+    init(
+        environment: EnvironmentService = .shared,
+        db: DatabaseManager = .shared
+    ) {
+        self.environment = environment
+        self.db = db
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
 

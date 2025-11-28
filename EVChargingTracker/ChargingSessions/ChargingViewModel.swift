@@ -25,11 +25,14 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     private var _selectedCarForExpenses: Car?
 
-    init() {
-
-        self.environment = EnvironmentService.shared
-        self.db = DatabaseManager.shared
-        self.notifications = NotificationManager.shared
+    init(
+        environment: EnvironmentService = .shared,
+        db: DatabaseManager = .shared,
+        notifications: NotificationManager = .shared
+    ) {
+        self.environment = environment
+        self.db = db
+        self.notifications = notifications
 
         self.expensesRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
