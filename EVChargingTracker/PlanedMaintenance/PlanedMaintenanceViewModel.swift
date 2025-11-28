@@ -30,35 +30,18 @@ class PlanedMaintenanceViewModel: ObservableObject {
     
     // MARK: - Production initializer
     init(
-        notifications: NotificationManager = .shared,
-        db: DatabaseManager = .shared
+        notifications: NotificationManagerProtocol,
+        db: DatabaseManagerProtocol
     ) {
         self.notificationsService = notifications
-        self.maintenanceRepository = db.plannedMaintenanceRepository!
-        self.delayedNotificationsRepo = db.delayedNotificationsRepository!
-        self.carRepo = db.carRepository!
+
+        self.maintenanceRepository = db.getPlannedMaintenanceRepository()
+        self.delayedNotificationsRepo = db.getDelayedNotificationsRepository()
+        self.carRepo = db.getCarRepository()
 
         loadData()
     }
-    
-    // MARK: - Testing initializer
-    init(
-        notificationsService: NotificationManagerProtocol,
-        maintenanceRepository: PlannedMaintenanceRepositoryProtocol,
-        delayedNotificationsRepository: DelayedNotificationsRepositoryProtocol,
-        carRepository: CarRepositoryProtocol,
-        loadDataOnInit: Bool = true
-    ) {
-        self.notificationsService = notificationsService
-        self.maintenanceRepository = maintenanceRepository
-        self.delayedNotificationsRepo = delayedNotificationsRepository
-        self.carRepo = carRepository
-        
-        if loadDataOnInit {
-            loadData()
-        }
-    }
-    
+
     func loadData() -> Void {
         let selectedCar = self.reloadSelectedCarForExpenses()
         if (selectedCar == nil) {

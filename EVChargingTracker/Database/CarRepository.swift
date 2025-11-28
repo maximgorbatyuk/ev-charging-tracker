@@ -8,7 +8,11 @@
 @_exported import SQLite
 import Foundation
 
-class CarRepository {
+protocol CarRepositoryProtocol {
+    func getSelectedForExpensesCar() -> Car?
+}
+
+class CarRepository : CarRepositoryProtocol {
     private let table: Table
     private let expensesTable: Table
 

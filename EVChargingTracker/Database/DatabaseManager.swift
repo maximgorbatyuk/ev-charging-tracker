@@ -7,7 +7,13 @@
 @_exported import SQLite
 import Foundation
 
-class DatabaseManager {
+protocol DatabaseManagerProtocol {
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepository
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepository
+    func getCarRepository() -> CarRepository
+}
+
+class DatabaseManager : DatabaseManagerProtocol {
     
     static let ExpensesTableName = "charging_sessions"
     static let MigrationsTableName = "migrations"
@@ -62,6 +68,18 @@ class DatabaseManager {
         } catch {
             print("Unable to setup database: \(error)")
         }
+    }
+
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepository {
+        return plannedMaintenanceRepository!
+    }
+
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepository {
+        return delayedNotificationsRepository!
+    }
+
+    func getCarRepository() -> CarRepository {
+        return carRepository!
     }
 
     func migrateIfNeeded() {
