@@ -8,7 +8,13 @@
 @_exported import SQLite
 import Foundation
 
-class DelayedNotificationsRepository {
+protocol DelayedNotificationsRepositoryProtocol {
+    func getRecordByMaintenanceId(_ maintenanceRecordId: Int64) -> DelayedNotification?
+    func insertRecord(_ record: DelayedNotification) -> Int64?
+    func deleteRecord(id recordId: Int64) -> Bool
+}
+
+class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     private let table: Table
 
     private let id = Expression<Int64>("id")

@@ -21,20 +21,12 @@
 			remoteGlobalIDString = 87756BD62E963D240055273C;
 			remoteInfo = EVChargingTracker;
 		};
-		87756BEF2E963D250055273C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 87756BCF2E963D230055273C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 87756BD62E963D240055273C;
-			remoteInfo = EVChargingTracker;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		874BB4FF2EA265B2004AFFD5 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		87756BD72E963D240055273C /* EVChargingTracker-Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EVChargingTracker-Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87756BE42E963D240055273C /* EVChargingTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVChargingTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		87756BEE2E963D250055273C /* EVChargingTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVChargingTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D58E512EA5035A00F4454C /* privacy-policy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "privacy-policy.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,6 +41,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		87171B3F2ED9B1240084F6D7 /* BusinessLogic */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BusinessLogic;
+			sourceTree = "<group>";
+		};
 		87756BD92E963D240055273C /* EVChargingTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -60,11 +57,6 @@
 		87756BE72E963D240055273C /* EVChargingTrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EVChargingTrackerTests;
-			sourceTree = "<group>";
-		};
-		87756BF12E963D250055273C /* EVChargingTrackerUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = EVChargingTrackerUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -86,24 +78,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		87756BEB2E963D250055273C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		87756BCE2E963D230055273C = {
 			isa = PBXGroup;
 			children = (
+				87171B3F2ED9B1240084F6D7 /* BusinessLogic */,
 				87D58E512EA5035A00F4454C /* privacy-policy.md */,
 				874BB4FF2EA265B2004AFFD5 /* readme.md */,
 				87756BD92E963D240055273C /* EVChargingTracker */,
 				87756BE72E963D240055273C /* EVChargingTrackerTests */,
-				87756BF12E963D250055273C /* EVChargingTrackerUITests */,
 				87756BD82E963D240055273C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,7 +98,6 @@
 			children = (
 				87756BD72E963D240055273C /* EVChargingTracker-Dev.app */,
 				87756BE42E963D240055273C /* EVChargingTrackerTests.xctest */,
-				87756BEE2E963D250055273C /* EVChargingTrackerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,6 +118,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				87171B3F2ED9B1240084F6D7 /* BusinessLogic */,
 				87756BD92E963D240055273C /* EVChargingTracker */,
 			);
 			name = EVChargingTracker;
@@ -168,29 +153,6 @@
 			productReference = 87756BE42E963D240055273C /* EVChargingTrackerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		87756BED2E963D250055273C /* EVChargingTrackerUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 87756BFE2E963D250055273C /* Build configuration list for PBXNativeTarget "EVChargingTrackerUITests" */;
-			buildPhases = (
-				87756BEA2E963D250055273C /* Sources */,
-				87756BEB2E963D250055273C /* Frameworks */,
-				87756BEC2E963D250055273C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				87756BF02E963D250055273C /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				87756BF12E963D250055273C /* EVChargingTrackerUITests */,
-			);
-			name = EVChargingTrackerUITests;
-			packageProductDependencies = (
-			);
-			productName = EVChargingTrackerUITests;
-			productReference = 87756BEE2E963D250055273C /* EVChargingTrackerUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -205,10 +167,6 @@
 						CreatedOnToolsVersion = 16.4;
 					};
 					87756BE32E963D240055273C = {
-						CreatedOnToolsVersion = 16.4;
-						TestTargetID = 87756BD62E963D240055273C;
-					};
-					87756BED2E963D250055273C = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = 87756BD62E963D240055273C;
 					};
@@ -239,7 +197,6 @@
 			targets = (
 				87756BD62E963D240055273C /* EVChargingTracker */,
 				87756BE32E963D240055273C /* EVChargingTrackerTests */,
-				87756BED2E963D250055273C /* EVChargingTrackerUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -255,13 +212,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		87756BE22E963D240055273C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		87756BEC2E963D250055273C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -285,13 +235,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		87756BEA2E963D250055273C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -299,11 +242,6 @@
 			isa = PBXTargetDependency;
 			target = 87756BD62E963D240055273C /* EVChargingTracker */;
 			targetProxy = 87756BE52E963D240055273C /* PBXContainerItemProxy */;
-		};
-		87756BF02E963D250055273C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 87756BD62E963D240055273C /* EVChargingTracker */;
-			targetProxy = 87756BEF2E963D250055273C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -461,7 +399,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTrackerDebug;
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -496,7 +434,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -522,7 +460,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EVChargingTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EVChargingTracker";
 			};
 			name = Debug;
 		};
@@ -543,45 +480,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EVChargingTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EVChargingTracker";
-			};
-			name = Release;
-		};
-		87756BFF2E963D250055273C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 87756BD92E963D240055273C /* EVChargingTracker */;
-			baseConfigurationReferenceRelativePath = Config/Debug.xcconfig;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = EKKL63HDHJ;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargingTrackerUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = EVChargingTracker;
-			};
-			name = Debug;
-		};
-		87756C002E963D250055273C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 87756BD92E963D240055273C /* EVChargingTracker */;
-			baseConfigurationReferenceRelativePath = Config/Release.xcconfig;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = EKKL63HDHJ;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargingTrackerUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = EVChargingTracker;
 			};
 			name = Release;
 		};
@@ -611,15 +509,6 @@
 			buildConfigurations = (
 				87756BFC2E963D250055273C /* Debug */,
 				87756BFD2E963D250055273C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		87756BFE2E963D250055273C /* Build configuration list for PBXNativeTarget "EVChargingTrackerUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				87756BFF2E963D250055273C /* Debug */,
-				87756C002E963D250055273C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
