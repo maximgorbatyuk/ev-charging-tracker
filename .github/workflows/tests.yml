@@ -1,4 +1,4 @@
-name: Run iOS Tests on PR
+name: Swift Tests
 
 on:
   pull_request:
@@ -15,62 +15,42 @@ concurrency:
 
 jobs:
   test:
-    name: Build & Test
-    runs-on: macos-15
-
-    env:
-      SCHEME: "EVChargingTracker"
-      DESTINATION: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
+    name: Swift Tests
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '5.10'
 
-      - name: Show Xcode version
-        run: xcodebuild -version
+      - name: Show Swift version
+        run: swift --version
 
       - name: Cache Swift Package Manager
         uses: actions/cache@v4
         with:
-          path: |
-            .build
-            ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          path: .build
+          key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-spm-
+            ${{ runner.os }}-swift-
 
-      - name: Resolve Swift packages
-        run: |
-          xcodebuild -resolvePackageDependencies \
-            -scheme "$SCHEME" \
-            -clonedSourcePackagesDirPath SourcePackages
+      - name: Resolve dependencies
+        run: swift package resolve
 
-      - name: Build for testing
-        run: |
-          xcodebuild build-for-testing \
-            -scheme "$SCHEME" \
-            -destination "$DESTINATION" \
-            -configuration Debug \
-            -derivedDataPath DerivedData \
-            -clonedSourcePackagesDirPath SourcePackages \
-            CODE_SIGNING_ALLOWED=NO
+      - name: Build
+        run: swift build --configuration release
 
       - name: Run tests
-        run: |
-          xcodebuild test-without-building \
-            -scheme "$SCHEME" \
-            -destination "$DESTINATION" \
-            -derivedDataPath DerivedData \
-            -resultBundlePath TestResults/results.xcresult \
-            CODE_SIGNING_ALLOWED=NO
+        run: swift test --parallel --xunit-output TestResults/results.xml
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
-          path: TestResults/results.xcresult
+          path: TestResults/results.xml
           retention-days: 30
