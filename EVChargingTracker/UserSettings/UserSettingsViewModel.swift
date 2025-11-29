@@ -20,18 +20,15 @@ class UserSettingsViewModel: ObservableObject {
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
-    private let appVersionChecker: AppVersionCheckerProtocol
 
     private var _allCars: [CarDto] = []
 
     init(
         environment: EnvironmentService = .shared,
-        db: DatabaseManager = .shared,
-        appVersionChecker: AppVersionCheckerProtocol
+        db: DatabaseManager = .shared
     ) {
         self.environment = environment
         self.db = db
-        self.appVersionChecker = appVersionChecker
 
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
@@ -49,10 +46,6 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency)
             } ?? []
-    }
-
-    func checkAppVersion() async -> Bool? {
-        return await appVersionChecker.checkAppStoreVersion()
     }
 
     func openAppStoreForUpdate() -> Void {

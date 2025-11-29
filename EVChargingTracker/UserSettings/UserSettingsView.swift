@@ -10,11 +10,11 @@ import StoreKit
 
 struct UserSettingsView: SwiftUICore.View {
 
+    @State var showAppUpdateButton: Bool = false
+
     @StateObject private var viewModel = UserSettingsViewModel(
         environment: EnvironmentService.shared,
-        db: DatabaseManager.shared,
-        appVersionChecker: AppVersionChecker(environment: EnvironmentService.shared)
-    )
+        db: DatabaseManager.shared)
 
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
@@ -22,7 +22,6 @@ struct UserSettingsView: SwiftUICore.View {
 
     @State private var showingAppAboutModal = false
     @State private var showAddCarModal = false
-    @State private var showAppUpdateButton = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -342,19 +341,9 @@ struct UserSettingsView: SwiftUICore.View {
             .onAppear {
                 analytics.trackScreen("user_settings_screen")
                 refreshData()
-
-                Task {
-                    let appVersionCheckResult = await viewModel.checkAppVersion()
-                    showAppUpdateButton = appVersionCheckResult ?? false
-                }
             }
             .refreshable {
                 refreshData()
-
-                Task {
-                    let appVersionCheckResult = await viewModel.checkAppVersion()
-                    showAppUpdateButton = appVersionCheckResult ?? false
-                }
             }
             .sheet(isPresented: $showingAppAboutModal) {
                 AboutAppSubView()
@@ -451,5 +440,5 @@ struct UserSettingsView: SwiftUICore.View {
 }
 
 #Preview {
-    UserSettingsView()
+    UserSettingsView(showAppUpdateButton: false)
 }
