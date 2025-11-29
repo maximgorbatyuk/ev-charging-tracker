@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class UserSettingsViewModel: ObservableObject {
 
@@ -50,12 +51,19 @@ class UserSettingsViewModel: ObservableObject {
             } ?? []
     }
 
-    func checkAppVersion() async -> Void {
-        await appVersionChecker.checkAppStoreVersion() { isNewVersionAvailable in
-            DispatchQueue.main.async {
-                self.newVersionIsAvailable = isNewVersionAvailable == true
-            }
+    func checkAppVersion() async -> Bool? {
+        return await appVersionChecker.checkAppStoreVersion()
+    }
+
+    func openAppStoreForUpdate() -> Void {
+        let urlAddress = environment.getAppStoreAppLink()
+        if let url = URL(string: urlAddress) {
+            self.openWebURL(url)
         }
+    }
+
+    func openWebURL(_ url: URL) {
+        UIApplication.shared.open(url)
     }
 
     func hasAnyExpense(_ carId: Int64? = nil) -> Bool {

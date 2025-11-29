@@ -22,6 +22,7 @@ struct UserSettingsView: SwiftUICore.View {
 
     @State private var showingAppAboutModal = false
     @State private var showAddCarModal = false
+    @State private var showAppUpdateButton = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -51,7 +52,7 @@ struct UserSettingsView: SwiftUICore.View {
                             viewModel.saveLanguage(newLang)
                         }
                     }
-                    
+
                     VStack {
                         HStack {
                             Text(L("Notifications enabled"))
@@ -123,6 +124,33 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    }
+
+                    if (showAppUpdateButton) {
+                        VStack {
+                            HStack {
+                                Text(L("App update available"))
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 16, weight: .bold))
+                                
+                                Spacer()
+
+                                Button(action: {
+                                    analytics.trackEvent("app_update_button_clicked", properties: [
+                                        "screen": "user_settings_screen",
+                                        "button_name": "update_app"
+                                    ])
+
+                                    if let url = URL(string: environment.getAppStoreAppLink()) {
+                                        viewModel.openWebURL(url)
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.down.circle.fill")
+                                        .foregroundColor(.yellow)
+                                        .font(.system(size: 28))
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -220,7 +248,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 "button_name": "developer_telegram_link"
                             ])
 
-                        openWebURL(URL(string: environment.getDeveloperTelegramLink())!)
+                        viewModel.openWebURL(URL(string: environment.getDeveloperTelegramLink())!)
                     } label: {
                         HStack {
                             Image(systemName: "ellipses.bubble.fill")
@@ -314,9 +342,19 @@ struct UserSettingsView: SwiftUICore.View {
             .onAppear {
                 analytics.trackScreen("user_settings_screen")
                 refreshData()
+
+                Task {
+                    let appVersionCheckResult = await viewModel.checkAppVersion()
+                    showAppUpdateButton = appVersionCheckResult ?? false
+                }
             }
             .refreshable {
                 refreshData()
+
+                Task {
+                    let appVersionCheckResult = await viewModel.checkAppVersion()
+                    showAppUpdateButton = appVersionCheckResult ?? false
+                }
             }
             .sheet(isPresented: $showingAppAboutModal) {
                 AboutAppSubView()
@@ -393,10 +431,6 @@ struct UserSettingsView: SwiftUICore.View {
                 showAddCarModal = false
             }
         )
-    }
-
-    private func openWebURL(_ url: URL) {
-        UIApplication.shared.open(url)
     }
 
     private func refreshData() -> Void {

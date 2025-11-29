@@ -34,6 +34,10 @@ class EnvironmentService: ObservableObject {
         return _appVisibleVersion!
     }
 
+    func getAppStoreId() -> String? {
+        return Bundle.main.object(forInfoDictionaryKey: "AppStoreId") as? String
+    }
+
     func getAppBundleId() -> String? {
         if _appBundleId != nil {
             return _appBundleId!
@@ -88,11 +92,8 @@ class EnvironmentService: ObservableObject {
             return _appStoreAppLink!
         }
 
-        _appStoreAppLink = Bundle.main.object(forInfoDictionaryKey: "AppStoreAppLink") as? String ?? "-"
-        if _appStoreAppLink != "-" {
-            _appStoreAppLink = "https://\(_appStoreAppLink!)"
-        }
-
+        let appStoreId = self.getAppStoreId()!
+        _appStoreAppLink = "https://apps.apple.com/app/id\(appStoreId)"
         return _appStoreAppLink!
     }
 

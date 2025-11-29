@@ -248,16 +248,4 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             .filter { $0.isInitialRecord == false && $0.expenseType == .charging }
             .compactMap { $0.cost }.reduce(0, +)
     }
-
-    func tryCheckAppUpdates() -> Void {
-        if (_checkedAppVersionForAppUpdates == true) {
-            return
-        }
-
-        self.appVersionChecker.checkAppStoreVersion() { isUpdateAvailable in
-            if (isUpdateAvailable) {
-                self.notifications.scheduleAppUpdateNotification()
-            }
-        }
-    }
 }

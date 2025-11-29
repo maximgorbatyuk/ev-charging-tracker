@@ -176,3 +176,5 @@
 "onboarding.plan_maintenance__subtitle" = "Planen Sie Wartungsaufgaben für Ihr Elektrofahrzeug und erhalten Sie Erinnerungen";
 "onboarding.view_stats" = "Statistiken anzeigen";
 "onboarding.view_stats__subtitle" = "Erfahren Sie, wie viel Ihr Elektrofahrzeug pro Kilometer kostet und wie viel CO₂ Sie durch das Fahren eines Elektrofahrzeugs eingespart haben";
+
+"App update available" = "App-Update verfügbar";

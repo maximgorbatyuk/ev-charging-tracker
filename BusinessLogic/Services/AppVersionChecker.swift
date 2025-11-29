@@ -3,7 +3,7 @@ import UIKit
 
 protocol AppVersionCheckerProtocol {
     func openLinkToUpdate()
-    func checkAppStoreVersion(_ completion: @escaping (Bool?) -> Void) async -> Void
+    func checkAppStoreVersion() async -> Bool?
 }
 
 class AppVersionChecker : AppVersionCheckerProtocol {
@@ -23,12 +23,16 @@ class AppVersionChecker : AppVersionCheckerProtocol {
         }
     }
 
-    func checkAppStoreVersion(_ completion: @escaping (Bool?) -> Void) async -> Void {
-        let currentVersion = environment.getAppVisibleVersion()
-        guard let bundleId = environment.getAppBundleId(),
-              let url = URL(string: "https://itunes.apple.com/lookup?bundleId=\(bundleId)") else {
-            completion(nil)
-            return
+    func checkAppStoreVersion() async -> Bool? {
+        let currentVersionWithBuild = environment.getAppVisibleVersion()
+        let splitBySpace = currentVersionWithBuild.split(separator: " ")
+        let currentVersion = splitBySpace.first ?? ""
+
+        guard
+            let appStoreId = environment.getAppStoreId(),
+            let bundleId = environment.getAppBundleId(),
+            let url = URL(string: "https://itunes.apple.com/lookup?id=\(appStoreId)") else {
+            return nil
         }
 
         do {
@@ -44,13 +48,13 @@ class AppVersionChecker : AppVersionCheckerProtocol {
 
             if (appStoreVersion == nil) {
                 print("No version info found in App Store response")
-                completion(nil)
+                return nil
             }
 
-            completion(appStoreVersion != currentVersion)
+            return currentVersion != appStoreVersion
         } catch {
             print("Version check failed: \(error)")
-            completion(nil)
+            return nil
         }
     }
 }
