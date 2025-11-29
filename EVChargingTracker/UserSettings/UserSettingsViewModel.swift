@@ -13,20 +13,25 @@ class UserSettingsViewModel: ObservableObject {
 
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
+    @Published var newVersionIsAvailable: Bool = false
 
     private let environment: EnvironmentService
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
+    private let appVersionChecker: AppVersionCheckerProtocol
 
     private var _allCars: [CarDto] = []
 
     init(
         environment: EnvironmentService = .shared,
-        db: DatabaseManager = .shared
+        db: DatabaseManager = .shared,
+        appVersionChecker: AppVersionCheckerProtocol
     ) {
         self.environment = environment
         self.db = db
+        self.appVersionChecker = appVersionChecker
+
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
 
@@ -43,6 +48,14 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency)
             } ?? []
+    }
+
+    func checkAppVersion() async -> Void {
+        await appVersionChecker.checkAppStoreVersion() { isNewVersionAvailable in
+            DispatchQueue.main.async {
+                self.newVersionIsAvailable = isNewVersionAvailable == true
+            }
+        }
     }
 
     func hasAnyExpense(_ carId: Int64? = nil) -> Bool {

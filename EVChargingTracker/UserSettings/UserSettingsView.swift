@@ -10,7 +10,12 @@ import StoreKit
 
 struct UserSettingsView: SwiftUICore.View {
 
-    @StateObject private var viewModel = UserSettingsViewModel()
+    @StateObject private var viewModel = UserSettingsViewModel(
+        environment: EnvironmentService.shared,
+        db: DatabaseManager.shared,
+        appVersionChecker: AppVersionChecker(environment: EnvironmentService.shared)
+    )
+
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
     @State private var isNotificationsEnabled: Bool = false

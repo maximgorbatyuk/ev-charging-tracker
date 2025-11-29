@@ -22,7 +22,6 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     private let expensesRepository: ExpensesRepository
     private let plannedMaintenanceRepository: PlannedMaintenanceRepository
     private let notifications: NotificationManager
-    private let appVersionChecker: AppVersionChecker
 
 	private var _checkedAppVersionForAppUpdates: Bool? = nil
 
@@ -39,7 +38,6 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
         self.expensesRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
-        self.appVersionChecker = AppVersionChecker(environment: self.environment)
 
         loadSessions()
     }
