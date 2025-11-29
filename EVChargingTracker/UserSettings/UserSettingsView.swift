@@ -33,6 +33,35 @@ struct UserSettingsView: SwiftUICore.View {
         NavigationView {
 
             Form {
+                
+                if (showAppUpdateButton) {
+                    HStack {
+                        Text(L("App update available"))
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16, weight: .bold))
+                        
+                        Spacer()
+
+                        Button(action: {
+                            analytics.trackEvent("app_update_button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "update_app"
+                            ])
+
+                            if let url = URL(string: environment.getAppStoreAppLink()) {
+                                viewModel.openWebURL(url)
+                            }
+                        }) {
+                            Image(systemName: "arrow.down.circle.fill")
+                                .foregroundColor(.orange)
+                                .font(.system(size: 28))
+                        }
+                    }
+                    .padding(8)
+                    .listRowBackground(Color.yellow.opacity(0.2))
+                    .background(Color.clear)
+                }
+
                 Section(header: Text(L("Base settings"))) {
                     HStack {
                         Picker(L("Language"), selection: $viewModel.selectedLanguage) {
@@ -123,33 +152,6 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    }
-
-                    if (showAppUpdateButton) {
-                        VStack {
-                            HStack {
-                                Text(L("App update available"))
-                                    .fontWeight(.semibold)
-                                    .font(.system(size: 16, weight: .bold))
-                                
-                                Spacer()
-
-                                Button(action: {
-                                    analytics.trackEvent("app_update_button_clicked", properties: [
-                                        "screen": "user_settings_screen",
-                                        "button_name": "update_app"
-                                    ])
-
-                                    if let url = URL(string: environment.getAppStoreAppLink()) {
-                                        viewModel.openWebURL(url)
-                                    }
-                                }) {
-                                    Image(systemName: "arrow.down.circle.fill")
-                                        .foregroundColor(.yellow)
-                                        .font(.system(size: 28))
-                                }
-                            }
-                        }
                     }
                 }
 
