@@ -8,7 +8,13 @@
 @_exported import SQLite
 import Foundation
 
-class PlannedMaintenanceRepository {
+protocol PlannedMaintenanceRepositoryProtocol {
+    func getAllRecords(carId: Int64) -> [PlannedMaintenance]
+    func insertRecord(_ record: PlannedMaintenance) -> Int64?
+    func deleteRecord(id recordId: Int64) -> Bool
+}
+
+class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
     private let table: Table
 
     private let id = Expression<Int64>("id")

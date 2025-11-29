@@ -6,8 +6,14 @@
 //
 
 import UserNotifications
+import Foundation
 
-class NotificationManager: ObservableObject {
+protocol NotificationManagerProtocol {
+    func scheduleNotification(title: String, body: String, on date: Date) -> String
+    func cancelNotification(_ id: String)
+}
+
+class NotificationManager: ObservableObject, NotificationManagerProtocol {
     static let shared = NotificationManager()
 
     func getAuthorizationStatus(completion: @escaping (UNAuthorizationStatus) -> Void) -> Void {

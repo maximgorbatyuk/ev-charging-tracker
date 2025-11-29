@@ -12,7 +12,9 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
     let onPlannedMaintenaceRecordsUpdated: () -> Void
 
-    @StateObject private var viewModel = PlanedMaintenanceViewModel()
+    @StateObject private var viewModel = PlanedMaintenanceViewModel(
+        notifications: NotificationManager.shared,
+        db: DatabaseManager.shared)
 
     @State private var showingAddMaintenanceRecord = false
     @State private var showingDeleteConfirmation: Bool = false

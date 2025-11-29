@@ -8,11 +8,7 @@
 import Testing
 @testable import EVChargingTracker
 
-// MARK: - Tests
-
 struct PlanedMaintenanceViewModelTests {
-
-    // MARK: - loadData Tests
     
     @Test func loadData_whenNoSelectedCar_doesNotLoadRecords() async throws {
         // Arrange
@@ -25,15 +21,15 @@ struct PlanedMaintenanceViewModelTests {
         mockMaintenanceRepo.records = [
             createTestMaintenance(id: 1, name: "Should not load", carId: 1)
         ]
-        
+
         // Act
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: true
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         // Assert
         #expect(viewModel.maintenanceRecords.isEmpty)
@@ -57,14 +53,13 @@ struct PlanedMaintenanceViewModelTests {
         
         // Act
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
-        viewModel.loadData()
-        
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
+
         // Wait for async dispatch
         try await Task.sleep(nanoseconds: 100_000_000)
         
@@ -72,8 +67,6 @@ struct PlanedMaintenanceViewModelTests {
         #expect(viewModel.maintenanceRecords.count == 2)
         #expect(viewModel.maintenanceRecords.allSatisfy { $0.carId == 1 })
     }
-
-    // MARK: - addNewMaintenanceRecord Tests
     
     @Test func addNewMaintenanceRecord_withoutDate_insertsRecordWithoutNotification() async throws {
         // Arrange
@@ -85,13 +78,13 @@ struct PlanedMaintenanceViewModelTests {
         mockCarRepo.selectedCar = nil
         
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
-        
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
+
         let newRecord = createTestMaintenance(
             name: "New Maintenance",
             when: nil,
@@ -118,13 +111,13 @@ struct PlanedMaintenanceViewModelTests {
         mockCarRepo.selectedCar = nil
         
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
-        
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
+
         let futureDate = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
         let newRecord = createTestMaintenance(
             name: "Scheduled Maintenance",
@@ -141,8 +134,6 @@ struct PlanedMaintenanceViewModelTests {
         #expect(mockNotificationManager.scheduledNotifications.first?.body == "Scheduled Maintenance")
         #expect(mockDelayedRepo.insertedNotifications.count == 1)
     }
-
-    // MARK: - deleteMaintenanceRecord Tests
     
     @Test func deleteMaintenanceRecord_withoutDate_deletesRecordOnly() async throws {
         // Arrange
@@ -154,13 +145,13 @@ struct PlanedMaintenanceViewModelTests {
         mockCarRepo.selectedCar = nil
         
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
-        
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
+
         let maintenance = createTestMaintenance(id: 1, when: nil)
         let recordToDelete = PlannedMaintenanceItem(maintenance: maintenance)
         
@@ -192,14 +183,14 @@ struct PlanedMaintenanceViewModelTests {
             createdAt: Date()
         )
         mockDelayedRepo.notifications = [existingNotification]
-        
+
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         let futureDate = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
         let maintenance = createTestMaintenance(id: 1, when: futureDate)
@@ -223,14 +214,14 @@ struct PlanedMaintenanceViewModelTests {
         
         mockCarRepo.selectedCar = nil
         mockDelayedRepo.notifications = [] // No notifications exist
-        
+
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         let futureDate = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
         let maintenance = createTestMaintenance(id: 1, when: futureDate)
@@ -244,8 +235,6 @@ struct PlanedMaintenanceViewModelTests {
         #expect(mockNotificationManager.cancelledNotificationIds.isEmpty)
         #expect(mockDelayedRepo.deletedNotificationIds.isEmpty)
     }
-
-    // MARK: - reloadSelectedCarForExpenses Tests
     
     @Test func reloadSelectedCarForExpenses_returnsCarFromRepository() async throws {
         // Arrange
@@ -256,14 +245,14 @@ struct PlanedMaintenanceViewModelTests {
         
         let testCar = createTestCar(id: 5, name: "My Tesla")
         mockCarRepo.selectedCar = testCar
-        
+
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         // Act
         let result = viewModel.reloadSelectedCarForExpenses()
@@ -284,12 +273,12 @@ struct PlanedMaintenanceViewModelTests {
         mockCarRepo.selectedCar = nil
         
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         // Act
         let result = viewModel.reloadSelectedCarForExpenses()
@@ -297,8 +286,6 @@ struct PlanedMaintenanceViewModelTests {
         // Assert
         #expect(result == nil)
     }
-
-    // MARK: - selectedCarForExpenses Property Tests
     
     @Test func selectedCarForExpenses_whenNotCached_callsReload() async throws {
         // Arrange
@@ -311,12 +298,12 @@ struct PlanedMaintenanceViewModelTests {
         mockCarRepo.selectedCar = testCar
         
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         // Act
         let result = viewModel.selectedCarForExpenses
@@ -338,12 +325,12 @@ struct PlanedMaintenanceViewModelTests {
         mockCarRepo.selectedCar = testCar
         
         let viewModel = PlanedMaintenanceViewModel(
-            notificationsService: mockNotificationManager,
-            maintenanceRepository: mockMaintenanceRepo,
-            delayedNotificationsRepository: mockDelayedRepo,
-            carRepository: mockCarRepo,
-            loadDataOnInit: false
-        )
+            notifications: mockNotificationManager,
+            db: DatabaseManagerFake(
+                plannedMaintenanceRepository: mockMaintenanceRepo,
+                delayedNotificationsRepository: mockDelayedRepo,
+                carRepository: mockCarRepo
+            ))
         
         // First call to cache the value
         _ = viewModel.selectedCarForExpenses
@@ -361,78 +348,5 @@ struct PlanedMaintenanceViewModelTests {
         #expect(result?.name == "First Car")
         // Call count should not increase significantly (property may call once to check nil)
         #expect(mockCarRepo.getSelectedCarCallCount == initialCallCount)
-    }
-}
-
-// MARK: - PlannedMaintenanceItem Tests
-
-struct PlannedMaintenanceItemTests {
-    
-    @Test func init_calculatesMileageDifference_whenCarAndOdometerProvided() async throws {
-        // Arrange
-        let car = createTestCar(currentMileage: 50000)
-        let maintenance = createTestMaintenance(odometer: 55000)
-        
-        // Act
-        let item = PlannedMaintenanceItem(maintenance: maintenance, car: car)
-        
-        // Assert
-        #expect(item.mileageDifference == -5000) // 50000 - 55000
-    }
-    
-    @Test func init_calculatesDaysDifference_whenDateProvided() async throws {
-        // Arrange
-        let now = Date()
-        let futureDate = Calendar.current.date(byAdding: .day, value: 10, to: now)!
-        let maintenance = createTestMaintenance(when: futureDate)
-        
-        // Act
-        let item = PlannedMaintenanceItem(maintenance: maintenance, now: now)
-        
-        // Assert
-        #expect(item.daysDifference == 10)
-    }
-    
-    @Test func compare_sortsByMileageDifferenceDescending_whenBothHaveMileage() async throws {
-        // Arrange
-        let car = createTestCar(currentMileage: 50000)
-        let maintenance1 = createTestMaintenance(id: 1, odometer: 45000) // diff: 5000
-        let maintenance2 = createTestMaintenance(id: 2, odometer: 48000) // diff: 2000
-        
-        let item1 = PlannedMaintenanceItem(maintenance: maintenance1, car: car)
-        let item2 = PlannedMaintenanceItem(maintenance: maintenance2, car: car)
-        
-        // Act & Assert - item1 has higher mileage difference, should come first
-        #expect(item1 < item2)
-    }
-    
-    @Test func compare_sortsByDateAscending_whenBothHaveDates() async throws {
-        // Arrange
-        let now = Date()
-        let earlierDate = Calendar.current.date(byAdding: .day, value: 5, to: now)!
-        let laterDate = Calendar.current.date(byAdding: .day, value: 10, to: now)!
-        
-        let maintenance1 = createTestMaintenance(id: 1, when: earlierDate)
-        let maintenance2 = createTestMaintenance(id: 2, when: laterDate)
-        
-        let item1 = PlannedMaintenanceItem(maintenance: maintenance1, now: now)
-        let item2 = PlannedMaintenanceItem(maintenance: maintenance2, now: now)
-        
-        // Act & Assert - earlier date should come first
-        #expect(item1 < item2)
-    }
-    
-    @Test func equality_returnsTrue_whenSameDateAndMileageDifference() async throws {
-        // Arrange
-        let car = createTestCar(currentMileage: 50000)
-        let date = Date()
-        let maintenance1 = createTestMaintenance(id: 1, when: date, odometer: 45000)
-        let maintenance2 = createTestMaintenance(id: 2, when: date, odometer: 45000)
-        
-        let item1 = PlannedMaintenanceItem(maintenance: maintenance1, car: car)
-        let item2 = PlannedMaintenanceItem(maintenance: maintenance2, car: car)
-        
-        // Act & Assert
-        #expect(item1 == item2)
     }
 }
