@@ -149,6 +149,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                         HStack {
                             Text(L("It is recommended to set the default currency before adding any expenses."))
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .font(.caption)
                         .foregroundColor(.secondary)

@@ -145,12 +145,20 @@ struct AddExpenseView: SwiftUICore.View {
                         }
                     }
                     
-                    HStack {
-                        Text(L("Odometer (km)"))
-                        Spacer()
-                        TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
+                    VStack {
+                        HStack {
+                            Text(L("Odometer (km)"))
+                            Spacer()
+                            TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                        }
+
+                        Text(L("If you leave it empty, the current mileage of the selected car will be used."))
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.top, 2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
                     HStack {
