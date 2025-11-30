@@ -9,9 +9,14 @@ import Foundation
 
 class MainTabViewModel {
     private let db: DatabaseManager
+    private let appVersionChecker: AppVersionCheckerProtocol
 
-    init() {
-        self.db = DatabaseManager.shared
+    init(
+        db: DatabaseManager = .shared,
+        appVersionChecker: AppVersionCheckerProtocol
+    ) {
+        self.db = db
+        self.appVersionChecker = appVersionChecker
     }
 
     func getPendingMaintenanceRecords() -> Int {
@@ -26,5 +31,9 @@ class MainTabViewModel {
             currentDate: Date()) ?? 0
 
         return result
+    }
+
+    func checkAppVersion() async -> Bool? {
+        return await appVersionChecker.checkAppStoreVersion()
     }
 }

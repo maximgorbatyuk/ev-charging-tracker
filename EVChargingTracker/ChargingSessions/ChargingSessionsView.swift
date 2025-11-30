@@ -115,9 +115,8 @@ struct ChargingSessionsView: SwiftUICore.View {
                 .refreshable {
                     loadData()
                 }
-                .background(Color.clear)
+                
             }
-            .background(Color.green)
         }
     }
     

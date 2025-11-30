@@ -17,6 +17,7 @@ struct EditCarView: SwiftUICore.View {
     @State private var selectedForTracking: Bool
 
     @State private var showDeleteConfirmation = false
+    @State private var alertMessage: String? = nil
 
     init(
         car: CarDto?,
@@ -44,6 +45,21 @@ struct EditCarView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
+                if (alertMessage != nil) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.system(size: 28))
+
+                        Text(alertMessage!)
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16, weight: .bold))
+                    }
+                    .padding(8)
+                    .listRowBackground(Color.yellow.opacity(0.2))
+                    .background(Color.clear)
+                }
+                
                 Section(header: Text(L("Basic info"))) {
                     HStack {
                         Text(L("Name"))

@@ -179,7 +179,6 @@
 				en,
 				Base,
 				ru,
-				kz,
 				kk,
 				tr,
 				de,

@@ -175,3 +175,6 @@
 "onboarding.plan_maintenance__subtitle" = "Elektrikli aracınızın bakım görevlerini planlayın ve hatırlatıcılar alın";
 "onboarding.view_stats" = "İstatistikleri görüntüle";
 "onboarding.view_stats__subtitle" = "Elektrikli aracınızın kilometre başına ne kadara mal olduğunu ve elektrikli araç kullanarak tasarruf ettiğiniz CO₂ miktarını görün";
+
+"App update available" = "Uygulama güncellemesi mevcut";
+"If you leave it empty, the current mileage of the selected car will be used." = "Boş bırakırsanız, seçilen aracın mevcut kilometresi kullanılacaktır.";
