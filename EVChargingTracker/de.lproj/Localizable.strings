@@ -178,3 +178,4 @@
 "onboarding.view_stats__subtitle" = "Erfahren Sie, wie viel Ihr Elektrofahrzeug pro Kilometer kostet und wie viel CO₂ Sie durch das Fahren eines Elektrofahrzeugs eingespart haben";
 
 "App update available" = "App-Update verfügbar";
+"If you leave it empty, the current mileage of the selected car will be used." = "Wenn Sie es leer lassen, wird der aktuelle Kilometerstand des ausgewählten Autos verwendet.";

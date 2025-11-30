@@ -177,3 +177,4 @@
 "onboarding.view_stats__subtitle" = "У вас будет статистика, сколько вы тратите на ваш электрокар, сколько стоит 1 километр на нем и сколько CO₂ вы сохранили";
 
 "App update available" = "Доступна новая версия";
+"If you leave it empty, the current mileage of the selected car will be used." = "Если оставить это поле пустым, будет использован текущий пробег выбранного автомобиля.";
