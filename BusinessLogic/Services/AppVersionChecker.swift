@@ -2,7 +2,6 @@ import Foundation
 import UIKit
 
 protocol AppVersionCheckerProtocol {
-    func openLinkToUpdate()
     func checkAppStoreVersion() async -> Bool?
 }
 
@@ -16,13 +15,6 @@ class AppVersionChecker : AppVersionCheckerProtocol {
         self.environment = environment
     }
 
-    func openLinkToUpdate() {
-        guard let bundleId = environment.getAppBundleId() else { return }
-        if let url = URL(string: "itms-apps://apple.com/app/id\(bundleId)") {
-            UIApplication.shared.open(url)
-        }
-    }
-
     func checkAppStoreVersion() async -> Bool? {
         let currentVersionWithBuild = environment.getAppVisibleVersion()
         let splitBySpace = currentVersionWithBuild.split(separator: " ")
@@ -30,7 +22,6 @@ class AppVersionChecker : AppVersionCheckerProtocol {
 
         guard
             let appStoreId = environment.getAppStoreId(),
-            let bundleId = environment.getAppBundleId(),
             let url = URL(string: "https://itunes.apple.com/lookup?id=\(appStoreId)") else {
             return nil
         }
@@ -43,10 +34,9 @@ class AppVersionChecker : AppVersionCheckerProtocol {
 
             let results = json?["results"] as? [[String: Any]]
 
-            let currentVersion = environment.getAppVisibleVersion()
-            let appStoreVersion = results?.first?["version"] as? String?
+            let appStoreVersion = results?.first?["version"] as? String ?? "-"
 
-            if (appStoreVersion == nil) {
+            if (appStoreVersion == "-") {
                 print("No version info found in App Store response")
                 return nil
             }

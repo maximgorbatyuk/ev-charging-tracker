@@ -26,6 +26,22 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
+
+                if (alertMessage != nil) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.system(size: 28))
+
+                        Text(alertMessage!)
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16, weight: .bold))
+                    }
+                    .padding(8)
+                    .listRowBackground(Color.yellow.opacity(0.2))
+                    .background(Color.clear)
+                }
+
                 Section(header: Text(L("Maintenance details"))) {
 
                     if (selectedCar != nil) {
@@ -93,6 +109,12 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
         
         alertMessage = nil
         if (selectedCar == nil) {
+            alertMessage = L("Please select a car first.")
+            return
+        }
+        
+        if (name == "") {
+            alertMessage = L("Please type service title.")
             return
         }
 

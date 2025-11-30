@@ -56,6 +56,21 @@ struct AddExpenseView: SwiftUICore.View {
         NavigationView {
                       
             Form {
+                if (alertMessage != nil) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.system(size: 28))
+
+                        Text(alertMessage!)
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16, weight: .bold))
+                    }
+                    .padding(8)
+                    .listRowBackground(Color.yellow.opacity(0.2))
+                    .background(Color.clear)
+                }
+                
                 Section(header: Text(L("Expense details"))) {
 
                     if (selectedCardForExpense != nil) {
@@ -260,18 +275,23 @@ struct AddExpenseView: SwiftUICore.View {
             energy = energyParsed
         }
 
-        guard let odo = Int(odometer) else {
-            alertMessage = L("Please type a valid value for Odometer.")
-            return
+        var currentMileageValue: Int? = Int(odometer)
+        if currentMileageValue == nil {
+            if (selectedCardForExpense == nil) {
+                alertMessage = L("Please type a valid value for Odometer.")
+                return
+            }
+
+            currentMileageValue = selectedCardForExpense!.currentMileage
         }
-        
+
         let sessionCost = Double(cost)
 
         let expense = Expense(
             date: date,
             energyCharged: energy,
             chargerType: chargerType,
-            odometer: odo,
+            odometer: currentMileageValue!,
             cost: sessionCost,
             notes: notes,
             isInitialRecord: false,
@@ -287,7 +307,7 @@ struct AddExpenseView: SwiftUICore.View {
                 date: date,
                 energyCharged: 0.0,
                 chargerType: .other,
-                odometer: odo,
+                odometer: currentMileageValue!,
                 cost: 0.0,
                 notes: L("Initial record for tracking car"),
                 isInitialRecord: true,
@@ -309,7 +329,7 @@ struct AddExpenseView: SwiftUICore.View {
                 expense: expense,
                 carName: carNameValue,
                 carId: carId,
-                initialOdometr: odo,
+                initialOdometr: currentMileageValue!,
                 batteryCapacity: batteryCapacityValue,
                 initialExpenseForNewCar: initialExpenseForNewCar))
         dismiss()

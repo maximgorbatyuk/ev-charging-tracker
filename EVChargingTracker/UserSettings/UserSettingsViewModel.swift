@@ -14,7 +14,6 @@ class UserSettingsViewModel: ObservableObject {
 
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
-    @Published var newVersionIsAvailable: Bool = false
 
     private let environment: EnvironmentService
     private let db: DatabaseManager
