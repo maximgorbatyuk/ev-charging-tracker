@@ -53,8 +53,7 @@ struct AddExpenseView: SwiftUICore.View {
     }
 
     var body: some SwiftUICore.View {
-        NavigationView {
-                      
+        NavigationStack {
             Form {
                 if (alertMessage != nil) {
                     HStack {
@@ -70,7 +69,7 @@ struct AddExpenseView: SwiftUICore.View {
                     .listRowBackground(Color.yellow.opacity(0.2))
                     .background(Color.clear)
                 }
-                
+
                 Section(header: Text(L("Expense details"))) {
 
                     if (selectedCardForExpense != nil) {
@@ -216,8 +215,32 @@ struct AddExpenseView: SwiftUICore.View {
                     TextField(L("Notes (optional)"), text: $notes)
                 }
             }
+            .safeAreaInset(edge: .bottom) {
+                FormButtonsView(
+                    onCancel: {
+                        analytics.trackEvent("cancel_button_clicked", properties: [
+                                "button_name": "cancel",
+                                "screen": "add_expense_screen",
+                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                            ])
+
+                        dismiss()
+                    },
+                    onSave: {
+                        analytics.trackEvent("save_button_clicked", properties: [
+                                "button_name": "save",
+                                "screen": "add_expense_screen",
+                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                            ])
+
+                        saveSession()
+                    }
+                )
+                .padding(.bottom, 30)
+                .padding(.horizontal, 20)
+            }
             .navigationTitle(L("Add expense"))
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
@@ -229,19 +252,6 @@ struct AddExpenseView: SwiftUICore.View {
 
                         dismiss()
                     }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(L("Save")) {
-                        analytics.trackEvent("save_button_clicked", properties: [
-                                "button_name": "save",
-                                "screen": "add_expense_screen",
-                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
-                            ])
-
-                        saveSession()
-                    }
-                    .fontWeight(.semibold)
                 }
             }
             .onAppear() {

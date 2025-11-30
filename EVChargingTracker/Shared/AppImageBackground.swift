@@ -13,10 +13,9 @@ struct AppImageBackground: SwiftUI.View {
     var body: some SwiftUI.View {
         Image(colorScheme == .dark ? "logo-pattern-white" : "logo-pattern-black" )
             .resizable()
-            .aspectRatio(contentMode: .fit)
+            .scaledToFill()
             .opacity(0.05)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .offset(x: -100, y: -100)
             .ignoresSafeArea()
     }
 }
