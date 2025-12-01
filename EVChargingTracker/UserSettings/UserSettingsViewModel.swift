@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class UserSettingsViewModel: ObservableObject {
 
@@ -27,6 +28,7 @@ class UserSettingsViewModel: ObservableObject {
     ) {
         self.environment = environment
         self.db = db
+
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
 
@@ -43,6 +45,17 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency)
             } ?? []
+    }
+
+    func openAppStoreForUpdate() -> Void {
+        let urlAddress = environment.getAppStoreAppLink()
+        if let url = URL(string: urlAddress) {
+            self.openWebURL(url)
+        }
+    }
+
+    func openWebURL(_ url: URL) {
+        UIApplication.shared.open(url)
     }
 
     func hasAnyExpense(_ carId: Int64? = nil) -> Bool {

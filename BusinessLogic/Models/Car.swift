@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Car {
+class Car: Codable, Identifiable {
     var id: Int64?
     var name: String
     var selectedForTracking: Bool

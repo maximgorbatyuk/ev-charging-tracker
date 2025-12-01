@@ -23,6 +23,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     private let plannedMaintenanceRepository: PlannedMaintenanceRepository
     private let notifications: NotificationManager
 
+	private var _checkedAppVersionForAppUpdates: Bool? = nil
+
     private var _selectedCarForExpenses: Car?
 
     init(

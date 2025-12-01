@@ -10,7 +10,12 @@ import StoreKit
 
 struct UserSettingsView: SwiftUICore.View {
 
-    @StateObject private var viewModel = UserSettingsViewModel()
+    @State var showAppUpdateButton: Bool = false
+
+    @StateObject private var viewModel = UserSettingsViewModel(
+        environment: EnvironmentService.shared,
+        db: DatabaseManager.shared)
+
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
     @State private var isNotificationsEnabled: Bool = false
@@ -28,6 +33,35 @@ struct UserSettingsView: SwiftUICore.View {
         NavigationView {
 
             Form {
+                
+                if (showAppUpdateButton) {
+                    HStack {
+                        Text(L("App update available"))
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16, weight: .bold))
+                        
+                        Spacer()
+
+                        Button(action: {
+                            analytics.trackEvent("app_update_button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "update_app"
+                            ])
+
+                            if let url = URL(string: environment.getAppStoreAppLink()) {
+                                viewModel.openWebURL(url)
+                            }
+                        }) {
+                            Image(systemName: "arrow.down.circle.fill")
+                                .foregroundColor(.orange)
+                                .font(.system(size: 28))
+                        }
+                    }
+                    .padding(8)
+                    .listRowBackground(Color.yellow.opacity(0.2))
+                    .background(Color.clear)
+                }
+
                 Section(header: Text(L("Base settings"))) {
                     HStack {
                         Picker(L("Language"), selection: $viewModel.selectedLanguage) {
@@ -46,7 +80,7 @@ struct UserSettingsView: SwiftUICore.View {
                             viewModel.saveLanguage(newLang)
                         }
                     }
-                    
+
                     VStack {
                         HStack {
                             Text(L("Notifications enabled"))
@@ -115,6 +149,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                         HStack {
                             Text(L("It is recommended to set the default currency before adding any expenses."))
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -215,7 +250,10 @@ struct UserSettingsView: SwiftUICore.View {
                                 "button_name": "developer_telegram_link"
                             ])
 
-                        openWebURL(URL(string: environment.getDeveloperTelegramLink())!)
+                        if let url = URL(string: environment.getDeveloperTelegramLink()) {
+                            viewModel.openWebURL(url)
+                        }
+
                     } label: {
                         HStack {
                             Image(systemName: "ellipses.bubble.fill")
@@ -390,10 +428,6 @@ struct UserSettingsView: SwiftUICore.View {
         )
     }
 
-    private func openWebURL(_ url: URL) {
-        UIApplication.shared.open(url)
-    }
-
     private func refreshData() -> Void {
         viewModel.refetchCars()
 
@@ -412,5 +446,5 @@ struct UserSettingsView: SwiftUICore.View {
 }
 
 #Preview {
-    UserSettingsView()
+    UserSettingsView(showAppUpdateButton: false)
 }
