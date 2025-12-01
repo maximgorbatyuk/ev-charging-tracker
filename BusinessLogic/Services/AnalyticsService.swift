@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseAnalytics
+import os
 
 class AnalyticsService: ObservableObject {
 
@@ -14,8 +15,11 @@ class AnalyticsService: ObservableObject {
     private var _sessionId = UUID().uuidString
 
     let environment: EnvironmentService
+    let logger: Logger
+    
     init() {
         self.environment = EnvironmentService.shared
+        self.logger = Logger(subsystem: "AnalyticsService", category: "Analytics")
     }
 
     static let shared = AnalyticsService()
@@ -23,7 +27,7 @@ class AnalyticsService: ObservableObject {
     func trackEvent(_ name: String, properties: [String: Any]? = nil) -> Void {
         let mergedParams = mergeProperties(properties)
         if (environment.isDevelopmentMode()) {
-            print("Analytics Event: \(name), properties: \(String(describing: mergedParams))")
+            logger.info("Analytics Event: \(name), properties: \(String(describing: mergedParams))")
         }
 
         Analytics.logEvent(name, parameters: mergedParams)
@@ -31,7 +35,7 @@ class AnalyticsService: ObservableObject {
 
     func identifyUser(_ userId: String, properties: [String: Any]? = nil) -> Void {
         if (environment.isDevelopmentMode()) {
-            print("Analytics Identify User: \(userId), properties: \(String(describing: properties))")
+            logger.info("Analytics Identify User: \(userId), properties: \(String(describing: properties))")
         }
 
         Analytics.setUserID(userId)
@@ -46,7 +50,7 @@ class AnalyticsService: ObservableObject {
         mergedParams[AnalyticsParameterScreenClass] = screenName
 
         if (environment.isDevelopmentMode()) {
-            print("Analytics Screen View: \(screenName), properties: \(String(describing: mergedParams))")
+            logger.info("Analytics Screen View: \(screenName), properties: \(String(describing: mergedParams))")
         }
 
         Analytics.logEvent(AnalyticsEventScreenView, parameters: mergedParams)

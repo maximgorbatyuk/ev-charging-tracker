@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import os
 
 protocol AppVersionCheckerProtocol {
     func checkAppStoreVersion() async -> Bool?
@@ -8,11 +9,14 @@ protocol AppVersionCheckerProtocol {
 class AppVersionChecker : AppVersionCheckerProtocol {
    
     private let environment: EnvironmentService
+    private let logger: Logger
 
     init(
-        environment: EnvironmentService
+        environment: EnvironmentService,
+        logger: Logger? = nil
     ) {
         self.environment = environment
+        self.logger = logger ?? Logger(subsystem: Bundle.main.bundleIdentifier ?? "-", category: "AppVersionChecker")
     }
 
     func checkAppStoreVersion() async -> Bool? {
@@ -30,20 +34,20 @@ class AppVersionChecker : AppVersionCheckerProtocol {
             let (data, _) = try await URLSession.shared.data(from: url)
             let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
 
-            print("Version check response: \(json)")
+            logger.debug("Version check response: \(String(describing: json))")
 
             let results = json?["results"] as? [[String: Any]]
 
             let appStoreVersion = results?.first?["version"] as? String ?? "-"
 
             if (appStoreVersion == "-") {
-                print("No version info found in App Store response")
+                logger.info("No version info found in App Store response")
                 return nil
             }
 
             return currentVersion != appStoreVersion
         } catch {
-            print("Version check failed: \(error)")
+            logger.error("Version check failed: \(error)")
             return nil
         }
     }

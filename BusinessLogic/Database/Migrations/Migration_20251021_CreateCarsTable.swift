@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 class Migration_20251021_CreateCarsTable {
     
@@ -24,17 +25,17 @@ class Migration_20251021_CreateCarsTable {
             expensesTableName: DatabaseManager.ExpensesTableName,
             userSettingsTableName: DatabaseManager.UserSettingsTableName)
 
+        let logger = Logger()
         let expensesRepository = ExpensesRepository(db: db, tableName: DatabaseManager.ExpensesTableName)
 
         do {
-
             let carsTableCreateCommand = carsRepository.getCreateTableCommand()
             try db.run(carsTableCreateCommand)
-            print("Cars table created successfully")
+            logger.debug("Cars table created successfully")
 
             let addColumnToExpensesCommand = expensesTable.addColumn(Expression<Int64?>("car_id"))
             try db.run(addColumnToExpensesCommand)
-            print("car_id column added to expenses table successfully")
+            logger.debug("car_id column added to expenses table successfully")
 
             let allExpenses = expensesRepository.fetchAllSessions()
             if (allExpenses.count > 0) {
@@ -62,12 +63,12 @@ class Migration_20251021_CreateCarsTable {
                     _ = expensesRepository.updateSession(expense)
                 }
 
-                print("All existing expenses (\(allExpenses.count) associated with the default car")
+                logger.debug("All existing expenses (\(allExpenses.count) associated with the default car")
             }
 
-            print("Migration \(migrationName) executed successfully")
+            logger.debug("Migration \(self.migrationName) executed successfully")
         } catch {
-            print("Unable to execute migration \(migrationName): \(error)")
+            logger.error("Unable to execute migration \(self.migrationName): \(error)")
         }
     }
 }

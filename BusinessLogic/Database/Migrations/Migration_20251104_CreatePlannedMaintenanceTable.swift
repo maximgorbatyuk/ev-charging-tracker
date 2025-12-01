@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 final class Migration_20251104_CreatePlannedMaintenanceTable {
     private let migrationName = "20251104_CreatePlannedMaintenanceTable"
@@ -18,12 +19,13 @@ final class Migration_20251104_CreatePlannedMaintenanceTable {
     func execute() {
         let repository = PlannedMaintenanceRepository(db: db, tableName: DatabaseManager.PlannedMaintenanceTableName)
 
+        let logger = Logger()
         do {
             let createCommand = repository.getCreateTableCommand()
             try db.run(createCommand)
-            print("Planned maintenance table created successfully")
+            logger.debug("Planned maintenance table created successfully")
         } catch {
-            print("Unable to execute migration \(migrationName): \(error)")
+            logger.error("Unable to execute migration \(self.migrationName): \(error)")
         }
     }
 }

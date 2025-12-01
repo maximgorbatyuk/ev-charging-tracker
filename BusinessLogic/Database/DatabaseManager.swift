@@ -6,6 +6,7 @@
 //
 @_exported import SQLite
 import Foundation
+import os
 
 protocol DatabaseManagerProtocol {
     func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepository
@@ -32,17 +33,20 @@ class DatabaseManager : DatabaseManagerProtocol {
     var delayedNotificationsRepository: DelayedNotificationsRepository?
 
     private var db: Connection?
+    private let logger: Logger
     private let latestVersion = 5
     
     private init() {
        
+        self.logger = Logger(subsystem: "com.evchargingtracker.database", category: "DatabaseManager")
+
         do {
             let path = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory, .userDomainMask, true
             ).first!
             
             let dbPath = "\(path)/tesla_charging.sqlite3"
-            print("Database path: \(dbPath)")
+            logger.debug("Database path: \(dbPath)")
 
             self.db = try Connection(dbPath)
             guard let dbConnection = db else {
@@ -66,7 +70,7 @@ class DatabaseManager : DatabaseManagerProtocol {
 
             migrateIfNeeded()
         } catch {
-            print("Unable to setup database: \(error)")
+            logger.error("Unable to setup database: \(error)")
         }
     }
 

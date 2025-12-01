@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 final class Migration_20251114_CreateDelayedNotificationTable {
     private let migrationName = "20251114_CreateDelayedNotificationTable"
@@ -17,15 +18,15 @@ final class Migration_20251114_CreateDelayedNotificationTable {
     }
     
     func execute() {
-        let plannedMaintenanceTable = Table(DatabaseManager.DelayedNotificationsTableName)
         let repository = DelayedNotificationsRepository(db: db, tableName: DatabaseManager.DelayedNotificationsTableName)
+        let logger = Logger()
 
         do {
             let createCommand = repository.getCreateTableCommand()
             try db.run(createCommand)
-            print("Table created successfully")
+            logger.info("Table created successfully")
         } catch {
-            print("Unable to execute migration \(migrationName): \(error)")
+            logger.error("Unable to execute migration \(self.migrationName): \(error)")
         }
     }
 }

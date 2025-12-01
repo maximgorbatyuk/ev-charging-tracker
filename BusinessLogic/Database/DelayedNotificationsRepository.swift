@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 protocol DelayedNotificationsRepositoryProtocol {
     func getRecordByMaintenanceId(_ maintenanceRecordId: Int64) -> DelayedNotification?
@@ -25,10 +26,12 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     private let createdAtColumn = Expression<Date>("created_at")
 
     private var db: Connection
+    private let logger: Logger
 
-    init(db: Connection, tableName: String) {
+    init(db: Connection, tableName: String, logger: Logger? = nil) {
         self.db = db
         self.table = Table(tableName)
+        self.logger = logger ?? Logger(subsystem: Bundle.main.bundleIdentifier ?? "-", category: "DelayedNotificationsRepository")
     }
 
     func getCreateTableCommand() -> String {
@@ -60,7 +63,7 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
                 recordsList.append(recordItem)
             }
         } catch {
-            print("Fetch failed: \(error)")
+            logger.error("Fetch failed: \(error)")
         }
 
         return recordsList
@@ -82,7 +85,7 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
             }
             return nil
         } catch {
-            print("Fetch by notification ID failed: \(error)")
+            logger.error("Fetch by notification ID failed: \(error)")
             return nil
         }
     }
@@ -99,11 +102,11 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
             )
 
             let rowId = try db.run(insert)
-            print("Inserted record with id: \(rowId)")
+            logger.info("Inserted record with id: \(rowId)")
 
             return rowId
         } catch {
-            print("Insert failed: \(error)")
+            logger.error("Insert failed: \(error)")
             return nil
         }
     }
@@ -112,7 +115,7 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
         do {
             return try db.scalar(table.count)
         } catch {
-            print("Failed to get records count: \(error)")
+            logger.error("Failed to get records count: \(error)")
             return 0
         }
     }
@@ -127,10 +130,10 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
                 maintenanceRecordIdColumn <- record.maintenanceRecord,
             ))
 
-            print("Updated record with id: \(recordId)")
+            logger.info("Updated record with id: \(recordId)")
             return true
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }
@@ -140,10 +143,10 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
         
         do {
             try db.run(recordToDelete.delete())
-            print("Deleted record with id: \(recordId)")
+            logger.info("Deleted record with id: \(recordId)")
             return true
         } catch {
-            print("Delete failed: \(error)")
+            logger.error("Delete failed: \(error)")
             return false
         }
     }
@@ -151,9 +154,9 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     func truncateTable() -> Void {
         do {
             try db.run(table.delete())
-            print("Table truncated successfully")
+            logger.info("Table truncated successfully")
         } catch {
-            print("Unable to truncate table: \(error)")
+            logger.error("Unable to truncate table: \(error)")
         }
     }
 

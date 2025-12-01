@@ -19,13 +19,13 @@ final class LocalizationManager: ObservableObject {
         Locale(identifier: currentLanguage.rawValue)
     }
 
-    func setLanguage(_ language: AppLanguage) {
+    func setLanguage(_ language: AppLanguage) throws {
         guard language != currentLanguage else { return }
         currentLanguage = language
 
         let success = DatabaseManager.shared.userSettingsRepository?.upsertLanguage(language.rawValue) ?? false
         if !success {
-            print("Failed to save selected language to DB")
+            throw RuntimeError("Failed to save selected language to DB")
         }
     }
 

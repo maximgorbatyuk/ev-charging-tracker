@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 protocol CarRepositoryProtocol {
     func getSelectedForExpensesCar() -> Car?
@@ -27,19 +28,21 @@ class CarRepository : CarRepositoryProtocol {
     private let createdAtColumn = Expression<Date>("created_at")
 
     private let userSettingsRepository: UserSettingsRepository
-
     private var db: Connection
+    private let logger: Logger
     
     init(
         db: Connection,
         tableName: String,
         expensesTableName: String,
-        userSettingsTableName: String) {
+        userSettingsTableName: String,
+        logger: Logger? = nil) {
 
         self.db = db
         self.table = Table(tableName)
         self.expensesTable = Table(expensesTableName)
         self.userSettingsRepository = UserSettingsRepository(db: db, tableName: userSettingsTableName)
+        self.logger = logger ?? Logger(subsystem: "CarRepository", category: "Database")
     }
 
     func getCreateTableCommand() -> String {
@@ -67,18 +70,18 @@ class CarRepository : CarRepositoryProtocol {
             }
 
             try db.run(table.drop(ifExists: true))
-            print("Table deleted successfully")
+            logger.info("Table deleted successfully")
         } catch {
-            print("Unable to delete table: \(error)")
+            logger.error("Unable to delete table: \(error)")
         }
     }
 
     func truncateTable() -> Void {
         do {
             try db.run(table.delete())
-            print("Table truncated successfully")
+            logger.info("Table truncated successfully")
         } catch {
-            print("Unable to truncate table: \(error)")
+            logger.error("Unable to truncate table: \(error)")
         }
     }
 
@@ -98,17 +101,17 @@ class CarRepository : CarRepositoryProtocol {
             )
 
             let rowId = try db.run(insert)
-            print("Inserted car with id: \(rowId)")
+            logger.info("Inserted car with id: \(rowId)")
             return rowId
         } catch {
-            print("Insert failed: \(error)")
+            logger.error("Insert failed: \(error)")
             return nil
         }
     }
 
     func updateMilleage(_ car: Car) -> Bool {
         guard let carId = car.id else {
-            print("Update failed: Car id is nil")
+            logger.info("Update failed: Car id is nil")
             return false
         }
 
@@ -121,7 +124,7 @@ class CarRepository : CarRepositoryProtocol {
             let updated = try db.run(update)
             return updated > 0
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }
@@ -146,7 +149,7 @@ class CarRepository : CarRepositoryProtocol {
                 )
             }
         } catch {
-            print("Failed to fetch car by id \(id): \(error)")
+            logger.error("Failed to fetch car by id \(id): \(error)")
         }
 
         return nil
@@ -168,7 +171,7 @@ class CarRepository : CarRepositoryProtocol {
             let updated = try db.run(update)
             return updated > 0
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }
@@ -178,7 +181,7 @@ class CarRepository : CarRepositoryProtocol {
         do {
             return try db.scalar(carsToCount.count)
         } catch {
-            print("Failed to get cars count excluding id \(carIdToExclude): \(error)")
+            logger.error("Failed to get cars count excluding id \(carIdToExclude): \(error)")
             return 0
         }
     }
@@ -192,7 +195,7 @@ class CarRepository : CarRepositoryProtocol {
             let updated = try db.run(update)
             return updated > 0
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }
@@ -206,7 +209,7 @@ class CarRepository : CarRepositoryProtocol {
             let updated = try db.run(update)
             return updated > 0
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }
@@ -217,10 +220,10 @@ class CarRepository : CarRepositoryProtocol {
         do {
             let deletionResult = try db.run(carExpenses.delete())
             if (deletionResult > 0) {
-                print("Deleted \(deletionResult) related expenses for car id: \(id)")
+                logger.info("Deleted \(deletionResult) related expenses for car id: \(id)")
             }
         } catch {
-            print("Failed to delete related expenses: \(error)")
+            logger.error("Failed to delete related expenses: \(error)")
             return false
         }
 
@@ -230,7 +233,7 @@ class CarRepository : CarRepositoryProtocol {
             let deleted = try db.run(carCommand.delete())
             return deleted > 0
         } catch {
-            print("Delete failed: \(error)")
+            logger.error("Delete failed: \(error)")
             return false
         }
     }
@@ -239,7 +242,7 @@ class CarRepository : CarRepositoryProtocol {
         do {
             return try db.scalar(table.count)
         } catch {
-            print("Failed to get cars count: \(error)")
+            logger.error("Failed to get cars count: \(error)")
             return 0
         }
     }
@@ -266,7 +269,7 @@ class CarRepository : CarRepositoryProtocol {
                 return nil
             }
         } catch {
-            print("Failed to fetch latest added car: \(error)")
+            logger.error("Failed to fetch latest added car: \(error)")
         }
 
         return nil
@@ -296,7 +299,7 @@ class CarRepository : CarRepositoryProtocol {
             }
         }
         catch {
-            print("Failed to fetch cars: \(error)")
+            logger.error("Failed to fetch cars: \(error)")
         }
 
         return cars
@@ -325,7 +328,7 @@ class CarRepository : CarRepositoryProtocol {
                 )
             }
         } catch {
-            print("Failed to fetch selected car for expenses: \(error)")
+            logger.error("Failed to fetch selected car for expenses: \(error)")
         }
 
         return nil

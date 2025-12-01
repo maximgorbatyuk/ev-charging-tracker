@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 class MigrationsRepository {
     private let table: Table
@@ -15,10 +16,12 @@ class MigrationsRepository {
     private let date = Expression<Date>("date")
     
     private var db: Connection
+    private let logger: Logger
     
-    init(db: Connection, tableName: String) {
+    init(db: Connection, tableName: String, logger: Logger? = nil) {
         self.db = db
         self.table = Table(tableName)
+        self.logger = logger ?? Logger(subsystem: tableName, category: "Database")
     }
 
     func createTableIfNotExists() -> Void {
@@ -29,9 +32,8 @@ class MigrationsRepository {
 
         do {
             try db.run(command)
-            print("Table created successfully")
         } catch {
-            print("Unable to create table: \(error)")
+            logger.error("Unable to create table: \(error)")
         }
     }
 
@@ -49,7 +51,7 @@ class MigrationsRepository {
                 migrationsList.append(migration)
             }
         } catch {
-            print("Fetch failed: \(error)")
+            logger.error("Fetch failed: \(error)")
         }
         
         if (migrationsList.count > 0) {
@@ -66,7 +68,7 @@ class MigrationsRepository {
         do {
             try db.run(insertCommand)
         } catch {
-            print("Unable to insert row: \(error)")
+            logger.error("Unable to insert row: \(error)")
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 class ChargingViewModel: ObservableObject, IExpenseView {
 
@@ -23,18 +24,19 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     private let plannedMaintenanceRepository: PlannedMaintenanceRepository
     private let notifications: NotificationManager
 
-	private var _checkedAppVersionForAppUpdates: Bool? = nil
-
     private var _selectedCarForExpenses: Car?
+    private let logger: Logger
 
     init(
         environment: EnvironmentService = .shared,
         db: DatabaseManager = .shared,
-        notifications: NotificationManager = .shared
+        notifications: NotificationManager = .shared,
+        logger: Logger? = nil
     ) {
         self.environment = environment
         self.db = db
         self.notifications = notifications
+        self.logger = logger ?? Logger(subsystem: "ChargingViewModel", category: "ViewModels")
 
         self.expensesRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
@@ -81,7 +83,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             if (chargingSessionResult.carName == nil) {
 
                 // TODO mgorbatyuk: show error alert to user
-                print("Error: First expense must have a car name!")
+                logger.error("Error: First expense must have a car name!")
                 return
             }
 
@@ -98,15 +100,27 @@ class ChargingViewModel: ObservableObject, IExpenseView {
                 createdAt: now)
 
             carId = db.carRepository!.insert(car)
-            chargingSessionResult.initialExpenseForNewCar!.setCarId(carId!)
+            do {
+                try chargingSessionResult.initialExpenseForNewCar!.setCarId(carId!)
+            } catch {
+                logger.error("Failed to set car ID for initial expense: \(error.localizedDescription)")
+                return
+            }
+
             self.insertExpense(chargingSessionResult.initialExpenseForNewCar!)
         } else {
             carId = selectedCarForExpense!.id
             selectedCarForExpense!.updateMileage(newMileage: chargingSessionResult.expense.odometer)
             _ = db.carRepository!.updateMilleage(selectedCarForExpense!)
         }
+        
+        do {
+            try chargingSessionResult.expense.setCarId(carId)
+        } catch {
+            logger.error("Failed to set car ID for initial expense: \(error.localizedDescription)")
+            return
+        }
 
-        chargingSessionResult.expense.setCarId(carId)
         self.insertExpense(chargingSessionResult.expense)
     }
 

@@ -94,15 +94,17 @@ class Expense: Codable, Identifiable {
         )
     }
 
-    func setCarId(_ carId: Int64?) -> Void {
-        if (self.carId != nil) {
-            print("Car ID is already set and cannot be changed.")
+    func setCarId(_ carId: Int64?) throws -> Void {
+        if (carId == nil) {
+            throw RuntimeError("Provided Car ID is nil. Cannot set nil Car ID.")
+        }
+
+        if (self.carId == carId) {
             return
         }
-        
-        if (carId == nil) {
-            print("Provided Car ID is nil. Cannot set nil Car ID.")
-            return
+
+        if (self.carId != nil) {
+            throw RuntimeError("Car ID is already set and cannot be changed.")
         }
 
         self.carId = carId

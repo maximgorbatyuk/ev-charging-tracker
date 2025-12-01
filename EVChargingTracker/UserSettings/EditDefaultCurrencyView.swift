@@ -60,6 +60,6 @@ struct EditDefaultCurrencyView: SwiftUICore.View {
     EditDefaultCurrencyView(
         selectedCurrency: .usd,
         onSave: { newCurrency in
-            print("selected: \(newCurrency)")
+            GlobalLogger.shared.info("selected: \(newCurrency)")
         })
 }

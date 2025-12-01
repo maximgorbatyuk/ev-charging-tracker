@@ -1,5 +1,6 @@
 @_exported import SQLite
 import Foundation
+import os
 
 class UserSettingsRepository {
     private let table: Table
@@ -9,10 +10,12 @@ class UserSettingsRepository {
     private let valueColumn = Expression<String>("value")
 
     private var db: Connection
+    private let logger: Logger
 
-    init(db: Connection, tableName: String) {
+    init(db: Connection, tableName: String, logger: Logger? = nil) {
         self.db = db
         self.table = Table(tableName)
+        self.logger = logger ?? Logger(subsystem: tableName, category: "Database")
     }
 
     func createTable() {
@@ -24,9 +27,8 @@ class UserSettingsRepository {
 
         do {
             try db.run(command)
-            print("User settings table created successfully")
         } catch {
-            print("Unable to create user_settings table: \(error)")
+            logger.error("Unable to create user_settings table: \(error)")
         }
     }
 
@@ -37,7 +39,7 @@ class UserSettingsRepository {
                 return row[valueColumn]
             }
         } catch {
-            print("Failed to fetch user setting for \(key): \(error)")
+            logger.error("Failed to fetch user setting for \(key): \(error)")
         }
         return nil
     }
@@ -56,7 +58,7 @@ class UserSettingsRepository {
                 return true
             }
         } catch {
-            print("Failed to upsert user setting for \(key): \(error)")
+            logger.error("Failed to upsert user setting for \(key): \(error)")
             return false
         }
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import os
 
 class UserSettingsViewModel: ObservableObject {
 
@@ -21,13 +22,16 @@ class UserSettingsViewModel: ObservableObject {
     private let expensesRepository: ExpensesRepository
 
     private var _allCars: [CarDto] = []
+    private let logger: Logger
 
     init(
         environment: EnvironmentService = .shared,
-        db: DatabaseManager = .shared
+        db: DatabaseManager = .shared,
+        logger: Logger? = nil
     ) {
         self.environment = environment
         self.db = db
+        self.logger = logger ?? Logger(subsystem: "UserSettingsViewModel", category: "Views")
 
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
@@ -66,7 +70,7 @@ class UserSettingsViewModel: ObservableObject {
         return defaultCurrency
     }
 
-    func saveDefaultCurrency(_ currency: Currency) {
+    func saveDefaultCurrency(_ currency: Currency) -> Void {
         // update in-memory value first so UI updates
         DispatchQueue.main.async {
             self.defaultCurrency = currency
@@ -75,18 +79,24 @@ class UserSettingsViewModel: ObservableObject {
         // persist to DB (upsert)
         let success = userSettingsRepository?.upsertCurrency(currency.rawValue) ?? false
         if !success {
-            print("Failed to save default currency to DB")
+            logger.error("Failed to save default currency \(currency.rawValue) to DB")
         }
     }
 
     // New: save selected language
-    func saveLanguage(_ language: AppLanguage) {
+    func saveLanguage(_ language: AppLanguage) -> Void {
         DispatchQueue.main.async {
             self.selectedLanguage = language
         }
 
         // Update runtime localization manager so UI can react immediately
-        LocalizationManager.shared.setLanguage(language)
+        do {
+            try LocalizationManager.shared.setLanguage(language)
+        }
+        catch {
+            logger.error("Failed to set language to \(language.rawValue): \(error.localizedDescription)")
+        }
+        
     }
 
     func getCars() -> [CarDto] {
@@ -188,7 +198,7 @@ class UserSettingsViewModel: ObservableObject {
     
     func deleteAllData() -> Void {
         if (!isDevelopmentMode()) {
-            print("Attempt to delete all data in non-development mode. Operation aborted.")
+            self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
             return
         }
 

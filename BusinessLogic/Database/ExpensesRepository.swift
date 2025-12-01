@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 class ExpensesRepository {
 
@@ -26,10 +27,12 @@ class ExpensesRepository {
     private let carIdColumn = Expression<Int64?>("car_id")
 
     private var db: Connection
+    private let logger: Logger
     
-    init(db: Connection, tableName: String) {
+    init(db: Connection, tableName: String, logger: Logger? = nil) {
         self.db = db
         self.chargingSessionsTable = Table(tableName)
+        self.logger = logger ?? Logger(subsystem: tableName, category: "Database")
     }
 
     func createTable() -> Void {
@@ -48,27 +51,27 @@ class ExpensesRepository {
 
         do {
             try db.run(command)
-            print("Table created successfully")
+            logger.info("Table created successfully")
         } catch {
-            print("Unable to create table: \(error)")
+            logger.error("Unable to create table: \(error)")
         }
     }
 
     func deleteTable() {
         do {
             try db.run(chargingSessionsTable.drop(ifExists: true))
-            print("Table deleted successfully")
+            logger.info("Table deleted successfully")
         } catch {
-            print("Unable to delete table: \(error)")
+            logger.error("Unable to delete table: \(error)")
         }
     }
 
     func truncateTable() -> Void {
         do {
             try db.run(chargingSessionsTable.delete())
-            print("Table truncated successfully")
+            logger.info("Table truncated successfully")
         } catch {
-            print("Unable to truncate table: \(error)")
+            logger.error("Unable to truncate table: \(error)")
         }
     }
 
@@ -89,10 +92,9 @@ class ExpensesRepository {
             )
             
             let rowId = try db.run(insert)
-            print("Inserted session with id: \(rowId)")
             return rowId
         } catch {
-            print("Insert failed: \(error)")
+            logger.error("Insert failed: \(error)")
             return nil
         }
     }
@@ -104,7 +106,7 @@ class ExpensesRepository {
                 : chargingSessionsTable
             return try db.scalar(query.count)
         } catch {
-            print("Failed to get expenses count: \(error)")
+            logger.error("Failed to get expenses count: \(error)")
             return 0
         }
     }
@@ -138,7 +140,7 @@ class ExpensesRepository {
                 sessionsList.append(chargingSession)
             }
         } catch {
-            print("Fetch failed: \(error)")
+            logger.error("Fetch failed: \(error)")
         }
         
         return sessionsList
@@ -182,7 +184,7 @@ class ExpensesRepository {
                 sessionsList.append(chargingSession)
             }
         } catch {
-            print("Fetch failed: \(error)")
+            logger.error("Fetch failed: \(error)")
         }
         
         return sessionsList
@@ -205,10 +207,9 @@ class ExpensesRepository {
                 expenseType <- session.expenseType.rawValue,
                 carIdColumn <- session.carId
             ))
-            print("Updated session with id: \(sessionId)")
             return true
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }
@@ -218,10 +219,9 @@ class ExpensesRepository {
         
         do {
             try db.run(sessionToDelete.delete())
-            print("Deleted session with id: \(sessionId)")
             return true
         } catch {
-            print("Delete failed: \(error)")
+            logger.error("Delete failed: \(error)")
             return false
         }
     }
@@ -231,7 +231,7 @@ class ExpensesRepository {
             let total = try db.scalar(chargingSessionsTable.select(energyCharged.sum))
             return total ?? 0
         } catch {
-            print("Failed to get total energy: \(error)")
+            logger.error("Failed to get total energy: \(error)")
             return 0
         }
     }
@@ -241,7 +241,7 @@ class ExpensesRepository {
             let total = try db.scalar(chargingSessionsTable.select(cost.sum))
             return total ?? 0
         } catch {
-            print("Failed to get total cost: \(error)")
+            logger.error("Failed to get total cost: \(error)")
             return 0
         }
     }
@@ -250,7 +250,7 @@ class ExpensesRepository {
         do {
             return try db.scalar(chargingSessionsTable.count)
         } catch {
-            print("Failed to get session count: \(error)")
+            logger.error("Failed to get session count: \(error)")
             return 0
         }
     }
@@ -259,9 +259,8 @@ class ExpensesRepository {
         let recordsToDelete = chargingSessionsTable.filter(carIdColumn == carId)
         do {
             try db.run(recordsToDelete.delete())
-            print("Deleted records for car id: \(carId)")
         } catch {
-            print("Delete failed: \(error)")
+            logger.error("Delete failed: \(error)")
         }
     }
 
@@ -269,10 +268,9 @@ class ExpensesRepository {
         let recordToUpdateQuery = chargingSessionsTable.filter(carIdColumn == car.id)
         do {
             try db.run(recordToUpdateQuery.update(currency <- car.expenseCurrency.rawValue))
-            print("Updated expenses currency for car id: \(car.id ?? 0)")
             return true
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }

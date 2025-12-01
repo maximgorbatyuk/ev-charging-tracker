@@ -7,6 +7,7 @@
 
 import UserNotifications
 import Foundation
+import os
 
 protocol NotificationManagerProtocol {
     func scheduleNotification(title: String, body: String, on date: Date) -> String
@@ -15,6 +16,12 @@ protocol NotificationManagerProtocol {
 
 class NotificationManager: ObservableObject, NotificationManagerProtocol {
     static let shared = NotificationManager()
+    
+    private let logger: Logger
+    
+    init(logger: Logger? = nil) {
+        self.logger = Logger(subsystem: "NotificationManager", category: "Notifications")
+    }
 
     func getAuthorizationStatus(completion: @escaping (UNAuthorizationStatus) -> Void) -> Void {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
@@ -35,9 +42,9 @@ class NotificationManager: ObservableObject, NotificationManagerProtocol {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) {
             granted, error in
             if granted {
-                print("Permission granted")
+                self.logger.info("Permission granted")
             } else if let error = error {
-                print("Error: \(error.localizedDescription)")
+                self.logger.error("Error: \(error.localizedDescription)")
             }
         }
     }
@@ -111,9 +118,9 @@ class NotificationManager: ObservableObject, NotificationManagerProtocol {
 
     func getPendingNotificationRequests() -> Void {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            print("Pending notifications: \(requests.count)")
+            self.logger.info("Pending notifications: \(requests.count)")
             for request in requests {
-                print("Pending notification: \(request.identifier) - \(request.content.title)")
+                self.logger.info("Pending notification: \(request.identifier) - \(request.content.title)")
             }
         }
     }
@@ -133,7 +140,7 @@ class NotificationManager: ObservableObject, NotificationManagerProtocol {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Error: \(error.localizedDescription)")
+                self.logger.error("Error: \(error.localizedDescription)")
             }
         }
 

@@ -371,6 +371,6 @@ struct AddExpenseViewResult {
         selectedCar: nil,
         allCars: [],
         onAdd: { session in
-            print("Added session: \(session)")
+            GlobalLogger.shared.info("Added session: \(session)")
         })
 }

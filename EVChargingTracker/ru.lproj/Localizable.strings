@@ -178,3 +178,4 @@
 
 "App update available" = "Доступна новая версия";
 "If you leave it empty, the current mileage of the selected car will be used." = "Если оставить это поле пустым, будет использован текущий пробег выбранного автомобиля.";
+"Please type service title." = "Пожалуйста, напишите что должно быть сделано.";

@@ -7,6 +7,7 @@
 
 @_exported import SQLite
 import Foundation
+import os
 
 protocol PlannedMaintenanceRepositoryProtocol {
     func getAllRecords(carId: Int64) -> [PlannedMaintenance]
@@ -26,10 +27,12 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
     private let carIdColumn = Expression<Int64>("car_id")
 
     private var db: Connection
+    private let logger: Logger
 
-    init(db: Connection, tableName: String) {
+    init(db: Connection, tableName: String, logger: Logger? = nil) {
         self.db = db
         self.table = Table(tableName)
+        self.logger = logger ?? Logger(subsystem: tableName, category: "Database")
     }
 
     func getCreateTableCommand() -> String {
@@ -51,7 +54,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
         do {
             return try db.scalar(query)
         } catch {
-            print("Failed to get records count: \(error)")
+            logger.error("Failed to get records count: \(error)")
             return 0
         }
     }
@@ -75,7 +78,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
                 recordsList.append(recordItem)
             }
         } catch {
-            print("Fetch failed: \(error)")
+            logger.error("Fetch failed: \(error)")
         }
 
         return recordsList
@@ -94,11 +97,9 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
             )
 
             let rowId = try db.run(insert)
-            print("Inserted record with id: \(rowId)")
-
             return rowId
         } catch {
-            print("Insert failed: \(error)")
+            logger.error("Insert failed: \(error)")
             return nil
         }
     }
@@ -106,9 +107,8 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
     func truncateTable() -> Void {
         do {
             try db.run(table.delete())
-            print("Table truncated successfully")
         } catch {
-            print("Unable to truncate table: \(error)")
+            logger.error("Unable to truncate table: \(error)")
         }
     }
 
@@ -116,7 +116,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
         do {
             return try db.scalar(table.count)
         } catch {
-            print("Failed to get records count: \(error)")
+            logger.error("Failed to get records count: \(error)")
             return 0
         }
     }
@@ -132,10 +132,10 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
                 nameColumn <- record.name,
                 notesColumn <- record.notes
             ))
-            print("Updated record with id: \(recordId)")
+
             return true
         } catch {
-            print("Update failed: \(error)")
+            logger.error("Update failed: \(error)")
             return false
         }
     }
@@ -144,9 +144,8 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
         let recordsToDelete = table.filter(carIdColumn == carId)
         do {
             try db.run(recordsToDelete.delete())
-            print("Deleted records for car id: \(carId)")
         } catch {
-            print("Delete failed: \(error)")
+            logger.error("Delete failed: \(error)")
         }
     }
 
@@ -155,10 +154,9 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
         
         do {
             try db.run(recordToDelete.delete())
-            print("Deleted record with id: \(recordId)")
             return true
         } catch {
-            print("Delete failed: \(error)")
+            logger.error("Delete failed: \(error)")
             return false
         }
     }
@@ -178,7 +176,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
                          odometerColumn != nil && odometerColumn <= currentOdometer)
                     .count)
         } catch {
-            print("Fetch failed: \(error)")
+            logger.error("Fetch failed: \(error)")
         }
 
         return result
