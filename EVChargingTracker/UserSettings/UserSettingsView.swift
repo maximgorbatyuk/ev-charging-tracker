@@ -250,7 +250,10 @@ struct UserSettingsView: SwiftUICore.View {
                                 "button_name": "developer_telegram_link"
                             ])
 
-                        viewModel.openWebURL(URL(string: environment.getDeveloperTelegramLink())!)
+                        if let url = URL(string: environment.getDeveloperTelegramLink()) {
+                            viewModel.openWebURL(url)
+                        }
+
                     } label: {
                         HStack {
                             Image(systemName: "ellipses.bubble.fill")
