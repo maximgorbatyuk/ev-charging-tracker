@@ -75,31 +75,32 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
                 Section(header: Text(L("Notes (optional)"))) {
                     TextField(L("Additional information that will be helpful"), text: $notes)
                 }
+                
+                Section {
+                    FormButtonsView(
+                        onCancel: {
+                            analytics.trackEvent("cancel_maintenance_button_clicked", properties: [
+                                    "button_name": "cancel",
+                                    "screen": "add_planned_maintenance_record"
+                                ])
+
+                            dismiss()
+                        },
+                        onSave: {
+                            analytics.trackEvent("save_maintenance_button_clicked", properties: [
+                                    "button_name": "save",
+                                    "screen": "add_planned_maintenance_record"
+                                ])
+
+                            save()
+                        }
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                }
             } // Form end
             .navigationTitle(L("Plan a maintenance"))
             .navigationBarTitleDisplayMode(.automatic)
-            .safeAreaInset(edge: .bottom) {
-                FormButtonsView(
-                    onCancel: {
-                        analytics.trackEvent("cancel_maintenance_button_clicked", properties: [
-                                "button_name": "cancel",
-                                "screen": "add_planned_maintenance_record"
-                            ])
-
-                        dismiss()
-                    },
-                    onSave: {
-                        analytics.trackEvent("save_maintenance_button_clicked", properties: [
-                                "button_name": "save",
-                                "screen": "add_planned_maintenance_record"
-                            ])
-
-                        save()
-                    }
-                )
-                .padding(.bottom, 30)
-                .padding(.horizontal, 20)
-            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {

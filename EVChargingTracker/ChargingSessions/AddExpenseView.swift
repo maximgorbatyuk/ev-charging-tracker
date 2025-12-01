@@ -214,30 +214,31 @@ struct AddExpenseView: SwiftUICore.View {
                 Section(header: Text(L("Optional"))) {
                     TextField(L("Notes (optional)"), text: $notes)
                 }
-            }
-            .safeAreaInset(edge: .bottom) {
-                FormButtonsView(
-                    onCancel: {
-                        analytics.trackEvent("cancel_button_clicked", properties: [
-                                "button_name": "cancel",
-                                "screen": "add_expense_screen",
-                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
-                            ])
 
-                        dismiss()
-                    },
-                    onSave: {
-                        analytics.trackEvent("save_button_clicked", properties: [
-                                "button_name": "save",
-                                "screen": "add_expense_screen",
-                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
-                            ])
+                Section {
+                    FormButtonsView(
+                        onCancel: {
+                            analytics.trackEvent("cancel_button_clicked", properties: [
+                                    "button_name": "cancel",
+                                    "screen": "add_expense_screen",
+                                    "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                                ])
 
-                        saveSession()
-                    }
-                )
-                .padding(.bottom, 30)
-                .padding(.horizontal, 20)
+                            dismiss()
+                        },
+                        onSave: {
+                            analytics.trackEvent("save_button_clicked", properties: [
+                                    "button_name": "save",
+                                    "screen": "add_expense_screen",
+                                    "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                                ])
+
+                            saveSession()
+                        }
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                }
             }
             .navigationTitle(L("Add expense"))
             .navigationBarTitleDisplayMode(.automatic)
