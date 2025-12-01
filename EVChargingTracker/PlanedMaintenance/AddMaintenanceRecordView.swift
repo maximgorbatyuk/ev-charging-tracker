@@ -26,6 +26,22 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
+
+                if (alertMessage != nil) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.system(size: 28))
+
+                        Text(alertMessage!)
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16, weight: .bold))
+                    }
+                    .padding(8)
+                    .listRowBackground(Color.yellow.opacity(0.2))
+                    .background(Color.clear)
+                }
+
                 Section(header: Text(L("Maintenance details"))) {
 
                     if (selectedCar != nil) {
@@ -59,9 +75,32 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
                 Section(header: Text(L("Notes (optional)"))) {
                     TextField(L("Additional information that will be helpful"), text: $notes)
                 }
+                
+                Section {
+                    FormButtonsView(
+                        onCancel: {
+                            analytics.trackEvent("cancel_maintenance_button_clicked", properties: [
+                                    "button_name": "cancel",
+                                    "screen": "add_planned_maintenance_record"
+                                ])
+
+                            dismiss()
+                        },
+                        onSave: {
+                            analytics.trackEvent("save_maintenance_button_clicked", properties: [
+                                    "button_name": "save",
+                                    "screen": "add_planned_maintenance_record"
+                                ])
+
+                            save()
+                        }
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                }
             } // Form end
             .navigationTitle(L("Plan a maintenance"))
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
@@ -73,18 +112,6 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
                         dismiss()
                     }
                 }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(L("Save")) {
-                        analytics.trackEvent("save_maintenance_button_clicked", properties: [
-                                "button_name": "save",
-                                "screen": "add_planned_maintenance_record"
-                            ])
-
-                        save()
-                    }
-                    .fontWeight(.semibold)
-                }
             }
         } // NavigationView end
     }
@@ -93,6 +120,12 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
         
         alertMessage = nil
         if (selectedCar == nil) {
+            alertMessage = L("Please select a car first.")
+            return
+        }
+        
+        if (name == "") {
+            alertMessage = L("Please type service title.")
             return
         }
 

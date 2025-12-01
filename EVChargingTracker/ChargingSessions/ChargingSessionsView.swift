@@ -8,6 +8,9 @@ struct ChargingSessionsView: SwiftUICore.View {
 
     var body: some SwiftUICore.View {
         ZStack {
+            Color.blue
+                .ignoresSafeArea()
+
             NavigationView {
                 ScrollView {
                     VStack(spacing: 16) {
@@ -112,14 +115,9 @@ struct ChargingSessionsView: SwiftUICore.View {
                 .refreshable {
                     loadData()
                 }
+                
             }
         }
-        // .overlay {
-        //     if !viewModel.expenses.isEmpty {
-        //         AppImageBackground()
-        //             .allowsHitTesting(false) // Makes sure it doesn't block touches
-        //     }
-        // }
     }
     
     private func loadData() -> Void {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
@@ -25,12 +26,18 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     private let analytics: AnalyticsService
 
     private var _selectedCarForExpenses: Car?
+    private let logger: Logger
 
-    init() {
-        
-        self.db = DatabaseManager.shared
-        self.notifications = NotificationManager.shared
-        self.analytics = AnalyticsService.shared
+    init(
+        db: DatabaseManager = .shared,
+        notifications: NotificationManager = .shared,
+        analytics: AnalyticsService = .shared,
+        logger: Logger? = nil
+    ) {
+        self.db = db
+        self.notifications = notifications
+        self.analytics = analytics
+        self.logger = logger ?? Logger(subsystem: "ExpensesViewModel", category: "Views")
 
         self.chargingSessionsRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
@@ -137,7 +144,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             if (newExpenseResult.carName == nil) {
 
                 // TODO mgorbatyuk: show error alert to user
-                print("Error: First expense must have a car name!")
+                logger.error("Error: First expense must have a car name!")
                 return
             }
 
@@ -154,7 +161,13 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 createdAt: now)
 
             carId = self.addCar(car: car)
-            newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
+            do {
+                try newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
+            } catch {
+                logger.error("Error setting car ID for initial expense of new car: \(error.localizedDescription)")
+                return
+            }
+            
             self.insertExpense(newExpenseResult.initialExpenseForNewCar!)
         } else {
             carId = selectedCarForExpense!.id
@@ -162,7 +175,13 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             _ = self.updateMilleage(selectedCarForExpense!)
         }
 
-        newExpenseResult.expense.setCarId(carId)
+        do {
+            try newExpenseResult.expense.setCarId(carId)
+        } catch {
+            logger.error("Error setting car ID for new expense: \(error.localizedDescription)")
+            return
+        }
+
         self.insertExpense(newExpenseResult.expense)
 
         loadSessions()

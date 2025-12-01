@@ -53,9 +53,23 @@ struct AddExpenseView: SwiftUICore.View {
     }
 
     var body: some SwiftUICore.View {
-        NavigationView {
-                      
+        NavigationStack {
             Form {
+                if (alertMessage != nil) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.system(size: 28))
+
+                        Text(alertMessage!)
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16, weight: .bold))
+                    }
+                    .padding(8)
+                    .listRowBackground(Color.yellow.opacity(0.2))
+                    .background(Color.clear)
+                }
+
                 Section(header: Text(L("Expense details"))) {
 
                     if (selectedCardForExpense != nil) {
@@ -130,12 +144,20 @@ struct AddExpenseView: SwiftUICore.View {
                         }
                     }
                     
-                    HStack {
-                        Text(L("Odometer (km)"))
-                        Spacer()
-                        TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
+                    VStack {
+                        HStack {
+                            Text(L("Odometer (km)"))
+                            Spacer()
+                            TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                        }
+
+                        Text(L("If you leave it empty, the current mileage of the selected car will be used."))
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.top, 2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
                     HStack {
@@ -192,9 +214,34 @@ struct AddExpenseView: SwiftUICore.View {
                 Section(header: Text(L("Optional"))) {
                     TextField(L("Notes (optional)"), text: $notes)
                 }
+
+                Section {
+                    FormButtonsView(
+                        onCancel: {
+                            analytics.trackEvent("cancel_button_clicked", properties: [
+                                    "button_name": "cancel",
+                                    "screen": "add_expense_screen",
+                                    "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                                ])
+
+                            dismiss()
+                        },
+                        onSave: {
+                            analytics.trackEvent("save_button_clicked", properties: [
+                                    "button_name": "save",
+                                    "screen": "add_expense_screen",
+                                    "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                                ])
+
+                            saveSession()
+                        }
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                }
             }
             .navigationTitle(L("Add expense"))
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
@@ -206,19 +253,6 @@ struct AddExpenseView: SwiftUICore.View {
 
                         dismiss()
                     }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(L("Save")) {
-                        analytics.trackEvent("save_button_clicked", properties: [
-                                "button_name": "save",
-                                "screen": "add_expense_screen",
-                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
-                            ])
-
-                        saveSession()
-                    }
-                    .fontWeight(.semibold)
                 }
             }
             .onAppear() {
@@ -260,18 +294,23 @@ struct AddExpenseView: SwiftUICore.View {
             energy = energyParsed
         }
 
-        guard let odo = Int(odometer) else {
-            alertMessage = L("Please type a valid value for Odometer.")
-            return
+        var currentMileageValue: Int? = Int(odometer)
+        if currentMileageValue == nil {
+            if (selectedCardForExpense == nil) {
+                alertMessage = L("Please type a valid value for Odometer.")
+                return
+            }
+
+            currentMileageValue = selectedCardForExpense!.currentMileage
         }
-        
+
         let sessionCost = Double(cost)
 
         let expense = Expense(
             date: date,
             energyCharged: energy,
             chargerType: chargerType,
-            odometer: odo,
+            odometer: currentMileageValue!,
             cost: sessionCost,
             notes: notes,
             isInitialRecord: false,
@@ -287,7 +326,7 @@ struct AddExpenseView: SwiftUICore.View {
                 date: date,
                 energyCharged: 0.0,
                 chargerType: .other,
-                odometer: odo,
+                odometer: currentMileageValue!,
                 cost: 0.0,
                 notes: L("Initial record for tracking car"),
                 isInitialRecord: true,
@@ -309,7 +348,7 @@ struct AddExpenseView: SwiftUICore.View {
                 expense: expense,
                 carName: carNameValue,
                 carId: carId,
-                initialOdometr: odo,
+                initialOdometr: currentMileageValue!,
                 batteryCapacity: batteryCapacityValue,
                 initialExpenseForNewCar: initialExpenseForNewCar))
         dismiss()
@@ -332,6 +371,6 @@ struct AddExpenseViewResult {
         selectedCar: nil,
         allCars: [],
         onAdd: { session in
-            print("Added session: \(session)")
+            GlobalLogger.shared.info("Added session: \(session)")
         })
 }

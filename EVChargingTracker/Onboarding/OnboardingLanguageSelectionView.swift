@@ -52,7 +52,12 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
                     ) {
                         withAnimation(.spring()) {
                             selectedLanguage = language
-                            localizationManager.setLanguage(language)
+                            do {
+                                try localizationManager.setLanguage(language)
+                            } catch {
+                                GlobalLogger.shared.error("Failed to set language to \(language.rawValue): \(error)")
+                            }
+
                             onCurrentLanguageSelected(language)
 
                             analytics.trackEvent("language_selected", properties: [

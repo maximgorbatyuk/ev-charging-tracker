@@ -9,9 +9,16 @@ import SwiftUI
 
 struct MainTabView: SwiftUI.View {
 
-    private var viewModel = MainTabViewModel()
+    private var viewModel = MainTabViewModel(
+        db: DatabaseManager.shared,
+        appVersionChecker: AppVersionChecker(
+            environment: EnvironmentService.shared
+        )
+    )
 
     @State private var pendingMaintenanceRecords: Int = 0
+    @State private var showAppVersionBadge = false
+
     @ObservedObject private var loc = LocalizationManager.shared
     @Environment(\.colorScheme) var colorScheme
 
@@ -38,14 +45,20 @@ struct MainTabView: SwiftUI.View {
                     }
                     .badge(pendingMaintenanceRecords)
 
-                UserSettingsView()
+                UserSettingsView(showAppUpdateButton: showAppVersionBadge)
                     .tabItem {
                         Label(L("Settings"), systemImage: "gear")
                     }
+                    .badge(showAppVersionBadge ? "New!" : nil)
             }
             .id(loc.currentLanguage.rawValue)
             .onAppear {
                 self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
+
+                Task {
+                    let appVersionCheckResult = await viewModel.checkAppVersion()
+                    showAppVersionBadge = appVersionCheckResult ?? false
+                }
             }
         }
     }

@@ -7,7 +7,7 @@
 
 GITHUB_REPO_URL = github.com/maximgorbatyuk/ev-charging-tracker
 DEVELOPER_TELEGRAM_LINK = t.me/maximgorbatyuk
-APP_STORE_LINK = apps.apple.com/app/id6754165643
+APP_STORE_ID = 6754165643
 DEVELOPER_NAME = Maxim Gorbatyuk
 BUILD_ENVIRONMENT = release
 CO2_EUROPE_POLLUTION_PER_ONE_KILOMETER = 0.17

@@ -173,3 +173,7 @@
 "onboarding.plan_maintenance__subtitle" = "Schedule and get reminders for your EV maintenance tasks";
 "onboarding.view_stats" = "View Stats";
 "onboarding.view_stats__subtitle" = "Get insights into how much your EV costs per 1 kilometer and how much CO₂ you have saved by driving an EV";
+
+"App update available" = "App update available";
+"If you leave it empty, the current mileage of the selected car will be used." = "If you leave it empty, the current mileage of the selected car will be used.";
+"Please type service title." = "Please type service title.";
