@@ -7,22 +7,34 @@
 
 import SwiftUI
 
-struct FilterButtonsView: SwiftUICore.View {
+class FilterButtonsViewModel: ObservableObject {
+    @Published var filterButtons: [FilterButtonItem]
 
-    let filterButtons: [FilterButtonItem]
-    @Environment(\.colorScheme) var colorScheme
+    init(_ filterButtons: [FilterButtonItem]) {
+        self.filterButtons = filterButtons
+    }
 
     func executeButtonAction(_ button: FilterButtonItem) {
         filterButtons.forEach { $0.deselect() }
         button.action()
     }
+}
+
+struct FilterButtonsView: SwiftUICore.View {
+
+    @State var viewModel: FilterButtonsViewModel
+    @Environment(\.colorScheme) var colorScheme
+    
+    init(filterButtons: [FilterButtonItem]) {
+        viewModel = FilterButtonsViewModel(filterButtons)
+    }
 
     var body: some SwiftUICore.View {
         HStack(spacing: 8) {
-            ForEach(filterButtons, id: \.id) { button in
+            ForEach(viewModel.filterButtons, id: \.id) { button in
 
                 Button(button.title) {
-                    executeButtonAction(button)
+                    viewModel.executeButtonAction(button)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 2)

@@ -11,11 +11,11 @@ import os
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
+    @Published var filterButtons: [FilterButtonItem] = []
 
     var totalCost: Double = 0.0
     var hasAnyExpense = false
 
-    var filterButtons: [FilterButtonItem] = []
     let analyticsScreenName = "all_expenses_screen"
 
     private let db: DatabaseManager
