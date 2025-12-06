@@ -205,13 +205,18 @@ class UserSettingsViewModel: ObservableObject {
         db.deleteAllData()
     }
 
-    func deleteAllExpenses() -> Void {
+    func deleteAllExpensesForCar() -> Void {
         if (!isDevelopmentMode()) {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
             return
         }
 
-        db.deleteAllExpenses()
+        let selectedCar = db.carRepository?.getSelectedForExpensesCar()
+        if (selectedCar == nil) {
+            return
+        }
+
+        db.deleteAllExpenses(selectedCar!)
     }
 
     func addRandomExpenses() -> Void {

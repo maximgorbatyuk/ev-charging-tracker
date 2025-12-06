@@ -134,9 +134,11 @@ class DatabaseManager : DatabaseManagerProtocol {
         carRepository!.truncateTable()
     }
 
-    func deleteAllExpenses() -> Void {
-        expensesRepository!.truncateTable()
-        plannedMaintenanceRepository!.truncateTable()
+    func deleteAllExpenses(_ selectedCar: Car) -> Void {
+
+        let carId = selectedCar.id!
+        expensesRepository!.deleteRecordsForCar(carId)
+        plannedMaintenanceRepository!.deleteRecordsForCar(carId)
         delayedNotificationsRepository!.truncateTable()
     }
 }

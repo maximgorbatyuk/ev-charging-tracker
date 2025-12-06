@@ -342,14 +342,14 @@ struct UserSettingsView: SwiftUICore.View {
 
                         Button(action: {
                             confirmationModalDialogData = ConfirmationData(
-                                title: "Delete all expenses?",
-                                message: "This will permanently delete all expense records. This action cannot be undone.",
+                                title: "Delete car expenses?",
+                                message: "This will permanently delete all expenses for selected car. This action cannot be undone.",
                                 action: {
-                                    viewModel.deleteAllExpenses()
+                                    viewModel.deleteAllExpensesForCar()
                                 }
                             )
                         }) {
-                            Text("Delete all expenses")
+                            Text("Delete car expenses")
                         }
                         .buttonStyle(.plain)
                         
@@ -399,6 +399,7 @@ struct UserSettingsView: SwiftUICore.View {
                 }
                 Button(confirmationModalDialogData.confirmButtonTitle, role: .destructive) {
                     confirmationModalDialogData.action()
+                    confirmationModalDialogData = .empty
                 }
             } message: {
                 Text(confirmationModalDialogData.message)
