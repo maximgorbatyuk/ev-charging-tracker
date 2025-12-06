@@ -195,7 +195,7 @@ class UserSettingsViewModel: ObservableObject {
     func isDevelopmentMode() -> Bool {
         return environment.isDevelopmentMode()
     }
-    
+
     func deleteAllData() -> Void {
         if (!isDevelopmentMode()) {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
@@ -203,6 +203,28 @@ class UserSettingsViewModel: ObservableObject {
         }
 
         db.deleteAllData()
+    }
+
+    func deleteAllExpenses() -> Void {
+        if (!isDevelopmentMode()) {
+            self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
+            return
+        }
+
+        db.deleteAllExpenses()
+    }
+
+    func addRandomExpenses() -> Void {
+        let selectedCar = db.carRepository?.getSelectedForExpensesCar()
+        if (selectedCar == nil) {
+            return
+        }
+
+        let countOfExpenseRecords = 80 // maintenance, carwash, repair
+        let countOfCharingSessions = 150
+        let oldestDate = Calendar.current.date(byAdding: .month, value: -8, to: Date())!
+
+        // TODO implement logic
     }
 
     var allCars : [CarDto] {

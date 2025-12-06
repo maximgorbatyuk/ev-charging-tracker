@@ -319,6 +319,20 @@ struct UserSettingsView: SwiftUICore.View {
                             Text("Schedule for 5 seconds")
                         }
                         .buttonStyle(.plain)
+
+                        Button(action: {
+                            viewModel.addRandomExpenses()
+                        }) {
+                            Text("Add random expenses")
+                        }
+                        .buttonStyle(.plain)
+
+                        Button(action: {
+                            viewModel.deleteAllExpenses()
+                        }) {
+                            Text("Delete all expenses")
+                        }
+                        .buttonStyle(.plain)
                         
                         Button(action: {
                             viewModel.deleteAllData()

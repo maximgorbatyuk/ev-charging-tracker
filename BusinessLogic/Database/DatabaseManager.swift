@@ -133,4 +133,10 @@ class DatabaseManager : DatabaseManagerProtocol {
         delayedNotificationsRepository!.truncateTable()
         carRepository!.truncateTable()
     }
+
+    func deleteAllExpenses() -> Void {
+        expensesRepository!.truncateTable()
+        plannedMaintenanceRepository!.truncateTable()
+        delayedNotificationsRepository!.truncateTable()
+    }
 }
