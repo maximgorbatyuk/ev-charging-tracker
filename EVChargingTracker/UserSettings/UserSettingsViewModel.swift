@@ -227,6 +227,7 @@ class UserSettingsViewModel: ObservableObject {
 
         let countOfExpenseRecords = 80 // maintenance, carwash, repair
         let countOfCharingSessions = 150
+        let countOfPlannedMaintenanceRecords = 20
         let oldestDate = Calendar.current.date(byAdding: .month, value: -8, to: Date())!
 
         // TODO implement logic
