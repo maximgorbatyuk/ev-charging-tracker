@@ -16,9 +16,9 @@ class ExpensesChartViewModel: ObservableObject {
 
     private let analytics: AnalyticsService
 
-    var filterButtons: [FilterButtonItem] = []
     var expensesToShow: [Expense]
-    var monthlyExpenseData: [MonthlyExpenseData]
+    @Published var filterButtons: [FilterButtonItem] = []
+    @Published var monthlyExpenseData: [MonthlyExpenseData]
 
     init(expenses: [Expense], currency: Currency, analytics: AnalyticsService) {
         self.expenses = expenses
