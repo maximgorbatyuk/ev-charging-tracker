@@ -13,7 +13,7 @@ struct ExpensesChartView: SwiftUICore.View {
     let currency: Currency
 
     @Environment(\.colorScheme) var colorScheme
-    private let viewModel: ExpensesChartViewModel
+    @State private var viewModel: ExpensesChartViewModel
 
     init(expenses: [Expense], currency: Currency, analytics: AnalyticsService) {
         self.expenses = expenses
@@ -22,6 +22,10 @@ struct ExpensesChartView: SwiftUICore.View {
             expenses: expenses,
             currency: currency,
             analytics: analytics)
+    }
+
+    var monthlyExpenseData: [MonthlyExpenseData] {
+        return viewModel.monthlyExpenseData
     }
 
     var body: some SwiftUICore.View {
@@ -45,7 +49,7 @@ struct ExpensesChartView: SwiftUICore.View {
                 .padding(.bottom, 8)
 
                 Chart {
-                    ForEach(viewModel.monthlyExpenseData) { item in
+                    ForEach(monthlyExpenseData) { item in
                         BarMark(
                             x: .value(L("Date"), item.month),
                             y: .value(L("Cost"), item.amount),
@@ -85,6 +89,7 @@ struct ExpensesChartView: SwiftUICore.View {
                     }
                 }
                 .padding(.top, 8)
+                
             }
         }
         .padding()
