@@ -60,7 +60,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 title: L("Filter.Charges"),
                 innerAction: {
                     self.loadSessions([ExpenseType.charging])
-                    
+
                     self.analytics.trackEvent(
                         "expenses_filter_charges_selected",
                         properties: [
@@ -86,7 +86,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 title: L("Filter.Carwash"),
                 innerAction: {
                     self.loadSessions([ExpenseType.carwash])
-                    
+
                     self.analytics.trackEvent(
                         "expenses_filter_carwash_selected",
                         properties: [
@@ -258,30 +258,5 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
 
         return _selectedCarForExpenses
-    }
-}
-
-class FilterButtonItem: ObservableObject {
-    let id: UUID = UUID()
-    let title: String
-    var isSelected = false
-    private let innerAction: () -> Void
-
-    init(
-        title: String,
-        innerAction: @escaping () -> Void,
-        isSelected: Bool = false) {
-        self.title = title
-        self.innerAction = innerAction
-        self.isSelected = isSelected
-    }
-
-    func action() {
-        innerAction()
-        self.isSelected = true
-    }
-
-    func deselect() {
-        self.isSelected = false
     }
 }

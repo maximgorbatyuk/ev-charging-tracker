@@ -62,7 +62,7 @@ struct ExpensesView: SwiftUICore.View {
 
                             HStack(spacing: 8) {
                                 ForEach(viewModel.filterButtons, id: \.id) { button in
-                                    
+
                                     Button(button.title) {
                                         viewModel.executeButtonAction(button)
                                     }
