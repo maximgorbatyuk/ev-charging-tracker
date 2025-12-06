@@ -49,6 +49,8 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 )
                             }
 
+                            
+
                             if viewModel.expenses.isEmpty {
                                 NoExpensesView()
                                     .padding(.top, 60)
@@ -76,6 +78,15 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 .cornerRadius(12)
                             }
                             .padding(.horizontal)
+
+                            // Expenses Chart
+                            if !viewModel.expenses.isEmpty && viewModel.totalCost > 0 {
+                                ExpensesChartView(
+                                    expenses: viewModel.expenses,
+                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency
+                                )
+                                .padding(.horizontal)
+                            }
 
                         } else {
                             ProgressView()
