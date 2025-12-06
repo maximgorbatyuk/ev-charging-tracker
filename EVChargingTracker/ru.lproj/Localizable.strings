@@ -157,6 +157,8 @@
 "Filter.All" = "Все";
 "Filter.Charges" = "Зарядки";
 "Filter.Repair/maintenance" = "Сервис";
+"Filter.Repair" = "Ремонт";
+"Filter.Maintenance" = "Сервис";
 "Filter.Carwash" = "Мойка";
 
 /* Onboarding pages */
@@ -179,3 +181,5 @@
 "App update available" = "Доступна новая версия";
 "If you leave it empty, the current mileage of the selected car will be used." = "Если оставить это поле пустым, будет использован текущий пробег выбранного автомобиля.";
 "Please type service title." = "Пожалуйста, напишите что должно быть сделано.";
+
+"Expenses chart" = "График расходов";

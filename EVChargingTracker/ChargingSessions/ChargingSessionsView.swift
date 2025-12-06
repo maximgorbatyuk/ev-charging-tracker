@@ -49,8 +49,6 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 )
                             }
 
-                            
-
                             if viewModel.expenses.isEmpty {
                                 NoExpensesView()
                                     .padding(.top, 60)
@@ -86,6 +84,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                     currency: viewModel.selectedCarForExpenses!.expenseCurrency
                                 )
                                 .padding(.horizontal)
+                                .padding(.top, 20)
                             }
 
                         } else {

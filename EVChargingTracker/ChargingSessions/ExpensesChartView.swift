@@ -17,6 +17,9 @@ struct MonthlyExpenseData: Identifiable {
 }
 
 struct ExpensesChartView: SwiftUICore.View {
+    
+    static let CountOfBars = 6
+
     let expenses: [Expense]
     let currency: Currency
 
@@ -28,11 +31,12 @@ struct ExpensesChartView: SwiftUICore.View {
         
         // Get the last 4 months including current month
         var months: [Date] = []
-        for i in 0..<4 {
+        for i in 0..<ExpensesChartView.CountOfBars {
             if let monthDate = calendar.date(byAdding: .month, value: -i, to: now) {
                 months.append(monthDate)
             }
         }
+
         months.reverse() // Oldest to newest
         
         // Filter expenses from the last 4 months
@@ -57,9 +61,9 @@ struct ExpensesChartView: SwiftUICore.View {
             
             // Group by expense type for this month
             let groupedByType = Dictionary(grouping: monthExpenses) { $0.expenseType }
-            
+
             let monthName = dateFormatter.string(from: monthDate)
-            
+
             // If there are no expenses for this month, add a zero entry for at least one type
             if groupedByType.isEmpty {
                 result.append(MonthlyExpenseData(
@@ -71,16 +75,16 @@ struct ExpensesChartView: SwiftUICore.View {
             } else {
                 for (type, expensesOfType) in groupedByType {
                     let total = expensesOfType.compactMap { $0.cost }.reduce(0, +)
-                    result.append(MonthlyExpenseData(
-                        month: monthName,
-                        date: monthDate,
-                        expenseType: type,
-                        amount: total
-                    ))
+                    result.append(
+                        MonthlyExpenseData(
+                            month: monthName,
+                            date: monthDate,
+                            expenseType: type,
+                            amount: total))
                 }
             }
         }
-        
+
         return result.sorted { $0.date < $1.date }
     }
     
@@ -103,8 +107,10 @@ struct ExpensesChartView: SwiftUICore.View {
         switch type {
         case .charging:
             return L("Filter.Charges")
-        case .maintenance, .repair:
-            return L("Filter.Repair/maintenance")
+        case .repair:
+            return L("Filter.Repair")
+        case .maintenance:
+            return L("Filter.Maintenance")
         case .carwash:
             return L("Filter.Carwash")
         case .other:
@@ -114,9 +120,10 @@ struct ExpensesChartView: SwiftUICore.View {
 
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(L("Expenses"))
+            Text(L("Expenses chart"))
                 .font(.headline)
                 .foregroundColor(colorScheme == .dark ? .white : .primary)
+                .padding(.bottom, 12)
 
             if !hasExpenses {
                 Text(L("No expenses yet"))
@@ -176,15 +183,18 @@ struct ExpensesChartView: SwiftUICore.View {
     }
 
     private func colorForExpenseType(_ type: ExpenseType) -> Color {
+        let opacity: Double = colorScheme == .dark ? 0.7 : 0.9
         switch type {
         case .charging:
-            return .green
-        case .maintenance, .repair:
-            return .orange
+            return .yellow.opacity(opacity)
+        case .maintenance:
+            return .green.opacity(opacity)
+        case .repair:
+            return .orange.opacity(opacity)
         case .carwash:
-            return .blue
+            return .blue.opacity(opacity)
         case .other:
-            return .purple
+            return .purple.opacity(opacity)
         }
     }
 }

@@ -164,6 +164,8 @@
 "Filter.All" = "Барлығы";
 "Filter.Charges" = "Зарядтаулар";
 "Filter.Repair/maintenance" = "Жөндеу/қызмет көрсету";
+"Filter.Repair" = "Жөндеу";
+"Filter.Maintenance" = "Қызмет көрсету";
 "Filter.Carwash" = "Көлік жуу";
 
 /* Onboarding pages */
@@ -186,3 +188,5 @@
 "App update available" = "Қосымша жаңартуы қолжетімді";
 "If you leave it empty, the current mileage of the selected car will be used." = "Егер сіз оны бос қалдырсаңыз, таңдалған көліктің ағымдағы жүрісі қолданылады.";
 "Please type service title." = "Қызмет атауын енгізіңіз.";
+
+"Expenses chart" = "Шығындар диаграммасы";
