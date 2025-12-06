@@ -255,6 +255,13 @@ class UserSettingsViewModel: ObservableObject {
         let currency = selectedCar!.expenseCurrency
         let initialMileage = selectedCar!.initialMileage
         let currentMileage = selectedCar!.currentMileage
+        
+        let currencyValueMultiplier = switch currency {
+            case .kzt:
+                100.0
+            default:
+                1.0
+        }
 
         // Helper function to generate random date between oldestDate and now
         func randomDate() -> Date {
@@ -276,7 +283,7 @@ class UserSettingsViewModel: ObservableObject {
             let chargerTypes = ChargerType.allCases
             let chargerType = chargerTypes.randomElement() ?? .home7kW
             let odometer = randomOdometer()
-            let cost = Double.random(in: 5...50) // Cost range
+            let cost = Double.random(in: 5...50) * currencyValueMultiplier // Cost range
             
             let expense = Expense(
                 date: date,
@@ -297,7 +304,7 @@ class UserSettingsViewModel: ObservableObject {
         // Generate other expenses (maintenance, carwash, repair, other)
         logger.info("Adding \(countOfExpenseRecords) other expenses...")
         let otherExpenseTypes: [ExpenseType] = [.maintenance, .carwash, .repair, .other]
-        
+
         for i in 0..<countOfExpenseRecords {
             let date = randomDate()
             let expenseType = otherExpenseTypes.randomElement() ?? .other
@@ -318,7 +325,7 @@ class UserSettingsViewModel: ObservableObject {
                     return Double.random(in: 5...50)
                 }
             }()
-            
+
             let notes: String = {
                 switch expenseType {
                 case .maintenance:
@@ -333,14 +340,14 @@ class UserSettingsViewModel: ObservableObject {
                     return "Charging"
                 }
             }()
-            
+
             let expense = Expense(
                 date: date,
                 energyCharged: 0, // No energy for non-charging expenses
                 chargerType: .other,
                 odometer: odometer,
-                cost: cost,
-                notes: notes,
+                cost: cost * currencyValueMultiplier,
+                notes: "\(notes) (\(i + 1))",
                 isInitialRecord: false,
                 expenseType: expenseType,
                 currency: currency,
@@ -371,9 +378,9 @@ class UserSettingsViewModel: ObservableObject {
             // Randomly choose between date-based or odometer-based reminder
             let useDateReminder = Bool.random()
             let useOdometerReminder = Bool.random()
-            
+
             let whenDate: Date? = useDateReminder ? Date().addingTimeInterval(TimeInterval.random(in: 86400...7776000)) : nil // 1 day to 90 days
-            let odometerValue: Int? = useOdometerReminder ? currentMileage + Int.random(in: 1000...10000) : nil
+            let odometerValue: Int? = useOdometerReminder ? currentMileage + Int.random(in: 5000...20000) : nil
             
             let notes = [
                 "Important maintenance",
@@ -384,13 +391,13 @@ class UserSettingsViewModel: ObservableObject {
             ].randomElement() ?? "Maintenance note"
             
             let createdAt = randomDate()
-            
+
             let maintenance = PlannedMaintenance(
                 id: nil,
                 when: whenDate,
                 odometer: odometerValue,
                 name: name,
-                notes: notes,
+                notes: "\(notes) (\(i + 1))",
                 carId: carId,
                 createdAt: createdAt
             )
