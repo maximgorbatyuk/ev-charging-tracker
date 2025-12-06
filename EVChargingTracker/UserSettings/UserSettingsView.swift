@@ -22,6 +22,13 @@ struct UserSettingsView: SwiftUICore.View {
 
     @State private var showingAppAboutModal = false
     @State private var showAddCarModal = false
+    
+    // Confirmation dialogs for developer actions
+    @State private var showAddRandomExpensesConfirmation = false
+    @State private var showDeleteAllExpensesConfirmation = false
+    @State private var showDeleteAllDataConfirmation = false
+
+    @State private var confirmationModalDialogData = ConfirmationData.empty
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -321,21 +328,39 @@ struct UserSettingsView: SwiftUICore.View {
                         .buttonStyle(.plain)
 
                         Button(action: {
-                            viewModel.addRandomExpenses()
+                            confirmationModalDialogData = ConfirmationData(
+                                title: "Add Random Expenses?",
+                                message: "This will add random expense records to your database. This action is for testing purposes only.",
+                                action: {
+                                    viewModel.addRandomExpenses()
+                                }
+                            )
                         }) {
                             Text("Add random expenses")
                         }
                         .buttonStyle(.plain)
 
                         Button(action: {
-                            viewModel.deleteAllExpenses()
+                            confirmationModalDialogData = ConfirmationData(
+                                title: "Delete all expenses?",
+                                message: "This will permanently delete all expense records. This action cannot be undone.",
+                                action: {
+                                    viewModel.deleteAllExpenses()
+                                }
+                            )
                         }) {
                             Text("Delete all expenses")
                         }
                         .buttonStyle(.plain)
                         
                         Button(action: {
-                            viewModel.deleteAllData()
+                            confirmationModalDialogData = ConfirmationData(
+                                title: "Delete all data?",
+                                message: "This will permanently delete all data including cars, expenses, and maintenance records. This action cannot be undone.",
+                                action: {
+                                    viewModel.deleteAllData()
+                                }
+                            )
                         }) {
                             Text("Delete all data")
                         }
@@ -367,6 +392,16 @@ struct UserSettingsView: SwiftUICore.View {
             }
             .sheet(isPresented: $showingAppAboutModal) {
                 AboutAppSubView()
+            }
+            .alert(confirmationModalDialogData.title, isPresented: $confirmationModalDialogData.showDialog) {
+                Button(confirmationModalDialogData.cancelButtonTitle, role: .cancel) {
+                    confirmationModalDialogData = .empty
+                }
+                Button(confirmationModalDialogData.confirmButtonTitle, role: .destructive) {
+                    confirmationModalDialogData.action()
+                }
+            } message: {
+                Text(confirmationModalDialogData.message)
             }
         }
     }
