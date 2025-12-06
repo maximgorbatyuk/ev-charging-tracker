@@ -60,28 +60,9 @@ struct ExpensesView: SwiftUICore.View {
                                     perKilometer: false)
                             }
 
-                            HStack(spacing: 8) {
-                                ForEach(viewModel.filterButtons, id: \.id) { button in
-
-                                    Button(button.title) {
-                                        viewModel.executeButtonAction(button)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 2)
-                                    .padding(.vertical, 12)
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(colorScheme == .dark ? .white : .black)
-                                    .animation(.easeInOut, value: button.isSelected)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .fill(button.isSelected ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 6)
-                                                    .stroke(button.isSelected ? Color.blue.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 1)
-                                            )
-                                    )
-                                }
-                            }
+                            FilterButtonsView(
+                                filterButtons: viewModel.filterButtons)
+                            .padding(.bottom, 8)
                             .padding(.horizontal)
 
                             if viewModel.expenses.isEmpty {

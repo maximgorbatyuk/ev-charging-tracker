@@ -81,7 +81,8 @@ struct ChargingSessionsView: SwiftUICore.View {
                             if !viewModel.expenses.isEmpty && viewModel.totalCost > 0 {
                                 ExpensesChartView(
                                     expenses: viewModel.expenses,
-                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency
+                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
+                                    analytics: analytics
                                 )
                                 .padding(.horizontal)
                                 .padding(.top, 20)

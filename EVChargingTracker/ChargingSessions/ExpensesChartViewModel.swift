@@ -9,17 +9,22 @@ import Foundation
 
 class ExpensesChartViewModel: ObservableObject {
     static let CountOfBars = 6
+    static let ScreenName = "expenses_chart_screen"
 
     let expenses: [Expense]
     let currency: Currency
+
+    private let analytics: AnalyticsService
 
     var filterButtons: [FilterButtonItem] = []
     var expensesToShow: [Expense]
     var monthlyExpenseData: [MonthlyExpenseData]
 
-    init(expenses: [Expense], currency: Currency) {
+    init(expenses: [Expense], currency: Currency, analytics: AnalyticsService) {
         self.expenses = expenses
         self.currency = currency
+        self.analytics = analytics
+
         self.expensesToShow = ExpensesChartViewModel.createExpensesToShow(
             filter: nil,
             expenses: expenses)
@@ -28,9 +33,77 @@ class ExpensesChartViewModel: ObservableObject {
             countOfBars: ExpensesChartViewModel.CountOfBars,
             expensesToShow: self.expensesToShow
         )
+
+        self.filterButtons = [
+            FilterButtonItem(
+                title: L("Filter.All"),
+                innerAction: {
+                    self.recreateExpensesToShow(nil)
+
+                    self.analytics.trackEvent(
+                        "expenses_chart_filter_all_selected",
+                        properties: [
+                            "screen": ExpensesChartViewModel.ScreenName
+                        ])
+                },
+                isSelected: true),
+
+            FilterButtonItem(
+                title: L("Filter.Charges"),
+                innerAction: {
+                    self.recreateExpensesToShow(ExpenseType.charging)
+
+                    self.analytics.trackEvent(
+                        "expenses_chart_filter_charges_selected",
+                        properties: [
+                            "screen": ExpensesChartViewModel.ScreenName
+                        ])
+                },
+                isSelected: false),
+
+            FilterButtonItem(
+                title: L("Filter.Repair"),
+                innerAction: {
+                    self.recreateExpensesToShow(ExpenseType.repair)
+
+                    self.analytics.trackEvent(
+                        "expenses_chart_filter_repair_selected",
+                        properties: [
+                            "screen": ExpensesChartViewModel.ScreenName
+                        ])
+                },
+                isSelected: false),
+            
+            FilterButtonItem(
+                title: L("Filter.Maintenance"),
+                innerAction: {
+                    self.recreateExpensesToShow(ExpenseType.maintenance)
+
+                    self.analytics.trackEvent(
+                        "expenses_chart_filter_maintenance_selected",
+                        properties: [
+                            "screen": ExpensesChartViewModel.ScreenName
+                        ])
+                },
+                isSelected: false),
+
+            FilterButtonItem(
+                title: L("Filter.Carwash"),
+                innerAction: {
+                    self.recreateExpensesToShow(ExpenseType.carwash)
+                    self.analytics.trackEvent(
+                        "expenses_chart_filter_carwash_selected",
+                        properties: [
+                            "screen": ExpensesChartViewModel.ScreenName
+                        ])
+                },
+                isSelected: false),
+        ]
     }
 
-    private static func createExpensesToShow(filter: ExpenseType?, expenses: [Expense]) -> [Expense] {
+    private static func createExpensesToShow(
+        filter: ExpenseType?,
+        expenses: [Expense]) -> [Expense] {
 
         var expensesToShow = expenses.filter { expense in
             !expense.isInitialRecord &&
@@ -54,6 +127,11 @@ class ExpensesChartViewModel: ObservableObject {
         self.expensesToShow = ExpensesChartViewModel.createExpensesToShow(
             filter: filter,
             expenses: expenses)
+
+        self.monthlyExpenseData = MonthlyExpenseData.buildCollection(
+            countOfBars: ExpensesChartViewModel.CountOfBars,
+            expensesToShow: self.expensesToShow
+        )
     }
 
     var hasExpenses: Bool {

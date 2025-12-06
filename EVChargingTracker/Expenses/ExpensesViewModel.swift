@@ -99,11 +99,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         loadSessions()
     }
 
-    func executeButtonAction(_ button: FilterButtonItem) {
-        self.filterButtons.forEach { $0.deselect() }
-        button.action()
-    }
-
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
         let car = self.reloadSelectedCarForExpenses()
         if let car = car, let carId = car.id {

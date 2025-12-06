@@ -15,24 +15,22 @@ struct ExpensesChartView: SwiftUICore.View {
     @Environment(\.colorScheme) var colorScheme
     private let viewModel: ExpensesChartViewModel
 
-    init(expenses: [Expense], currency: Currency) {
+    init(expenses: [Expense], currency: Currency, analytics: AnalyticsService) {
         self.expenses = expenses
         self.currency = currency
         self.viewModel = ExpensesChartViewModel(
             expenses: expenses,
-            currency: currency)
+            currency: currency,
+            analytics: analytics)
     }
 
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
+
             Text(L("Expenses chart"))
                 .font(.headline)
                 .foregroundColor(colorScheme == .dark ? .white : .primary)
                 .padding(.bottom, 12)
-
-            FilterButtonsView(
-                filterButtons: viewModel.filterButtons)
-            .padding(.bottom, 8)
 
             if !viewModel.hasExpenses {
                 Text(L("No expenses yet"))
@@ -41,6 +39,11 @@ struct ExpensesChartView: SwiftUICore.View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, 40)
             } else {
+
+                FilterButtonsView(
+                    filterButtons: viewModel.filterButtons)
+                .padding(.bottom, 8)
+
                 Chart {
                     ForEach(viewModel.monthlyExpenseData) { item in
                         BarMark(
