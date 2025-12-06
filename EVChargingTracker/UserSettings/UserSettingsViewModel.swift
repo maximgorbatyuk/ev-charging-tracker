@@ -203,6 +203,23 @@ class UserSettingsViewModel: ObservableObject {
         }
 
         db.deleteAllData()
+        refetchCars()
+    }
+
+    func deleteAllExpenses() -> Void {
+        if (!isDevelopmentMode()) {
+            self.logger.info("Attempt to delete all expenses in non-development mode. Operation aborted.")
+            return
+        }
+
+        let selectedCar = db.carRepository?.getSelectedForExpensesCar()
+        if (selectedCar == nil) {
+            logger.warning("No car selected for expenses")
+            return
+        }
+
+        db.deleteAllExpenses(selectedCar!)
+        logger.info("Deleted all expenses for car: \(selectedCar!.name)")
     }
 
     func deleteAllExpensesForCar() -> Void {
@@ -230,7 +247,158 @@ class UserSettingsViewModel: ObservableObject {
         let countOfPlannedMaintenanceRecords = 20
         let oldestDate = Calendar.current.date(byAdding: .month, value: -8, to: Date())!
 
-        // TODO implement logic
+        guard let carId = selectedCar!.id else {
+            logger.error("Selected car has no ID")
+            return
+        }
+        
+        let currency = selectedCar!.expenseCurrency
+        let initialMileage = selectedCar!.initialMileage
+        let currentMileage = selectedCar!.currentMileage
+
+        // Helper function to generate random date between oldestDate and now
+        func randomDate() -> Date {
+            let timeInterval = Date().timeIntervalSince(oldestDate)
+            let randomInterval = TimeInterval.random(in: 0...timeInterval)
+            return oldestDate.addingTimeInterval(randomInterval)
+        }
+
+        // Helper function to generate random odometer value
+        func randomOdometer() -> Int {
+            return Int.random(in: initialMileage...currentMileage)
+        }
+
+        // Generate charging sessions
+        logger.info("Adding \(countOfCharingSessions) charging sessions...")
+        for i in 0..<countOfCharingSessions {
+            let date = randomDate()
+            let energyCharged = Double.random(in: 10...75) // kWh
+            let chargerTypes = ChargerType.allCases
+            let chargerType = chargerTypes.randomElement() ?? .home7kW
+            let odometer = randomOdometer()
+            let cost = Double.random(in: 5...50) // Cost range
+            
+            let expense = Expense(
+                date: date,
+                energyCharged: energyCharged,
+                chargerType: chargerType,
+                odometer: odometer,
+                cost: cost,
+                notes: "Random charging session \(i + 1)",
+                isInitialRecord: false,
+                expenseType: .charging,
+                currency: currency,
+                carId: carId
+            )
+            
+            _ = expensesRepository.insertSession(expense)
+        }
+        
+        // Generate other expenses (maintenance, carwash, repair, other)
+        logger.info("Adding \(countOfExpenseRecords) other expenses...")
+        let otherExpenseTypes: [ExpenseType] = [.maintenance, .carwash, .repair, .other]
+        
+        for i in 0..<countOfExpenseRecords {
+            let date = randomDate()
+            let expenseType = otherExpenseTypes.randomElement() ?? .other
+            let odometer = randomOdometer()
+            
+            // Different cost ranges based on type
+            let cost: Double = {
+                switch expenseType {
+                case .maintenance:
+                    return Double.random(in: 50...300)
+                case .repair:
+                    return Double.random(in: 100...1000)
+                case .carwash:
+                    return Double.random(in: 5...30)
+                case .other:
+                    return Double.random(in: 10...200)
+                case .charging:
+                    return Double.random(in: 5...50)
+                }
+            }()
+            
+            let notes: String = {
+                switch expenseType {
+                case .maintenance:
+                    return ["Oil change", "Tire rotation", "Brake inspection", "Filter replacement"].randomElement() ?? "Maintenance"
+                case .repair:
+                    return ["Battery repair", "Suspension fix", "Brake replacement", "Motor service"].randomElement() ?? "Repair"
+                case .carwash:
+                    return ["Car wash", "Full detail", "Interior cleaning", "Exterior wash"].randomElement() ?? "Car wash"
+                case .other:
+                    return ["Parking", "Toll", "Insurance", "Registration"].randomElement() ?? "Other"
+                case .charging:
+                    return "Charging"
+                }
+            }()
+            
+            let expense = Expense(
+                date: date,
+                energyCharged: 0, // No energy for non-charging expenses
+                chargerType: .other,
+                odometer: odometer,
+                cost: cost,
+                notes: notes,
+                isInitialRecord: false,
+                expenseType: expenseType,
+                currency: currency,
+                carId: carId
+            )
+            
+            _ = expensesRepository.insertSession(expense)
+        }
+        
+        // Generate planned maintenance records
+        logger.info("Adding \(countOfPlannedMaintenanceRecords) planned maintenance records...")
+        let maintenanceNames = [
+            "Tire rotation",
+            "Brake fluid change",
+            "Cabin air filter replacement",
+            "Tire replacement",
+            "Brake inspection",
+            "Coolant system check",
+            "Battery health check",
+            "Wheel alignment",
+            "Wiper blade replacement",
+            "12V battery replacement"
+        ]
+        
+        for i in 0..<countOfPlannedMaintenanceRecords {
+            let name = maintenanceNames.randomElement() ?? "Scheduled maintenance"
+            
+            // Randomly choose between date-based or odometer-based reminder
+            let useDateReminder = Bool.random()
+            let useOdometerReminder = Bool.random()
+            
+            let whenDate: Date? = useDateReminder ? Date().addingTimeInterval(TimeInterval.random(in: 86400...7776000)) : nil // 1 day to 90 days
+            let odometerValue: Int? = useOdometerReminder ? currentMileage + Int.random(in: 1000...10000) : nil
+            
+            let notes = [
+                "Important maintenance",
+                "Scheduled service",
+                "Recommended by manufacturer",
+                "Regular checkup",
+                "Safety check"
+            ].randomElement() ?? "Maintenance note"
+            
+            let createdAt = randomDate()
+            
+            let maintenance = PlannedMaintenance(
+                id: nil,
+                when: whenDate,
+                odometer: odometerValue,
+                name: name,
+                notes: notes,
+                carId: carId,
+                createdAt: createdAt
+            )
+            
+            _ = db.plannedMaintenanceRepository?.insertRecord(maintenance)
+        }
+        
+        logger.info("Successfully added random test data: \(countOfCharingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records")
     }
 
     var allCars : [CarDto] {
