@@ -30,14 +30,14 @@ struct MainTabView: SwiftUI.View {
                     .tabItem {
                         Label(L("Stats"), systemImage: "bolt.car.fill")
                     }
-                    .tint(Color.accentColor)
+                    .tint(nil)
                     .tag(0)
 
                 ExpensesView()
                     .tabItem {
                         Label(L("Expenses"), systemImage: "dollarsign.circle")
                     }
-                    .tint(Color.accentColor)
+                    .tint(nil)
                     .tag(1)
 
                 PlanedMaintenanceView(
@@ -49,7 +49,7 @@ struct MainTabView: SwiftUI.View {
                     .tabItem {
                         Label(L("Maintenance"), systemImage: "hammer.fill")
                     }
-                    .tint(Color.accentColor)
+                    .tint(nil)
                     .badge(pendingMaintenanceRecords)
 
                 UserSettingsView(showAppUpdateButton: showAppVersionBadge)
@@ -57,7 +57,7 @@ struct MainTabView: SwiftUI.View {
                         Label(L("Settings"), systemImage: "gear")
                     }
                     .tag(3)
-                    .tint(Color.accentColor)
+                    .tint(nil)
                     .badge(showAppVersionBadge ? "New!" : nil)
             }
             .tint(getTabViewColor())
