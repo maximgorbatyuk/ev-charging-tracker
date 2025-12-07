@@ -63,6 +63,10 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             oneKmPriceBasedOnlyOnCharging: calculateOneKilometerCosts(true),
             lastUpdated: Date())
     }
+    
+    func getMonthCountForCharts() -> Int {
+        return 6
+    }
 
     // TODO mgorbatyuk: avoid code duplication with saveNewExpense
     func saveChargingSession(_ chargingSessionResult: AddExpenseViewResult) -> Void {

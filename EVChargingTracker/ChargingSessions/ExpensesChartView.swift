@@ -11,18 +11,21 @@ import Charts
 struct ExpensesChartView: SwiftUICore.View {
     let expenses: [Expense]
     let currency: Currency
+    let monthsCount: Int
 
     @Environment(\.colorScheme) var colorScheme
     @StateObject private var viewModel: ExpensesChartViewModel
 
-    init(expenses: [Expense], currency: Currency, analytics: AnalyticsService) {
+    init(expenses: [Expense], currency: Currency, analytics: AnalyticsService, monthsCount: Int) {
         self.expenses = expenses
         self.currency = currency
+        self.monthsCount = monthsCount
 
         _viewModel = StateObject(wrappedValue: ExpensesChartViewModel(
             expenses: expenses,
             currency: currency,
-            analytics: analytics))
+            analytics: analytics,
+            monthsCount: monthsCount))
     }
 
     var body: some SwiftUICore.View {

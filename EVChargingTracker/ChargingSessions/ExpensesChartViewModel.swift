@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 
 class ExpensesChartViewModel: ObservableObject {
-    static let CountOfBars = 6
     static let ScreenName = "expenses_chart_screen"
 
     let expenses: [Expense]
     let currency: Currency
+    let monthsCount: Int
 
     private let analytics: AnalyticsService
 
@@ -21,17 +21,18 @@ class ExpensesChartViewModel: ObservableObject {
     @Published var filterButtons: [FilterButtonItem] = []
     @Published var monthlyExpenseData: [MonthlyExpenseData]
 
-    init(expenses: [Expense], currency: Currency, analytics: AnalyticsService) {
+    init(expenses: [Expense], currency: Currency, analytics: AnalyticsService, monthsCount: Int) {
         self.expenses = expenses
         self.currency = currency
         self.analytics = analytics
+        self.monthsCount = monthsCount
 
         self.expensesToShow = ExpensesChartViewModel.createExpensesToShow(
             filter: nil,
             expenses: expenses)
 
         self.monthlyExpenseData = MonthlyExpenseData.buildCollection(
-            countOfBars: ExpensesChartViewModel.CountOfBars,
+            countOfBars: monthsCount,
             expensesToShow: self.expensesToShow
         )
 
@@ -163,7 +164,7 @@ class ExpensesChartViewModel: ObservableObject {
             expenses: expenses)
 
         self.monthlyExpenseData = MonthlyExpenseData.buildCollection(
-            countOfBars: ExpensesChartViewModel.CountOfBars,
+            countOfBars: monthsCount,
             expensesToShow: self.expensesToShow
         )
     }

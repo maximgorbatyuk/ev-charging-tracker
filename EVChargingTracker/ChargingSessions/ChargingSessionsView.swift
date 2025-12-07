@@ -77,12 +77,23 @@ struct ChargingSessionsView: SwiftUICore.View {
                             }
                             .padding(.horizontal)
 
+                            // Consumption Trend Chart
+                            if !viewModel.expenses.isEmpty {
+                                ChargingConsumptionLineChart(
+                                    expenses: viewModel.expenses,
+                                    analytics: analytics,
+                                    monthsCount: viewModel.getMonthCountForCharts()
+                                )
+                                .padding(.top, 20)
+                            }
+                            
                             // Expenses Chart
                             if !viewModel.expenses.isEmpty && viewModel.totalCost > 0 {
                                 ExpensesChartView(
                                     expenses: viewModel.expenses,
                                     currency: viewModel.selectedCarForExpenses!.expenseCurrency,
-                                    analytics: analytics
+                                    analytics: analytics,
+                                    monthsCount: viewModel.getMonthCountForCharts()
                                 )
                                 .padding(.horizontal)
                                 .padding(.top, 20)
