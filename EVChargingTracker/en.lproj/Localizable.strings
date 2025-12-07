@@ -158,6 +158,7 @@
 "Filter.Repair" = "Repair";
 "Filter.Maintenance" = "Maintenance";
 "Filter.Carwash" = "Car wash";
+"Filter.Other" = "Other";
 
 /* Onboarding pages */
 "Welcome to" = "Welcome to";

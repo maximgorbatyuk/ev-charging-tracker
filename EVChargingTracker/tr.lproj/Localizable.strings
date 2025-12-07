@@ -160,6 +160,7 @@
 "Filter.Repair" = "Tamir";
 "Filter.Maintenance" = "Bakım";
 "Filter.Carwash" = "Araba Yıkama";
+"Filter.Other" = "Diğer";
 
 /* Onboarding pages */
 "Welcome to" = "Hoş geldiniz";

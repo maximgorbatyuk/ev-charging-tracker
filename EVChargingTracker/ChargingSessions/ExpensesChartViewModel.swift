@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class ExpensesChartViewModel: ObservableObject {
     static let CountOfBars = 6
@@ -59,6 +60,7 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
+                customColor: ExpensesChartViewModel.colorForExpenseType(.charging),
                 isSelected: false),
 
             FilterButtonItem(
@@ -72,6 +74,7 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
+                customColor: ExpensesChartViewModel.colorForExpenseType(.repair),
                 isSelected: false),
             
             FilterButtonItem(
@@ -85,6 +88,7 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
+                customColor: ExpensesChartViewModel.colorForExpenseType(.maintenance),
                 isSelected: false),
 
             FilterButtonItem(
@@ -97,8 +101,38 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
+                customColor: ExpensesChartViewModel.colorForExpenseType(.carwash),
+                isSelected: false),
+
+            FilterButtonItem(
+                title: L("Filter.Other"),
+                innerAction: {
+                    self.recreateExpensesToShow(ExpenseType.other)
+                    self.analytics.trackEvent(
+                        "expenses_chart_filter_other_selected",
+                        properties: [
+                            "screen": ExpensesChartViewModel.ScreenName
+                        ])
+                },
+                customColor: ExpensesChartViewModel.colorForExpenseType(.other),
                 isSelected: false),
         ]
+    }
+
+    public static func colorForExpenseType(_ type: ExpenseType) -> Color {
+        let opacity = 0.9
+        switch type {
+        case .charging:
+            return .yellow.opacity(opacity)
+        case .maintenance:
+            return .green.opacity(opacity)
+        case .repair:
+            return .orange.opacity(opacity)
+        case .carwash:
+            return .blue.opacity(opacity)
+        case .other:
+            return .purple.opacity(opacity)
+        }
     }
 
     private static func createExpensesToShow(

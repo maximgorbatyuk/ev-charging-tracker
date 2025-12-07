@@ -161,6 +161,7 @@
 "Filter.Repair" = "Reparatur";
 "Filter.Maintenance" = "Wartung";
 "Filter.Carwash" = "Autowäsche";
+"Filter.Other" = "Sonstiges";
 
 /* Onboarding pages */
 "Welcome to" = "Willkommen bei";

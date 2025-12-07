@@ -167,6 +167,7 @@
 "Filter.Repair" = "Жөндеу";
 "Filter.Maintenance" = "Қызмет көрсету";
 "Filter.Carwash" = "Көлік жуу";
+"Filter.Other" = "Басқа";
 
 /* Onboarding pages */
 "Welcome to" = "Қош келдіңіз";

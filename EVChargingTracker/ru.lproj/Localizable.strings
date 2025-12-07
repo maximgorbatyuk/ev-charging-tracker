@@ -160,6 +160,7 @@
 "Filter.Repair" = "Ремонт";
 "Filter.Maintenance" = "Сервис";
 "Filter.Carwash" = "Мойка";
+"Filter.Other" = "Другое";
 
 /* Onboarding pages */
 "Welcome to" = "Добро пожаловать в";
