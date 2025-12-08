@@ -243,7 +243,7 @@ class UserSettingsViewModel: ObservableObject {
         }
 
         let countOfExpenseRecords = 80 // maintenance, carwash, repair
-        let countOfCharingSessions = 150
+        let countOfChargingSessions = 150
         let countOfPlannedMaintenanceRecords = 20
         let oldestDate = Calendar.current.date(byAdding: .month, value: -8, to: Date())!
 
@@ -276,8 +276,8 @@ class UserSettingsViewModel: ObservableObject {
         }
 
         // Generate charging sessions
-        logger.info("Adding \(countOfCharingSessions) charging sessions...")
-        for i in 0..<countOfCharingSessions {
+        logger.info("Adding \(countOfChargingSessions) charging sessions...")
+        for i in 0..<countOfChargingSessions {
             let date = randomDate()
             let energyCharged = Double.random(in: 10...75) // kWh
             let chargerTypes = ChargerType.allCases
@@ -405,7 +405,7 @@ class UserSettingsViewModel: ObservableObject {
             _ = db.plannedMaintenanceRepository?.insertRecord(maintenance)
         }
         
-        logger.info("Successfully added random test data: \(countOfCharingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records")
+        logger.info("Successfully added random test data: \(countOfChargingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records")
     }
 
     var allCars : [CarDto] {

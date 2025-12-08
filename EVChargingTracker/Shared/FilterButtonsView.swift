@@ -12,8 +12,8 @@ class FilterButtonItem: ObservableObject {
     let id: UUID = UUID()
     let title: String
 
-    var customColor: Color? = nil
-    var isSelected = false
+    @Published var customColor: Color? = nil
+    @Published var isSelected = false
     private let innerAction: () -> Void
 
     init(
@@ -34,14 +34,6 @@ class FilterButtonItem: ObservableObject {
 
     func deselect() {
         self.isSelected = false
-    }
-    
-    func getForegroundColor(colorScheme: ColorScheme) -> Color {
-        if customColor != nil {
-            return customColor!
-        }
-
-        return colorScheme == .dark ? .white : .black
     }
 }
 

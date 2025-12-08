@@ -136,7 +136,11 @@ class DatabaseManager : DatabaseManagerProtocol {
 
     func deleteAllExpenses(_ selectedCar: Car) -> Void {
 
-        let carId = selectedCar.id!
+        guard let carId = selectedCar.id else {
+            logger.error("Cannot delete expenses: car ID is nil")
+            return
+        }
+
         expensesRepository!.deleteRecordsForCar(carId)
         plannedMaintenanceRepository!.deleteRecordsForCar(carId)
         delayedNotificationsRepository!.truncateTable()

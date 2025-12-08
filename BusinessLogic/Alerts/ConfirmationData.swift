@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ConfirmationData {
+class ConfirmationData: ObservableObject {
 
     static let empty = ConfirmationData(
         title: "",
@@ -39,12 +39,5 @@ class ConfirmationData {
 
     func executeAction() {
         action()
-    }
-
-    func hide() -> Void {
-        showDialog = false
-        title = ""
-        message = ""
-        action = {}
     }
 }

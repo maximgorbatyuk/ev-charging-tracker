@@ -22,12 +22,6 @@ struct UserSettingsView: SwiftUICore.View {
 
     @State private var showingAppAboutModal = false
     @State private var showAddCarModal = false
-    
-    // Confirmation dialogs for developer actions
-    @State private var showAddRandomExpensesConfirmation = false
-    @State private var showDeleteAllExpensesConfirmation = false
-    @State private var showDeleteAllDataConfirmation = false
-
     @State private var confirmationModalDialogData = ConfirmationData.empty
 
     @ObservedObject private var analytics = AnalyticsService.shared

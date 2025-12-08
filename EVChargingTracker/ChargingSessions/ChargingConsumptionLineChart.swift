@@ -28,25 +28,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                 ProgressView()
                     .frame(maxWidth: .infinity)
                     .frame(height: 200)
-            } else if !viewModel.hasData {
-                VStack(spacing: 8) {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.system(size: 40))
-                        .foregroundColor(.secondary)
-                    
-                    Text(L("No charing data available"))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    
-                    Text(L("Add charging sessions to see trends"))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 200)
             } else {
-                // Chart
                 Chart {
                     ForEach(viewModel.monthlyData) { data in
                         LineMark(
@@ -108,7 +90,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                         }
                     }
                 }
-                .chartYAxisLabel("kWh/100km", position: .leading)
+                .chartYAxisLabel("kWh", position: .leading)
                 .frame(height: 220)
                 .padding()
                 .background(
