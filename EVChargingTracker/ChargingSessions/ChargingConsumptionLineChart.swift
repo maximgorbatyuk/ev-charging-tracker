@@ -12,12 +12,12 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             VStack(alignment: .leading, spacing: 4) {
-                Text(L("Average Consumption Trend"))
+                Text(L("Average charging trend"))
                     .font(.headline)
                     .fontWeight(.bold)
                 
                 if viewModel.hasData {
-                    Text(String(format: "%.1f kWh/month average", viewModel.overallAverage))
+                    Text(String(format: L("%.1f kWh/month average"), viewModel.overallAverage))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -112,9 +112,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                 .frame(height: 220)
                 .padding()
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(UIColor.systemBackground))
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    ShadowBackgroundView()
                 )
                 .padding(.horizontal)
             }

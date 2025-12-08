@@ -185,3 +185,5 @@
 "Please type service title." = "Bitte geben Sie den Servicetitel ein.";
 
 "Expenses chart" = "Ausgabenübersicht";
+"Average charging trend" = "Durchschnittlicher Ladetrend";
+"%.1f kWh/month average" = "%.1f kWh/Monat Durchschnitt";

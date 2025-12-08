@@ -191,3 +191,5 @@
 "Please type service title." = "Қызмет атауын енгізіңіз.";
 
 "Expenses chart" = "Шығындар диаграммасы";
+"Average charging trend" = "Орташа зарядтау тренд";
+"%.1f kWh/month average" = "Орташа мәні: %.1f кВт⋅сағ/ай";

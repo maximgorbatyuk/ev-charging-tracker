@@ -30,57 +30,59 @@ struct ExpensesChartView: SwiftUICore.View {
 
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
-
-            Text(L("Expenses chart"))
-                .font(.headline)
-                .foregroundColor(colorScheme == .dark ? .white : .primary)
-                .padding(.bottom, 12)
-
-            if !viewModel.hasExpenses {
-                Text(L("No expenses yet"))
-                    .font(.subheadline)
-                    .foregroundColor((colorScheme == .dark ? Color.white : Color.primary).opacity(0.7))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 40)
-            } else {
-
-                Chart {
-                    ForEach(viewModel.monthlyExpenseData) { item in
-                        BarMark(
-                            x: .value(L("Date"), item.month),
-                            y: .value(L("Cost"), item.amount),
-                            stacking: .standard
-                        )
-                        .foregroundStyle(colorForExpenseType(item.expenseType))
-                    }
-                }
-                .frame(height: 280)
-                .chartYAxis {
-                    AxisMarks(position: .leading) { value in
-                        AxisGridLine()
-                            .foregroundStyle((colorScheme == .dark ? Color.white : Color.primary).opacity(0.2))
-                        AxisValueLabel()
-                            .foregroundStyle(colorScheme == .dark ? .white : .primary)
-                    }
-                }
-                .chartXAxis {
-                    AxisMarks { value in
-                        AxisValueLabel()
-                            .foregroundStyle(colorScheme == .dark ? .white : .primary)
-                    }
-                }
-                .chartLegend(.hidden) // Hide the automatic legend
-
-                FilterButtonsView(
-                    filterButtons: viewModel.filterButtons)
-                .padding(.top, 8)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L("Expenses chart"))
+                    .font(.headline)
+                    .foregroundColor(colorScheme == .dark ? .white : .primary)
             }
+
+            VStack(alignment: .leading, spacing: 12) {
+                if !viewModel.hasExpenses {
+                    Text(L("No expenses yet"))
+                        .font(.subheadline)
+                        .foregroundColor((colorScheme == .dark ? Color.white : Color.primary).opacity(0.7))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 40)
+                } else {
+
+                    Chart {
+                        ForEach(viewModel.monthlyExpenseData) { item in
+                            BarMark(
+                                x: .value(L("Date"), item.month),
+                                y: .value(L("Cost"), item.amount),
+                                stacking: .standard
+                            )
+                            .foregroundStyle(colorForExpenseType(item.expenseType))
+                        }
+                    }
+                    .frame(height: 280)
+                    .chartYAxis {
+                        AxisMarks(position: .leading) { value in
+                            AxisGridLine()
+                                .foregroundStyle((colorScheme == .dark ? Color.white : Color.primary).opacity(0.2))
+                            AxisValueLabel()
+                                .foregroundStyle(colorScheme == .dark ? .white : .primary)
+                        }
+                    }
+                    .chartXAxis {
+                        AxisMarks { value in
+                            AxisValueLabel()
+                                .foregroundStyle(colorScheme == .dark ? .white : .primary)
+                        }
+                    }
+                    .chartLegend(.hidden) // Hide the automatic legend
+
+                    FilterButtonsView(
+                        filterButtons: viewModel.filterButtons)
+                    .padding(.top, 8)
+                }
+            }
+            .padding()
+            .background(
+                ShadowBackgroundView()
+            )
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill((colorScheme == .dark ? Color.white : Color.black).opacity(0.1))
-        )
     }
 
     private func colorForExpenseType(_ type: ExpenseType) -> Color {

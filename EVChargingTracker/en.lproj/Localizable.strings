@@ -182,3 +182,5 @@
 "Please type service title." = "Please type service title.";
 
 "Expenses chart" = "Expenses chart";
+"Average charging trend" = "Average charging trend";
+"%.1f kWh/month average" = "%.1f kWh/month average";
