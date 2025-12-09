@@ -12,6 +12,7 @@ struct AddExpenseView: SwiftUICore.View {
     let defaultCurrency: Currency
     let selectedCar: Car?
     let allCars: [Car]
+    let existingExpense: Expense? // For edit mode
     let onAdd: (AddExpenseViewResult) -> Void
 
     @Environment(\.dismiss) var dismiss
@@ -35,21 +36,44 @@ struct AddExpenseView: SwiftUICore.View {
 
     @FocusState private var isPricePerKWhFocused: Bool
     @FocusState private var isCostFocused: Bool
+    
+    private var isEditMode: Bool {
+        existingExpense != nil
+    }
 
     init(
         defaultExpenseType: ExpenseType?,
         defaultCurrency: Currency,
         selectedCar: Car?,
         allCars: [Car],
+        existingExpense: Expense? = nil,
         onAdd: @escaping (AddExpenseViewResult) -> Void) {
         self.defaultExpenseType = defaultExpenseType
         self.defaultCurrency = defaultCurrency
         self.selectedCar = selectedCar
         self.allCars = allCars
+        self.existingExpense = existingExpense
         self.onAdd = onAdd
-    
-        _carId = State(initialValue: self.selectedCar?.id)
+
+        _carId = State(initialValue: self.selectedCar?.id ?? existingExpense?.carId)
         _selectedCardForExpense = State(initialValue: self.selectedCar)
+
+        // Initialize fields with existing expense data if in edit mode
+        if let expense = existingExpense {
+            _date = State(initialValue: expense.date)
+            _energyCharged = State(initialValue: expense.energyCharged > 0 ? String(expense.energyCharged) : "")
+            _chargerType = State(initialValue: expense.chargerType)
+            _expenseType = State(initialValue: expense.expenseType)
+            _odometer = State(initialValue: String(expense.odometer))
+            _cost = State(initialValue: expense.cost != nil ? String(expense.cost!) : "")
+            _notes = State(initialValue: expense.notes)
+            
+            // Calculate price per kWh if it's a charging expense
+            if expense.expenseType == .charging && expense.energyCharged > 0, let costValue = expense.cost {
+                let pricePerKWh = costValue / expense.energyCharged
+                _pricePerKWh = State(initialValue: String(format: "%.2f", pricePerKWh))
+            }
+        }
     }
 
     var body: some SwiftUICore.View {
@@ -90,6 +114,8 @@ struct AddExpenseView: SwiftUICore.View {
 
                             selectedCardForExpense = allCars.first { $0.id == newCarId }
                         }
+                        .foregroundColor(isEditMode ? .gray : .primary)
+                        .disabled(isEditMode)
                     }
 
                     DatePicker(L("Date"), selection: $date, displayedComponents: .date)
@@ -101,6 +127,8 @@ struct AddExpenseView: SwiftUICore.View {
                             TextField(L("45.2"), text: $energyCharged)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
+                                .foregroundColor(isEditMode ? .gray : .primary)
+                                .disabled(isEditMode)
                         }
 
                         HStack {
@@ -110,6 +138,8 @@ struct AddExpenseView: SwiftUICore.View {
                                 .focused($isPricePerKWhFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
+                                .foregroundColor(isEditMode ? .gray : .primary)
+                                .disabled(isEditMode)
                                 .onChange(of: pricePerKWh, { oldValue, newValue in
 
                                     if (!isPricePerKWhFocused) {
@@ -142,6 +172,8 @@ struct AddExpenseView: SwiftUICore.View {
                                 Text(L(type.rawValue)).tag(type)
                             }
                         }
+                        .foregroundColor(isEditMode ? .gray : .primary)
+                        .disabled(isEditMode)
                     }
                     
                     VStack {
@@ -151,6 +183,8 @@ struct AddExpenseView: SwiftUICore.View {
                             TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
                                 .keyboardType(.numberPad)
                                 .multilineTextAlignment(.trailing)
+                                .foregroundColor(isEditMode ? .gray : .primary)
+                                .disabled(isEditMode)
                         }
 
                         Text(L("If you leave it empty, the current mileage of the selected car will be used."))
@@ -220,8 +254,8 @@ struct AddExpenseView: SwiftUICore.View {
                         onCancel: {
                             analytics.trackEvent("cancel_button_clicked", properties: [
                                     "button_name": "cancel",
-                                    "screen": "add_expense_screen",
-                                    "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                                    "screen": isEditMode ? "edit_expense_screen" : "add_expense_screen",
+                                    "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none")
                                 ])
 
                             dismiss()
@@ -229,8 +263,8 @@ struct AddExpenseView: SwiftUICore.View {
                         onSave: {
                             analytics.trackEvent("save_button_clicked", properties: [
                                     "button_name": "save",
-                                    "screen": "add_expense_screen",
-                                    "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                                    "screen": isEditMode ? "edit_expense_screen" : "add_expense_screen",
+                                    "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none")
                                 ])
 
                             saveSession()
@@ -240,15 +274,15 @@ struct AddExpenseView: SwiftUICore.View {
                     .listRowInsets(EdgeInsets())
                 }
             }
-            .navigationTitle(L("Add expense"))
+            .navigationTitle(L(isEditMode ? "Edit expense" : "Add expense"))
             .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(L("Cancel")) {
-                        analytics.trackEvent("cancel_button_clicked", properties: [
+                        analytics.trackEvent("cancel_toolbaar_button_clicked", properties: [
                                 "button_name": "cancel",
-                                "screen": "add_expense_screen",
-                                "action": "add_expense_" + (defaultExpenseType?.rawValue ?? "none")
+                                "screen": isEditMode ? "edit_expense_screen" : "add_expense_screen",
+                                "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none")
                             ])
 
                         dismiss()
@@ -258,7 +292,7 @@ struct AddExpenseView: SwiftUICore.View {
             .onAppear() {
 
                 analytics.trackScreen(
-                    "add_expense_screen", properties: [
+                    isEditMode ? "edit_expense_screen" : "add_expense_screen", properties: [
                         "default_expense_type": defaultExpenseType?.rawValue ?? "none"
                     ])
             }
@@ -307,21 +341,22 @@ struct AddExpenseView: SwiftUICore.View {
         let sessionCost = Double(cost)
 
         let expense = Expense(
+            id: existingExpense?.id, // Preserve ID when editing
             date: date,
             energyCharged: energy,
             chargerType: chargerType,
             odometer: currentMileageValue!,
             cost: sessionCost,
             notes: notes,
-            isInitialRecord: false,
+            isInitialRecord: existingExpense?.isInitialRecord ?? false,
             expenseType: expenseTypeUnwrapped,
             currency: defaultCurrency,
-            carId: selectedCardForExpense?.id
+            carId: selectedCardForExpense?.id ?? existingExpense?.carId
         )
 
         var initialExpenseForNewCar: Expense? = nil
 
-        if (selectedCardForExpense == nil) {
+        if (selectedCardForExpense == nil && existingExpense == nil) {
             initialExpenseForNewCar = Expense(
                 date: date,
                 energyCharged: 0.0,

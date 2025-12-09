@@ -118,6 +118,14 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         return db.carRepository!.getAllCars()
     }
 
+    func updateExistingExpense(_ expenseEditResult: AddExpenseViewResult, expenseToEdit: Expense) -> Void {
+        expenseToEdit.cost = expenseEditResult.expense.cost
+        expenseToEdit.date = expenseEditResult.expense.date
+        expenseToEdit.notes = expenseEditResult.expense.notes
+
+        self.updateSession(expenseToEdit)
+    }
+
     // TODO mgorbatyuk: avoid code duplication with saveChargingSession
     func saveNewExpense(_ newExpenseResult: AddExpenseViewResult) -> Void {
 
@@ -223,7 +231,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             if let index = expenses.firstIndex(where: { $0.id == session.id }) {
                 expenses[index] = session
             }
-            loadSessions() // Reload to get proper sorting
+
+            loadSessions()
         }
     }
 
