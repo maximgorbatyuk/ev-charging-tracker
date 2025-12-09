@@ -20,6 +20,7 @@ class ExpensesChartViewModel: ObservableObject {
     var expensesToShow: [Expense]
     @Published var filterButtons: [FilterButtonItem] = []
     @Published var monthlyExpenseData: [MonthlyExpenseData]
+    @Published var hasChartItemsToShow: Bool
 
     init(expenses: [Expense], currency: Currency, analytics: AnalyticsService, monthsCount: Int) {
         self.expenses = expenses
@@ -31,10 +32,13 @@ class ExpensesChartViewModel: ObservableObject {
             filter: nil,
             expenses: expenses)
 
-        self.monthlyExpenseData = MonthlyExpenseData.buildCollection(
+        let monthlyExpenseData = MonthlyExpenseData.buildCollection(
             countOfBars: monthsCount,
             expensesToShow: self.expensesToShow
         )
+
+        self.monthlyExpenseData = monthlyExpenseData
+        self.hasChartItemsToShow = monthlyExpenseData.contains { $0.amount > 0 }
 
         self.filterButtons = [
             FilterButtonItem(
@@ -167,6 +171,8 @@ class ExpensesChartViewModel: ObservableObject {
             countOfBars: monthsCount,
             expensesToShow: self.expensesToShow
         )
+
+        self.hasChartItemsToShow = self.monthlyExpenseData.contains { $0.amount > 0 }
     }
 
     var hasExpenses: Bool {

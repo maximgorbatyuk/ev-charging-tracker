@@ -6,9 +6,21 @@ class ChargingConsumptionChartViewModel: ObservableObject {
     @Published var monthlyData: [MonthlyConsumption] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-    
+
+    private let expenses: [Expense]
+    private let analytics: AnalyticsService
+    private let monthsCount: Int
+
+    init(data: ChargingConsumptionLineChartData) {
+        self.expenses = data.expenses
+        self.analytics = data.analytics
+        self.monthsCount = data.monthsCount
+
+        loadMonthlyConsumption()
+    }
+
     // Calculate monthly average consumption for the last 6 months
-    func loadMonthlyConsumption(expenses: [Expense], monthsCount: Int) {
+    func loadMonthlyConsumption() {
         isLoading = true
         errorMessage = nil
 
@@ -16,7 +28,7 @@ class ChargingConsumptionChartViewModel: ObservableObject {
         let today = Date()
         var monthlyAverages: [MonthlyConsumption] = []
         
-        for monthOffset in (0..<monthsCount).reversed() {
+        for monthOffset in (0..<self.monthsCount).reversed() {
             guard let monthDate = calendar.date(byAdding: .month, value: -monthOffset, to: today),
                   let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate)),
                   let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth) else {
@@ -24,7 +36,7 @@ class ChargingConsumptionChartViewModel: ObservableObject {
             }
             
             // Filter expenses for this month that are charging sessions
-            let monthExpenses = expenses.filter { expense in
+            let monthExpenses = self.expenses.filter { expense in
                 return expense.expenseType == .charging &&
                         expense.date >= startOfMonth && expense.date <= endOfMonth
             }

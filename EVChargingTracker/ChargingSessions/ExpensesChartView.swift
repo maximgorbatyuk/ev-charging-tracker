@@ -9,23 +9,30 @@ import SwiftUI
 import Charts
 
 struct ExpensesChartView: SwiftUICore.View {
+    let data: ExpensesChartData
+    
     let expenses: [Expense]
     let currency: Currency
     let monthsCount: Int
 
+    var monthlyExpenseData: [MonthlyExpenseData] {
+        return viewModel.monthlyExpenseData
+    }
+
     @Environment(\.colorScheme) var colorScheme
     @StateObject private var viewModel: ExpensesChartViewModel
 
-    init(expenses: [Expense], currency: Currency, analytics: AnalyticsService, monthsCount: Int) {
-        self.expenses = expenses
-        self.currency = currency
-        self.monthsCount = monthsCount
+    init(data: ExpensesChartData) {
+        self.data = data
+        self.expenses = data.expenses
+        self.currency = data.currency
+        self.monthsCount = data.monthsCount
 
         _viewModel = StateObject(wrappedValue: ExpensesChartViewModel(
-            expenses: expenses,
-            currency: currency,
-            analytics: analytics,
-            monthsCount: monthsCount))
+            expenses: data.expenses,
+            currency: data.currency,
+            analytics: data.analytics,
+            monthsCount: data.monthsCount))
     }
 
     var body: some SwiftUICore.View {
@@ -38,16 +45,9 @@ struct ExpensesChartView: SwiftUICore.View {
             }
 
             VStack(alignment: .leading, spacing: 12) {
-                if !viewModel.hasExpenses {
-                    Text(L("No expenses yet"))
-                        .font(.subheadline)
-                        .foregroundColor((colorScheme == .dark ? Color.white : Color.primary).opacity(0.7))
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, 40)
-                } else {
-
+                if viewModel.hasChartItemsToShow {
                     Chart {
-                        ForEach(viewModel.monthlyExpenseData) { item in
+                        ForEach(monthlyExpenseData) { item in
                             BarMark(
                                 x: .value(L("Date"), item.month),
                                 y: .value(L("Cost"), item.amount),
@@ -72,11 +72,30 @@ struct ExpensesChartView: SwiftUICore.View {
                         }
                     }
                     .chartLegend(.hidden) // Hide the automatic legend
-
-                    FilterButtonsView(
-                        filterButtons: viewModel.filterButtons)
-                    .padding(.top, 8)
                 }
+                else {
+                    VStack(alignment: .center) {
+                        Image(systemName: "chart.bar.xaxis")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 120)
+                            .foregroundColor(.gray.opacity(0.2))
+                            .padding(.top, 80)
+                            .padding(.horizontal)
+
+                        Text(L("No expense data available for the selected filters."))
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14, weight: .semibold))
+                            .padding(.top, 20)
+                            .padding(.horizontal)
+                        Spacer()
+                    }
+                    .frame(height: 280)
+                }
+
+                FilterButtonsView(
+                    filterButtons: viewModel.filterButtons)
+                .padding(.top, 8)
             }
             .padding()
             .background(

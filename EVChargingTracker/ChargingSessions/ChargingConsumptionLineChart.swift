@@ -2,12 +2,17 @@ import SwiftUI
 import Charts
 
 struct ChargingConsumptionLineChart: SwiftUI.View {
-    @StateObject private var viewModel = ChargingConsumptionChartViewModel()
 
-    let expenses: [Expense]
+    var viewModel: ChargingConsumptionChartViewModel
+    let data: ChargingConsumptionLineChartData
     let analytics: AnalyticsService
-    let monthsCount: Int
-    
+
+    init(data: ChargingConsumptionLineChartData) {
+        self.data = data
+        self.viewModel = ChargingConsumptionChartViewModel(data: data)
+        self.analytics = data.analytics
+    }
+
     var body: some SwiftUI.View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
@@ -100,16 +105,8 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
             }
         }
         .onAppear {
-            viewModel.loadMonthlyConsumption(expenses: expenses, monthsCount: monthsCount)
+            viewModel.loadMonthlyConsumption()
             analytics.trackEvent("charging_consumption_chart_viewed", properties: [:])
         }
     }
-}
-
-#Preview {
-    ChargingConsumptionLineChart(
-        expenses: [],
-        analytics: AnalyticsService.shared,
-        monthsCount: 6
-    )
 }

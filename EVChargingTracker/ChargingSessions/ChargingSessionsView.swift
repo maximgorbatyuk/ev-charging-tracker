@@ -78,23 +78,14 @@ struct ChargingSessionsView: SwiftUICore.View {
                             .padding(.horizontal)
 
                             // Consumption Trend Chart
-                            if !viewModel.expenses.isEmpty {
+                            if viewModel.consumptionLineChartData != nil {
                                 ChargingConsumptionLineChart(
-                                    expenses: viewModel.expenses,
-                                    analytics: analytics,
-                                    monthsCount: viewModel.getMonthCountForCharts()
-                                )
+                                    data: viewModel.consumptionLineChartData!)
                                 .padding(.top, 20)
                             }
-                            
-                            // Expenses Chart
-                            if !viewModel.expenses.isEmpty && viewModel.totalCost > 0 {
-                                ExpensesChartView(
-                                    expenses: viewModel.expenses,
-                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
-                                    analytics: analytics,
-                                    monthsCount: viewModel.getMonthCountForCharts()
-                                )
+
+                            if viewModel.expenseChartData != nil {
+                                ExpensesChartView(data: viewModel.expenseChartData!)
                                 .padding(.horizontal)
                                 .padding(.top, 20)
                             }
@@ -127,23 +118,19 @@ struct ChargingSessionsView: SwiftUICore.View {
                                     "screen": "charging_sessions_stats_screen"
                                 ])
 
-                            loadData()
+                            viewModel.loadSessions()
                         })
                 }
                 .onAppear {
                     analytics.trackScreen("charging_sessions_stats_screen")
-                    loadData()
+                    viewModel.loadSessions()
                 }
                 .refreshable {
-                    loadData()
+                    viewModel.loadSessions()
                 }
                 
             }
         }
-    }
-    
-    private func loadData() -> Void {
-        viewModel.loadSessions()
     }
 }
 
