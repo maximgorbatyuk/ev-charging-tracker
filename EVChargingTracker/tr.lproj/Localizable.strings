@@ -157,7 +157,10 @@
 "Filter.All" = "Tümü";
 "Filter.Charges" = "Şarj";
 "Filter.Repair/maintenance" = "Bakım";
+"Filter.Repair" = "Tamir";
+"Filter.Maintenance" = "Bakım";
 "Filter.Carwash" = "Araba Yıkama";
+"Filter.Other" = "Diğer";
 
 /* Onboarding pages */
 "Welcome to" = "Hoş geldiniz";
@@ -179,3 +182,8 @@
 "App update available" = "Uygulama güncellemesi mevcut";
 "If you leave it empty, the current mileage of the selected car will be used." = "Boş bırakırsanız, seçilen aracın mevcut kilometresi kullanılacaktır.";
 "Please type service title." = "Lütfen servis başlığını yazın.";
+
+"Expenses chart" = "Giderler grafiği";
+"Average charging trend" = "Ortalama şarj trendi";
+"%.1f kWh/month average" = "Aylık ortalama %.1f kWh";
+"No expense data available for the selected filter." = "Seçilen filtre için harcama verisi yok.";

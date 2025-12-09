@@ -19,7 +19,19 @@ struct CostsBlockView: SwiftUICore.View {
     @ObservedObject private var analytics = AnalyticsService.shared
 
     @State private var showingHelp = false
-    
+
+    func getMoneyFormattedText() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.decimalSeparator = "."
+        formatter.groupingSeparator = " "
+
+        let number = NSNumber(value: costsValue)
+        let formattedNumber = formatter.string(from: number)!
+        return "\(formattedNumber)\(currency.rawValue)"
+    }
+
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -58,7 +70,7 @@ struct CostsBlockView: SwiftUICore.View {
             }
 
             HStack(alignment: .lastTextBaseline) {
-                Text(String(format: "%@%.2f", currency.rawValue, costsValue))
+                Text(getMoneyFormattedText())
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                 

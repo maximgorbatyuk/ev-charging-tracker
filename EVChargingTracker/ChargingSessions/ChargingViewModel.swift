@@ -11,9 +11,11 @@ import os
 class ChargingViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
+    @Published var statData: SharedStatsData?
+    @Published var totalCost: Double = 0.0
 
-    var statData: SharedStatsData?
-    var totalCost: Double = 0.0
+    @Published var expenseChartData: ExpensesChartData?
+    @Published var consumptionLineChartData: ChargingConsumptionLineChartData?
 
     // Average fuel density in kg per gas liter
     let fuelKgPerL = 2.31
@@ -23,6 +25,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     private let expensesRepository: ExpensesRepository
     private let plannedMaintenanceRepository: PlannedMaintenanceRepository
     private let notifications: NotificationManager
+    private let analytics: AnalyticsService
 
     private var _selectedCarForExpenses: Car?
     private let logger: Logger
@@ -31,12 +34,14 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         environment: EnvironmentService = .shared,
         db: DatabaseManager = .shared,
         notifications: NotificationManager = .shared,
-        logger: Logger? = nil
+        logger: Logger? = nil,
+        analytics: AnalyticsService = .shared
     ) {
         self.environment = environment
         self.db = db
         self.notifications = notifications
         self.logger = logger ?? Logger(subsystem: "ChargingViewModel", category: "ViewModels")
+        self.analytics = analytics
 
         self.expensesRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
@@ -46,6 +51,9 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     func loadSessions() {
         self._selectedCarForExpenses = self.reloadSelectedCarForExpenses()
+        expenseChartData = nil
+        consumptionLineChartData = nil
+
         if let car = self._selectedCarForExpenses, let carId = car.id {
             expenses = expensesRepository.fetchAllSessions(carId)
             totalCost = getTotalCost()
@@ -62,6 +70,25 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             oneKmPriceIncludingAllExpenses: calculateOneKilometerCosts(false),
             oneKmPriceBasedOnlyOnCharging: calculateOneKilometerCosts(true),
             lastUpdated: Date())
+        
+        if (self._selectedCarForExpenses != nil) {
+            expenseChartData = ExpensesChartData(
+                expenses: expenses,
+                currency: self._selectedCarForExpenses!.expenseCurrency,
+                analytics: self.analytics,
+                monthsCount: getMonthCountForCharts()
+            )
+
+            consumptionLineChartData = ChargingConsumptionLineChartData(
+                expenses: expenses,
+                analytics: self.analytics,
+                monthsCount: getMonthCountForCharts()
+            )
+        }
+    }
+    
+    func getMonthCountForCharts() -> Int {
+        return 6
     }
 
     // TODO mgorbatyuk: avoid code duplication with saveNewExpense

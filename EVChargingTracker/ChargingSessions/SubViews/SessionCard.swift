@@ -13,6 +13,7 @@ struct SessionCard: SwiftUICore.View {
     
     let session: Expense
     let onDelete: () -> Void
+    let onEdit: () -> Void
     
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
@@ -22,6 +23,12 @@ struct SessionCard: SwiftUICore.View {
                     .foregroundColor(.gray)
                 
                 Spacer()
+                
+                Button(action: onEdit) {
+                    Image(systemName: "pencil")
+                        .foregroundColor(.blue)
+                }
+                .padding(.trailing, 8)
                 
                 Button(action: onDelete) {
                     Image(systemName: "trash")
@@ -89,13 +96,7 @@ struct SessionCard: SwiftUICore.View {
                 
                 Spacer()
             }
-            
-            if (session.expenseType == .charging && session.notes != "") {
-                Text(session.notes)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            
+
             if !session.notes.isEmpty {
                 Text(session.notes)
                     .font(.caption)

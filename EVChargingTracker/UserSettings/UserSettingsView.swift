@@ -14,7 +14,8 @@ struct UserSettingsView: SwiftUICore.View {
 
     @StateObject private var viewModel = UserSettingsViewModel(
         environment: EnvironmentService.shared,
-        db: DatabaseManager.shared)
+        db: DatabaseManager.shared,
+        developerMode: DeveloperModeManager.shared)
 
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
@@ -22,10 +23,13 @@ struct UserSettingsView: SwiftUICore.View {
 
     @State private var showingAppAboutModal = false
     @State private var showAddCarModal = false
+    @State private var confirmationModalDialogData = ConfirmationData.empty
+    @State private var showDeveloperModeAlert = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var environment = EnvironmentService.shared
+    @ObservedObject private var developerMode = DeveloperModeManager.shared
 
     @Environment(\.requestReview) var requestReview
 
@@ -267,11 +271,17 @@ struct UserSettingsView: SwiftUICore.View {
                 }
 
                 Section(header: Text(L("About app"))) {
-                    HStack {
-                        Label(L("App version"), systemImage: "info.circle")
-                        Spacer()
-                        Text(environment.getAppVisibleVersion())
+                    Button(action: {
+                        viewModel.handleVersionTap()
+                    }) {
+                        HStack {
+                            Label(L("App version"), systemImage: "info.circle")
+                            Spacer()
+                            Text(environment.getAppVisibleVersion())
+                                .foregroundColor(.primary)
+                        }
                     }
+                    .buttonStyle(.plain)
 
                     HStack {
                         Label(L("Developer"), systemImage: "person")
@@ -286,9 +296,27 @@ struct UserSettingsView: SwiftUICore.View {
                             Text("Development")
                         }
                     }
+
+                    if (viewModel.isSpecialDeveloperModeEnabled()) {
+                        Button(action: {
+                            developerMode.disableDeveloperMode()
+                        }) {
+                            HStack {
+                                Label(L("Developer Mode"), systemImage: "hammer.fill")
+                                    .foregroundColor(.orange)
+                                Spacer()
+                                Text("Enabled")
+                                    .foregroundColor(.orange)
+                                    .fontWeight(.bold)
+                            }
+                        }
+                        .buttonStyle(.plain)
+
+                        
+                    }
                 }
 
-                if (viewModel.isDevelopmentMode()) {
+                if (viewModel.isSpecialDeveloperModeEnabled()) {
 
                     Section(header: Text(L("Developer section"))) {
 
@@ -319,9 +347,41 @@ struct UserSettingsView: SwiftUICore.View {
                             Text("Schedule for 5 seconds")
                         }
                         .buttonStyle(.plain)
+
+                        Button(action: {
+                            confirmationModalDialogData = ConfirmationData(
+                                title: "Add Random Expenses?",
+                                message: "This will add random expense records to your database. This action is for testing purposes only.",
+                                action: {
+                                    viewModel.addRandomExpenses()
+                                }
+                            )
+                        }) {
+                            Text("Add random expenses")
+                        }
+                        .buttonStyle(.plain)
+
+                        Button(action: {
+                            confirmationModalDialogData = ConfirmationData(
+                                title: "Delete car expenses?",
+                                message: "This will permanently delete all expenses for selected car. This action cannot be undone.",
+                                action: {
+                                    viewModel.deleteAllExpensesForCar()
+                                }
+                            )
+                        }) {
+                            Text("Delete car expenses")
+                        }
+                        .buttonStyle(.plain)
                         
                         Button(action: {
-                            viewModel.deleteAllData()
+                            confirmationModalDialogData = ConfirmationData(
+                                title: "Delete all data?",
+                                message: "This will permanently delete all data including cars, expenses, and maintenance records. This action cannot be undone.",
+                                action: {
+                                    viewModel.deleteAllData()
+                                }
+                            )
                         }) {
                             Text("Delete all data")
                         }
@@ -353,6 +413,24 @@ struct UserSettingsView: SwiftUICore.View {
             }
             .sheet(isPresented: $showingAppAboutModal) {
                 AboutAppSubView()
+            }
+            .alert(confirmationModalDialogData.title, isPresented: $confirmationModalDialogData.showDialog) {
+                Button(confirmationModalDialogData.cancelButtonTitle, role: .cancel) {
+                    confirmationModalDialogData = .empty
+                }
+                Button(confirmationModalDialogData.confirmButtonTitle, role: .destructive) {
+                    confirmationModalDialogData.action()
+                    confirmationModalDialogData = .empty
+                }
+            } message: {
+                Text(confirmationModalDialogData.message)
+            }
+            .alert("Developer Mode Activated", isPresented: $developerMode.shouldShowActivationAlert) {
+                Button("OK") {
+                    developerMode.dismissAlert()
+                }
+            } message: {
+                Text("Developer mode has been enabled. You can now access additional debugging tools and options.")
             }
         }
     }

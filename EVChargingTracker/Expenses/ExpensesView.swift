@@ -13,6 +13,7 @@ struct ExpensesView: SwiftUICore.View {
     @State private var showingAddSession = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var expenseToDelete: Expense? = nil
+    @State private var expenseToEdit: Expense? = nil
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
@@ -60,28 +61,9 @@ struct ExpensesView: SwiftUICore.View {
                                     perKilometer: false)
                             }
 
-                            HStack(spacing: 8) {
-                                ForEach(viewModel.filterButtons, id: \.id) { button in
-                                    
-                                    Button(button.title) {
-                                        viewModel.executeButtonAction(button)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 2)
-                                    .padding(.vertical, 12)
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(colorScheme == .dark ? .white : .black)
-                                    .animation(.easeInOut, value: button.isSelected)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .fill(button.isSelected ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 6)
-                                                    .stroke(button.isSelected ? Color.blue.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 1)
-                                            )
-                                    )
-                                }
-                            }
+                            FilterButtonsView(
+                                filterButtons: viewModel.filterButtons)
+                            .padding(.bottom, 8)
                             .padding(.horizontal)
 
                             if viewModel.expenses.isEmpty {
@@ -111,6 +93,26 @@ struct ExpensesView: SwiftUICore.View {
                             viewModel.saveNewExpense(newExpenseResult)
                             analytics.trackEvent(
                                 "expense_record_added",
+                                properties: [
+                                    "screen": viewModel.analyticsScreenName
+                                ])
+                        })
+                }
+                .sheet(item: $expenseToEdit) { expense in
+                    let selectedCar = viewModel.selectedCarForExpenses
+                    AddExpenseView(
+                        defaultExpenseType: expense.expenseType,
+                        defaultCurrency: expense.currency,
+                        selectedCar: selectedCar,
+                        allCars: viewModel.getAllCars(),
+                        existingExpense: expense,
+                        onAdd: { updatedExpenseResult in
+                            viewModel.updateExistingExpense(
+                                updatedExpenseResult,
+                                expenseToEdit: expense)
+
+                            analytics.trackEvent(
+                                "expense_record_updated",
                                 properties: [
                                     "screen": viewModel.analyticsScreenName
                                 ])
@@ -175,6 +177,15 @@ struct ExpensesView: SwiftUICore.View {
                         // ask for confirmation before deleting
                         expenseToDelete = session
                         showingDeleteConfirmation = true
+                    },
+                    onEdit: {
+                        analytics.trackEvent("expense_edit_button_clicked", properties: [
+                                "button_name": "edit",
+                                "screen": viewModel.analyticsScreenName,
+                                "action": "edit_expense"
+                            ])
+                        
+                        expenseToEdit = session
                     })
             }
         }

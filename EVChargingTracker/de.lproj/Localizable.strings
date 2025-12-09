@@ -158,7 +158,10 @@
 "Filter.All" = "Alle";
 "Filter.Charges" = "Ladungen";
 "Filter.Repair/maintenance" = "Reparatur/Wartung";
+"Filter.Repair" = "Reparatur";
+"Filter.Maintenance" = "Wartung";
 "Filter.Carwash" = "Autowäsche";
+"Filter.Other" = "Sonstiges";
 
 /* Onboarding pages */
 "Welcome to" = "Willkommen bei";
@@ -180,3 +183,8 @@
 "App update available" = "App-Update verfügbar";
 "If you leave it empty, the current mileage of the selected car will be used." = "Wenn Sie es leer lassen, wird der aktuelle Kilometerstand des ausgewählten Autos verwendet.";
 "Please type service title." = "Bitte geben Sie den Servicetitel ein.";
+
+"Expenses chart" = "Ausgabenübersicht";
+"Average charging trend" = "Durchschnittlicher Ladetrend";
+"%.1f kWh/month average" = "%.1f kWh/Monat Durchschnitt";
+"No expense data available for the selected filter." = "Für den ausgewählten Filter sind keine Ausgabendaten verfügbar.";
