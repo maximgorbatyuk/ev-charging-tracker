@@ -130,7 +130,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
         }
 
         var odo: Int? = nil
-        if (remindByOdometer && odometer != nil && odometer != "") {
+        if (remindByOdometer && odometer != "") {
             guard let odometerValue = Int(odometer) else {
                 // TODO mgorbatyuk: show alert
                 alertMessage = L("Please type a valid value for Odometer.")

@@ -157,7 +157,10 @@
 "Filter.All" = "Все";
 "Filter.Charges" = "Зарядки";
 "Filter.Repair/maintenance" = "Сервис";
+"Filter.Repair" = "Ремонт";
+"Filter.Maintenance" = "Сервис";
 "Filter.Carwash" = "Мойка";
+"Filter.Other" = "Другое";
 
 /* Onboarding pages */
 "Welcome to" = "Добро пожаловать в";
@@ -179,3 +182,8 @@
 "App update available" = "Доступна новая версия";
 "If you leave it empty, the current mileage of the selected car will be used." = "Если оставить это поле пустым, будет использован текущий пробег выбранного автомобиля.";
 "Please type service title." = "Пожалуйста, напишите что должно быть сделано.";
+
+"Expenses chart" = "График расходов";
+"Average charging trend" = "Средний заряд в месяц";
+"%.1f kWh/month average" = "В среднем %.1f кВт⋅ч/месяц";
+"No expense data available for the selected filter." = "Нет данных для выбранного фильтра.";

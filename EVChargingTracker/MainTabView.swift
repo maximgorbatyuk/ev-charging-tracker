@@ -21,36 +21,46 @@ struct MainTabView: SwiftUI.View {
 
     @ObservedObject private var loc = LocalizationManager.shared
     @Environment(\.colorScheme) var colorScheme
+    @State private var selectedTab: Int = 0
 
     var body: some SwiftUI.View {
         ZStack {
-            TabView {
+            TabView(selection: $selectedTab) {
                 ChargingSessionsView()
                     .tabItem {
                         Label(L("Stats"), systemImage: "bolt.car.fill")
                     }
-                
+                    .tint(nil)
+                    .tag(0)
+
                 ExpensesView()
                     .tabItem {
                         Label(L("Expenses"), systemImage: "dollarsign.circle")
                     }
+                    .tint(nil)
+                    .tag(1)
 
                 PlanedMaintenanceView(
                     onPlannedMaintenaceRecordsUpdated: {
                         self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
                     }
                 )
+                    .tag(2)
                     .tabItem {
                         Label(L("Maintenance"), systemImage: "hammer.fill")
                     }
+                    .tint(nil)
                     .badge(pendingMaintenanceRecords)
 
                 UserSettingsView(showAppUpdateButton: showAppVersionBadge)
                     .tabItem {
                         Label(L("Settings"), systemImage: "gear")
                     }
+                    .tag(3)
+                    .tint(nil)
                     .badge(showAppVersionBadge ? "New!" : nil)
             }
+            .tint(getTabViewColor())
             .id(loc.currentLanguage.rawValue)
             .onAppear {
                 self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
@@ -60,6 +70,21 @@ struct MainTabView: SwiftUI.View {
                     showAppVersionBadge = appVersionCheckResult ?? false
                 }
             }
+        }
+    }
+    
+    private func getTabViewColor() -> Color {
+        switch selectedTab {
+            case 0:
+                return Color.orange
+            case 1:
+                return Color.green
+            case 2:
+                return Color.cyan
+            case 3:
+                return Color.blue
+            default:
+            return Color.primary
         }
     }
 }

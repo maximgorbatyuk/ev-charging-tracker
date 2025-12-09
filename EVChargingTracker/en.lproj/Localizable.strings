@@ -155,7 +155,10 @@
 "Filter.All" = "All";
 "Filter.Charges" = "Charges";
 "Filter.Repair/maintenance" = "Maintenance";
+"Filter.Repair" = "Repair";
+"Filter.Maintenance" = "Maintenance";
 "Filter.Carwash" = "Car wash";
+"Filter.Other" = "Other";
 
 /* Onboarding pages */
 "Welcome to" = "Welcome to";
@@ -177,3 +180,8 @@
 "App update available" = "App update available";
 "If you leave it empty, the current mileage of the selected car will be used." = "If you leave it empty, the current mileage of the selected car will be used.";
 "Please type service title." = "Please type service title.";
+
+"Expenses chart" = "Expenses chart";
+"Average charging trend" = "Average charging trend";
+"%.1f kWh/month average" = "%.1f kWh/month average";
+"No expense data available for the selected filter." = "No expense data available for the selected filter.";

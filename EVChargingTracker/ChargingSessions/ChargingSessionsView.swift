@@ -77,6 +77,20 @@ struct ChargingSessionsView: SwiftUICore.View {
                             }
                             .padding(.horizontal)
 
+                            // Consumption Trend Chart
+                            if viewModel.consumptionLineChartData != nil {
+                                ChargingConsumptionLineChart(
+                                    data: viewModel.consumptionLineChartData!)
+                                .padding(.top, 20)
+                            }
+
+                            if viewModel.expenseChartData != nil {
+                                ExpensesChartView(data: viewModel.expenseChartData!)
+                                    .id(viewModel.expenseChartData!.id)
+                                    .padding(.horizontal)
+                                    .padding(.top, 20)
+                            }
+
                         } else {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle())
@@ -105,23 +119,19 @@ struct ChargingSessionsView: SwiftUICore.View {
                                     "screen": "charging_sessions_stats_screen"
                                 ])
 
-                            loadData()
+                            viewModel.loadSessions()
                         })
                 }
                 .onAppear {
                     analytics.trackScreen("charging_sessions_stats_screen")
-                    loadData()
+                    viewModel.loadSessions()
                 }
                 .refreshable {
-                    loadData()
+                    viewModel.loadSessions()
                 }
                 
             }
         }
-    }
-    
-    private func loadData() -> Void {
-        viewModel.loadSessions()
     }
 }
 

@@ -11,11 +11,11 @@ import os
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
+    @Published var filterButtons: [FilterButtonItem] = []
 
     var totalCost: Double = 0.0
     var hasAnyExpense = false
 
-    var filterButtons: [FilterButtonItem] = []
     let analyticsScreenName = "all_expenses_screen"
 
     private let db: DatabaseManager
@@ -60,7 +60,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 title: L("Filter.Charges"),
                 innerAction: {
                     self.loadSessions([ExpenseType.charging])
-                    
+
                     self.analytics.trackEvent(
                         "expenses_filter_charges_selected",
                         properties: [
@@ -86,7 +86,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 title: L("Filter.Carwash"),
                 innerAction: {
                     self.loadSessions([ExpenseType.carwash])
-                    
+
                     self.analytics.trackEvent(
                         "expenses_filter_carwash_selected",
                         properties: [
@@ -97,11 +97,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         ]
 
         loadSessions()
-    }
-
-    func executeButtonAction(_ button: FilterButtonItem) {
-        self.filterButtons.forEach { $0.deselect() }
-        button.action()
     }
 
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
@@ -121,6 +116,14 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     func getAllCars() -> [Car] {
         return db.carRepository!.getAllCars()
+    }
+
+    func updateExistingExpense(_ expenseEditResult: AddExpenseViewResult, expenseToEdit: Expense) -> Void {
+        expenseToEdit.cost = expenseEditResult.expense.cost
+        expenseToEdit.date = expenseEditResult.expense.date
+        expenseToEdit.notes = expenseEditResult.expense.notes
+
+        self.updateSession(expenseToEdit)
     }
 
     // TODO mgorbatyuk: avoid code duplication with saveChargingSession
@@ -228,7 +231,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             if let index = expenses.firstIndex(where: { $0.id == session.id }) {
                 expenses[index] = session
             }
-            loadSessions() // Reload to get proper sorting
+
+            loadSessions()
         }
     }
 
@@ -258,30 +262,5 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
 
         return _selectedCarForExpenses
-    }
-}
-
-class FilterButtonItem: ObservableObject {
-    let id: UUID = UUID()
-    let title: String
-    var isSelected = false
-    private let innerAction: () -> Void
-
-    init(
-        title: String,
-        innerAction: @escaping () -> Void,
-        isSelected: Bool = false) {
-        self.title = title
-        self.innerAction = innerAction
-        self.isSelected = isSelected
-    }
-
-    func action() {
-        innerAction()
-        self.isSelected = true
-    }
-
-    func deselect() {
-        self.isSelected = false
     }
 }
