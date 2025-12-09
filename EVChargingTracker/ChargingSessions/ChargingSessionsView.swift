@@ -86,8 +86,9 @@ struct ChargingSessionsView: SwiftUICore.View {
 
                             if viewModel.expenseChartData != nil {
                                 ExpensesChartView(data: viewModel.expenseChartData!)
-                                .padding(.horizontal)
-                                .padding(.top, 20)
+                                    .id(viewModel.expenseChartData!.id)
+                                    .padding(.horizontal)
+                                    .padding(.top, 20)
                             }
 
                         } else {

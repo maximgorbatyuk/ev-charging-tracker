@@ -71,23 +71,27 @@ struct ExpensesChartView: SwiftUICore.View {
                     .chartLegend(.hidden) // Hide the automatic legend
                 }
                 else {
-                    VStack(alignment: .center) {
+                    VStack {
+                        Spacer()
+
                         Image(systemName: "chart.bar.xaxis")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 120)
                             .foregroundColor(.gray.opacity(0.2))
-                            .padding(.top, 80)
                             .padding(.horizontal)
 
-                        Text(L("No expense data available for the selected filters."))
+                        Text(L("No expense data available for the selected filter."))
                             .foregroundColor(.gray)
                             .font(.system(size: 14, weight: .semibold))
+                            .multilineTextAlignment(.center)
                             .padding(.top, 20)
                             .padding(.horizontal)
+                        
                         Spacer()
                     }
                     .frame(height: 280)
+                    .frame(maxWidth: .infinity, maxHeight: 280)
                 }
 
                 FilterButtonsView(

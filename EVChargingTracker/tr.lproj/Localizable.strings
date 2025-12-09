@@ -186,3 +186,4 @@
 "Expenses chart" = "Giderler grafiği";
 "Average charging trend" = "Ortalama şarj trendi";
 "%.1f kWh/month average" = "Aylık ortalama %.1f kWh";
+"No expense data available for the selected filter." = "Seçilen filtre için harcama verisi yok.";

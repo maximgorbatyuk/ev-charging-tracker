@@ -14,7 +14,8 @@ struct UserSettingsView: SwiftUICore.View {
 
     @StateObject private var viewModel = UserSettingsViewModel(
         environment: EnvironmentService.shared,
-        db: DatabaseManager.shared)
+        db: DatabaseManager.shared,
+        developerMode: DeveloperModeManager.shared)
 
     @State private var showEditCurrencyModal: Bool = false
     @State private var editingCar: CarDto? = nil
@@ -23,10 +24,12 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showingAppAboutModal = false
     @State private var showAddCarModal = false
     @State private var confirmationModalDialogData = ConfirmationData.empty
+    @State private var showDeveloperModeAlert = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var environment = EnvironmentService.shared
+    @ObservedObject private var developerMode = DeveloperModeManager.shared
 
     @Environment(\.requestReview) var requestReview
 
@@ -268,11 +271,17 @@ struct UserSettingsView: SwiftUICore.View {
                 }
 
                 Section(header: Text(L("About app"))) {
-                    HStack {
-                        Label(L("App version"), systemImage: "info.circle")
-                        Spacer()
-                        Text(environment.getAppVisibleVersion())
+                    Button(action: {
+                        viewModel.handleVersionTap()
+                    }) {
+                        HStack {
+                            Label(L("App version"), systemImage: "info.circle")
+                            Spacer()
+                            Text(environment.getAppVisibleVersion())
+                                .foregroundColor(.primary)
+                        }
                     }
+                    .buttonStyle(.plain)
 
                     HStack {
                         Label(L("Developer"), systemImage: "person")
@@ -287,9 +296,27 @@ struct UserSettingsView: SwiftUICore.View {
                             Text("Development")
                         }
                     }
+
+                    if (viewModel.isSpecialDeveloperModeEnabled()) {
+                        Button(action: {
+                            developerMode.disableDeveloperMode()
+                        }) {
+                            HStack {
+                                Label(L("Developer Mode"), systemImage: "hammer.fill")
+                                    .foregroundColor(.orange)
+                                Spacer()
+                                Text("Enabled")
+                                    .foregroundColor(.orange)
+                                    .fontWeight(.bold)
+                            }
+                        }
+                        .buttonStyle(.plain)
+
+                        
+                    }
                 }
 
-                if (viewModel.isDevelopmentMode()) {
+                if (viewModel.isSpecialDeveloperModeEnabled()) {
 
                     Section(header: Text(L("Developer section"))) {
 
@@ -397,6 +424,13 @@ struct UserSettingsView: SwiftUICore.View {
                 }
             } message: {
                 Text(confirmationModalDialogData.message)
+            }
+            .alert("Developer Mode Activated", isPresented: $developerMode.shouldShowActivationAlert) {
+                Button("OK") {
+                    developerMode.dismissAlert()
+                }
+            } message: {
+                Text("Developer mode has been enabled. You can now access additional debugging tools and options.")
             }
         }
     }

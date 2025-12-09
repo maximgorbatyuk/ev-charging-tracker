@@ -20,6 +20,7 @@ class UserSettingsViewModel: ObservableObject {
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
+    private let developerMode: DeveloperModeManager
 
     private var _allCars: [CarDto] = []
     private let logger: Logger
@@ -27,11 +28,13 @@ class UserSettingsViewModel: ObservableObject {
     init(
         environment: EnvironmentService = .shared,
         db: DatabaseManager = .shared,
-        logger: Logger? = nil
+        logger: Logger? = nil,
+        developerMode: DeveloperModeManager = .shared
     ) {
         self.environment = environment
         self.db = db
         self.logger = logger ?? Logger(subsystem: "UserSettingsViewModel", category: "Views")
+        self.developerMode = developerMode
 
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
@@ -49,6 +52,10 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency)
             } ?? []
+    }
+
+    func handleVersionTap() -> Void {
+        self.developerMode.handleVersionTap()
     }
 
     func openAppStoreForUpdate() -> Void {
@@ -192,8 +199,13 @@ class UserSettingsViewModel: ObservableObject {
         }
     }
 
+    func isSpecialDeveloperModeEnabled() -> Bool {
+        return developerMode.isDeveloperModeEnabled
+    }
+
     func isDevelopmentMode() -> Bool {
-        return environment.isDevelopmentMode()
+        return environment.isDevelopmentMode() ||
+                developerMode.isDeveloperModeEnabled
     }
 
     func deleteAllData() -> Void {

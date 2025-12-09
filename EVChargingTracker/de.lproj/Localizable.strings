@@ -187,3 +187,4 @@
 "Expenses chart" = "Ausgabenübersicht";
 "Average charging trend" = "Durchschnittlicher Ladetrend";
 "%.1f kWh/month average" = "%.1f kWh/Monat Durchschnitt";
+"No expense data available for the selected filter." = "Für den ausgewählten Filter sind keine Ausgabendaten verfügbar.";
