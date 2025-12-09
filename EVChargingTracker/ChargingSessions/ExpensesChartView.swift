@@ -15,12 +15,9 @@ struct ExpensesChartView: SwiftUICore.View {
     let currency: Currency
     let monthsCount: Int
 
-    var monthlyExpenseData: [MonthlyExpenseData] {
-        return viewModel.monthlyExpenseData
-    }
+    @StateObject var viewModel: ExpensesChartViewModel
 
     @Environment(\.colorScheme) var colorScheme
-    @StateObject private var viewModel: ExpensesChartViewModel
 
     init(data: ExpensesChartData) {
         self.data = data
@@ -47,7 +44,7 @@ struct ExpensesChartView: SwiftUICore.View {
             VStack(alignment: .leading, spacing: 12) {
                 if viewModel.hasChartItemsToShow {
                     Chart {
-                        ForEach(monthlyExpenseData) { item in
+                        ForEach(viewModel.monthlyExpenseData) { item in
                             BarMark(
                                 x: .value(L("Date"), item.month),
                                 y: .value(L("Cost"), item.amount),
