@@ -288,6 +288,18 @@ struct AddExpenseView: SwiftUICore.View {
                         dismiss()
                     }
                 }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(L("Save")) {
+                        analytics.trackEvent("save_toolbaar_button_clicked", properties: [
+                                "button_name": "save",
+                                "screen": isEditMode ? "edit_expense_screen" : "add_expense_screen",
+                                "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none")
+                            ])
+
+                        saveSession()
+                    }
+                }
             }
             .onAppear() {
 
