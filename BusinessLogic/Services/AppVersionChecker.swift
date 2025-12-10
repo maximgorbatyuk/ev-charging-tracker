@@ -24,9 +24,15 @@ class AppVersionChecker : AppVersionCheckerProtocol {
         let splitBySpace = currentVersionWithBuild.split(separator: " ")
         let currentVersion = splitBySpace.first ?? ""
 
+        let today = Date()
+        let currentWeekOfYear = Calendar.current.component(.weekOfYear, from: today)
+        let currentYear = Calendar.current.component(.year, from: today)
+
+        let queryParam = "\(currentYear).\(currentWeekOfYear)"
+
         guard
             let appStoreId = environment.getAppStoreId(),
-            let url = URL(string: "https://itunes.apple.com/lookup?id=\(appStoreId)") else {
+            let url = URL(string: "https://itunes.apple.com/lookup?id=\(appStoreId)&current=\(currentVersion)&now=\(queryParam)") else {
             return nil
         }
 

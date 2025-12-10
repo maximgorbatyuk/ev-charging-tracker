@@ -53,6 +53,7 @@ class FilterButtonsViewModel: ObservableObject {
 struct FilterButtonsView: SwiftUICore.View {
 
     let cornerRadius: CGFloat = 6.0
+    let buttonHeight: CGFloat = 44.0
 
     @State var viewModel: FilterButtonsViewModel
     @Environment(\.colorScheme) var colorScheme
@@ -70,9 +71,8 @@ struct FilterButtonsView: SwiftUICore.View {
                 }) {
                     Text(button.title)
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, minHeight: buttonHeight, maxHeight: buttonHeight)
                 .padding(.horizontal, 2)
-                .padding(.vertical, 12)
                 .font(.system(size: 12, weight: .medium))
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .animation(.easeInOut, value: button.isSelected)
