@@ -185,6 +185,7 @@
 				kk,
 				tr,
 				de,
+				uk,
 			);
 			mainGroup = 87756BCE2E963D230055273C;
 			minimizedProjectReferenceProxies = 1;
@@ -402,7 +403,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.9;
+				MARKETING_VERSION = 1.4.10;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTrackerDebug;
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -437,7 +438,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.9;
+				MARKETING_VERSION = 1.4.10;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -194,3 +194,8 @@
 "Average charging trend" = "Орташа зарядтау тренд";
 "%.1f kWh/month average" = "Орташа мәні: %.1f кВт⋅сағ/ай";
 "No expense data available for the selected filter." = "Таңдалған сүзгі үшін шығындар туралы мәліметтер жоқ.";
+
+"maintenance" = "техникалық қызмет";
+"repair" = "жөндеу";
+"carwash" = "автокөлік жуу";
+"other" = "басқа";
