@@ -14,6 +14,7 @@ struct AddExpenseView: SwiftUICore.View {
     let allCars: [Car]
     let existingExpense: Expense? // For edit mode
     let onAdd: (AddExpenseViewResult) -> Void
+    let lastChargingSession: Expense?
 
     @Environment(\.dismiss) var dismiss
     @ObservedObject private var analytics = AnalyticsService.shared
@@ -47,6 +48,7 @@ struct AddExpenseView: SwiftUICore.View {
         selectedCar: Car?,
         allCars: [Car],
         existingExpense: Expense? = nil,
+        lastChargingSession: Expense? = nil,
         onAdd: @escaping (AddExpenseViewResult) -> Void) {
         self.defaultExpenseType = defaultExpenseType
         self.defaultCurrency = defaultCurrency
@@ -54,6 +56,7 @@ struct AddExpenseView: SwiftUICore.View {
         self.allCars = allCars
         self.existingExpense = existingExpense
         self.onAdd = onAdd
+        self.lastChargingSession = lastChargingSession
 
         _carId = State(initialValue: self.selectedCar?.id ?? existingExpense?.carId)
         _selectedCardForExpense = State(initialValue: self.selectedCar)
@@ -73,6 +76,9 @@ struct AddExpenseView: SwiftUICore.View {
                 let pricePerKWh = costValue / expense.energyCharged
                 _pricePerKWh = State(initialValue: String(format: "%.2f", pricePerKWh))
             }
+        } else if let lastChargingSession = lastChargingSession {
+            _chargerType = State(initialValue: lastChargingSession.chargerType)
+            _expenseType = State(initialValue: .charging)
         }
     }
 

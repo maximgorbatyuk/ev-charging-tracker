@@ -289,4 +289,19 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             .filter { $0.isInitialRecord == false && $0.expenseType == .charging }
             .compactMap { $0.cost }.reduce(0, +)
     }
+
+    func getLastChargingSessionOrNull(_ car: Car?) -> Expense? {
+        
+        if (car == nil || expenses.isEmpty) {
+            return nil
+        }
+
+        let expensesSortedByDesc = expenses
+            .filter({ $0.expenseType == .charging && $0.carId == car!.id })
+            .sorted(by: { $0.date > $1.date })
+
+        let chargingSession = expensesSortedByDesc.first
+
+        return chargingSession
+    }
 }

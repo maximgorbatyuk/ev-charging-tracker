@@ -187,3 +187,8 @@
 "Average charging trend" = "Средний заряд в месяц";
 "%.1f kWh/month average" = "В среднем %.1f кВт⋅ч/месяц";
 "No expense data available for the selected filter." = "Нет данных для выбранного фильтра.";
+
+"maintenance" = "сервис";
+"repair" = "ремонт";
+"carwash" = "мойка";
+"other" = "другое";
