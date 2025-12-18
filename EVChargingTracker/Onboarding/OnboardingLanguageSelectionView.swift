@@ -23,11 +23,11 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
             Image("BackgroundImage")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 130, height: 130) // Adjust size as needed
+                .frame(width: 100, height: 100) // Adjust size as needed
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .shadow(radius: 10)
 
-            VStack(spacing: 8) {
+            VStack(spacing: 6) {
                 Text(L("Welcome to"))
                     .font(.title2)
                     .foregroundColor(.secondary)
@@ -44,7 +44,7 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
                 .padding(.top, 5)
 
             // Language options
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 ForEach(AppLanguage.allCases, id: \.self) { language in
                     LanguageButton(
                         language: language,
