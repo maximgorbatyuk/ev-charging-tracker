@@ -1,0 +1,192 @@
+/* Ukrainian localization */
+"Car" = "Автомобіль";
+"Name" = "Назва";
+"Battery capacity (kWh)" = "Ємність батареї (кВт·год)";
+"e.g. 75" = "напр. 75";
+"Current mileage (km)" = "Поточний пробіг (км)";
+"Minimum: %d" = "Мінімум: %d";
+"Current: %d" = "Поточний: %d";
+"Danger zone" = "Небезпечна зона";
+"Selected for tracking" = "Обрано для відстеження";
+"Edit car" = "Редагувати авто";
+"Cancel" = "Скасувати";
+"Save" = "Зберегти";
+"Close" = "Закрити";
+"CO₂ saved (kg)" = "Збережено CO₂ (кг)";
+"kWh / 100km" = "кВт·год / 100км";
+"Charges" = "Зарядки";
+
+"Initial mileage" = "Початковий пробіг";
+"Current mileage" = "Поточний пробіг";
+"Battery" = "Батарея";
+"Tracking" = "Відстеження";
+"Not tracking" = "Не відстежується";
+
+"Base settings" = "Основні налаштування";
+"Currency" = "Валюта";
+"It is recommended to set the default currency before adding any expenses." = "Рекомендується встановити валюту за замовчуванням перед додаванням витрат.";
+"Cars" = "Автомобілі";
+"User settings" = "Налаштування користувача";
+"Notifications enabled" = "Сповіщення увімкнено";
+"Open settings" = "Відкрити налаштування";
+"In case you want to change this setting, please open app settings" = "Якщо ви хочете змінити це налаштування, будь ласка, відкрийте налаштування додатку";
+"About app" = "Про додаток";
+"Tracking settings" = "Налаштування відстеження";
+"App version" = "Версія додатку";
+"Developer" = "Розробник";
+"What is the app about?" = "Про що цей додаток?";
+"Rate the app" = "Оцінити додаток";
+"Contact developer via Telegram" = "Зв'язатися з розробником через Telegram";
+
+"Expense details" = "Деталі витрат";
+"Car" = "Автомобіль";
+"Date" = "Дата";
+"Energy (kWh)" = "Енергія (кВт·год)";
+"Charger Type" = "Тип зарядки";
+"Expense Type" = "Тип витрат";
+"Odometer (km)" = "Одометр (км)";
+"Cost (%@)" = "Вартість (%@)";
+"Car name" = "Назва авто";
+"Name of the car" = "Назва автомобіля";
+"Battery capacity (kWh)" = "Ємність батареї (кВт·год)";
+"Optional" = "Необов'язково";
+"Notes (optional)" = "Нотатки (необов'язково)";
+"Add expense" = "Додати витрату";
+"Price per kWh" = "Ціна за кВт·год";
+
+"Please select an expense type." = "Будь ласка, оберіть тип витрат.";
+"Please type a valid value for Energy." = "Будь ласка, введіть коректне значення енергії.";
+"Please type a valid value for Odometer." = "Будь ласка, введіть коректне значення одометра.";
+
+"Hint" = "Підказка";
+"per km" = "за км";
+
+"One kilometer price (charging only)" = "Вартість одного кілометра (лише зарядка)";
+"How much one kilometer costs you including only charging expenses" = "Скільки коштує один кілометр, враховуючи лише витрати на зарядку";
+"One kilometer price (total)" = "Вартість одного кілометра (загалом)";
+"How much one kilometer costs you including all logged expenses" = "Скільки коштує один кілометр, враховуючи всі записані витрати";
+"Total charging costs" = "Загальні витрати на зарядку";
+"Add Charging Session" = "Додати сеанс зарядки";
+"Car stats" = "Статистика авто";
+
+"Add Expense" = "Додати витрату";
+"Total costs" = "Загальні витрати";
+"All car expenses" = "Всі витрати на авто";
+"No expenses yet" = "Витрат ще немає";
+"No expenses of this type yet" = "Витрат цього типу ще немає";
+"Add your first expense to start tracking" = "Додайте першу витрату, щоб почати відстеження";
+
+"Delete expense" = "Видалити витрату";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "Видалити витрату від %@ на суму %@? Цю дію неможливо скасувати.";
+"Delete expense on %@? This action cannot be undone." = "Видалити витрату від %@? Цю дію неможливо скасувати.";
+"Delete selected expense? This action cannot be undone." = "Видалити обрану витрату? Цю дію неможливо скасувати.";
+"Delete" = "Видалити";
+
+"Energy" = "Енергія";
+"Expense type" = "Тип витрат";
+"Odometer" = "Одометр";
+"Cost" = "Вартість";
+"%.1f kWh" = "%.1f кВт·год";
+
+"How much one kilometer costs you" = "Скільки коштує один кілометр";
+
+/* ExpenseType human-friendly */
+"charging" = "Зарядка";
+"maintenance" = "Обслуговування";
+"repair" = "Ремонт";
+"carwash" = "Мийка";
+"other" = "Інше";
+
+/* ChargerType human-friendly */
+"Home (3kW)" = "Домашня (3кВт)";
+"Home (7kW)" = "Домашня (7кВт)";
+"Home (11kW)" = "Домашня (11кВт)";
+"Destination (22kW)" = "Пункт призначення (22кВт)";
+"Supercharger V2 (150kW)" = "Суперчарджер V2 (150кВт)";
+"Supercharger V3 (250kW)" = "Суперчарджер V3 (250кВт)";
+"Supercharger V4 (350kW)" = "Суперчарджер V4 (350кВт)";
+"Public Fast (50kW)" = "Публічна швидка (50кВт)";
+"Public Rapid (100kW)" = "Публічна надшвидка (100кВт)";
+"Other" = "Інше";
+
+/* Menu */
+"Stats" = "Статистика";
+"Expenses" = "Витрати";
+"Settings" = "Налаштування";
+"About" = "Про додаток";
+"Maintenance" = "Обслуговування";
+
+"Planned maintenance" = "Заплановане обслуговування";
+"Add maintenance" = "Додати обслуговування";
+"Maintenance" = "Обслуговування";
+"No maintenance records yet" = "Запланованого обслуговування ще немає";
+"Add your first maintenance record" = "Додайте перший запис про обслуговування авто на майбутнє";
+"Delete maintenance record?" = "Видалити запис про обслуговування?";
+"Delete selected maintenance record? This action cannot be undone." = "Видалити обраний запис про обслуговування? Цю дію неможливо скасувати.";
+"Please add car first to track maintenance records" = "Спочатку додайте автомобіль для відстеження обслуговування";
+"When" = "Коли";
+
+"Plan a maintenance" = "Запланувати обслуговування";
+"Maintenance details" = "Деталі обслуговування";
+"Odometer value cannot be less than current car mileage." = "Значення одометра не може бути меншим за поточний пробіг авто.";
+"What should be done?" = "Що потрібно зробити?";
+"Remind by date (optional)" = "Нагадати за датою (необов'язково)";
+"Remind by odometer (optional)" = "Нагадати за одометром (необов'язково)";
+"Additional information that will be helpful" = "Додаткова інформація, яка буде корисною";
+
+"Basic info" = "Основна інформація";
+"Name" = "Назва";
+"Rides" = "Поїздки";
+"Car mileage" = "Пробіг авто";
+"Initial (km)" = "Початковий (км)";
+"Current (km)" = "Поточний (км)";
+"Remain at odometer" = "Залишилось за одометром";
+"Maintenance reminder" = "Нагадування про обслуговування";
+"Some maintenance tasks due" = "Є заплановані роботи";
+"You have %d maintenance task(s) due based on your car's current mileage." = "У вас %d запланована(их) робота(іт) на основі поточного пробігу авто.";
+
+"Select currency" = "Обрати валюту";
+"Select default currency" = "Обрати валюту за замовчуванням";
+"Add new car" = "Додати новий автомобіль";
+"Delete car" = "Видалити автомобіль";
+"Delete selected car? This action cannot be undone." = "Видалити обраний автомобіль? Цю дію неможливо скасувати.";
+"If you change it, then other active car will be unselected automatically." = "Якщо ви зміните це, інший активний автомобіль буде автоматично знято з вибору.";
+
+"Filter.All" = "Всі";
+"Filter.Charges" = "Зарядки";
+"Filter.Repair/maintenance" = "Обслуговування";
+"Filter.Repair" = "Ремонт";
+"Filter.Maintenance" = "Обслуговування";
+"Filter.Carwash" = "Мийка";
+"Filter.Other" = "Інше";
+
+/* Onboarding pages */
+"Welcome to" = "Ласкаво просимо до";
+"Select your language" = "Оберіть мову";
+"Continue" = "Продовжити";
+"Next" = "Далі";
+"Skip" = "Пропустити";
+"Get started" = "Розпочати";
+"Start onboarding again" = "Почати знайомство знову";
+"onboarding.track_your_chargings" = "Відстежуйте зарядки";
+"onboarding.track_your_chargings__subtitle" = "Зберігайте всі сеанси зарядки вашого EV в одному місці";
+"onboarding.monitor_costs" = "Контролюйте витрати";
+"onboarding.monitor_costs__subtitle" = "Дізнайтесь, скільки ви витрачаєте на електромобіль, включаючи електроенергію та інші витрати";
+"onboarding.plan_maintenance" = "Плануйте обслуговування";
+"onboarding.plan_maintenance__subtitle" = "Плануйте та отримуйте нагадування про технічне обслуговування вашого EV";
+"onboarding.view_stats" = "Переглядайте статистику";
+"onboarding.view_stats__subtitle" = "Дізнайтесь, скільки коштує 1 кілометр на вашому EV та скільки CO₂ ви зберегли, керуючи електромобілем";
+
+"App update available" = "Доступне оновлення додатку";
+"If you leave it empty, the current mileage of the selected car will be used." = "Якщо залишити порожнім, буде використано поточний пробіг обраного авто.";
+"Please type service title." = "Будь ласка, введіть назву послуги.";
+
+"Expenses chart" = "Графік витрат";
+"Average charging trend" = "Середній тренд зарядки";
+"%.1f kWh/month average" = "%.1f кВт·год/місяць в середньому";
+"No expense data available for the selected filter." = "Немає даних про витрати для обраного фільтра.";
+
+"maintenance" = "обслуговування";
+"repair" = "ремонт";
+"carwash" = "мийка";
+"other" = "iнше";

@@ -104,11 +104,14 @@ struct ChargingSessionsView: SwiftUICore.View {
                 .sheet(isPresented: $showingAddSession) {
 
                     let selectedCar = viewModel.selectedCarForExpenses
+                    let lastChargingSession = viewModel.getLastChargingSessionOrNull(selectedCar)
+
                     AddExpenseView(
                         defaultExpenseType: .charging,
                         defaultCurrency: viewModel.getAddExpenseCurrency(),
                         selectedCar: selectedCar,
                         allCars: viewModel.getAllCars(),
+                        lastChargingSession: lastChargingSession,
                         onAdd: { newExpenseResult in
 
                             viewModel.saveChargingSession(newExpenseResult)
