@@ -193,3 +193,5 @@
 "repair" = "reparatur";
 "carwash" = "autowäsche";
 "other" = "sonstiges";
+"Total records: %d, total pages: %d" = "Gesamtaufzeichnungen: %d, Gesamtseiten: %d";
+"Previous" = "Vorherige";

@@ -69,7 +69,13 @@ struct ExpensesView: SwiftUICore.View {
                             if viewModel.expenses.isEmpty {
                                 emptyStateForThisTypeView
                             } else {
-                                sessionsListView
+                                VStack(spacing: 16) {
+                                    sessionsListView
+                                    
+                                    if viewModel.totalPages > 1 {
+                                        paginationControlsView
+                                    }
+                                }
                             }
                         }
 
@@ -190,6 +196,70 @@ struct ExpensesView: SwiftUICore.View {
             }
         }
         .padding(.horizontal)
+    }
+    
+    private var paginationControlsView: some SwiftUICore.View {
+        VStack(spacing: 12) {
+            // Navigation buttons
+            HStack(spacing: 16) {
+                // Previous button
+                Button(action: {
+                    viewModel.goToPreviousPage()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text(L("Previous"))
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(viewModel.currentPage > 1 ? .blue : .gray)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.gray.opacity(0.1))
+                    )
+                }
+                .disabled(viewModel.currentPage <= 1)
+                
+                // Current page indicator
+                Text("\(viewModel.currentPage)")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .frame(minWidth: 40)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.blue.opacity(0.1))
+                    )
+                
+                // Next button
+                Button(action: {
+                    viewModel.goToNextPage()
+                }) {
+                    HStack(spacing: 4) {
+                        Text(L("Next"))
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(viewModel.currentPage < viewModel.totalPages ? .blue : .gray)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.gray.opacity(0.1))
+                    )
+                }
+                .disabled(viewModel.currentPage >= viewModel.totalPages)
+            }
+            
+            // Information text
+            Text(String(format: L("Total records: %d, total pages: %d"), viewModel.totalRecords, viewModel.totalPages))
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
     }
     
     // Confirmation alert attached to the view

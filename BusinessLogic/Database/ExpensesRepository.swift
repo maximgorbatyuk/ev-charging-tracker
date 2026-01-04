@@ -190,6 +190,92 @@ class ExpensesRepository {
         return sessionsList
     }
 
+    // MARK: - Paginated Fetching
+    
+    /// Fetches expenses for a car with pagination support
+    /// - Parameters:
+    ///   - carId: The ID of the car to fetch expenses for
+    ///   - expenseTypeFilters: Optional filters for expense types
+    ///   - page: The page number (1-indexed)
+    ///   - pageSize: Number of items per page
+    /// - Returns: Array of expenses for the requested page, ordered by id desc (created_at desc)
+    func fetchCarSessionsPaginated(
+        carId: Int64?,
+        expenseTypeFilters: [ExpenseType] = [],
+        page: Int,
+        pageSize: Int
+    ) -> [Expense] {
+        var sessionsList: [Expense] = []
+        
+        // Calculate offset
+        let offset = (page - 1) * pageSize
+        
+        var query: QueryType
+        if (!expenseTypeFilters.isEmpty) {
+            let stringValues = expenseTypeFilters.map { $0.rawValue }
+            query = chargingSessionsTable
+                .filter(carIdColumn == carId)
+                .filter(stringValues.contains(expenseType))
+                .order(id.desc)
+                .limit(pageSize, offset: offset)
+        } else {
+            query = chargingSessionsTable
+                .filter(carIdColumn == carId)
+                .order(id.desc)
+                .limit(pageSize, offset: offset)
+        }
+        
+        do {
+            for session in try db.prepare(query) {
+                let chargerTypeEnum = ChargerType(rawValue: session[chargerType]) ?? .other
+                let currencyEnum = Currency(rawValue: session[currency]) ?? .usd
+                
+                let chargingSession = Expense(
+                    id: session[id],
+                    date: session[date],
+                    energyCharged: session[energyCharged],
+                    chargerType: chargerTypeEnum,
+                    odometer: session[odometer],
+                    cost: session[cost],
+                    notes: session[notes],
+                    isInitialRecord: session[isInitialRecord],
+                    expenseType: ExpenseType(rawValue: session[expenseType]) ?? .other,
+                    currency: currencyEnum,
+                    carId: session[carIdColumn]
+                )
+                
+                sessionsList.append(chargingSession)
+            }
+        } catch {
+            logger.error("Fetch paginated failed: \(error)")
+        }
+        
+        return sessionsList
+    }
+    
+    /// Gets the total count of expenses for a car with optional filters
+    /// - Parameters:
+    ///   - carId: The ID of the car
+    ///   - expenseTypeFilters: Optional filters for expense types
+    /// - Returns: Total count of matching expenses
+    func getExpensesCount(carId: Int64?, expenseTypeFilters: [ExpenseType] = []) -> Int {
+        do {
+            if (!expenseTypeFilters.isEmpty) {
+                let stringValues = expenseTypeFilters.map { $0.rawValue }
+                let query = chargingSessionsTable
+                    .filter(carIdColumn == carId)
+                    .filter(stringValues.contains(expenseType))
+                return try db.scalar(query.count)
+            } else {
+                let query = chargingSessionsTable.filter(carIdColumn == carId)
+                return try db.scalar(query.count)
+            }
+        } catch {
+            logger.error("Failed to get expenses count: \(error)")
+            return 0
+        }
+    }
+
     func updateSession(_ session: Expense) -> Bool {
         let sessionId = session.id ?? 0
         let sessionToUpdate = chargingSessionsTable.filter(id == sessionId)

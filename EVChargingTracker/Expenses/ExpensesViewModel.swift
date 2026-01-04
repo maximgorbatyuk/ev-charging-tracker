@@ -12,9 +12,14 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
     @Published var filterButtons: [FilterButtonItem] = []
+    @Published var currentPage: Int = 1
+    @Published var totalRecords: Int = 0
+    @Published var totalPages: Int = 0
 
     var totalCost: Double = 0.0
     var hasAnyExpense = false
+    
+    let pageSize: Int = 15
 
     let analyticsScreenName = "all_expenses_screen"
 
@@ -26,6 +31,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     private let analytics: AnalyticsService
 
     private var _selectedCarForExpenses: Car?
+    private var _currentExpenseTypeFilters: [ExpenseType] = []
     private let logger: Logger
 
     init(
@@ -100,17 +106,74 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
+        _currentExpenseTypeFilters = expenseTypeFilters
+        currentPage = 1 // Reset to first page when filtering
+        loadSessionsForCurrentPage()
+    }
+    
+    private func loadSessionsForCurrentPage() -> Void {
         let car = self.reloadSelectedCarForExpenses()
         if let car = car, let carId = car.id {
             hasAnyExpense = (db.expensesRepository?.expensesCount(carId) ?? 0) > 0
 
-            expenses = chargingSessionsRepository.fetchCarSessions(
-                carId : carId,
-                expenseTypeFilters: expenseTypeFilters)
+            // Get total count for current filters
+            totalRecords = chargingSessionsRepository.getExpensesCount(
+                carId: carId,
+                expenseTypeFilters: _currentExpenseTypeFilters
+            )
+            
+            // Calculate total pages
+            totalPages = totalRecords > 0 ? (totalRecords + pageSize - 1) / pageSize : 0
+            
+            // Ensure current page is within bounds
+            if currentPage > totalPages && totalPages > 0 {
+                currentPage = totalPages
+            }
+            if currentPage < 1 {
+                currentPage = 1
+            }
+
+            // Fetch paginated expenses
+            expenses = chargingSessionsRepository.fetchCarSessionsPaginated(
+                carId: carId,
+                expenseTypeFilters: _currentExpenseTypeFilters,
+                page: currentPage,
+                pageSize: pageSize
+            )
             totalCost = getTotalCost()
         } else {
             hasAnyExpense = false
             expenses = []
+            totalRecords = 0
+            totalPages = 0
+        }
+    }
+    
+    func goToNextPage() -> Void {
+        if currentPage < totalPages {
+            currentPage += 1
+            loadSessionsForCurrentPage()
+            
+            analytics.trackEvent(
+                "expenses_page_next",
+                properties: [
+                    "screen": analyticsScreenName,
+                    "page": currentPage
+                ])
+        }
+    }
+    
+    func goToPreviousPage() -> Void {
+        if currentPage > 1 {
+            currentPage -= 1
+            loadSessionsForCurrentPage()
+            
+            analytics.trackEvent(
+                "expenses_page_previous",
+                properties: [
+                    "screen": analyticsScreenName,
+                    "page": currentPage
+                ])
         }
     }
 
@@ -187,7 +250,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         self.insertExpense(newExpenseResult.expense)
 
-        loadSessions()
+        loadSessionsForCurrentPage()
 
         if (newExpenseResult.expense.expenseType == .maintenance ||
             newExpenseResult.expense.expenseType == .repair) {
@@ -223,6 +286,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         
         if chargingSessionsRepository.deleteSession(id: sessionId) {
             expenses.removeAll { $0.id == sessionId }
+            loadSessionsForCurrentPage() // Reload to update pagination
         }
     }
     
@@ -232,7 +296,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 expenses[index] = session
             }
 
-            loadSessions()
+            loadSessionsForCurrentPage() // Reload to reflect updates
         }
     }
 

@@ -199,3 +199,5 @@
 "repair" = "жөндеу";
 "carwash" = "автокөлік жуу";
 "other" = "басқа";
+"Total records: %d, total pages: %d" = "Жазбалар саны: %d, беттер саны: %d";
+"Previous" = "Алдыңғы";

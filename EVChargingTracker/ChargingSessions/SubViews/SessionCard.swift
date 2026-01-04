@@ -35,18 +35,6 @@ struct SessionCard: SwiftUICore.View {
                         .foregroundColor(.red)
                 }
             }
-            
-            if (session.expenseType == .charging) {
-                Text(L(session.chargerType.rawValue))
-                    .font(.caption)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.red.opacity(0.2))
-                    .foregroundColor(.red)
-                    .cornerRadius(12)
-            } else {
-                // TODO mgorbatyuk: write notes if available
-            }
 
             HStack(spacing: 20) {
                 

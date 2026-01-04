@@ -192,3 +192,5 @@
 "repair" = "tamir";
 "carwash" = "araç yıkama";
 "other" = "diğer";
+"Total records: %d, total pages: %d" = "Toplam kayıtlar: %d, toplam sayfalar: %d";
+"Previous" = "Önceki";

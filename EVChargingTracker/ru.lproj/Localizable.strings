@@ -192,3 +192,5 @@
 "repair" = "ремонт";
 "carwash" = "мойка";
 "other" = "другое";
+"Total records: %d, total pages: %d" = "Всего записей: %d, всего страниц: %d";
+"Previous" = "Назад";
