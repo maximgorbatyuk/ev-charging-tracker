@@ -11,18 +11,31 @@ import os
 
 class AnalyticsService: ObservableObject {
 
+    static let shared = AnalyticsService()
+
     private var _globalProps: [String: Any]? = nil
     private var _sessionId = UUID().uuidString
+    private var _userId: String?
 
     let environment: EnvironmentService
+    let db: DatabaseManager
     let logger: Logger
-    
+
     init() {
         self.environment = EnvironmentService.shared
+        self.db = DatabaseManager.shared
         self.logger = Logger(subsystem: "AnalyticsService", category: "Analytics")
+        
+        // Initialize user_id from database
+        self.initializeUserId()
     }
 
-    static let shared = AnalyticsService()
+    private func initializeUserId() {
+        if let userSettingsRepo = db.userSettingsRepository {
+            self._userId = userSettingsRepo.fetchOrGenerateUserId()
+            logger.info("Initialized user_id: \(self._userId ?? "nil")")
+        }
+    }
 
     func trackEvent(_ name: String, properties: [String: Any]? = nil) -> Void {
         let mergedParams = mergeProperties(properties)
@@ -90,6 +103,11 @@ class AnalyticsService: ObservableObject {
             "os_version": environment.getOsVersion(),
             "app_language": environment.getAppLanguage()
         ]
+
+        // Add user_id if available
+        if let userId = _userId {
+            _globalProps!["user_id"] = userId
+        }
 
         return _globalProps!
     }
