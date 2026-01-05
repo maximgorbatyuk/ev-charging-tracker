@@ -151,7 +151,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Maxim Gorbatyuk. Open source project under MIT License.</p>
+                <p>&copy; <span id="current-year">2026</span> Maxim Gorbatyuk. Open source project under MIT License.</p>
             </div>
         </div>
     </footer>
@@ -192,6 +192,9 @@
             card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
             observer.observe(card);
         });
+
+        // Update year dynamically
+        document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
