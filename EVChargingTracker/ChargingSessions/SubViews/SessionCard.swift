@@ -18,12 +18,44 @@ struct SessionCard: SwiftUICore.View {
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(session.date, style: .date)
-                    .font(.headline)
-                    .foregroundColor(.gray)
                 
+                if (session.expenseType == .charging) {
+                    HStack {
+                        Image(systemName: "bolt.fill")
+                            .foregroundColor(.yellow)
+                            .font(.headline)
+
+                        Text(String(format: L("%.1f kWh"), session.energyCharged))
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(colorScheme == .dark ? .white : .primary)
+                    }
+                } else {
+                    HStack {
+
+                        if (session.expenseType == .maintenance || session.expenseType == .repair) {
+                            Image(systemName: "wrench.fill")
+                                .foregroundColor(.blue)
+                                .font(.headline)
+                        } else if (session.expenseType == .carwash) {
+                            Image(systemName: "drop.fill")
+                                .foregroundColor(.cyan)
+                                .font(.headline)
+                        } else {
+                            Image(systemName: "creditcard.fill")
+                                .foregroundColor(.green)
+                                .font(.headline)
+                        }
+
+                        Text(L(session.expenseType.rawValue))
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(colorScheme == .dark ? .white : .primary)
+                    }
+                }
+
                 Spacer()
-                
+
                 Button(action: onEdit) {
                     Image(systemName: "pencil")
                         .foregroundColor(.blue)
@@ -35,41 +67,17 @@ struct SessionCard: SwiftUICore.View {
                         .foregroundColor(.red)
                 }
             }
-            
-            if (session.expenseType == .charging) {
-                Text(L(session.chargerType.rawValue))
-                    .font(.caption)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.red.opacity(0.2))
-                    .foregroundColor(.red)
-                    .cornerRadius(12)
-            } else {
-                // TODO mgorbatyuk: write notes if available
-            }
 
             HStack(spacing: 20) {
-                
-                if (session.expenseType == .charging) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L("Energy"))
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Text(String(format: L("%.1f kWh"), session.energyCharged))
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(colorScheme == .dark ? .white : .primary)
-                    }
-                } else {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L("Expense type"))
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Text(L(session.expenseType.rawValue))
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(colorScheme == .dark ? .white : .primary)
-                    }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L("Date"))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+
+                    Text(session.date.formatted(as: "yyyy-MM-dd"))
+                        .font(.subheadline)
+                        .foregroundColor(colorScheme == .dark ? .white : .primary)
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -78,7 +86,6 @@ struct SessionCard: SwiftUICore.View {
                         .foregroundColor(.gray)
                     Text("\(session.odometer.formatted()) km")
                         .font(.subheadline)
-                        .fontWeight(.semibold)
                         .foregroundColor(colorScheme == .dark ? .white : .primary)
                 }
                 

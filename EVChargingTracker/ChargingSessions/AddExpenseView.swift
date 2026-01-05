@@ -8,6 +8,9 @@ import SwiftUI
 
 struct AddExpenseView: SwiftUICore.View {
 
+    static let ExpenseFormatWithTwoDigits = "%.2f";
+    static let ExpenseFormatWithNoDigits = "%.0f";
+
     let defaultExpenseType: ExpenseType?
     let defaultCurrency: Currency
     let selectedCar: Car?
@@ -70,15 +73,22 @@ struct AddExpenseView: SwiftUICore.View {
             _odometer = State(initialValue: String(expense.odometer))
             _cost = State(initialValue: expense.cost != nil ? String(expense.cost!) : "")
             _notes = State(initialValue: expense.notes)
-            
+
             // Calculate price per kWh if it's a charging expense
             if expense.expenseType == .charging && expense.energyCharged > 0, let costValue = expense.cost {
                 let pricePerKWh = costValue / expense.energyCharged
-                _pricePerKWh = State(initialValue: String(format: "%.2f", pricePerKWh))
+                _pricePerKWh = State(initialValue: String(format: AddExpenseView.ExpenseFormatWithNoDigits, pricePerKWh))
             }
         } else if let lastChargingSession = lastChargingSession {
             _chargerType = State(initialValue: lastChargingSession.chargerType)
             _expenseType = State(initialValue: .charging)
+
+            if let lastChargingPricePerKWh = lastChargingSession.getPricePerKWh() {
+                _pricePerKWh = State(
+                    initialValue: String(
+                        format: AddExpenseView.ExpenseFormatWithNoDigits,
+                        lastChargingPricePerKWh))
+            }
         }
     }
 

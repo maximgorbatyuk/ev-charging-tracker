@@ -190,3 +190,5 @@
 "repair" = "repair";
 "carwash" = "carwash";
 "other" = "other";
+"Total records: %d, total pages: %d" = "Total records: %d, total pages: %d";
+"Previous" = "Previous";

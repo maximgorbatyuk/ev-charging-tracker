@@ -109,4 +109,16 @@ class Expense: Codable, Identifiable {
 
         self.carId = carId
     }
+
+    func getPricePerKWh() -> Double? {
+        if (self.cost == nil ||
+            self.energyCharged == 0 ||
+            self.expenseType != .charging) {
+            return nil
+        }
+   
+        return self.cost! / self.energyCharged
+    }
+    
+
 }
