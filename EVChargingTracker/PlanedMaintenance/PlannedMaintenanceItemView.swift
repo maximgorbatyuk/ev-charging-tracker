@@ -67,9 +67,10 @@ struct PlannedOnView: SwiftUICore.View {
             if record.when != nil {
                 SmallLabelView(
                     title: L("When"),
-                    value: record.when!.formatted(date: .abbreviated, time: .omitted),
+                    value: record.when!.formatted(as: "yyyy-MM-dd"),
                     color: now > record.when! ? Color.red : Color.primary,
-                    darkSchemeColor: now > record.when! ? Color.red : Color.primary)
+                    darkSchemeColor: now > record.when! ? Color.red : Color.primary,
+                    useBoldFont: now > record.when!)
             }
 
             if record.odometer != nil {
@@ -77,13 +78,17 @@ struct PlannedOnView: SwiftUICore.View {
                     title: L("Odometer"),
                     value: "\(record.odometer!.formatted()) km",
                     color: Color.primary,
-                    darkSchemeColor: Color.white)
+                    darkSchemeColor: Color.white,
+                    useBoldFont: false)
 
                 SmallLabelView(
                     title: L("Remain at odometer"),
                     value: "\(record.odometer! - selectedCar.currentMileage) km",
-                    color: (record.odometer! - selectedCar.currentMileage) > 0 ? Color.green : Color.red,
-                    darkSchemeColor: (record.odometer! - selectedCar.currentMileage) > 0 ? Color.green : Color.red)
+                    color:
+                        (record.odometer! - selectedCar.currentMileage) > 0 ? Color.green : Color.red,
+                    darkSchemeColor:
+                        (record.odometer! - selectedCar.currentMileage) > 0 ? Color.green : Color.red,
+                    useBoldFont: (record.odometer! - selectedCar.currentMileage) > 0)
             }
         }
     }
@@ -95,6 +100,7 @@ struct SmallLabelView : SwiftUICore.View {
     let value: String
     let color: Color
     let darkSchemeColor: Color
+    let useBoldFont: Bool
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -107,8 +113,8 @@ struct SmallLabelView : SwiftUICore.View {
 
             Text(value)
                 .font(.subheadline)
-                .fontWeight(.semibold)
                 .foregroundColor(colorScheme == .dark ? darkSchemeColor : color)
+                .fontWeight(useBoldFont ? .semibold : .regular)
         }
     }
 }
