@@ -33,13 +33,17 @@ if you have any questions, feel free to reach me out via Telegram: [maximgorbaty
 
 See exactly how much each kilometer costs you to drive. Compare charging sessions and track how your driving efficiency impacts your expenses over time.
 
-**Detailed Charging History**
+**Detailed Expenses History**
 
-Log every charging session with important details including energy consumed and cost. Build a complete picture of your EV charging patterns.
+Log every charging session and expenses with important details including energy consumed and cost. Build a complete picture of your EV expenses patterns.
 
 **Smart Calculations**
 
 Automatically calculate your cost per kilometer based on your charging expenses and distance traveled. No manual math required.
+
+**Planned Maintenance**
+
+Plan your maintenance/service tasks and get reminders when to perform them. You can add additional information that will be helpful for the service provider.
 
 **Expense Insights**
 
