@@ -27,8 +27,9 @@ class AppVersionChecker : AppVersionCheckerProtocol {
         let today = Date()
         let currentWeekOfYear = Calendar.current.component(.weekOfYear, from: today)
         let currentYear = Calendar.current.component(.year, from: today)
+        let dayOfWeek = Calendar.current.component(.weekday, from: today)
 
-        let queryParam = "\(currentYear).\(currentWeekOfYear)"
+        let queryParam = "\(currentYear).\(currentWeekOfYear).\(dayOfWeek)"
 
         guard
             let appStoreId = environment.getAppStoreId(),
