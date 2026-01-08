@@ -38,6 +38,7 @@ struct AddExpenseView: SwiftUICore.View {
     @State private var alertMessage: String? = nil
     @State private var selectedCardForExpense: Car? = nil
 
+    @FocusState private var isCountOfKWtFocused: Bool
     @FocusState private var isPricePerKWhFocused: Bool
     @FocusState private var isCostFocused: Bool
     
@@ -112,7 +113,7 @@ struct AddExpenseView: SwiftUICore.View {
 
                 Section(header: Text(L("Expense details"))) {
 
-                    if (selectedCardForExpense != nil) {
+                    if (selectedCardForExpense != nil && allCars.count > 1) {
 
                         Picker(L("Car"), selection: $carId) {
                             ForEach(allCars, id: \.self.id) { optionCar in
@@ -141,10 +142,18 @@ struct AddExpenseView: SwiftUICore.View {
                             Text(L("Energy (kWh)"))
                             Spacer()
                             TextField(L("45.2"), text: $energyCharged)
+                                .focused($isCountOfKWtFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                                 .foregroundColor(isEditMode ? .gray : .primary)
                                 .disabled(isEditMode)
+                                .onChange(of: energyCharged, { oldValue, newValue in
+                                    if (!isCountOfKWtFocused) {
+                                        return
+                                    }
+
+                                    adjustCostsBasedOnInputs()
+                                })
                         }
 
                         HStack {
@@ -162,16 +171,7 @@ struct AddExpenseView: SwiftUICore.View {
                                         return
                                     }
 
-                                    guard let pricePerKWhValue = Double(pricePerKWh.replacing(",", with: ".")) else {
-                                        return
-                                    }
-
-                                    guard let energyChargedValue = Double(energyCharged.replacing(",", with: ".")) else {
-                                        return
-                                    }
-
-                                    let totalCost = pricePerKWhValue * energyChargedValue
-                                    cost = String(format: "%.2f", totalCost)
+                                    adjustCostsBasedOnInputs()
                                 })
                         }
 
@@ -325,6 +325,19 @@ struct AddExpenseView: SwiftUICore.View {
                     ])
             }
         }
+    }
+
+    private func adjustCostsBasedOnInputs() {
+        guard let pricePerKWhValue = Double(pricePerKWh.replacing(",", with: ".")) else {
+            return
+        }
+
+        guard let energyChargedValue = Double(energyCharged.replacing(",", with: ".")) else {
+            return
+        }
+
+        let totalCost = pricePerKWhValue * energyChargedValue
+        cost = String(format: "%.2f", totalCost)
     }
 
     private func saveSession() {
