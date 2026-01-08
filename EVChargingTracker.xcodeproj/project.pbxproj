@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		874BB5002EA265B6004AFFD5 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 874BB4FF2EA265B2004AFFD5 /* readme.md */; };
+		8754CF962F1018890050355A /* changelogs.md in Resources */ = {isa = PBXBuildFile; fileRef = 8754CF952F1018830050355A /* changelogs.md */; };
 		875B0FA12EE806EF00F6C42E /* DEVELOPER_MODE_README.md in Resources */ = {isa = PBXBuildFile; fileRef = 875B0FA02EE806EF00F6C42E /* DEVELOPER_MODE_README.md */; };
 		87756C032E963DBC0055273C /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 87756C022E963DBC0055273C /* SQLite */; };
 		87D58E522EA5036100F4454C /* privacy-policy.md in Resources */ = {isa = PBXBuildFile; fileRef = 87D58E512EA5035A00F4454C /* privacy-policy.md */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		874BB4FF2EA265B2004AFFD5 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		8754CF952F1018830050355A /* changelogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = changelogs.md; sourceTree = "<group>"; };
 		875B0FA02EE806EF00F6C42E /* DEVELOPER_MODE_README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DEVELOPER_MODE_README.md; sourceTree = "<group>"; };
 		87756BD72E963D240055273C /* EVChargingTracker-Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EVChargingTracker-Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87756BE42E963D240055273C /* EVChargingTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVChargingTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +91,7 @@
 		87756BCE2E963D230055273C = {
 			isa = PBXGroup;
 			children = (
+				8754CF952F1018830050355A /* changelogs.md */,
 				87171B3F2ED9B1240084F6D7 /* BusinessLogic */,
 				87D58E512EA5035A00F4454C /* privacy-policy.md */,
 				874BB4FF2EA265B2004AFFD5 /* readme.md */,
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				875B0FA12EE806EF00F6C42E /* DEVELOPER_MODE_README.md in Resources */,
+				8754CF962F1018890050355A /* changelogs.md in Resources */,
 				874BB5002EA265B6004AFFD5 /* readme.md in Resources */,
 				87D58E522EA5036100F4454C /* privacy-policy.md in Resources */,
 			);
@@ -410,7 +414,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2026.1.2;
+				MARKETING_VERSION = 2026.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTrackerDebug;
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -445,7 +449,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2026.1.2;
+				MARKETING_VERSION = 2026.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
