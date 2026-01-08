@@ -37,6 +37,10 @@ struct AddExpenseView: SwiftUICore.View {
 
     @State private var alertMessage: String? = nil
     @State private var selectedCardForExpense: Car? = nil
+    
+    // Store price and charger type from the stored expense
+    @State private var storedPricePerKWh: String = ""
+    @State private var storedChargerType: ChargerType? = nil
 
     @FocusState private var isCountOfKWtFocused: Bool
     @FocusState private var isPricePerKWhFocused: Bool
@@ -78,17 +82,26 @@ struct AddExpenseView: SwiftUICore.View {
             // Calculate price per kWh if it's a charging expense
             if expense.expenseType == .charging && expense.energyCharged > 0, let costValue = expense.cost {
                 let pricePerKWh = costValue / expense.energyCharged
-                _pricePerKWh = State(initialValue: String(format: AddExpenseView.ExpenseFormatWithNoDigits, pricePerKWh))
+                let pricePerKWhString = String(format: AddExpenseView.ExpenseFormatWithNoDigits, pricePerKWh)
+                _pricePerKWh = State(initialValue: pricePerKWhString)
+                
+                // Store the price and charger type from the expense
+                _storedPricePerKWh = State(initialValue: pricePerKWhString)
+                _storedChargerType = State(initialValue: expense.chargerType)
             }
         } else if let lastChargingSession = lastChargingSession {
             _chargerType = State(initialValue: lastChargingSession.chargerType)
             _expenseType = State(initialValue: .charging)
 
             if let lastChargingPricePerKWh = lastChargingSession.getPricePerKWh() {
-                _pricePerKWh = State(
-                    initialValue: String(
-                        format: AddExpenseView.ExpenseFormatWithNoDigits,
-                        lastChargingPricePerKWh))
+                let pricePerKWhString = String(
+                    format: AddExpenseView.ExpenseFormatWithNoDigits,
+                    lastChargingPricePerKWh)
+                _pricePerKWh = State(initialValue: pricePerKWhString)
+                
+                // Store the price and charger type from the last session
+                _storedPricePerKWh = State(initialValue: pricePerKWhString)
+                _storedChargerType = State(initialValue: lastChargingSession.chargerType)
             }
         }
     }
@@ -180,6 +193,9 @@ struct AddExpenseView: SwiftUICore.View {
                                 Text(L(type.rawValue)).tag(type)
                             }
                         }
+                        .onChange(of: chargerType) { oldChargerType, newChargerType in
+                            handleChargerTypeChange(from: oldChargerType, to: newChargerType)
+                        }
 
                         
                     } else {
@@ -221,18 +237,7 @@ struct AddExpenseView: SwiftUICore.View {
                                     return
                                 }
 
-                                guard let energyChargedValue = Double(energyCharged.replacing(",", with: ".")) else {
-                                    return
-                                }
-
-                                guard let costValue = Double(newValue.replacing(",", with: ".")) else {
-                                    return
-                                }
-
-                                if (energyChargedValue > 0) {
-                                    let pricePerKWhValue = costValue / energyChargedValue
-                                    pricePerKWh = String(format: "%.2f", pricePerKWhValue)
-                                }
+                                adjustPriceBasedOnInputs()
                             })
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
@@ -338,6 +343,34 @@ struct AddExpenseView: SwiftUICore.View {
 
         let totalCost = pricePerKWhValue * energyChargedValue
         cost = String(format: "%.2f", totalCost)
+    }
+
+    private func adjustPriceBasedOnInputs() {
+        guard let energyChargedValue = Double(energyCharged.replacing(",", with: ".")) else {
+            return
+        }
+
+        guard let costValue = Double(cost.replacing(",", with: ".")) else {
+            return
+        }
+
+        if (energyChargedValue > 0) {
+            let pricePerKWhValue = costValue / energyChargedValue
+            pricePerKWh = String(format: "%.2f", pricePerKWhValue)
+        }
+    }
+
+    private func handleChargerTypeChange(from oldType: ChargerType, to newType: ChargerType) {
+        // Check if the new charger type matches the stored expense's charger type
+        if let storedType = storedChargerType, newType == storedType, !storedPricePerKWh.isEmpty {
+            // Restore the price from the stored expense
+            pricePerKWh = storedPricePerKWh
+            
+            // Recalculate cost based on restored price
+            adjustCostsBasedOnInputs()
+        } else {
+            adjustPriceBasedOnInputs()
+        }
     }
 
     private func saveSession() {
