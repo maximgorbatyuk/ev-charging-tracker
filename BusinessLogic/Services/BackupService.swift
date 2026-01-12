@@ -356,7 +356,7 @@ final class BackupService: ObservableObject {
             // Map old car ID to new car ID
             if let oldCarId = exportExpense.carId, let newCarId = carIdMapping[oldCarId] {
                 do {
-                    try expense.setCarId(newCarId)
+                    try expense.setCarIdWithNoValidation(newCarId)
                 } catch {
                     throw ExportValidationError.corruptedData
                 }
