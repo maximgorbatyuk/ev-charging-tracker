@@ -232,3 +232,27 @@
 "export.error.invalid_enum %@ %@" = "Ungültiger %@-Wert: %@";
 "export.error.invalid_reference %@ %lld" = "Ungültige Referenz: %@ mit ID %lld nicht gefunden.";
 "export.error.corrupted" = "Die Sicherungsdatei ist beschädigt und kann nicht wiederhergestellt werden.";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud-Sicherung";
+"Backup Now" = "Jetzt sichern";
+"Creating backup..." = "Sicherung wird erstellt...";
+"Last backup" = "Letzte Sicherung";
+"View Backup History" = "Sicherungsverlauf anzeigen";
+"Automatic backups to iCloud keep your data safe." = "Automatische Sicherungen in iCloud halten Ihre Daten sicher.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Maximal 5 Sicherungen werden gespeichert, ältere als 30 Tage werden automatisch gelöscht.";
+"iCloud Backups" = "iCloud-Sicherungen";
+"Loading backups..." = "Sicherungen werden geladen...";
+"No backups found" = "Keine Sicherungen gefunden";
+"Create your first backup to get started" = "Erstellen Sie Ihre erste Sicherung, um loszulegen";
+"Delete Backup?" = "Sicherung löschen?";
+"Are you sure you want to delete the backup from %@?" = "Möchten Sie die Sicherung vom %@ wirklich löschen?";
+"Restore from Backup?" = "Aus Sicherung wiederherstellen?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "Dies ersetzt alle aktuellen Daten durch die Sicherung vom %@. Dies kann nicht rückgängig gemacht werden.";
+"Restore" = "Wiederherstellen";
+"Backup Error" = "Sicherungsfehler";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud ist nicht verfügbar. Bitte melden Sie sich in den Einstellungen bei iCloud an.";
+"backup.error.network_unavailable" = "Keine Internetverbindung. Bitte überprüfen Sie Ihr Netzwerk.";
+"backup.error.icloud_storage_full" = "iCloud-Speicher ist voll. Bitte geben Sie Speicherplatz frei oder upgraden Sie Ihren Plan.";

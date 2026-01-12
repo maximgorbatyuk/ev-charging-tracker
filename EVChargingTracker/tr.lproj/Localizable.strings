@@ -231,3 +231,27 @@
 "export.error.invalid_enum %@ %@" = "Geçersiz %@ değeri: %@";
 "export.error.invalid_reference %@ %lld" = "Geçersiz referans: %@ kimliği %lld bulunamadı.";
 "export.error.corrupted" = "Yedekleme dosyası bozuk ve geri yüklenemiyor.";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud Yedeği";
+"Backup Now" = "Şimdi Yedekle";
+"Creating backup..." = "Yedek oluşturuluyor...";
+"Last backup" = "Son yedek";
+"View Backup History" = "Yedek Geçmişini Görüntüle";
+"Automatic backups to iCloud keep your data safe." = "iCloud'a otomatik yedeklemeler verilerinizi güvende tutar.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Maksimum 5 yedek saklanır, 30 günden eskiler otomatik silinir.";
+"iCloud Backups" = "iCloud Yedekleri";
+"Loading backups..." = "Yedekler yükleniyor...";
+"No backups found" = "Yedek bulunamadı";
+"Create your first backup to get started" = "Başlamak için ilk yedeğinizi oluşturun";
+"Delete Backup?" = "Yedek Silinsin mi?";
+"Are you sure you want to delete the backup from %@?" = "%@ tarihli yedeği silmek istediğinizden emin misiniz?";
+"Restore from Backup?" = "Yedekten Geri Yükle?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "Bu, tüm mevcut verileri %@ tarihli yedekle değiştirecektir. Bu işlem geri alınamaz.";
+"Restore" = "Geri Yükle";
+"Backup Error" = "Yedekleme Hatası";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud kullanılamıyor. Lütfen Ayarlar'dan iCloud'da oturum açın.";
+"backup.error.network_unavailable" = "İnternet bağlantısı yok. Lütfen ağınızı kontrol edin.";
+"backup.error.icloud_storage_full" = "iCloud depolama alanı dolu. Lütfen alan boşaltın veya planınızı yükseltin.";

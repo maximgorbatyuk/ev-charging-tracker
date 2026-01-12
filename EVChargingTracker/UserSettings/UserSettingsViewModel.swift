@@ -24,6 +24,14 @@ class UserSettingsViewModel: ObservableObject {
     @Published var pendingImportURL: URL?
     @Published var importPreviewData: ImportPreviewData?
 
+    // iCloud Backup
+    @Published var isBackingUp: Bool = false
+    @Published var backupError: String?
+    @Published var lastBackupDate: Date?
+    @Published var iCloudBackups: [BackupInfo] = []
+    @Published var isLoadingBackups: Bool = false
+    @Published var showBackupList: Bool = false
+
     private let environment: EnvironmentService
     private let backupService: BackupService
     private let db: DatabaseManager
@@ -536,6 +544,91 @@ class UserSettingsViewModel: ObservableObject {
         formatter.timeStyle = .none
 
         return "\(formatter.string(from: earliest)) - \(formatter.string(from: latest))"
+    }
+
+    // MARK: - iCloud Backup
+
+    func createiCloudBackup() async {
+        guard backupService.isiCloudAvailable() else {
+            backupError = String(localized: "backup.error.icloud_not_available")
+            return
+        }
+
+        isBackingUp = true
+        backupError = nil
+
+        do {
+            let backupInfo = try await backupService.createiCloudBackup()
+            isBackingUp = false
+            lastBackupDate = backupInfo.createdAt
+            logger.info("iCloud backup created successfully")
+        } catch {
+            isBackingUp = false
+            backupError = error.localizedDescription
+            logger.error("iCloud backup failed: \(error.localizedDescription)")
+        }
+    }
+
+    func loadiCloudBackups() async {
+        guard backupService.isiCloudAvailable() else {
+            backupError = String(localized: "backup.error.icloud_not_available")
+            return
+        }
+
+        isLoadingBackups = true
+        backupError = nil
+
+        do {
+            let backups = try await backupService.listiCloudBackups()
+            isLoadingBackups = false
+            iCloudBackups = backups
+
+            // Update last backup date
+            if let latest = backups.first {
+                lastBackupDate = latest.createdAt
+            }
+        } catch {
+            isLoadingBackups = false
+            backupError = error.localizedDescription
+            logger.error("Failed to load iCloud backups: \(error.localizedDescription)")
+        }
+    }
+
+    func restoreFromiCloudBackup(_ backupInfo: BackupInfo) async {
+        isImporting = true
+        importError = nil
+
+        do {
+            try await backupService.restoreFromiCloudBackup(backupInfo)
+            isImporting = false
+
+            // Refresh all data
+            refetchCars()
+
+            logger.info("Restored from iCloud backup successfully")
+        } catch {
+            isImporting = false
+            importError = error.localizedDescription
+            logger.error("Failed to restore from iCloud backup: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteiCloudBackup(_ backupInfo: BackupInfo) async {
+        do {
+            try await backupService.deleteiCloudBackup(backupInfo)
+
+            // Reload backups
+            await loadiCloudBackups()
+
+            logger.info("Deleted iCloud backup successfully")
+        } catch {
+            backupError = error.localizedDescription
+            logger.error("Failed to delete iCloud backup: \(error.localizedDescription)")
+        }
+    }
+
+    func isiCloudAvailable() -> Bool {
+        return backupService.isiCloudAvailable()
     }
 }
 

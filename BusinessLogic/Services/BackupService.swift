@@ -16,6 +16,8 @@ final class BackupService: ObservableObject {
     // MARK: - Constants
 
     private let maxSafetyBackups = 3
+    private let maxiCloudBackups = 5
+    private let maxBackupAgeInDays = 30
 
     // MARK: - File Paths
 
@@ -24,6 +26,16 @@ final class BackupService: ObservableObject {
         return documentsPath
             .appendingPathComponent("ev_charging_tracker", isDirectory: true)
             .appendingPathComponent("safety_backups", isDirectory: true)
+    }
+
+    private var iCloudBackupDirectory: URL? {
+        guard let containerURL = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
+            return nil
+        }
+        return containerURL
+            .appendingPathComponent("Documents", isDirectory: true)
+            .appendingPathComponent("ev_charging_tracker", isDirectory: true)
+            .appendingPathComponent("backups", isDirectory: true)
     }
 
     // MARK: - Dependencies
@@ -468,5 +480,354 @@ final class BackupService: ObservableObject {
 
     private func getDeviceName() -> String {
         return ProcessInfo.processInfo.hostName
+    }
+
+    // MARK: - iCloud Backup
+
+    func isiCloudAvailable() -> Bool {
+        return FileManager.default.ubiquityIdentityToken != nil
+    }
+
+    func checkiCloudStatus() throws {
+        guard isiCloudAvailable() else {
+            throw BackupError.iCloudNotAvailable
+        }
+
+        guard iCloudBackupDirectory != nil else {
+            throw BackupError.iCloudNotAvailable
+        }
+    }
+
+    func createiCloudBackup() async throws -> BackupInfo {
+        try checkiCloudStatus()
+
+        guard let backupDirectory = iCloudBackupDirectory else {
+            throw BackupError.iCloudNotAvailable
+        }
+
+        // Create export data
+        let exportData = try await createExportData()
+
+        // Create directory if needed
+        try await createiCloudDirectoryIfNeeded()
+
+        // Create filename with timestamp
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+        let timestamp = dateFormatter.string(from: Date())
+
+        let isDevelopment = EnvironmentService.shared.isDevelopmentMode()
+        let filename = isDevelopment
+            ? "ev_charging_tracker_backup_dev_\(timestamp).json"
+            : "ev_charging_tracker_backup_\(timestamp).json"
+
+        let fileURL = backupDirectory.appendingPathComponent(filename)
+
+        // Use NSFileCoordinator for safe iCloud access
+        let coordinator = NSFileCoordinator()
+        var coordinatorError: NSError?
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            coordinator.coordinate(
+                writingItemAt: fileURL,
+                options: .forReplacing,
+                error: &coordinatorError
+            ) { url in
+                do {
+                    let encoder = JSONEncoder()
+                    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+                    encoder.dateEncodingStrategy = .iso8601
+
+                    let jsonData = try encoder.encode(exportData)
+                    try jsonData.write(to: url)
+
+                    self.logger.info("iCloud backup created: \(filename)")
+                    continuation.resume()
+                } catch {
+                    self.logger.error("Failed to write iCloud backup: \(error)")
+                    continuation.resume(throwing: error)
+                }
+            }
+
+            if let error = coordinatorError {
+                continuation.resume(throwing: error)
+            }
+        }
+
+        // Cleanup old backups
+        try await cleanupOldiCloudBackups()
+
+        // Get backup info
+        let backupInfo = try getBackupInfo(from: fileURL)
+        return backupInfo
+    }
+
+    func listiCloudBackups() async throws -> [BackupInfo] {
+        try checkiCloudStatus()
+
+        guard let backupDirectory = iCloudBackupDirectory else {
+            throw BackupError.iCloudNotAvailable
+        }
+
+        return try await withCheckedThrowingContinuation { continuation in
+            let coordinator = NSFileCoordinator()
+            var coordinatorError: NSError?
+
+            coordinator.coordinate(
+                readingItemAt: backupDirectory,
+                options: .withoutChanges,
+                error: &coordinatorError
+            ) { url in
+                do {
+                    let fileManager = FileManager.default
+
+                    // Create directory if it doesn't exist
+                    if !fileManager.fileExists(atPath: url.path) {
+                        try fileManager.createDirectory(
+                            at: url,
+                            withIntermediateDirectories: true
+                        )
+                        continuation.resume(returning: [])
+                        return
+                    }
+
+                    let files = try fileManager.contentsOfDirectory(
+                        at: url,
+                        includingPropertiesForKeys: [.creationDateKey, .fileSizeKey],
+                        options: [.skipsHiddenFiles]
+                    )
+
+                    let jsonFiles = files.filter { $0.pathExtension == "json" }
+
+                    var backups: [BackupInfo] = []
+                    for fileURL in jsonFiles {
+                        if let info = try? self.getBackupInfo(from: fileURL) {
+                            backups.append(info)
+                        }
+                    }
+
+                    // Sort by creation date (newest first)
+                    backups.sort { $0.createdAt > $1.createdAt }
+
+                    continuation.resume(returning: backups)
+                } catch {
+                    self.logger.error("Failed to list iCloud backups: \(error)")
+                    continuation.resume(throwing: error)
+                }
+            }
+
+            if let error = coordinatorError {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
+    func restoreFromiCloudBackup(_ backupInfo: BackupInfo) async throws {
+        try checkiCloudStatus()
+
+        // Create safety backup before restore
+        let safetyBackupURL = try await createSafetyBackup()
+
+        do {
+            // Use NSFileCoordinator to read iCloud file
+            let exportData = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExportData, Error>) in
+                let coordinator = NSFileCoordinator()
+                var coordinatorError: NSError?
+
+                coordinator.coordinate(
+                    readingItemAt: backupInfo.fileURL,
+                    options: .withoutChanges,
+                    error: &coordinatorError
+                ) { url in
+                    do {
+                        let data = try Data(contentsOf: url)
+
+                        let decoder = JSONDecoder()
+                        decoder.dateDecodingStrategy = .iso8601
+
+                        let exportData = try decoder.decode(ExportData.self, from: data)
+                        continuation.resume(returning: exportData)
+                    } catch {
+                        self.logger.error("Failed to read iCloud backup: \(error)")
+                        continuation.resume(throwing: error)
+                    }
+                }
+
+                if let error = coordinatorError {
+                    continuation.resume(throwing: error)
+                }
+            }
+
+            // Validate and import
+            try validateExportData(exportData)
+            wipeAllData()
+            try await importExportData(exportData)
+
+            self.logger.info("Successfully restored from iCloud backup: \(backupInfo.fileName)")
+
+        } catch {
+            // Restore from safety backup if import fails
+            self.logger.error("Restore from iCloud failed: \(error.localizedDescription). Restoring from safety backup.")
+            try await restoreFromSafetyBackup(safetyBackupURL)
+            throw error
+        }
+    }
+
+    func deleteiCloudBackup(_ backupInfo: BackupInfo) async throws {
+        try checkiCloudStatus()
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            let coordinator = NSFileCoordinator()
+            var coordinatorError: NSError?
+
+            coordinator.coordinate(
+                writingItemAt: backupInfo.fileURL,
+                options: .forDeleting,
+                error: &coordinatorError
+            ) { url in
+                do {
+                    try FileManager.default.removeItem(at: url)
+                    self.logger.info("Deleted iCloud backup: \(backupInfo.fileName)")
+                    continuation.resume()
+                } catch {
+                    self.logger.error("Failed to delete iCloud backup: \(error)")
+                    continuation.resume(throwing: error)
+                }
+            }
+
+            if let error = coordinatorError {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
+    private func createiCloudDirectoryIfNeeded() async throws {
+        guard let backupDirectory = iCloudBackupDirectory else {
+            throw BackupError.iCloudNotAvailable
+        }
+
+        let fileManager = FileManager.default
+
+        if !fileManager.fileExists(atPath: backupDirectory.path) {
+            try fileManager.createDirectory(
+                at: backupDirectory,
+                withIntermediateDirectories: true
+            )
+            self.logger.info("Created iCloud backup directory")
+        }
+    }
+
+    private func cleanupOldiCloudBackups() async throws {
+        guard let backupDirectory = iCloudBackupDirectory else {
+            return
+        }
+
+        let backups = try await listiCloudBackups()
+
+        // Apply both retention policies
+        let now = Date()
+        let maxAge = TimeInterval(maxBackupAgeInDays * 24 * 60 * 60)
+
+        var backupsToDelete: [BackupInfo] = []
+
+        // 1. Delete backups older than 30 days
+        let oldBackups = backups.filter { now.timeIntervalSince($0.createdAt) > maxAge }
+        backupsToDelete.append(contentsOf: oldBackups)
+
+        // 2. Keep only 5 most recent backups
+        if backups.count > maxiCloudBackups {
+            let excessBackups = backups.dropFirst(maxiCloudBackups)
+            backupsToDelete.append(contentsOf: excessBackups)
+        }
+
+        // Remove duplicates
+        let uniqueBackupsToDelete = Array(Set(backupsToDelete.map { $0.fileURL }))
+
+        // Delete backups
+        for fileURL in uniqueBackupsToDelete {
+            if let backup = backups.first(where: { $0.fileURL == fileURL }) {
+                try? await deleteiCloudBackup(backup)
+            }
+        }
+
+        if !uniqueBackupsToDelete.isEmpty {
+            self.logger.info("Cleaned up \(uniqueBackupsToDelete.count) old iCloud backup(s)")
+        }
+    }
+
+    private func getBackupInfo(from fileURL: URL) throws -> BackupInfo {
+        let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+
+        let creationDate = attributes[.creationDate] as? Date ?? Date()
+        let fileSize = attributes[.size] as? Int64 ?? 0
+
+        // Parse metadata from file
+        let data = try Data(contentsOf: fileURL)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let exportData = try decoder.decode(ExportData.self, from: data)
+
+        return BackupInfo(
+            fileName: fileURL.lastPathComponent,
+            fileURL: fileURL,
+            createdAt: creationDate,
+            fileSize: fileSize,
+            deviceName: exportData.metadata.deviceName,
+            appVersion: exportData.metadata.appVersion,
+            schemaVersion: exportData.metadata.databaseSchemaVersion,
+            carsCount: exportData.cars.count,
+            expensesCount: exportData.expenses.count,
+            maintenanceCount: exportData.plannedMaintenance.count,
+            notificationsCount: exportData.delayedNotifications.count
+        )
+    }
+}
+
+// MARK: - Backup Models
+
+struct BackupInfo: Identifiable, Hashable {
+    let fileName: String
+    let fileURL: URL
+    let createdAt: Date
+    let fileSize: Int64
+    let deviceName: String
+    let appVersion: String
+    let schemaVersion: Int
+    let carsCount: Int
+    let expensesCount: Int
+    let maintenanceCount: Int
+    let notificationsCount: Int
+
+    var id: String { fileURL.absoluteString }
+
+    var formattedFileSize: String {
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: fileSize)
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(fileURL)
+    }
+
+    static func == (lhs: BackupInfo, rhs: BackupInfo) -> Bool {
+        return lhs.fileURL == rhs.fileURL
+    }
+}
+
+enum BackupError: LocalizedError {
+    case iCloudNotAvailable
+    case networkUnavailable
+    case iCloudStorageFull
+
+    var errorDescription: String? {
+        switch self {
+        case .iCloudNotAvailable:
+            return String(localized: "backup.error.icloud_not_available")
+        case .networkUnavailable:
+            return String(localized: "backup.error.network_unavailable")
+        case .iCloudStorageFull:
+            return String(localized: "backup.error.icloud_storage_full")
+        }
     }
 }

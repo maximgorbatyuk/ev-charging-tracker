@@ -231,3 +231,27 @@
 "export.error.invalid_enum %@ %@" = "Неверное значение %@: %@";
 "export.error.invalid_reference %@ %lld" = "Неверная ссылка: %@ с ID %lld не найден.";
 "export.error.corrupted" = "Файл резервной копии поврежден и не может быть восстановлен.";
+
+/* iCloud Backup */
+"iCloud Backup" = "Резервная копия iCloud";
+"Backup Now" = "Создать резервную копию";
+"Creating backup..." = "Создание резервной копии...";
+"Last backup" = "Последняя копия";
+"View Backup History" = "История резервных копий";
+"Automatic backups to iCloud keep your data safe." = "Автоматические резервные копии в iCloud сохранят ваши данные.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Хранится максимум 5 копий, старше 30 дней удаляются автоматически.";
+"iCloud Backups" = "Резервные копии iCloud";
+"Loading backups..." = "Загрузка копий...";
+"No backups found" = "Копии не найдены";
+"Create your first backup to get started" = "Создайте первую резервную копию для начала работы";
+"Delete Backup?" = "Удалить копию?";
+"Are you sure you want to delete the backup from %@?" = "Вы уверены, что хотите удалить резервную копию от %@?";
+"Restore from Backup?" = "Восстановить из копии?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "Это заменит все текущие данные резервной копией от %@. Это действие нельзя отменить.";
+"Restore" = "Восстановить";
+"Backup Error" = "Ошибка резервного копирования";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud недоступен. Войдите в iCloud в Настройках.";
+"backup.error.network_unavailable" = "Нет подключения к интернету. Проверьте сеть.";
+"backup.error.icloud_storage_full" = "Хранилище iCloud заполнено. Освободите место или обновите тариф.";

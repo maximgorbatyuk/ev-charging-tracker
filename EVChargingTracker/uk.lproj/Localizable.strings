@@ -229,3 +229,27 @@
 "export.error.invalid_enum %@ %@" = "Невірне значення %@: %@";
 "export.error.invalid_reference %@ %lld" = "Невірне посилання: %@ з ID %lld не знайдено.";
 "export.error.corrupted" = "Файл резервної копії пошкоджено і не може бути відновлено.";
+
+/* iCloud Backup */
+"iCloud Backup" = "Резервна копія iCloud";
+"Backup Now" = "Створити резервну копію";
+"Creating backup..." = "Створення резервної копії...";
+"Last backup" = "Остання копія";
+"View Backup History" = "Історія резервних копій";
+"Automatic backups to iCloud keep your data safe." = "Автоматичні резервні копії в iCloud збережуть ваші дані.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Зберігається максимум 5 копій, старші за 30 днів видаляються автоматично.";
+"iCloud Backups" = "Резервні копії iCloud";
+"Loading backups..." = "Завантаження копій...";
+"No backups found" = "Копії не знайдено";
+"Create your first backup to get started" = "Створіть першу резервну копію для початку роботи";
+"Delete Backup?" = "Видалити копію?";
+"Are you sure you want to delete the backup from %@?" = "Ви впевнені, що хочете видалити резервну копію від %@?";
+"Restore from Backup?" = "Відновити з копії?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "Це замінить всі поточні дані резервною копією від %@. Цю дію не можна скасувати.";
+"Restore" = "Відновити";
+"Backup Error" = "Помилка резервного копіювання";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud недоступний. Увійдіть в iCloud в Налаштуваннях.";
+"backup.error.network_unavailable" = "Немає підключення до інтернету. Перевірте мережу.";
+"backup.error.icloud_storage_full" = "Сховище iCloud заповнене. Звільніть місце або оновіть тариф.";

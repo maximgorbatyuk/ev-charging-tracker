@@ -229,3 +229,27 @@
 "export.error.invalid_enum %@ %@" = "Invalid %@ value: %@";
 "export.error.invalid_reference %@ %lld" = "Invalid reference: %@ with ID %lld not found.";
 "export.error.corrupted" = "The backup file is corrupted and cannot be restored.";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud Backup";
+"Backup Now" = "Backup Now";
+"Creating backup..." = "Creating backup...";
+"Last backup" = "Last backup";
+"View Backup History" = "View Backup History";
+"Automatic backups to iCloud keep your data safe." = "Automatic backups to iCloud keep your data safe.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Maximum 5 backups kept, older than 30 days auto-deleted.";
+"iCloud Backups" = "iCloud Backups";
+"Loading backups..." = "Loading backups...";
+"No backups found" = "No backups found";
+"Create your first backup to get started" = "Create your first backup to get started";
+"Delete Backup?" = "Delete Backup?";
+"Are you sure you want to delete the backup from %@?" = "Are you sure you want to delete the backup from %@?";
+"Restore from Backup?" = "Restore from Backup?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "This will replace all current data with the backup from %@. This cannot be undone.";
+"Restore" = "Restore";
+"Backup Error" = "Backup Error";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud is not available. Please sign in to iCloud in Settings.";
+"backup.error.network_unavailable" = "No internet connection. Please check your network.";
+"backup.error.icloud_storage_full" = "iCloud storage is full. Please free up space or upgrade your plan.";

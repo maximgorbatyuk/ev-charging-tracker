@@ -266,6 +266,85 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                 }
 
+                if viewModel.isiCloudAvailable() {
+                    Section(header: Text(L("iCloud Backup"))) {
+                        // Manual backup button
+                        Button(action: {
+                            analytics.trackEvent("icloud_backup_button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "create_icloud_backup"
+                            ])
+
+                            Task {
+                                await viewModel.createiCloudBackup()
+                            }
+                        }) {
+                            HStack {
+                                if viewModel.isBackingUp {
+                                    ProgressView()
+                                        .progressViewStyle(.circular)
+                                        .frame(width: 20, height: 20)
+                                } else {
+                                    Image(systemName: "icloud.and.arrow.up")
+                                        .foregroundColor(.blue)
+                                }
+
+                                Text(viewModel.isBackingUp ? L("Creating backup...") : L("Backup Now"))
+                                    .padding(.leading, 4)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .disabled(viewModel.isBackingUp || viewModel.isImporting || viewModel.isExporting)
+
+                        // Last backup timestamp
+                        if let lastBackup = viewModel.lastBackupDate {
+                            HStack {
+                                Text(L("Last backup"))
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(formatBackupDate(lastBackup))
+                                    .foregroundColor(.secondary)
+                            }
+                            .font(.caption)
+                        }
+
+                        // View backups button
+                        Button(action: {
+                            analytics.trackEvent("view_backups_button_clicked", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "view_backup_history"
+                            ])
+
+                            viewModel.showBackupList = true
+                        }) {
+                            HStack {
+                                Image(systemName: "clock.arrow.circlepath")
+                                    .foregroundColor(.purple)
+
+                                Text(L("View Backup History"))
+                                    .padding(.leading, 4)
+                                    .foregroundColor(.primary)
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+
+                        // Info text
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(L("Automatic backups to iCloud keep your data safe."))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(L("Maximum 5 backups kept, older than 30 days auto-deleted."))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+
                 Section(header: Text(L("Support"))) {
                     Button(action: {
                         analytics.trackEvent("about_app_button_clicked", properties: [
@@ -509,6 +588,9 @@ struct UserSettingsView: SwiftUICore.View {
                     ShareSheet(items: [url])
                 }
             }
+            .sheet(isPresented: $viewModel.showBackupList) {
+                iCloudBackupListView(viewModel: viewModel)
+            }
             .fileImporter(
                 isPresented: $showImportFilePicker,
                 allowedContentTypes: [.json],
@@ -662,6 +744,13 @@ struct UserSettingsView: SwiftUICore.View {
                self.isNotificationsEnabled = status == .authorized
            }
        }
+    }
+
+    private func formatBackupDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 
     private func openSettings() {

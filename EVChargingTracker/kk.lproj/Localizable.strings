@@ -238,3 +238,27 @@
 "export.error.invalid_enum %@ %@" = "Жарамсыз %@ мәні: %@";
 "export.error.invalid_reference %@ %lld" = "Жарамсыз сілтеме: %@ идентификаторы %lld табылмады.";
 "export.error.corrupted" = "Сақтық көшірме файлы бүлінген және қалпына келтірілмейді.";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud сақтық көшірмесі";
+"Backup Now" = "Қазір сақтық көшірмесін жасау";
+"Creating backup..." = "Сақтық көшірме жасалуда...";
+"Last backup" = "Соңғы сақтық көшірме";
+"View Backup History" = "Сақтық көшірме тарихын көру";
+"Automatic backups to iCloud keep your data safe." = "iCloud-қа автоматты сақтық көшірмелер деректеріңізді қауіпсіз ұстайды.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Максимум 5 сақтық көшірме сақталады, 30 күннен ескілері автоматты түрде жойылады.";
+"iCloud Backups" = "iCloud сақтық көшірмелері";
+"Loading backups..." = "Сақтық көшірмелер жүктелуде...";
+"No backups found" = "Сақтық көшірмелер табылмады";
+"Create your first backup to get started" = "Бастау үшін алғашқы сақтық көшірмені жасаңыз";
+"Delete Backup?" = "Сақтық көшірмені жою керек пе?";
+"Are you sure you want to delete the backup from %@?" = "%@ күніндегі сақтық көшірмені жойғыңыз келетініне сенімдісіз бе?";
+"Restore from Backup?" = "Сақтық көшірмеден қалпына келтіру керек пе?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "Бұл барлық ағымдағы деректерді %@ күніндегі сақтық көшірмемен алмастырады. Бұл әрекетті болдырмауға болмайды.";
+"Restore" = "Қалпына келтіру";
+"Backup Error" = "Сақтық көшірме қатесі";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud қолжетімді емес. Баптауларда iCloud-қа кіріңіз.";
+"backup.error.network_unavailable" = "Интернет байланысы жоқ. Желіңізді тексеріңіз.";
+"backup.error.icloud_storage_full" = "iCloud қоймасы толған. Орын босатыңыз немесе тарифіңізді жаңартыңыз.";
