@@ -195,3 +195,40 @@
 "other" = "sonstiges";
 "Total records: %d, total pages: %d" = "Gesamtaufzeichnungen: %d, Gesamtseiten: %d";
 "Previous" = "Vorherige";
+
+/* Export & Import */
+"Export & Import" = "Export & Import";
+"Export Data..." = "Daten exportieren...";
+"Import Data..." = "Daten importieren...";
+"Preparing export..." = "Export vorbereiten...";
+"Importing data..." = "Daten importieren...";
+"Export your data to back it up or transfer to another device." = "Exportieren Sie Ihre Daten, um sie zu sichern oder auf ein anderes Gerät zu übertragen.";
+"Import will replace all existing data." = "Der Import ersetzt alle vorhandenen Daten.";
+"Export Error" = "Exportfehler";
+"Import Error" = "Importfehler";
+"Confirm Import" = "Import bestätigen";
+"Import and Replace All Data" = "Importieren und alle Daten ersetzen";
+"Source" = "Quelle";
+"Export Date" = "Exportdatum";
+"Schema Version" = "Schemaversion";
+"Data Summary" = "Datenzusammenfassung";
+"cars" = "Autos";
+"expenses" = "Ausgaben";
+"maintenance records" = "Wartungseinträge";
+"notifications" = "Benachrichtigungen";
+"Date Range" = "Datumsbereich";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Warnung: Der Import LÖSCHT ALLE vorhandenen Daten. Dies kann nicht rückgängig gemacht werden.";
+"export.preview.no_expenses" = "Keine Ausgaben";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Ungültiges Dateiformat. Bitte wählen Sie eine gültige Sicherungsdatei.";
+"export.error.missing_metadata" = "Metadaten fehlen in der Sicherungsdatei.";
+"export.error.missing_fields" = "Erforderliche Felder fehlen in der Sicherungsdatei.";
+"export.error.incompatible_schema %d %d" = "Diese Sicherung stammt von einer inkompatiblen Version (aktuell: %d, Datei: %d).";
+"export.error.newer_schema %d %d" = "Diese Sicherung wurde mit einer neueren Version der App erstellt (aktuell: %d, Datei: %d). Der Import kann fehlschlagen oder zu Datenverlust führen.";
+"export.error.invalid_date" = "Ungültiges Datum in der Sicherungsdatei gefunden.";
+"export.error.invalid_numeric %@" = "Ungültiger numerischer Wert für Feld: %@";
+"export.error.invalid_currency %@" = "Ungültiger Währungscode: %@";
+"export.error.invalid_enum %@ %@" = "Ungültiger %@-Wert: %@";
+"export.error.invalid_reference %@ %lld" = "Ungültige Referenz: %@ mit ID %lld nicht gefunden.";
+"export.error.corrupted" = "Die Sicherungsdatei ist beschädigt und kann nicht wiederhergestellt werden.";

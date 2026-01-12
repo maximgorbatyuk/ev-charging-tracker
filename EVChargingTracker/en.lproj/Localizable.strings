@@ -192,3 +192,40 @@
 "other" = "other";
 "Total records: %d, total pages: %d" = "Total records: %d, total pages: %d";
 "Previous" = "Previous";
+
+/* Export & Import */
+"Export & Import" = "Export & Import";
+"Export Data..." = "Export Data...";
+"Import Data..." = "Import Data...";
+"Preparing export..." = "Preparing export...";
+"Importing data..." = "Importing data...";
+"Export your data to back it up or transfer to another device." = "Export your data to back it up or transfer to another device.";
+"Import will replace all existing data." = "Import will replace all existing data.";
+"Export Error" = "Export Error";
+"Import Error" = "Import Error";
+"Confirm Import" = "Confirm Import";
+"Import and Replace All Data" = "Import and Replace All Data";
+"Source" = "Source";
+"Export Date" = "Export Date";
+"Schema Version" = "Schema Version";
+"Data Summary" = "Data Summary";
+"cars" = "cars";
+"expenses" = "expenses";
+"maintenance records" = "maintenance records";
+"notifications" = "notifications";
+"Date Range" = "Date Range";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Warning: Importing will DELETE ALL existing data. This cannot be undone.";
+"export.preview.no_expenses" = "No expenses";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Invalid file format. Please select a valid backup file.";
+"export.error.missing_metadata" = "Missing metadata in backup file.";
+"export.error.missing_fields" = "Missing required fields in backup file.";
+"export.error.incompatible_schema %d %d" = "This backup is from an incompatible version (current: %d, file: %d).";
+"export.error.newer_schema %d %d" = "This backup was created with a newer version of the app (current: %d, file: %d). Import may fail or cause data loss.";
+"export.error.invalid_date" = "Invalid date found in backup file.";
+"export.error.invalid_numeric %@" = "Invalid numeric value for field: %@";
+"export.error.invalid_currency %@" = "Invalid currency code: %@";
+"export.error.invalid_enum %@ %@" = "Invalid %@ value: %@";
+"export.error.invalid_reference %@ %lld" = "Invalid reference: %@ with ID %lld not found.";
+"export.error.corrupted" = "The backup file is corrupted and cannot be restored.";

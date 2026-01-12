@@ -194,3 +194,40 @@
 "other" = "другое";
 "Total records: %d, total pages: %d" = "Всего записей: %d, всего страниц: %d";
 "Previous" = "Назад";
+
+/* Export & Import */
+"Export & Import" = "Экспорт и импорт";
+"Export Data..." = "Экспортировать данные...";
+"Import Data..." = "Импортировать данные...";
+"Preparing export..." = "Подготовка экспорта...";
+"Importing data..." = "Импорт данных...";
+"Export your data to back it up or transfer to another device." = "Экспортируйте данные для резервного копирования или переноса на другое устройство.";
+"Import will replace all existing data." = "Импорт заменит все существующие данные.";
+"Export Error" = "Ошибка экспорта";
+"Import Error" = "Ошибка импорта";
+"Confirm Import" = "Подтвердите импорт";
+"Import and Replace All Data" = "Импортировать и заменить все данные";
+"Source" = "Источник";
+"Export Date" = "Дата экспорта";
+"Schema Version" = "Версия схемы";
+"Data Summary" = "Сводка данных";
+"cars" = "автомобилей";
+"expenses" = "трат";
+"maintenance records" = "записей об обслуживании";
+"notifications" = "уведомлений";
+"Date Range" = "Диапазон дат";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Внимание: Импорт УДАЛИТ ВСЕ существующие данные. Это действие нельзя отменить.";
+"export.preview.no_expenses" = "Нет трат";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Неверный формат файла. Пожалуйста, выберите корректный файл резервной копии.";
+"export.error.missing_metadata" = "Отсутствуют метаданные в файле резервной копии.";
+"export.error.missing_fields" = "Отсутствуют обязательные поля в файле резервной копии.";
+"export.error.incompatible_schema %d %d" = "Эта резервная копия создана несовместимой версией (текущая: %d, файл: %d).";
+"export.error.newer_schema %d %d" = "Эта резервная копия создана более новой версией приложения (текущая: %d, файл: %d). Импорт может не сработать или привести к потере данных.";
+"export.error.invalid_date" = "Обнаружена неверная дата в файле резервной копии.";
+"export.error.invalid_numeric %@" = "Неверное числовое значение для поля: %@";
+"export.error.invalid_currency %@" = "Неверный код валюты: %@";
+"export.error.invalid_enum %@ %@" = "Неверное значение %@: %@";
+"export.error.invalid_reference %@ %lld" = "Неверная ссылка: %@ с ID %lld не найден.";
+"export.error.corrupted" = "Файл резервной копии поврежден и не может быть восстановлен.";

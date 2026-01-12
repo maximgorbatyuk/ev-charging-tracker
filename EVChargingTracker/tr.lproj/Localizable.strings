@@ -194,3 +194,40 @@
 "other" = "diğer";
 "Total records: %d, total pages: %d" = "Toplam kayıtlar: %d, toplam sayfalar: %d";
 "Previous" = "Önceki";
+
+/* Export & Import */
+"Export & Import" = "Dışa ve İçe Aktar";
+"Export Data..." = "Verileri Dışa Aktar...";
+"Import Data..." = "Verileri İçe Aktar...";
+"Preparing export..." = "Dışa aktarma hazırlanıyor...";
+"Importing data..." = "Veriler içe aktarılıyor...";
+"Export your data to back it up or transfer to another device." = "Yedekleme veya başka bir cihaza aktarma için verilerinizi dışa aktarın.";
+"Import will replace all existing data." = "İçe aktarma mevcut tüm verileri değiştirecektir.";
+"Export Error" = "Dışa Aktarma Hatası";
+"Import Error" = "İçe Aktarma Hatası";
+"Confirm Import" = "İçe Aktarmayı Onayla";
+"Import and Replace All Data" = "İçe Aktar ve Tüm Verileri Değiştir";
+"Source" = "Kaynak";
+"Export Date" = "Dışa Aktarma Tarihi";
+"Schema Version" = "Şema Sürümü";
+"Data Summary" = "Veri Özeti";
+"cars" = "araç";
+"expenses" = "gider";
+"maintenance records" = "bakım kaydı";
+"notifications" = "bildirim";
+"Date Range" = "Tarih Aralığı";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Uyarı: İçe aktarma mevcut TÜM verileri SİLECEKTİR. Bu işlem geri alınamaz.";
+"export.preview.no_expenses" = "Gider yok";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Geçersiz dosya formatı. Lütfen geçerli bir yedekleme dosyası seçin.";
+"export.error.missing_metadata" = "Yedekleme dosyasında meta veriler eksik.";
+"export.error.missing_fields" = "Yedekleme dosyasında gerekli alanlar eksik.";
+"export.error.incompatible_schema %d %d" = "Bu yedekleme uyumsuz bir sürümden (mevcut: %d, dosya: %d).";
+"export.error.newer_schema %d %d" = "Bu yedekleme uygulamanın daha yeni bir sürümüyle oluşturuldu (mevcut: %d, dosya: %d). İçe aktarma başarısız olabilir veya veri kaybına neden olabilir.";
+"export.error.invalid_date" = "Yedekleme dosyasında geçersiz tarih bulundu.";
+"export.error.invalid_numeric %@" = "Alan için geçersiz sayısal değer: %@";
+"export.error.invalid_currency %@" = "Geçersiz para birimi kodu: %@";
+"export.error.invalid_enum %@ %@" = "Geçersiz %@ değeri: %@";
+"export.error.invalid_reference %@ %lld" = "Geçersiz referans: %@ kimliği %lld bulunamadı.";
+"export.error.corrupted" = "Yedekleme dosyası bozuk ve geri yüklenemiyor.";

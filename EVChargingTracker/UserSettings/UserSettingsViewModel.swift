@@ -9,14 +9,23 @@ import Foundation
 import UIKit
 import os
 
+@MainActor
 class UserSettingsViewModel: ObservableObject {
 
     static let onboardingCompletedKey = "isOnboardingComplete"
 
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
+    @Published var isExporting: Bool = false
+    @Published var isImporting: Bool = false
+    @Published var exportError: String?
+    @Published var importError: String?
+    @Published var showImportConfirmation: Bool = false
+    @Published var pendingImportURL: URL?
+    @Published var importPreviewData: ImportPreviewData?
 
     private let environment: EnvironmentService
+    private let backupService: BackupService
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
@@ -29,12 +38,14 @@ class UserSettingsViewModel: ObservableObject {
         environment: EnvironmentService = .shared,
         db: DatabaseManager = .shared,
         logger: Logger? = nil,
-        developerMode: DeveloperModeManager = .shared
+        developerMode: DeveloperModeManager = .shared,
+        backupService: BackupService = .shared
     ) {
         self.environment = environment
         self.db = db
         self.logger = logger ?? Logger(subsystem: "UserSettingsViewModel", category: "Views")
         self.developerMode = developerMode
+        self.backupService = backupService
 
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
@@ -423,4 +434,121 @@ class UserSettingsViewModel: ObservableObject {
     var allCars : [CarDto] {
         return _allCars
     }
+
+    // MARK: - Export/Import
+
+    func exportData() async -> URL? {
+        isExporting = true
+        exportError = nil
+
+        do {
+            let fileURL = try await backupService.exportData()
+            isExporting = false
+            logger.info("Export successful: \(fileURL.path)")
+            return fileURL
+        } catch {
+            isExporting = false
+            exportError = error.localizedDescription
+            logger.error("Export failed: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    func prepareImport(from fileURL: URL) async {
+        isImporting = true
+        importError = nil
+
+        do {
+            let exportData = try await backupService.parseExportFile(fileURL)
+
+            // Validate data
+            try backupService.validateExportData(exportData)
+
+            // Create preview data
+            let preview = ImportPreviewData(
+                deviceName: exportData.metadata.deviceName,
+                exportDate: exportData.metadata.createdAt,
+                appVersion: exportData.metadata.appVersion,
+                schemaVersion: exportData.metadata.databaseSchemaVersion,
+                carsCount: exportData.cars.count,
+                expensesCount: exportData.expenses.count,
+                maintenanceCount: exportData.plannedMaintenance.count,
+                notificationsCount: exportData.delayedNotifications.count,
+                dateRange: calculateDateRange(from: exportData.expenses)
+            )
+
+            isImporting = false
+            importPreviewData = preview
+            pendingImportURL = fileURL
+            showImportConfirmation = true
+        } catch {
+            isImporting = false
+            importError = error.localizedDescription
+            logger.error("Import preparation failed: \(error.localizedDescription)")
+        }
+    }
+
+    func confirmImport() async {
+        guard let fileURL = pendingImportURL else {
+            logger.error("No pending import URL")
+            return
+        }
+
+        isImporting = true
+        importError = nil
+        showImportConfirmation = false
+
+        do {
+            try await backupService.importData(from: fileURL)
+
+            isImporting = false
+            pendingImportURL = nil
+            importPreviewData = nil
+
+            // Refresh all data
+            refetchCars()
+
+            logger.info("Import successful")
+        } catch {
+            isImporting = false
+            importError = error.localizedDescription
+            logger.error("Import failed: \(error.localizedDescription)")
+        }
+    }
+
+    func cancelImport() {
+        pendingImportURL = nil
+        importPreviewData = nil
+        showImportConfirmation = false
+    }
+
+    private func calculateDateRange(from expenses: [ExportExpense]) -> String {
+        guard !expenses.isEmpty else {
+            return String(localized: "export.preview.no_expenses")
+        }
+
+        let dates = expenses.map { $0.date }
+        let earliest = dates.min() ?? Date()
+        let latest = dates.max() ?? Date()
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+
+        return "\(formatter.string(from: earliest)) - \(formatter.string(from: latest))"
+    }
+}
+
+// MARK: - Import Preview Data
+
+struct ImportPreviewData {
+    let deviceName: String
+    let exportDate: Date
+    let appVersion: String
+    let schemaVersion: Int
+    let carsCount: Int
+    let expensesCount: Int
+    let maintenanceCount: Int
+    let notificationsCount: Int
+    let dateRange: String
 }

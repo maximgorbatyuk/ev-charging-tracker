@@ -192,3 +192,40 @@
 "other" = "iнше";
 "Total records: %d, total pages: %d" = "Всього записів: %d, всього сторінок: %d";
 "Previous" = "Попередня";
+
+/* Export & Import */
+"Export & Import" = "Експорт і імпорт";
+"Export Data..." = "Експортувати дані...";
+"Import Data..." = "Імпортувати дані...";
+"Preparing export..." = "Підготовка експорту...";
+"Importing data..." = "Імпорт даних...";
+"Export your data to back it up or transfer to another device." = "Експортуйте дані для резервного копіювання або переносу на інший пристрій.";
+"Import will replace all existing data." = "Імпорт замінить всі існуючі дані.";
+"Export Error" = "Помилка експорту";
+"Import Error" = "Помилка імпорту";
+"Confirm Import" = "Підтвердіть імпорт";
+"Import and Replace All Data" = "Імпортувати і замінити всі дані";
+"Source" = "Джерело";
+"Export Date" = "Дата експорту";
+"Schema Version" = "Версія схеми";
+"Data Summary" = "Зведення даних";
+"cars" = "автомобілів";
+"expenses" = "витрат";
+"maintenance records" = "записів про обслуговування";
+"notifications" = "сповіщень";
+"Date Range" = "Діапазон дат";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Увага: Імпорт ВИДАЛИТЬ УСІ існуючі дані. Цю дію не можна скасувати.";
+"export.preview.no_expenses" = "Немає витрат";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Невірний формат файлу. Будь ласка, виберіть коректний файл резервної копії.";
+"export.error.missing_metadata" = "Відсутні метадані у файлі резервної копії.";
+"export.error.missing_fields" = "Відсутні обов'язкові поля у файлі резервної копії.";
+"export.error.incompatible_schema %d %d" = "Ця резервна копія створена несумісною версією (поточна: %d, файл: %d).";
+"export.error.newer_schema %d %d" = "Ця резервна копія створена новішою версією додатка (поточна: %d, файл: %d). Імпорт може не спрацювати або призвести до втрати даних.";
+"export.error.invalid_date" = "Знайдено невірну дату у файлі резервної копії.";
+"export.error.invalid_numeric %@" = "Невірне числове значення для поля: %@";
+"export.error.invalid_currency %@" = "Невірний код валюти: %@";
+"export.error.invalid_enum %@ %@" = "Невірне значення %@: %@";
+"export.error.invalid_reference %@ %lld" = "Невірне посилання: %@ з ID %lld не знайдено.";
+"export.error.corrupted" = "Файл резервної копії пошкоджено і не може бути відновлено.";

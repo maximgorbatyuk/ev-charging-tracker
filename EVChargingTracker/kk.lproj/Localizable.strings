@@ -201,3 +201,40 @@
 "other" = "басқа";
 "Total records: %d, total pages: %d" = "Жазбалар саны: %d, беттер саны: %d";
 "Previous" = "Алдыңғы";
+
+/* Export & Import */
+"Export & Import" = "Экспорт және импорт";
+"Export Data..." = "Деректерді экспорттау...";
+"Import Data..." = "Деректерді импорттау...";
+"Preparing export..." = "Экспорт дайындалуда...";
+"Importing data..." = "Деректер импортталуда...";
+"Export your data to back it up or transfer to another device." = "Деректеріңізді сақтық көшірме жасау немесе басқа құрылғыға көшіру үшін экспорттаңыз.";
+"Import will replace all existing data." = "Импорт барлық қолданыстағы деректерді алмастырады.";
+"Export Error" = "Экспорт қатесі";
+"Import Error" = "Импорт қатесі";
+"Confirm Import" = "Импортты растау";
+"Import and Replace All Data" = "Импорттау және барлық деректерді алмастыру";
+"Source" = "Дереккөз";
+"Export Date" = "Экспорт күні";
+"Schema Version" = "Схема нұсқасы";
+"Data Summary" = "Деректер қорытындысы";
+"cars" = "автокөліктер";
+"expenses" = "шығындар";
+"maintenance records" = "техникалық қызмет жазбалары";
+"notifications" = "хабарландырулар";
+"Date Range" = "Күн аралығы";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Ескерту: Импорт БАРЛЫҚ қолданыстағы деректерді ЖОЯДЫ. Бұл әрекетті болдырмауға болмайды.";
+"export.preview.no_expenses" = "Шығындар жоқ";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Файл пішімі жарамсыз. Жарамды сақтық көшірме файлын таңдаңыз.";
+"export.error.missing_metadata" = "Сақтық көшірме файлында метадеректер жоқ.";
+"export.error.missing_fields" = "Сақтық көшірме файлында қажетті өрістер жоқ.";
+"export.error.incompatible_schema %d %d" = "Бұл сақтық көшірме үйлесімсіз нұсқадан (ағымдағы: %d, файл: %d).";
+"export.error.newer_schema %d %d" = "Бұл сақтық көшірме қолданбаның жаңа нұсқасымен жасалған (ағымдағы: %d, файл: %d). Импорт сәтсіз болуы немесе деректер жоғалуы мүмкін.";
+"export.error.invalid_date" = "Сақтық көшірме файлында жарамсыз күн табылды.";
+"export.error.invalid_numeric %@" = "Өріс үшін жарамсыз сандық мән: %@";
+"export.error.invalid_currency %@" = "Валюта коды жарамсыз: %@";
+"export.error.invalid_enum %@ %@" = "Жарамсыз %@ мәні: %@";
+"export.error.invalid_reference %@ %lld" = "Жарамсыз сілтеме: %@ идентификаторы %lld табылмады.";
+"export.error.corrupted" = "Сақтық көшірме файлы бүлінген және қалпына келтірілмейді.";

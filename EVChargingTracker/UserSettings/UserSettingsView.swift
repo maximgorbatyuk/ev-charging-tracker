@@ -25,6 +25,9 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showAddCarModal = false
     @State private var confirmationModalDialogData = ConfirmationData.empty
     @State private var showDeveloperModeAlert = false
+    @State private var showExportShareSheet = false
+    @State private var exportFileURL: URL?
+    @State private var showImportFilePicker = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -191,6 +194,75 @@ struct UserSettingsView: SwiftUICore.View {
                                 .padding(.leading, 4)
                                 .foregroundColor(.primary)
                         }
+                    }
+                }
+
+                Section(header: Text(L("Export & Import"))) {
+                    // Export button
+                    Button(action: {
+                        analytics.trackEvent("export_data_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "export_data"
+                        ])
+
+                        Task {
+                            if let fileURL = await viewModel.exportData() {
+                                exportFileURL = fileURL
+                                showExportShareSheet = true
+                            }
+                        }
+                    }) {
+                        HStack {
+                            if viewModel.isExporting {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(.blue)
+                            }
+
+                            Text(viewModel.isExporting ? L("Preparing export...") : L("Export Data..."))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .disabled(viewModel.isExporting || viewModel.isImporting)
+
+                    // Import button
+                    Button(action: {
+                        analytics.trackEvent("import_data_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "import_data"
+                        ])
+
+                        showImportFilePicker = true
+                    }) {
+                        HStack {
+                            if viewModel.isImporting {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "square.and.arrow.down")
+                                    .foregroundColor(.orange)
+                            }
+
+                            Text(viewModel.isImporting ? L("Importing data...") : L("Import Data..."))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .disabled(viewModel.isExporting || viewModel.isImporting)
+
+                    // Info text
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(L("Export your data to back it up or transfer to another device."))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(L("Import will replace all existing data."))
+                            .font(.caption)
+                            .foregroundColor(.red)
                     }
                 }
 
@@ -432,7 +504,83 @@ struct UserSettingsView: SwiftUICore.View {
             } message: {
                 Text("Developer mode has been enabled. You can now access additional debugging tools and options.")
             }
+            .sheet(isPresented: $showExportShareSheet) {
+                if let url = exportFileURL {
+                    ShareSheet(items: [url])
+                }
+            }
+            .fileImporter(
+                isPresented: $showImportFilePicker,
+                allowedContentTypes: [.json],
+                allowsMultipleSelection: false
+            ) { result in
+                switch result {
+                case .success(let urls):
+                    if let url = urls.first {
+                        Task {
+                            await viewModel.prepareImport(from: url)
+                        }
+                    }
+                case .failure(let error):
+                    viewModel.importError = error.localizedDescription
+                }
+            }
+            .alert(L("Export Error"), isPresented: .constant(viewModel.exportError != nil)) {
+                Button(L("OK")) {
+                    viewModel.exportError = nil
+                }
+            } message: {
+                if let error = viewModel.exportError {
+                    Text(error)
+                }
+            }
+            .alert(L("Import Error"), isPresented: .constant(viewModel.importError != nil)) {
+                Button(L("OK")) {
+                    viewModel.importError = nil
+                }
+            } message: {
+                if let error = viewModel.importError {
+                    Text(error)
+                }
+            }
+            .alert(L("Confirm Import"), isPresented: $viewModel.showImportConfirmation) {
+                Button(L("Cancel"), role: .cancel) {
+                    viewModel.cancelImport()
+                }
+                Button(L("Import and Replace All Data"), role: .destructive) {
+                    Task {
+                        await viewModel.confirmImport()
+                    }
+                }
+            } message: {
+                if let preview = viewModel.importPreviewData {
+                    Text(buildImportPreviewMessage(preview))
+                }
+            }
         }
+    }
+
+    private func buildImportPreviewMessage(_ preview: ImportPreviewData) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+
+        return """
+        \(L("Source")): \(preview.deviceName)
+        \(L("Export Date")): \(dateFormatter.string(from: preview.exportDate))
+        \(L("App Version")): \(preview.appVersion)
+        \(L("Schema Version")): \(preview.schemaVersion)
+
+        \(L("Data Summary")):
+        • \(preview.carsCount) \(L("cars"))
+        • \(preview.expensesCount) \(L("expenses"))
+        • \(preview.maintenanceCount) \(L("maintenance records"))
+        • \(preview.notificationsCount) \(L("notifications"))
+
+        \(L("Date Range")): \(preview.dateRange)
+
+        ⚠️ \(L("Warning: Importing will DELETE ALL existing data. This cannot be undone."))
+        """
     }
 
     private func CallEditCarView(carToEdit: CarDto?) -> some SwiftUICore.View {
