@@ -197,143 +197,98 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                 }
 
-                Section(header: Text(L("Export & Import"))) {
-                    // Export button
-                    Button(action: {
-                        analytics.trackEvent("export_data_button_clicked", properties: [
-                            "screen": "user_settings_screen",
-                            "button_name": "export_data"
-                        ])
+                Section(header: Text(L("iCloud Backup"))) {
+                    let iCloudAvailable = viewModel.isiCloudAvailable()
 
-                        Task {
-                            if let fileURL = await viewModel.exportData() {
-                                exportFileURL = fileURL
-                                showExportShareSheet = true
-                            }
-                        }
-                    }) {
-                        HStack {
-                            if viewModel.isExporting {
-                                ProgressView()
-                                    .progressViewStyle(.circular)
-                                    .frame(width: 20, height: 20)
-                            } else {
-                                Image(systemName: "square.and.arrow.up")
-                                    .foregroundColor(.blue)
-                            }
+                    // iCloud not available warning
+                    if !iCloudAvailable {
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                                .font(.title3)
 
-                            Text(viewModel.isExporting ? L("Preparing export...") : L("Export Data..."))
-                                .padding(.leading, 4)
-                                .foregroundColor(.primary)
-                        }
-                    }
-                    .disabled(viewModel.isExporting || viewModel.isImporting)
-
-                    // Import button
-                    Button(action: {
-                        analytics.trackEvent("import_data_button_clicked", properties: [
-                            "screen": "user_settings_screen",
-                            "button_name": "import_data"
-                        ])
-
-                        showImportFilePicker = true
-                    }) {
-                        HStack {
-                            if viewModel.isImporting {
-                                ProgressView()
-                                    .progressViewStyle(.circular)
-                                    .frame(width: 20, height: 20)
-                            } else {
-                                Image(systemName: "square.and.arrow.down")
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(L("iCloud Not Available"))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
                                     .foregroundColor(.orange)
-                            }
 
-                            Text(viewModel.isImporting ? L("Importing data...") : L("Import Data..."))
-                                .padding(.leading, 4)
-                                .foregroundColor(.primary)
-                        }
-                    }
-                    .disabled(viewModel.isExporting || viewModel.isImporting)
-
-                    // Info text
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L("Export your data to back it up or transfer to another device."))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text(L("Import will replace all existing data."))
-                            .font(.caption)
-                            .foregroundColor(.red)
-                    }
-                }
-
-                if viewModel.isiCloudAvailable() {
-                    Section(header: Text(L("iCloud Backup"))) {
-                        // Manual backup button
-                        Button(action: {
-                            analytics.trackEvent("icloud_backup_button_clicked", properties: [
-                                "screen": "user_settings_screen",
-                                "button_name": "create_icloud_backup"
-                            ])
-
-                            Task {
-                                await viewModel.createiCloudBackup()
-                            }
-                        }) {
-                            HStack {
-                                if viewModel.isBackingUp {
-                                    ProgressView()
-                                        .progressViewStyle(.circular)
-                                        .frame(width: 20, height: 20)
-                                } else {
-                                    Image(systemName: "icloud.and.arrow.up")
-                                        .foregroundColor(.blue)
-                                }
-
-                                Text(viewModel.isBackingUp ? L("Creating backup...") : L("Backup Now"))
-                                    .padding(.leading, 4)
-                                    .foregroundColor(.primary)
-                            }
-                        }
-                        .disabled(viewModel.isBackingUp || viewModel.isImporting || viewModel.isExporting)
-
-                        // Last backup timestamp
-                        if let lastBackup = viewModel.lastBackupDate {
-                            HStack {
-                                Text(L("Last backup"))
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                Text(formatBackupDate(lastBackup))
-                                    .foregroundColor(.secondary)
-                            }
-                            .font(.caption)
-                        }
-
-                        // View backups button
-                        Button(action: {
-                            analytics.trackEvent("view_backups_button_clicked", properties: [
-                                "screen": "user_settings_screen",
-                                "button_name": "view_backup_history"
-                            ])
-
-                            viewModel.showBackupList = true
-                        }) {
-                            HStack {
-                                Image(systemName: "clock.arrow.circlepath")
-                                    .foregroundColor(.purple)
-
-                                Text(L("View Backup History"))
-                                    .padding(.leading, 4)
-                                    .foregroundColor(.primary)
-
-                                Spacer()
-
-                                Image(systemName: "chevron.right")
+                                Text(L("Please sign in to iCloud in Settings to enable backups."))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
                         }
+                        .padding(.vertical, 4)
+                    }
 
-                        // Info text
+                    // Manual backup button
+                    Button(action: {
+                        analytics.trackEvent("icloud_backup_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "create_icloud_backup"
+                        ])
+
+                        Task {
+                            await viewModel.createiCloudBackup()
+                        }
+                    }) {
+                        HStack {
+                            if viewModel.isBackingUp {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "icloud.and.arrow.up")
+                                    .foregroundColor(iCloudAvailable ? .blue : .gray)
+                            }
+
+                            Text(viewModel.isBackingUp ? L("Creating backup...") : L("Backup Now"))
+                                .padding(.leading, 4)
+                                .foregroundColor(iCloudAvailable ? .primary : .secondary)
+                        }
+                    }
+                    .disabled(!iCloudAvailable || viewModel.isBackingUp || viewModel.isImporting || viewModel.isExporting)
+
+                    // Last backup timestamp
+                    if let lastBackup = viewModel.lastBackupDate {
+                        HStack {
+                            Text(L("Last backup"))
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text(formatBackupDate(lastBackup))
+                                .foregroundColor(.secondary)
+                        }
+                        .font(.caption)
+                    }
+
+                    // View backups button
+                    Button(action: {
+                        analytics.trackEvent("view_backups_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "view_backup_history"
+                        ])
+
+                        viewModel.showBackupList = true
+                    }) {
+                        HStack {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundColor(iCloudAvailable ? .purple : .gray)
+
+                            Text(L("View Backup History"))
+                                .padding(.leading, 4)
+                                .foregroundColor(iCloudAvailable ? .primary : .secondary)
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .disabled(!iCloudAvailable)
+
+                    // Info text
+                    if iCloudAvailable {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(L("Automatic backups to iCloud keep your data safe."))
                                 .font(.caption)
@@ -464,6 +419,75 @@ struct UserSettingsView: SwiftUICore.View {
                         .buttonStyle(.plain)
 
                         
+                    }
+                }
+
+                Section(header: Text(L("Export & Import"))) {
+                    // Export button
+                    Button(action: {
+                        analytics.trackEvent("export_data_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "export_data"
+                        ])
+
+                        Task {
+                            if let fileURL = await viewModel.exportData() {
+                                exportFileURL = fileURL
+                                showExportShareSheet = true
+                            }
+                        }
+                    }) {
+                        HStack {
+                            if viewModel.isExporting {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(.blue)
+                            }
+
+                            Text(viewModel.isExporting ? L("Preparing export...") : L("Export Data..."))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .disabled(viewModel.isExporting || viewModel.isImporting)
+
+                    // Import button
+                    Button(action: {
+                        analytics.trackEvent("import_data_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "import_data"
+                        ])
+
+                        showImportFilePicker = true
+                    }) {
+                        HStack {
+                            if viewModel.isImporting {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "square.and.arrow.down")
+                                    .foregroundColor(.orange)
+                            }
+
+                            Text(viewModel.isImporting ? L("Importing data...") : L("Import Data..."))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .disabled(viewModel.isExporting || viewModel.isImporting)
+
+                    // Info text
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(L("Export your data to back it up or transfer to another device."))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(L("Import will replace all existing data."))
+                            .font(.caption)
+                            .foregroundColor(.red)
                     }
                 }
 

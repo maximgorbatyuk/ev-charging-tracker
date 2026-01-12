@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct iCloudBackupListView: View {
+struct iCloudBackupListView: SwiftUI.View {
     @ObservedObject var viewModel: UserSettingsViewModel
     @Environment(\.dismiss) var dismiss
 
@@ -16,7 +16,7 @@ struct iCloudBackupListView: View {
     @State private var backupToRestore: BackupInfo?
     @State private var showRestoreConfirmation = false
 
-    var body: some View {
+    var body: some SwiftUI.View {
         NavigationView {
             Group {
                 if viewModel.isLoadingBackups {
@@ -137,10 +137,10 @@ struct iCloudBackupListView: View {
     }
 }
 
-struct BackupRow: View {
+struct BackupRow: SwiftUI.View {
     let backup: BackupInfo
 
-    var body: some View {
+    var body: some SwiftUI.View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "icloud.and.arrow.down")

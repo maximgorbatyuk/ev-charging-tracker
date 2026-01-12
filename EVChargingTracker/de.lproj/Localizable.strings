@@ -235,6 +235,8 @@
 
 /* iCloud Backup */
 "iCloud Backup" = "iCloud-Sicherung";
+"iCloud Not Available" = "iCloud nicht verfügbar";
+"Please sign in to iCloud in Settings to enable backups." = "Bitte melden Sie sich in den Einstellungen bei iCloud an, um Sicherungen zu aktivieren.";
 "Backup Now" = "Jetzt sichern";
 "Creating backup..." = "Sicherung wird erstellt...";
 "Last backup" = "Letzte Sicherung";

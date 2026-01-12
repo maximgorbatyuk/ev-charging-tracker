@@ -234,6 +234,8 @@
 
 /* iCloud Backup */
 "iCloud Backup" = "iCloud Yedeği";
+"iCloud Not Available" = "iCloud Kullanılamıyor";
+"Please sign in to iCloud in Settings to enable backups." = "Yedeklemeyi etkinleştirmek için Ayarlar'dan iCloud'da oturum açın.";
 "Backup Now" = "Şimdi Yedekle";
 "Creating backup..." = "Yedek oluşturuluyor...";
 "Last backup" = "Son yedek";

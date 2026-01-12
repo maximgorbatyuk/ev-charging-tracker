@@ -232,6 +232,8 @@
 
 /* iCloud Backup */
 "iCloud Backup" = "iCloud Backup";
+"iCloud Not Available" = "iCloud Not Available";
+"Please sign in to iCloud in Settings to enable backups." = "Please sign in to iCloud in Settings to enable backups.";
 "Backup Now" = "Backup Now";
 "Creating backup..." = "Creating backup...";
 "Last backup" = "Last backup";

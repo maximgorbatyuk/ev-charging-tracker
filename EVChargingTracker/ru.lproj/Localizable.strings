@@ -234,6 +234,8 @@
 
 /* iCloud Backup */
 "iCloud Backup" = "Резервная копия iCloud";
+"iCloud Not Available" = "iCloud недоступен";
+"Please sign in to iCloud in Settings to enable backups." = "Войдите в iCloud в Настройках, чтобы включить резервное копирование.";
 "Backup Now" = "Создать резервную копию";
 "Creating backup..." = "Создание резервной копии...";
 "Last backup" = "Последняя копия";

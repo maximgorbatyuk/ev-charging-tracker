@@ -241,6 +241,8 @@
 
 /* iCloud Backup */
 "iCloud Backup" = "iCloud сақтық көшірмесі";
+"iCloud Not Available" = "iCloud қолжетімді емес";
+"Please sign in to iCloud in Settings to enable backups." = "Сақтық көшірмелерді қосу үшін Баптауларда iCloud-қа кіріңіз.";
 "Backup Now" = "Қазір сақтық көшірмесін жасау";
 "Creating backup..." = "Сақтық көшірме жасалуда...";
 "Last backup" = "Соңғы сақтық көшірме";
