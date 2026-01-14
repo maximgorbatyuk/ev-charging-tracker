@@ -255,3 +255,7 @@
 "backup.error.icloud_not_available" = "iCloud is not available. Please sign in to iCloud in Settings.";
 "backup.error.network_unavailable" = "No internet connection. Please check your network.";
 "backup.error.icloud_storage_full" = "iCloud storage is full. Please free up space or upgrade your plan.";
+
+/* Automatic Backup */
+"Automatic Backup" = "Automatic Backup";
+"Last: " = "Last: ";

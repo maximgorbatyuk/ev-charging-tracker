@@ -32,8 +32,13 @@ class UserSettingsViewModel: ObservableObject {
     @Published var isLoadingBackups: Bool = false
     @Published var showBackupList: Bool = false
 
+    // Automatic Backup
+    @Published var isAutomaticBackupEnabled: Bool = false
+    @Published var lastAutomaticBackupDate: Date?
+
     private let environment: EnvironmentService
     private let backupService: BackupService
+    private let backgroundTaskManager: BackgroundTaskManager
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
@@ -47,13 +52,15 @@ class UserSettingsViewModel: ObservableObject {
         db: DatabaseManager = .shared,
         logger: Logger? = nil,
         developerMode: DeveloperModeManager = .shared,
-        backupService: BackupService = .shared
+        backupService: BackupService = .shared,
+        backgroundTaskManager: BackgroundTaskManager = .shared
     ) {
         self.environment = environment
         self.db = db
         self.logger = logger ?? Logger(subsystem: "UserSettingsViewModel", category: "Views")
         self.developerMode = developerMode
         self.backupService = backupService
+        self.backgroundTaskManager = backgroundTaskManager
 
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
@@ -71,6 +78,10 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency)
             } ?? []
+
+        // Sync automatic backup state from BackgroundTaskManager
+        self.isAutomaticBackupEnabled = backgroundTaskManager.isAutomaticBackupEnabled
+        self.lastAutomaticBackupDate = backgroundTaskManager.lastAutomaticBackupDate
     }
 
     func handleVersionTap() -> Void {
@@ -629,6 +640,19 @@ class UserSettingsViewModel: ObservableObject {
 
     func isiCloudAvailable() -> Bool {
         return backupService.isiCloudAvailable()
+    }
+
+    // MARK: - Automatic Backup
+
+    func toggleAutomaticBackup(_ enabled: Bool) {
+        isAutomaticBackupEnabled = enabled
+        backgroundTaskManager.isAutomaticBackupEnabled = enabled
+        logger.info("Automatic backup \(enabled ? "enabled" : "disabled")")
+    }
+
+    func refreshAutomaticBackupState() {
+        isAutomaticBackupEnabled = backgroundTaskManager.isAutomaticBackupEnabled
+        lastAutomaticBackupDate = backgroundTaskManager.lastAutomaticBackupDate
     }
 }
 

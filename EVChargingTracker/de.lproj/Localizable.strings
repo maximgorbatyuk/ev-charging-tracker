@@ -258,3 +258,7 @@
 "backup.error.icloud_not_available" = "iCloud ist nicht verfügbar. Bitte melden Sie sich in den Einstellungen bei iCloud an.";
 "backup.error.network_unavailable" = "Keine Internetverbindung. Bitte überprüfen Sie Ihr Netzwerk.";
 "backup.error.icloud_storage_full" = "iCloud-Speicher ist voll. Bitte geben Sie Speicherplatz frei oder upgraden Sie Ihren Plan.";
+
+/* Automatic Backup */
+"Automatic Backup" = "Automatische Sicherung";
+"Last: " = "Letzte: ";

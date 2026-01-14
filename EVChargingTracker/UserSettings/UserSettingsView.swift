@@ -287,6 +287,31 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                     .disabled(!iCloudAvailable)
 
+                    // Automatic backup toggle
+                    Toggle(isOn: Binding(
+                        get: { viewModel.isAutomaticBackupEnabled },
+                        set: { newValue in
+                            viewModel.toggleAutomaticBackup(newValue)
+                        }
+                    )) {
+                        HStack {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundColor(iCloudAvailable ? .green : .gray)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(L("Automatic Backup"))
+                                    .foregroundColor(iCloudAvailable ? .primary : .secondary)
+
+                                if let lastAutoBackup = viewModel.lastAutomaticBackupDate {
+                                    Text(L("Last: \(formatBackupDate(lastAutoBackup))"))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                    }
+                    .disabled(!iCloudAvailable)
+
                     // Info text
                     if iCloudAvailable {
                         VStack(alignment: .leading, spacing: 4) {
@@ -582,6 +607,7 @@ struct UserSettingsView: SwiftUICore.View {
             .onAppear {
                 analytics.trackScreen("user_settings_screen")
                 refreshData()
+                viewModel.refreshAutomaticBackupState()
             }
             .refreshable {
                 refreshData()

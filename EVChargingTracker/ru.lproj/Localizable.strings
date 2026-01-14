@@ -257,3 +257,7 @@
 "backup.error.icloud_not_available" = "iCloud недоступен. Войдите в iCloud в Настройках.";
 "backup.error.network_unavailable" = "Нет подключения к интернету. Проверьте сеть.";
 "backup.error.icloud_storage_full" = "Хранилище iCloud заполнено. Освободите место или обновите тариф.";
+
+/* Automatic Backup */
+"Automatic Backup" = "Автоматическое резервное копирование";
+"Last: " = "Последнее: ";

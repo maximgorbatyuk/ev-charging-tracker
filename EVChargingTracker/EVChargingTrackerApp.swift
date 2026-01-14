@@ -67,6 +67,12 @@ final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNU
         FirebaseApp.configure()
         #endif
 
+        // Register background tasks for automatic backups
+        Task { @MainActor in
+            BackgroundTaskManager.shared.registerBackgroundTasks()
+            BackgroundTaskManager.shared.scheduleNextBackup()
+        }
+
         return true
     }
 
@@ -83,5 +89,12 @@ final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNU
                                 withCompletionHandler completion: @escaping () -> Void) {
         // route user based on response.actionIdentifier or notification.request.content.userInfo
         completion()
+    }
+
+    // Handle app becoming active to retry failed automatic backups
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        Task { @MainActor in
+            await BackgroundTaskManager.shared.retryIfNeeded()
+        }
     }
 }

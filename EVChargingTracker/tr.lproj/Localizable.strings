@@ -257,3 +257,7 @@
 "backup.error.icloud_not_available" = "iCloud kullanılamıyor. Lütfen Ayarlar'dan iCloud'da oturum açın.";
 "backup.error.network_unavailable" = "İnternet bağlantısı yok. Lütfen ağınızı kontrol edin.";
 "backup.error.icloud_storage_full" = "iCloud depolama alanı dolu. Lütfen alan boşaltın veya planınızı yükseltin.";
+
+/* Automatic Backup */
+"Automatic Backup" = "Otomatik Yedekleme";
+"Last: " = "Son: ";

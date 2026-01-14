@@ -29,9 +29,23 @@ final class BackupService: ObservableObject {
     }
 
     private var iCloudBackupDirectory: URL? {
-        guard let containerURL = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
+        guard isiCloudAvailable() else {
+            logger.warning("iCloud not available - ubiquity identity token is nil")
             return nil
         }
+
+        var bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.evchargingtracker.EVChargingTracker"
+        if (bundleIdentifier.contains("Debug")) {
+            bundleIdentifier = bundleIdentifier.replacingOccurrences(of: "Debug", with: "")
+        }
+
+        let containerIdentifier = "iCloud.\(bundleIdentifier)"
+
+        guard let containerURL = FileManager.default.url(forUbiquityContainerIdentifier: containerIdentifier) ?? FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
+            logger.warning("Failed to get iCloud container URL for identifier: \(containerIdentifier)")
+            return nil
+        }
+
         return containerURL
             .appendingPathComponent("Documents", isDirectory: true)
             .appendingPathComponent("ev_charging_tracker", isDirectory: true)
@@ -485,7 +499,8 @@ final class BackupService: ObservableObject {
     // MARK: - iCloud Backup
 
     func isiCloudAvailable() -> Bool {
-        return FileManager.default.ubiquityIdentityToken != nil
+        let token = FileManager.default.ubiquityIdentityToken;
+        return token != nil
     }
 
     func checkiCloudStatus() throws {
