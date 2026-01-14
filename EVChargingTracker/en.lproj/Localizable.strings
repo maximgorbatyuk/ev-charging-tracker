@@ -245,7 +245,11 @@
 "No backups found" = "No backups found";
 "Create your first backup to get started" = "Create your first backup to get started";
 "Delete Backup?" = "Delete Backup?";
-"Are you sure you want to delete the backup from %@?" = "Are you sure you want to delete the backup from %@?";
+"Are you sure you want to delete backup from %@?" = "Are you sure you want to delete backup from %@?";
+"Delete All Backups?" = "Delete All Backups?";
+"Are you sure you want to delete all backups? This cannot be undone." = "Are you sure you want to delete all backups? This cannot be undone.";
+"Delete All" = "Delete All";
+"Delete All Backups" = "Delete All Backups";
 "Restore from Backup?" = "Restore from Backup?";
 "This will replace all current data with the backup from %@. This cannot be undone." = "This will replace all current data with the backup from %@. This cannot be undone.";
 "Restore" = "Restore";

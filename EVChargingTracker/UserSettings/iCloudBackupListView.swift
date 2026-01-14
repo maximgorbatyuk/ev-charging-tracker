@@ -15,6 +15,7 @@ struct iCloudBackupListView: SwiftUI.View {
     @State private var showDeleteConfirmation = false
     @State private var backupToRestore: BackupInfo?
     @State private var showRestoreConfirmation = false
+    @State private var showDeleteAllConfirmation = false
 
     var body: some SwiftUI.View {
         NavigationView {
@@ -55,6 +56,21 @@ struct iCloudBackupListView: SwiftUI.View {
                                         Label(L("Delete"), systemImage: "trash")
                                     }
                                 }
+                        }
+
+                        if !viewModel.iCloudBackups.isEmpty {
+                            Section {
+                                Button(role: .destructive) {
+                                    showDeleteAllConfirmation = true
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "trash.circle.fill")
+                                            .foregroundColor(.red)
+                                        Text(L("Delete All Backups"))
+                                            .foregroundColor(.red)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -122,6 +138,16 @@ struct iCloudBackupListView: SwiftUI.View {
                 if let error = viewModel.backupError {
                     Text(error)
                 }
+            }
+            .alert(L("Delete All Backups?"), isPresented: $showDeleteAllConfirmation) {
+                Button(L("Cancel"), role: .cancel) { }
+                Button(L("Delete All"), role: .destructive) {
+                    Task {
+                        await viewModel.deleteAlliCloudBackups()
+                    }
+                }
+            } message: {
+                Text(L("Are you sure you want to delete all backups? This cannot be undone."))
             }
         }
         .task {

@@ -12,6 +12,18 @@ import os
 @MainActor
 class UserSettingsViewModel: ObservableObject {
 
+    // MARK: - Haptic Feedback
+
+    private func triggerSuccessHaptic() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+
+    private func triggerErrorHaptic() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.error)
+    }
+
     static let onboardingCompletedKey = "isOnboardingComplete"
 
     @Published var defaultCurrency: Currency
@@ -463,11 +475,13 @@ class UserSettingsViewModel: ObservableObject {
         do {
             let fileURL = try await backupService.exportData()
             isExporting = false
+            triggerSuccessHaptic()
             logger.info("Export successful: \(fileURL.path)")
             return fileURL
         } catch {
             isExporting = false
             exportError = error.localizedDescription
+            triggerErrorHaptic()
             logger.error("Export failed: \(error.localizedDescription)")
             return nil
         }
@@ -527,10 +541,12 @@ class UserSettingsViewModel: ObservableObject {
             // Refresh all data
             refetchCars()
 
+            triggerSuccessHaptic()
             logger.info("Import successful")
         } catch {
             isImporting = false
             importError = error.localizedDescription
+            triggerErrorHaptic()
             logger.error("Import failed: \(error.localizedDescription)")
         }
     }
@@ -562,6 +578,7 @@ class UserSettingsViewModel: ObservableObject {
     func createiCloudBackup() async {
         guard backupService.isiCloudAvailable() else {
             backupError = String(localized: "backup.error.icloud_not_available")
+            triggerErrorHaptic()
             return
         }
 
@@ -572,10 +589,12 @@ class UserSettingsViewModel: ObservableObject {
             let backupInfo = try await backupService.createiCloudBackup()
             isBackingUp = false
             lastBackupDate = backupInfo.createdAt
+            triggerSuccessHaptic()
             logger.info("iCloud backup created successfully")
         } catch {
             isBackingUp = false
             backupError = error.localizedDescription
+            triggerErrorHaptic()
             logger.error("iCloud backup failed: \(error.localizedDescription)")
         }
     }
@@ -620,10 +639,12 @@ class UserSettingsViewModel: ObservableObject {
             // Refresh all data
             refetchCars()
 
+            triggerSuccessHaptic()
             logger.info("Restored from iCloud backup successfully")
         } catch {
             isImporting = false
             importError = error.localizedDescription
+            triggerErrorHaptic()
             logger.error("Failed to restore from iCloud backup: \(error.localizedDescription)")
         }
     }
@@ -635,10 +656,28 @@ class UserSettingsViewModel: ObservableObject {
             // Reload backups
             await loadiCloudBackups()
 
+            triggerSuccessHaptic()
             logger.info("Deleted iCloud backup successfully")
         } catch {
             backupError = error.localizedDescription
+            triggerErrorHaptic()
             logger.error("Failed to delete iCloud backup: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteAlliCloudBackups() async {
+        do {
+            try await backupService.deleteAlliCloudBackups()
+
+            // Reload backups
+            await loadiCloudBackups()
+
+            triggerSuccessHaptic()
+            logger.info("Deleted all iCloud backups successfully")
+        } catch {
+            backupError = error.localizedDescription
+            triggerErrorHaptic()
+            logger.error("Failed to delete all iCloud backups: \(error.localizedDescription)")
         }
     }
 

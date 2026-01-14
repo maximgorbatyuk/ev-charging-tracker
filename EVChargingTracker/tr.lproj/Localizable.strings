@@ -247,7 +247,11 @@
 "No backups found" = "Yedek bulunamadı";
 "Create your first backup to get started" = "Başlamak için ilk yedeğinizi oluşturun";
 "Delete Backup?" = "Yedek Silinsin mi?";
-"Are you sure you want to delete the backup from %@?" = "%@ tarihli yedeği silmek istediğinizden emin misiniz?";
+"Are you sure you want to delete backup from %@?" = "%@ tarihli yedeği silmek istediğinizden emin misiniz?";
+"Delete All Backups?" = "Tüm Yedekler Silinsin mi?";
+"Are you sure you want to delete all backups? This cannot be undone." = "Tüm yedekleri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"Delete All" = "Tümünü Sil";
+"Delete All Backups" = "Tüm Yedekleri Sil";
 "Restore from Backup?" = "Yedekten Geri Yükle?";
 "This will replace all current data with the backup from %@. This cannot be undone." = "Bu, tüm mevcut verileri %@ tarihli yedekle değiştirecektir. Bu işlem geri alınamaz.";
 "Restore" = "Geri Yükle";

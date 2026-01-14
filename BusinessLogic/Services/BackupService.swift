@@ -716,6 +716,26 @@ final class BackupService: ObservableObject {
         }
     }
 
+    func deleteAlliCloudBackups() async throws {
+        try checkiCloudStatus()
+
+        guard let backupDirectory = iCloudBackupDirectory else {
+            throw BackupError.iCloudNotAvailable
+        }
+
+        let backups = try await listiCloudBackups()
+
+        guard !backups.isEmpty else {
+            return
+        }
+
+        for backup in backups {
+            try await deleteiCloudBackup(backup)
+        }
+
+        self.logger.info("Deleted all iCloud backups: \(backups.count) files")
+    }
+
     private func createiCloudDirectoryIfNeeded() async throws {
         guard let backupDirectory = iCloudBackupDirectory else {
             throw BackupError.iCloudNotAvailable
