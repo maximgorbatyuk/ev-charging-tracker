@@ -815,6 +815,8 @@ struct BackupInfo: Identifiable, Hashable {
 
     var id: String { fileURL.absoluteString }
 
+    var isDevBackup: Bool { fileName.contains("_dev_") }
+
     var formattedFileSize: String {
         let formatter = ByteCountFormatter()
         formatter.countStyle = .file
@@ -834,6 +836,7 @@ enum BackupError: LocalizedError {
     case iCloudNotAvailable
     case networkUnavailable
     case iCloudStorageFull
+    case devBackupRestoreOnProdApp
 
     var errorDescription: String? {
         switch self {
@@ -843,6 +846,8 @@ enum BackupError: LocalizedError {
             return String(localized: "backup.error.network_unavailable")
         case .iCloudStorageFull:
             return String(localized: "backup.error.icloud_storage_full")
+        case .devBackupRestoreOnProdApp:
+            return String(localized: "backup.error.dev_backup_restore_on_prod_app")
         }
     }
 }

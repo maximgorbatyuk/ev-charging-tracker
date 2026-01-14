@@ -264,6 +264,7 @@
 "backup.error.icloud_not_available" = "iCloud қолжетімді емес. Баптауларда iCloud-қа кіріңіз.";
 "backup.error.network_unavailable" = "Интернет байланысы жоқ. Желіңізді тексеріңіз.";
 "backup.error.icloud_storage_full" = "iCloud қоймасы толған. Орын босатыңыз немесе тарифіңізді жаңартыңыз.";
+"backup.error.dev_backup_restore_on_prod_app" = "Өндіріс көшірмесін production құрылымында қалпына келтіру мүмкін емес. Production көшірмесін қолданыңыз.";
 
 /* Automatic Backup */
 "Automatic Backup" = "Автоматты сақтық көшірме";

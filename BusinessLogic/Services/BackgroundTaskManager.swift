@@ -62,8 +62,8 @@ final class BackgroundTaskManager: ObservableObject {
 
     // MARK: - Initialization
 
-    private init(backupService: BackupService = .shared) {
-        self.backupService = backupService
+    private init(backupService: BackupService? = nil) {
+        self.backupService = backupService ?? BackupService.shared
 
         // Load saved preferences
         self.isAutomaticBackupEnabled = UserDefaults.standard.bool(forKey: UserDefaultsKey.automaticBackupEnabled)

@@ -149,6 +149,17 @@ struct BackupRow: SwiftUI.View {
                 Text(formatDate(backup.createdAt))
                     .font(.headline)
 
+                if backup.isDevBackup {
+                    Text("dev")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.orange.opacity(0.2))
+                        .foregroundColor(.orange)
+                        .cornerRadius(4)
+                }
+
                 Spacer()
 
                 Text(backup.formattedFileSize)

@@ -610,6 +610,10 @@ class UserSettingsViewModel: ObservableObject {
         importError = nil
 
         do {
+            if backupInfo.isDevBackup && !environment.isDevelopmentMode() {
+                throw BackupError.devBackupRestoreOnProdApp
+            }
+
             try await backupService.restoreFromiCloudBackup(backupInfo)
             isImporting = false
 

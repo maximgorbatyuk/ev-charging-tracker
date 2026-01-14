@@ -253,6 +253,7 @@
 "backup.error.icloud_not_available" = "iCloud недоступний. Увійдіть в iCloud в Налаштуваннях.";
 "backup.error.network_unavailable" = "Немає підключення до інтернету. Перевірте мережу.";
 "backup.error.icloud_storage_full" = "Сховище iCloud заповнене. Звільніть місце або оновіть тариф.";
+"backup.error.dev_backup_restore_on_prod_app" = "Резервну копію розробки не можна відновити на production-збірці. Використайте production резервну копію.";
 
 /* Automatic Backup */
 "Automatic Backup" = "Автоматичне резервне копіювання";
