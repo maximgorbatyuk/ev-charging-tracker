@@ -1,27 +1,7 @@
-# Change logs
+# Changelog
 
 ## 2026.1.4 (2026-01-16)
 
-### What's New
-
-🔹 **Data Export & Import**
-Export all your charging data to a JSON file and import it anytime. Perfect for backing up data, moving to a new device, or sharing between devices. Exported files can be shared via AirDrop, Messages, Mail, or saved to Files.
-
-🔹 **iCloud Backup**
-Automatically back up your data to iCloud Drive. View all your backups in the Settings, restore from any device, and let the app manage multiple backups automatically.
-
-🔹 **Enhanced Safety**
-- Pre-import preview shows exactly what data will be restored
-- Automatic safety backups created before any import
-- Automatic rollback if import fails - your data is always safe
-
-🔹 **Smart Backup Management**
-- Keeps last 5 iCloud backups automatically
-- Keeps last 3 safety backups locally
-- View backup dates, sizes, and source devices
-- Delete individual backups easily
-
-### Development changes
 - **Export/Import functionality**
   - Export all app data (cars, expenses, maintenance, notifications, settings) to JSON files
   - Import data from JSON files with comprehensive validation and safety mechanisms

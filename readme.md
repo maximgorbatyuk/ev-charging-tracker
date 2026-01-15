@@ -56,6 +56,12 @@ Perfect for EV owners who want to understand their true cost of ownership and op
 - 6.5: 1242 x 2688
 - 6.3: 1179 x 2556
 
+## Docs
+
+- Development: [changelog.md](changelog.md)
+- Release notes for App Store: [appstore_releases](appstore_releases)
+- Privacy policy: [privacy-policy.md](privacy-policy.md)
+
 ## Contributors
 
 - [@maximgorbatyuk](https://github.com/maximgorbatyuk) - Product ownership, iOS development
