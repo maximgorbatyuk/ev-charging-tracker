@@ -422,4 +422,15 @@ class ExpensesRepository {
             return false
         }
     }
+
+    func updateCarExpensesCurrency(_ car: Car) -> Bool {
+        let recordToUpdateQuery = chargingSessionsTable.filter(carIdColumn == car.id)
+        do {
+            try db.run(recordToUpdateQuery.update(currency <- car.expenseCurrency.rawValue))
+            return true
+        } catch {
+            logger.error("Update failed: \(error)")
+            return false
+        }
+    }
 }
