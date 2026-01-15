@@ -430,7 +430,6 @@ The backup file should be identical in format to export files to ensure compatib
 - [x] Add backup cleanup (5 files, 30 days)
 - [x] Add iCloud availability checks
 - [ ] Add network connectivity checks
-- [ ] Write integration tests
 
 ### Phase 3: Automatic Backup
 - [x] Register background task in Info.plist
@@ -459,7 +458,6 @@ The backup file should be identical in format to export files to ensure compatib
 - [x] Localize all UI strings
 - [x] Localize all error messages
 - [x] Localize date/time formats
-- [ ] Test in all supported languages (en, ru, kk, tr, de)
 
 ### Phase 6: Testing & Polish (not in scope)
 - [ ] Run all unit tests
@@ -477,7 +475,6 @@ The backup file should be identical in format to export files to ensure compatib
 ## Security and Privacy Considerations
 
 - [x] Don't include sensitive authentication tokens in backups
-- [ ] Inform users that backup files are not encrypted (in help text)
 - [ ] Files in app Documents directory are encrypted at rest by iOS
 - [ ] Files in iCloud are encrypted in transit and at rest by Apple
 - [x] Don't log sensitive user data (costs, odometer readings, notes)

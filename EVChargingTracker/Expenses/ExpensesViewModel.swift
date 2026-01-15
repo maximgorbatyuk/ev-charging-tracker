@@ -317,7 +317,12 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func getTotalCost() -> Double {
-        return expenses.compactMap { $0.cost }.reduce(0, +)
+        guard let car = selectedCarForExpenses, let carId = car.id else {
+            return 0
+        }
+        return chargingSessionsRepository.getTotalCost(
+            carId: carId,
+            expenseTypeFilters: _currentExpenseTypeFilters)
     }
 
     var selectedCarForExpenses: Car? {
