@@ -105,7 +105,7 @@ Since all data is stored locally on your device, no cross-border data transfers 
 
 If you have questions about this Privacy Policy or our privacy practices, please contact us at:
 
-**Email**: [Your Contact Email]  
+**Email**: [maximgorbatyuk191093@gmail.com](mailto:maximgorbatyuk191093@gmail.com)  
 **GitHub**: https://github.com/maximgorbatyuk/ev-charging-tracker
 
 ## Consent
