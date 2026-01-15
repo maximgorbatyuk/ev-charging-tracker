@@ -1,6 +1,6 @@
 # Privacy Policy for EV Charging Tracker
 
-**Last Updated: October 19, 2025**
+**Last Updated: January 15, 2026**
 
 ## Introduction
 
@@ -34,21 +34,18 @@ We use the collected information to:
 
 ## Data Storage
 
-All data collected by EV Charging Tracker is stored locally on your device. We do not:
+All your personal data (charging sessions, vehicle information, expenses) is stored locally on your device. We do not transfer your personal data to external servers.
 
-- Transfer your data to external servers
-- Share your data with third parties
-- Use cloud storage services (unless you explicitly enable iCloud backup)
+## iCloud Backup
 
-## iCloud Backup (Optional)
+EV Charging Tracker offers iCloud backup functionality to help you safeguard your data and sync it across your Apple devices. When you enable iCloud backup in the app:
 
-If you enable iCloud backup on your device, your EV Charging Tracker data may be backed up to your personal iCloud account. This backup is:
+- Your charging sessions, vehicle data, and expense records are backed up to your personal iCloud account
+- Backups are encrypted by Apple and protected by your Apple ID
+- Data is accessible only through your iCloud account
+- Backup and sync is subject to [Apple's Privacy Policy](https://www.apple.com/legal/privacy/)
 
-- Encrypted by Apple
-- Accessible only through your iCloud account
-- Subject to Apple's Privacy Policy
-
-You can disable iCloud backup for this app in your device settings.
+You can enable or disable iCloud backup at any time in the app settings. If disabled, all data remains stored locally on your device only.
 
 ## Location Services
 
@@ -59,9 +56,27 @@ If you grant location permissions, we use your location data to:
 
 You can revoke location permissions at any time through your device settings. The app will continue to function without location services, but you'll need to manually enter location information if desired.
 
+## Analytics
+
+We use Google Analytics to collect anonymous usage data to help us understand how the app is used and improve the user experience. This includes:
+
+- **App usage patterns**: Which features are used, screen views, and user interactions
+- **Device information**: Device type, operating system version, and app version
+- **Performance data**: App launch times, crashes, and errors
+
+Google Analytics data is:
+
+- Anonymous and does not include your personal charging data, vehicle information, or expense records
+- Processed by Google in accordance with [Google's Privacy Policy](https://policies.google.com/privacy)
+- Used solely to improve app functionality and user experience
+
+You can limit ad tracking and analytics collection through your device's privacy settings (Settings > Privacy & Security > Tracking).
+
 ## Data Sharing and Third Parties
 
-We do not sell, trade, or transfer your personal information to third parties. Your data remains on your device and is not accessible to us or any third parties.
+We do not sell, trade, or transfer your personal information to third parties. Your personal data (charging sessions, expenses, vehicle information) remains on your device and in your personal iCloud account (if enabled).
+
+We share anonymous usage data with Google Analytics as described above to improve the app.
 
 ## Data Security
 
@@ -111,7 +126,3 @@ If you have questions about this Privacy Policy or our privacy practices, please
 ## Consent
 
 By using EV Charging Tracker, you consent to this Privacy Policy and agree to its terms.
-
----
-
-**Note**: This privacy policy is specifically designed for an app that stores data locally on the device. If you implement any cloud services, analytics tools, advertising networks, or third-party integrations in the future, this policy must be updated accordingly.
