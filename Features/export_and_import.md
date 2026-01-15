@@ -130,8 +130,8 @@ The backup file should be identical in format to export files to ensure compatib
 ### iCloud Requirements and Error Handling
 - [x] Check if user is signed into iCloud before attempting backup
 - [x] If not signed in: "You must be signed into iCloud to use automatic backups."
-- [ ] Check network connectivity before attempting backup
-- [ ] If offline: "No internet connection. Backup requires network access."
+- [x] Check network connectivity before attempting backup
+- [x] If offline: "No internet connection. Backup requires network access."
 - [ ] Check iCloud storage quota before backup
 - [ ] If storage full: "iCloud storage is full. Please free up space or upgrade your plan."
 - [ ] Handle iCloud sync conflicts gracefully (if backup modified on another device)
@@ -157,7 +157,7 @@ The backup file should be identical in format to export files to ensure compatib
 ### Restore Error Handling
 - [x] If no backups exist: "No backups found in iCloud."
 - [ ] If backup file is corrupted: "This backup file is corrupted and cannot be restored."
-- [ ] If network unavailable: "Cannot access iCloud. Check your internet connection."
+- [x] If network unavailable: "Cannot access iCloud. Check your internet connection."
 - [x] All restore errors should offer option to try again or cancel
 
 ## 5. Delete Backups
@@ -254,9 +254,9 @@ The backup file should be identical in format to export files to ensure compatib
 - [x] Lock UI during operations to prevent user from triggering multiple operations
 
 ### Network and Connectivity
-- [ ] Check network reachability before iCloud operations
+- [x] Check network reachability before iCloud operations
 - [x] Use `Network` framework or check `FileManager.ubiquityIdentityToken`
-- [ ] Handle offline mode gracefully with user-friendly error messages
+- [x] Handle offline mode gracefully with user-friendly error messages
 - [ ] Don't retry iCloud operations excessively (avoid battery drain)
 
 ### Error Handling and Logging
@@ -429,7 +429,7 @@ The backup file should be identical in format to export files to ensure compatib
 - [x] Implement restore from backup
 - [x] Add backup cleanup (5 files, 30 days)
 - [x] Add iCloud availability checks
-- [ ] Add network connectivity checks
+- [x] Add network connectivity checks
 
 ### Phase 3: Automatic Backup
 - [x] Register background task in Info.plist

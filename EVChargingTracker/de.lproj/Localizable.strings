@@ -248,7 +248,7 @@
 "No backups found" = "Keine Sicherungen gefunden";
 "Create your first backup to get started" = "Erstellen Sie Ihre erste Sicherung, um loszulegen";
 "Delete Backup?" = "Sicherung löschen?";
-"Are you sure you want to delete backup from %@?" = "Möchten Sie die Sicherung vom %@ wirklich löschen?";
+"Are you sure you want to delete the backup from %@?" = "Möchten Sie die Sicherung vom %@ wirklich löschen?";
 "Delete All Backups?" = "Alle Sicherungen löschen?";
 "Are you sure you want to delete all backups? This cannot be undone." = "Möchten Sie wirklich alle Sicherungen löschen? Dies kann nicht rückgängig gemacht werden.";
 "Delete All" = "Alle löschen";
@@ -263,6 +263,10 @@
 "backup.error.network_unavailable" = "Keine Internetverbindung. Bitte überprüfen Sie Ihr Netzwerk.";
 "backup.error.icloud_storage_full" = "iCloud-Speicher ist voll. Bitte geben Sie Speicherplatz frei oder upgraden Sie Ihren Plan.";
 "backup.error.dev_backup_restore_on_prod_app" = "Entwicklungssicherung kann nicht auf Production-Build wiederhergestellt werden. Verwenden Sie eine Production-Sicherung.";
+
+/* Network Warning */
+"No Internet Connection" = "Keine Internetverbindung";
+"Connect to the internet to create or restore backups." = "Verbinden Sie sich mit dem Internet, um Sicherungen zu erstellen oder wiederherzustellen.";
 
 /* Automatic Backup */
 "Automatic Backup" = "Automatische Sicherung";

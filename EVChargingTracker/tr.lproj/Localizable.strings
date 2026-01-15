@@ -247,7 +247,7 @@
 "No backups found" = "Yedek bulunamadı";
 "Create your first backup to get started" = "Başlamak için ilk yedeğinizi oluşturun";
 "Delete Backup?" = "Yedek Silinsin mi?";
-"Are you sure you want to delete backup from %@?" = "%@ tarihli yedeği silmek istediğinizden emin misiniz?";
+"Are you sure you want to delete the backup from %@?" = "%@ tarihli yedeği silmek istediğinizden emin misiniz?";
 "Delete All Backups?" = "Tüm Yedekler Silinsin mi?";
 "Are you sure you want to delete all backups? This cannot be undone." = "Tüm yedekleri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
 "Delete All" = "Tümünü Sil";
@@ -262,6 +262,10 @@
 "backup.error.network_unavailable" = "İnternet bağlantısı yok. Lütfen ağınızı kontrol edin.";
 "backup.error.icloud_storage_full" = "iCloud depolama alanı dolu. Lütfen alan boşaltın veya planınızı yükseltin.";
 "backup.error.dev_backup_restore_on_prod_app" = "Geliştirme yedeği production derlemesinde geri yüklenemez. Production yedeğini kullanın.";
+
+/* Network Warning */
+"No Internet Connection" = "İnternet Bağlantısı Yok";
+"Connect to the internet to create or restore backups." = "Yedekleme oluşturmak veya geri yüklemek için internete bağlanın.";
 
 /* Automatic Backup */
 "Automatic Backup" = "Otomatik Yedekleme";

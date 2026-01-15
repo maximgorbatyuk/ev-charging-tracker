@@ -33,6 +33,7 @@ struct UserSettingsView: SwiftUICore.View {
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var environment = EnvironmentService.shared
     @ObservedObject private var developerMode = DeveloperModeManager.shared
+    @ObservedObject private var networkMonitor = NetworkMonitor.shared
 
     @Environment(\.requestReview) var requestReview
 
@@ -247,7 +248,28 @@ struct UserSettingsView: SwiftUICore.View {
                                 .foregroundColor(iCloudAvailable ? .primary : .secondary)
                         }
                     }
-                    .disabled(!iCloudAvailable || viewModel.isBackingUp || viewModel.isImporting || viewModel.isExporting)
+                    .disabled(!iCloudAvailable || viewModel.isBackingUp || viewModel.isImporting || viewModel.isExporting || !networkMonitor.isConnected)
+
+                    // Network not available warning
+                    if iCloudAvailable && !networkMonitor.isConnected {
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "wifi.slash")
+                                .foregroundColor(.orange)
+                                .font(.title3)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(L("No Internet Connection"))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.orange)
+
+                                Text(L("Connect to the internet to create or restore backups."))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
 
                     // Last backup timestamp
                     if let lastBackup = viewModel.lastBackupDate {

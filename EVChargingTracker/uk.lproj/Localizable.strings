@@ -243,7 +243,7 @@
 "No backups found" = "Копії не знайдено";
 "Create your first backup to get started" = "Створіть першу резервну копію для початку роботи";
 "Delete Backup?" = "Видалити копію?";
-"Are you sure you want to delete backup from %@?" = "Ви впевнені, що хочете видалити резервну копію від %@?";
+"Are you sure you want to delete the backup from %@?" = "Ви впевнені, що хочете видалити резервну копію від %@?";
 "Delete All Backups?" = "Видалити всі копії?";
 "Are you sure you want to delete all backups? This cannot be undone." = "Ви впевнені, що хочете видалити всі копії? Цю дію не можна скасувати.";
 "Delete All" = "Видалити всі";
@@ -258,6 +258,10 @@
 "backup.error.network_unavailable" = "Немає підключення до інтернету. Перевірте мережу.";
 "backup.error.icloud_storage_full" = "Сховище iCloud заповнене. Звільніть місце або оновіть тариф.";
 "backup.error.dev_backup_restore_on_prod_app" = "Резервну копію розробки не можна відновити на production-збірці. Використайте production резервну копію.";
+
+/* Network Warning */
+"No Internet Connection" = "Немає підключення до інтернету";
+"Connect to the internet to create or restore backups." = "Підключіться до інтернету для створення або відновлення резервних копій.";
 
 /* Automatic Backup */
 "Automatic Backup" = "Автоматичне резервне копіювання";

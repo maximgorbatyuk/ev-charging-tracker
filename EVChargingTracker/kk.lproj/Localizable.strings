@@ -270,6 +270,10 @@
 "backup.error.icloud_storage_full" = "iCloud қоймасы толған. Орын босатыңыз немесе тарифіңізді жаңартыңыз.";
 "backup.error.dev_backup_restore_on_prod_app" = "Өндіріс көшірмесін production құрылымында қалпына келтіру мүмкін емес. Production көшірмесін қолданыңыз.";
 
+/* Network Warning */
+"No Internet Connection" = "Интернет байланысы жоқ";
+"Connect to the internet to create or restore backups." = "Сақтық көшірмелерді жасау немесе қалпына келтіру үшін интернетке қосылыңыз.";
+
 /* Automatic Backup */
 "Automatic Backup" = "Автоматты сақтық көшірме";
 "Last: " = "Соңғы: ";

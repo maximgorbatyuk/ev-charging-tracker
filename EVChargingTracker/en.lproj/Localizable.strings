@@ -245,7 +245,7 @@
 "No backups found" = "No backups found";
 "Create your first backup to get started" = "Create your first backup to get started";
 "Delete Backup?" = "Delete Backup?";
-"Are you sure you want to delete backup from %@?" = "Are you sure you want to delete backup from %@?";
+"Are you sure you want to delete the backup from %@?" = "Are you sure you want to delete the backup from %@?";
 "Delete All Backups?" = "Delete All Backups?";
 "Are you sure you want to delete all backups? This cannot be undone." = "Are you sure you want to delete all backups? This cannot be undone.";
 "Delete All" = "Delete All";
@@ -260,6 +260,10 @@
 "backup.error.network_unavailable" = "No internet connection. Please check your network.";
 "backup.error.icloud_storage_full" = "iCloud storage is full. Please free up space or upgrade your plan.";
 "backup.error.dev_backup_restore_on_prod_app" = "Development backup cannot be restored on a production build. Use a production backup instead.";
+
+/* Network Warning */
+"No Internet Connection" = "No Internet Connection";
+"Connect to the internet to create or restore backups." = "Connect to the internet to create or restore backups.";
 
 /* Automatic Backup */
 "Automatic Backup" = "Automatic Backup";

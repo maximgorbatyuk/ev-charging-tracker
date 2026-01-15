@@ -61,14 +61,17 @@ final class BackupService: ObservableObject {
     private let notificationsRepository: DelayedNotificationsRepository
     private let settingsRepository: UserSettingsRepository
     private let databaseManager: DatabaseManager
+    private let networkMonitor: NetworkMonitor
     private let logger: Logger
 
     // MARK: - Initialization
 
     init(
-        databaseManager: DatabaseManager = DatabaseManager.shared
+        databaseManager: DatabaseManager = DatabaseManager.shared,
+        networkMonitor: NetworkMonitor = NetworkMonitor.shared
     ) {
         self.databaseManager = databaseManager
+        self.networkMonitor = networkMonitor
         self.currentSchemaVersion = self.databaseManager.getDatabaseSchemaVersion()
 
         self.carRepository = self.databaseManager.carRepository!
@@ -510,6 +513,12 @@ final class BackupService: ObservableObject {
 
         guard iCloudBackupDirectory != nil else {
             throw BackupError.iCloudNotAvailable
+        }
+
+        // Check network connectivity
+        guard networkMonitor.checkConnectivity() else {
+            logger.warning("Network unavailable for iCloud operation")
+            throw BackupError.networkUnavailable
         }
     }
 
