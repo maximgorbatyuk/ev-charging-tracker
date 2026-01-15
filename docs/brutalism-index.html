@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charge Tracker - Track Your Electric Vehicle Expenses Costs</title>
+    <meta name="description" content="Track your electric vehicle charging sessions and expenses, monitor costs per kilometer, and optimize your EV charging experience with our iOS app.">
+    <meta name="author" content="Maxim Gorbatyuk">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mgorbatyuk.dev/ev-charging-tracker/">
+    <meta property="og:title" content="EV Charge Tracker - Track Your Electric Vehicle Expenses Costs">
+    <meta property="og:description" content="Track your electric vehicle charging sessions and expenses, monitor costs per kilometer, and optimize your EV charging experience with our iOS app.">
+    <meta property="og:image" content="https://mgorbatyuk.dev/ev-charging-tracker/app_icon.png">
+    <meta property="og:site_name" content="EV Charge Tracker">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://mgorbatyuk.dev/ev-charging-tracker/">
+    <meta name="twitter:title" content="EV Charge Tracker - Track Your Electric Vehicle Expenses Costs">
+    <meta name="twitter:description" content="Track your electric vehicle charging sessions and expenses, monitor costs per kilometer, and optimize your EV charging experience with our iOS app.">
+    <meta name="twitter:image" content="https://mgorbatyuk.dev/ev-charging-tracker/app_icon.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --brutal-purple: #a388ee;
+      --brutal-green: #90ee90;
+      --brutal-mint: #daf5f0;
+      --brutal-yellow: #fdfd96;
+      --brutal-black: #000000;
+      --brutal-white: #ffffff;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: var(--brutal-green);
+      color: var(--brutal-black);
+      line-height: 1.6;
+    }
+    ::selection {
+      background-color: var(--brutal-purple);
+      color: var(--brutal-white);
+    }
+    /* Navigation */
+    .nav {
+      border-bottom: 4px solid var(--brutal-black);
+      background-color: var(--brutal-mint);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      height: 80px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      border-right: 4px solid var(--brutal-black);
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+    }
+    .nav-logo svg {
+      margin-right: 12px;
+      color: var(--brutal-yellow);
+    }
+    .nav-logo span {
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.05em;
+    }
+    .nav-links {
+      display: none;
+      align-items: stretch;
+    }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--brutal-black);
+      border-left: 4px solid var(--brutal-black);
+      transition: all 0.2s;
+    }
+    .nav-links a:hover {
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+    }
+    .nav-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      border-left: 4px solid var(--brutal-black);
+      background-color: var(--brutal-purple);
+      color: var(--brutal-white);
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .mobile-menu {
+      display: none;
+      border-bottom: 4px solid var(--brutal-black);
+      background-color: var(--brutal-mint);
+    }
+    .mobile-menu.active {
+      display: block;
+    }
+    .mobile-menu a {
+      display: block;
+      padding: 16px 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--brutal-black);
+      border-bottom: 4px solid var(--brutal-black);
+    }
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+    .mobile-menu a:hover {
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+    }
+    /* Hero Section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-bottom: 4px solid var(--brutal-black);
+    }
+    .hero-content {
+      padding: 64px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 4px solid var(--brutal-black);
+      background-color: var(--brutal-mint);
+    }
+    .hero-title {
+      font-size: 48px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.85;
+      margin-bottom: 32px;
+    }
+    .hero-title span {
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+      padding: 0 8px;
+    }
+    .hero-subtitle {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 48px;
+      max-width: 700px;
+      line-height: 1.3;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .hero-image {
+      background-color: var(--brutal-black);
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+    .app-icon {
+      width: 256px;
+      height: 256px;
+      background-color: var(--brutal-mint);
+      border: 4px solid var(--brutal-white);
+      border-radius: 24px;
+      padding: 24px;
+      transform: rotate(-5deg);
+      box-shadow: 8px 8px 0px 0px var(--brutal-purple);
+      position: relative;
+    }
+    .app-icon-inner {
+      width: 100%;
+      height: 100%;
+      background-color: var(--brutal-green);
+      border: 4px solid var(--brutal-black);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .app-badge {
+      position: absolute;
+      bottom: -16px;
+      right: -16px;
+      background-color: var(--brutal-yellow);
+      border: 4px solid var(--brutal-black);
+      padding: 8px 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      transform: rotate(8deg);
+    }
+    /* Button Styles */
+    .btn {
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 4px solid var(--brutal-black);
+      padding: 16px 32px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.1s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: none !important;
+    }
+    .btn-primary {
+      background-color: var(--brutal-purple);
+      color: var(--brutal-white);
+      box-shadow: 8px 8px 0px 0px var(--brutal-black);
+    }
+    .btn-primary:hover {
+      background-color: #8b6fd9;
+    }
+    .btn-secondary {
+      background-color: var(--brutal-yellow);
+      color: var(--brutal-black);
+      box-shadow: 8px 8px 0px 0px var(--brutal-black);
+    }
+    .btn-secondary:hover {
+      background-color: #f5f57d;
+    }
+    .btn-outline {
+      background-color: transparent;
+      color: var(--brutal-black);
+      border: 4px solid var(--brutal-black);
+    }
+    .btn-outline:hover {
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+    }
+    /* Features Grid */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-bottom: 4px solid var(--brutal-black);
+    }
+    .feature {
+      padding: 32px;
+      border-bottom: 4px solid var(--brutal-black);
+      background-color: var(--brutal-mint);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .feature:last-child {
+      border-bottom: none;
+    }
+    .feature:hover {
+      background-color: var(--brutal-purple);
+      color: var(--brutal-white);
+    }
+    .feature svg {
+      margin-bottom: 24px;
+    }
+    .feature h3 {
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .feature p {
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+    /* Content Split */
+    .content-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-bottom: 4px solid var(--brutal-black);
+    }
+    .content-left {
+      padding: 48px;
+      border-bottom: 4px solid var(--brutal-black);
+      background-color: var(--brutal-green);
+    }
+    .content-card {
+      background-color: var(--brutal-mint);
+      border: 4px solid var(--brutal-black);
+      padding: 32px;
+      box-shadow: 8px 8px 0px 0px var(--brutal-black);
+    }
+    .content-card h2 {
+      font-size: 40px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .content-card ul {
+      list-style: none;
+    }
+    .content-card li {
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .content-card li::before {
+      content: '';
+      width: 24px;
+      height: 24px;
+      background-color: var(--brutal-purple);
+      border: 2px solid var(--brutal-black);
+      margin-right: 16px;
+      flex-shrink: 0;
+    }
+    .content-right {
+      padding: 48px;
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .content-right h2 {
+      font-size: 40px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      color: var(--brutal-yellow);
+    }
+    .content-right p {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 48px;
+      line-height: 1.5;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .stat {
+      border: 4px solid var(--brutal-white);
+      padding: 24px;
+      text-align: center;
+    }
+    .stat:last-child {
+      background-color: var(--brutal-purple);
+    }
+    .stat-value {
+      font-size: 36px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    /* App Features */
+    .app-features {
+      padding: 96px 16px;
+      background-color: var(--brutal-green);
+    }
+    .app-features-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .app-features h2 {
+      font-size: 56px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .app-features h2 span {
+      color: var(--brutal-purple);
+      text-decoration: underline;
+      text-decoration-thickness: 4px;
+      text-underline-offset: 8px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .feature-card {
+      border: 4px solid var(--brutal-black);
+      background-color: var(--brutal-mint);
+      padding: 24px;
+      box-shadow: 8px 8px 0px 0px var(--brutal-black);
+    }
+    .feature-card.featured {
+      background-color: var(--brutal-purple);
+      color: var(--brutal-white);
+    }
+    .feature-card svg {
+      margin-bottom: 16px;
+    }
+    .feature-card h3 {
+      font-size: 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+    /* Download CTA */
+    .download-cta {
+      border-top: 4px solid var(--brutal-black);
+      border-bottom: 4px solid var(--brutal-black);
+      background-color: var(--brutal-mint);
+      padding: 96px 16px;
+      text-align: center;
+    }
+    .download-cta-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .download-cta h2 {
+      font-size: 56px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .download-cta h2 span {
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+      padding: 0 8px;
+    }
+    .download-cta p {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 48px;
+    }
+    .download-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+    .free-badge {
+      background-color: var(--brutal-yellow);
+      border: 4px solid var(--brutal-black);
+      padding: 16px 32px;
+      font-weight: 900;
+      text-transform: uppercase;
+      box-shadow: 8px 8px 0px 0px var(--brutal-black);
+    }
+    /* Footer */
+    .footer {
+      background-color: var(--brutal-black);
+      color: var(--brutal-white);
+      border-top: 4px solid var(--brutal-black);
+      padding: 48px;
+    }
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 48px;
+      margin-bottom: 96px;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .footer-brand svg {
+      margin-right: 16px;
+      color: var(--brutal-yellow);
+    }
+    .footer-brand h2 {
+      font-size: 40px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.05em;
+    }
+    .footer-description {
+      font-size: 20px;
+      font-weight: bold;
+      max-width: 500px;
+    }
+    .footer-section h4 {
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      color: var(--brutal-purple);
+    }
+    .footer-section ul {
+      list-style: none;
+    }
+    .footer-section li {
+      margin-bottom: 16px;
+    }
+    .footer-section a {
+      color: var(--brutal-white);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .footer-section a:hover {
+      color: var(--brutal-purple);
+      text-decoration: underline;
+      text-decoration-thickness: 4px;
+      text-underline-offset: 4px;
+    }
+    .footer-bottom {
+      padding-top: 32px;
+      border-top: 4px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: bold;
+      text-align: center;
+      gap: 16px;
+    }
+    .footer-bottom span {
+      color: var(--brutal-yellow);
+    }
+    /* Responsive */
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+      .nav-toggle {
+        display: none;
+      }
+      .nav-logo span {
+        font-size: 30px;
+      }
+      .hero {
+        grid-template-columns: 2fr 1fr;
+      }
+      .hero-content {
+        border-bottom: none;
+        border-right: 4px solid var(--brutal-black);
+        padding: 96px;
+      }
+      .hero-title {
+        font-size: 80px;
+      }
+      .hero-subtitle {
+        font-size: 24px;
+      }
+      .hero-buttons {
+        flex-direction: row;
+      }
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .feature {
+        border-right: 4px solid var(--brutal-black);
+        border-bottom: none;
+      }
+      .feature:nth-child(2n) {
+        border-right: none;
+      }
+      .content-split {
+        grid-template-columns: 1fr 1fr;
+      }
+      .content-left {
+        border-bottom: none;
+        border-right: 4px solid var(--brutal-black);
+        padding: 96px;
+      }
+      .content-right {
+        padding: 96px;
+      }
+      .content-card h2 {
+        font-size: 48px;
+      }
+      .content-right h2 {
+        font-size: 48px;
+      }
+      .content-right p {
+        font-size: 24px;
+      }
+      .app-features h2 {
+        font-size: 72px;
+      }
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .download-cta h2 {
+        font-size: 72px;
+      }
+      .download-buttons {
+        flex-direction: row;
+      }
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr;
+      }
+      .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+    @media (min-width: 1024px) {
+      .features {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .feature {
+        border-right: 4px solid var(--brutal-black);
+      }
+      .feature:last-child {
+        border-right: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <span>EV CHARGE TRACKER</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+      </div>
+      <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" onclick="toggleMenu()">Features</a>
+    <a href="#download" onclick="toggleMenu()">Download</a>
+  </div>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Track Your EV <span>Charge Costs</span> with Precision
+      </h1>
+      <p class="hero-subtitle">
+        Take control of your electric vehicle expenses. Whether you charge at home, at work, or at public charging stations, get clear insights into what your EV really costs to run.
+      </p>
+      <div class="hero-buttons">
+        <a href="#download" class="btn btn-primary">
+          📱 Download on App Store
+        </a>
+        <a href="#features" class="btn btn-secondary">
+          View Features
+        </a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="app-icon">
+        <div class="app-icon-inner">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="var(--brutal-purple)"></polygon>
+          </svg>
+        </div>
+        <div class="app-badge">iOS App</div>
+      </div>
+    </div>
+  </header>
+  <!-- Features Grid -->
+  <section id="features" class="features">
+    <div class="feature">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="1" x2="12" y2="23"></line>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+      </svg>
+      <h3>Cost Tracking</h3>
+      <p>Monitor every charging session with precise cost calculations.</p>
+    </div>
+    <div class="feature">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+      <h3>Location Data</h3>
+      <p>Track where you charge - home, work, or public stations.</p>
+    </div>
+    <div class="feature">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="20" x2="18" y2="10"></line>
+        <line x1="12" y1="20" x2="12" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="14"></line>
+      </svg>
+      <h3>Analytics</h3>
+      <p>Visualize your charging patterns and spending trends.</p>
+    </div>
+    <div class="feature">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+      <h3>Insights</h3>
+      <p>Get actionable insights to optimize your EV costs.</p>
+    </div>
+  </section>
+  <!-- Content Split -->
+  <section class="content-split">
+    <div class="content-left">
+      <div class="content-card">
+        <h2>Why Track EV Charging?</h2>
+        <ul>
+          <li>Know your true costs</li>
+          <li>Compare charging locations</li>
+          <li>Optimize your budget</li>
+          <li>Plan better routes</li>
+        </ul>
+      </div>
+    </div>
+    <div class="content-right">
+      <h2>Simple. Powerful.</h2>
+      <p>"No more guessing what your EV costs. Track every charge, analyze your spending, and take control of your electric vehicle expenses."</p>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Accurate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">24/7</div>
+          <div class="stat-label">Tracking</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- App Features -->
+  <section class="app-features">
+    <div class="app-features-container">
+      <h2>Everything You <span>Need</span></h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+          <h3>Session Logs</h3>
+          <p>Record every charging session with detailed information about location, duration, and cost.</p>
+        </div>
+        <div class="feature-card featured">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+          <h3>Smart Analytics</h3>
+          <p>Visualize your charging patterns, compare costs across locations, and identify savings opportunities.</p>
+        </div>
+        <div class="feature-card">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <h3>Location Tracking</h3>
+          <p>Automatically categorize charges by location - home, work, or public stations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Download CTA -->
+  <section id="download" class="download-cta">
+    <div class="download-cta-container">
+      <h2>Ready to Start <span>Tracking?</span></h2>
+      <p>Download the app and take control of your EV charging costs today.</p>
+      <div class="download-buttons">
+        <a href="#" class="btn btn-primary">
+          📱 Download on App Store
+        </a>
+        <div class="free-badge">Free to Download</div>
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <h2>EV CHARGE TRACKER</h2>
+          </div>
+          <p class="footer-description">
+            Take control of your electric vehicle expenses with precision tracking and powerful insights.
+          </p>
+        </div>
+        <div class="footer-section">
+          <h4>App</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#download">Download</a></li>
+            <li><a href="#">Support</a></li>
+            <li><a href="#">Privacy</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Email</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 EV CHARGE TRACKER. ALL RIGHTS RESERVED.</p>
+        <p>Made for <span>⚡</span> EV Drivers</p>
+      </div>
+    </div>
+  </footer>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
