@@ -396,9 +396,11 @@ final class BackupService: ObservableObject {
             }
         }
 
-        // 4. Import planned maintenance with updated car IDs
+        // 4. Import planned maintenance with updated car IDs and build ID mapping
+        var maintenanceIdMapping: [Int64: Int64] = [:] // oldId -> newId
         for exportMaintenance in exportData.plannedMaintenance {
             let maintenance = exportMaintenance.toPlannedMaintenance()
+            let oldMaintenanceId = maintenance.id
             maintenance.id = nil // Let database assign new ID
 
             // Map old car ID to new car ID
@@ -406,7 +408,11 @@ final class BackupService: ObservableObject {
                 maintenance.carId = newCarId
             }
 
-            if maintenanceRepository.insertRecord(maintenance) == nil {
+            if let newMaintenanceId = maintenanceRepository.insertRecord(maintenance) {
+                if let oldId = oldMaintenanceId {
+                    maintenanceIdMapping[oldId] = newMaintenanceId
+                }
+            } else {
                 throw ExportValidationError.corruptedData
             }
         }
@@ -421,8 +427,11 @@ final class BackupService: ObservableObject {
                 notification.carId = newCarId
             }
 
-            // Note: Maintenance record IDs are not mapped since we don't track that mapping
-            // This is acceptable as the notification will still be stored
+            // Map old maintenance record ID to new maintenance record ID
+            if let oldMaintenanceId = exportNotification.maintenanceRecord,
+               let newMaintenanceId = maintenanceIdMapping[oldMaintenanceId] {
+                notification.maintenanceRecord = newMaintenanceId
+            }
 
             if notificationsRepository.insertRecord(notification) == nil {
                 throw ExportValidationError.corruptedData
