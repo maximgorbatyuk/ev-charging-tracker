@@ -74,6 +74,10 @@ class DatabaseManager : DatabaseManagerProtocol {
         }
     }
 
+    func getDatabaseSchemaVersion() -> Int {
+        return latestVersion;
+    }
+
     func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepository {
         return plannedMaintenanceRepository!
     }

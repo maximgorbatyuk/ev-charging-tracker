@@ -194,3 +194,79 @@
 "other" = "diğer";
 "Total records: %d, total pages: %d" = "Toplam kayıtlar: %d, toplam sayfalar: %d";
 "Previous" = "Önceki";
+
+/* Export & Import */
+"Export & Import" = "Dışa ve İçe Aktar";
+"Export Data..." = "Verileri Dışa Aktar...";
+"Import Data..." = "Verileri İçe Aktar...";
+"Preparing export..." = "Dışa aktarma hazırlanıyor...";
+"Importing data..." = "Veriler içe aktarılıyor...";
+"Export your data to back it up or transfer to another device." = "Yedekleme veya başka bir cihaza aktarma için verilerinizi dışa aktarın.";
+"Import will replace all existing data." = "İçe aktarma mevcut tüm verileri değiştirecektir.";
+"Export Error" = "Dışa Aktarma Hatası";
+"Import Error" = "İçe Aktarma Hatası";
+"Confirm Import" = "İçe Aktarmayı Onayla";
+"Import and Replace All Data" = "İçe Aktar ve Tüm Verileri Değiştir";
+"Source" = "Kaynak";
+"Export Date" = "Dışa Aktarma Tarihi";
+"Schema Version" = "Şema Sürümü";
+"Data Summary" = "Veri Özeti";
+"cars" = "araç";
+"expenses" = "gider";
+"maintenance records" = "bakım kaydı";
+"notifications" = "bildirim";
+"Date Range" = "Tarih Aralığı";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Uyarı: İçe aktarma mevcut TÜM verileri SİLECEKTİR. Bu işlem geri alınamaz.";
+"export.preview.no_expenses" = "Gider yok";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Geçersiz dosya formatı. Lütfen geçerli bir yedekleme dosyası seçin.";
+"export.error.missing_metadata" = "Yedekleme dosyasında meta veriler eksik.";
+"export.error.missing_fields" = "Yedekleme dosyasında gerekli alanlar eksik.";
+"export.error.incompatible_schema %d %d" = "Bu yedekleme uyumsuz bir sürümden (mevcut: %d, dosya: %d).";
+"export.error.newer_schema %d %d" = "Bu yedekleme uygulamanın daha yeni bir sürümüyle oluşturuldu (mevcut: %d, dosya: %d). İçe aktarma başarısız olabilir veya veri kaybına neden olabilir.";
+"export.error.invalid_date" = "Yedekleme dosyasında geçersiz tarih bulundu.";
+"export.error.invalid_numeric %@" = "Alan için geçersiz sayısal değer: %@";
+"export.error.invalid_currency %@" = "Geçersiz para birimi kodu: %@";
+"export.error.invalid_enum %@ %@" = "Geçersiz %@ değeri: %@";
+"export.error.invalid_reference %@ %lld" = "Geçersiz referans: %@ kimliği %lld bulunamadı.";
+"export.error.corrupted" = "Yedekleme dosyası bozuk ve geri yüklenemiyor.";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud Yedeği";
+"iCloud Not Available" = "iCloud Kullanılamıyor";
+"Please sign in to iCloud in Settings to enable backups." = "Yedeklemeyi etkinleştirmek için Ayarlar'dan iCloud'da oturum açın.";
+"Backup Now" = "Şimdi Yedekle";
+"Creating backup..." = "Yedek oluşturuluyor...";
+"Last backup" = "Son yedek";
+"View Backup History" = "Yedek Geçmişini Görüntüle";
+"Automatic backups to iCloud keep your data safe." = "iCloud'a otomatik yedeklemeler verilerinizi güvende tutar.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Maksimum 5 yedek saklanır, 30 günden eskiler otomatik silinir.";
+"iCloud Backups" = "iCloud Yedekleri";
+"Loading backups..." = "Yedekler yükleniyor...";
+"No backups found" = "Yedek bulunamadı";
+"Create your first backup to get started" = "Başlamak için ilk yedeğinizi oluşturun";
+"Delete Backup?" = "Yedek Silinsin mi?";
+"Are you sure you want to delete the backup from %@?" = "%@ tarihli yedeği silmek istediğinizden emin misiniz?";
+"Delete All Backups?" = "Tüm Yedekler Silinsin mi?";
+"Are you sure you want to delete all backups? This cannot be undone." = "Tüm yedekleri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"Delete All" = "Tümünü Sil";
+"Delete All Backups" = "Tüm Yedekleri Sil";
+"Restore from Backup?" = "Yedekten Geri Yükle?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "Bu, tüm mevcut verileri %@ tarihli yedekle değiştirecektir. Bu işlem geri alınamaz.";
+"Restore" = "Geri Yükle";
+"Backup Error" = "Yedekleme Hatası";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud kullanılamıyor. Lütfen Ayarlar'dan iCloud'da oturum açın.";
+"backup.error.network_unavailable" = "İnternet bağlantısı yok. Lütfen ağınızı kontrol edin.";
+"backup.error.icloud_storage_full" = "iCloud depolama alanı dolu. Lütfen alan boşaltın veya planınızı yükseltin.";
+"backup.error.dev_backup_restore_on_prod_app" = "Geliştirme yedeği production derlemesinde geri yüklenemez. Production yedeğini kullanın.";
+
+/* Network Warning */
+"No Internet Connection" = "İnternet Bağlantısı Yok";
+"Connect to the internet to create or restore backups." = "Yedekleme oluşturmak veya geri yüklemek için internete bağlanın.";
+
+/* Automatic Backup */
+"Automatic Backup" = "Otomatik Yedekleme";
+"Last: " = "Son: ";

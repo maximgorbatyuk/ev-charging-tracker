@@ -25,11 +25,15 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showAddCarModal = false
     @State private var confirmationModalDialogData = ConfirmationData.empty
     @State private var showDeveloperModeAlert = false
+    @State private var showExportShareSheet = false
+    @State private var exportFileURL: URL?
+    @State private var showImportFilePicker = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var environment = EnvironmentService.shared
     @ObservedObject private var developerMode = DeveloperModeManager.shared
+    @ObservedObject private var networkMonitor = NetworkMonitor.shared
 
     @Environment(\.requestReview) var requestReview
 
@@ -194,6 +198,155 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                 }
 
+                Section(header: Text(L("iCloud Backup"))) {
+                    let iCloudAvailable = viewModel.isiCloudAvailable()
+
+                    // iCloud not available warning
+                    if !iCloudAvailable {
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                                .font(.title3)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(L("iCloud Not Available"))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.orange)
+
+                                Text(L("Please sign in to iCloud in Settings to enable backups."))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+
+                    // Manual backup button
+                    Button(action: {
+                        analytics.trackEvent("icloud_backup_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "create_icloud_backup"
+                        ])
+
+                        Task {
+                            await viewModel.createiCloudBackup()
+                        }
+                    }) {
+                        HStack {
+                            if viewModel.isBackingUp {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "icloud.and.arrow.up")
+                                    .foregroundColor(iCloudAvailable ? .blue : .gray)
+                            }
+
+                            Text(viewModel.isBackingUp ? L("Creating backup...") : L("Backup Now"))
+                                .padding(.leading, 4)
+                                .foregroundColor(iCloudAvailable ? .primary : .secondary)
+                        }
+                    }
+                    .disabled(!iCloudAvailable || viewModel.isBackingUp || viewModel.isImporting || viewModel.isExporting || !networkMonitor.isConnected)
+
+                    // Network not available warning
+                    if iCloudAvailable && !networkMonitor.isConnected {
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "wifi.slash")
+                                .foregroundColor(.orange)
+                                .font(.title3)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(L("No Internet Connection"))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.orange)
+
+                                Text(L("Connect to the internet to create or restore backups."))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+
+                    // Last backup timestamp
+                    if let lastBackup = viewModel.lastBackupDate {
+                        HStack {
+                            Text(L("Last backup"))
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text(formatBackupDate(lastBackup))
+                                .foregroundColor(.secondary)
+                        }
+                        .font(.caption)
+                    }
+
+                    // View backups button
+                    Button(action: {
+                        analytics.trackEvent("view_backups_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "view_backup_history"
+                        ])
+
+                        viewModel.showBackupList = true
+                    }) {
+                        HStack {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundColor(iCloudAvailable ? .purple : .gray)
+
+                            Text(L("View Backup History"))
+                                .padding(.leading, 4)
+                                .foregroundColor(iCloudAvailable ? .primary : .secondary)
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .disabled(!iCloudAvailable)
+
+                    // Automatic backup toggle
+                    Toggle(isOn: Binding(
+                        get: { viewModel.isAutomaticBackupEnabled },
+                        set: { newValue in
+                            viewModel.toggleAutomaticBackup(newValue)
+                        }
+                    )) {
+                        HStack {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundColor(iCloudAvailable ? .green : .gray)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(L("Automatic Backup"))
+                                    .foregroundColor(iCloudAvailable ? .primary : .secondary)
+
+                                if let lastAutoBackup = viewModel.lastAutomaticBackupDate {
+                                    Text(L("Last: \(formatBackupDate(lastAutoBackup))"))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                    }
+                    .disabled(!iCloudAvailable)
+
+                    // Info text
+                    if iCloudAvailable {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(L("Automatic backups to iCloud keep your data safe."))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(L("Maximum 5 backups kept, older than 30 days auto-deleted."))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+
                 Section(header: Text(L("Support"))) {
                     Button(action: {
                         analytics.trackEvent("about_app_button_clicked", properties: [
@@ -316,6 +469,75 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                 }
 
+                Section(header: Text(L("Export & Import"))) {
+                    // Export button
+                    Button(action: {
+                        analytics.trackEvent("export_data_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "export_data"
+                        ])
+
+                        Task {
+                            if let fileURL = await viewModel.exportData() {
+                                exportFileURL = fileURL
+                                showExportShareSheet = true
+                            }
+                        }
+                    }) {
+                        HStack {
+                            if viewModel.isExporting {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(.blue)
+                            }
+
+                            Text(viewModel.isExporting ? L("Preparing export...") : L("Export Data..."))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .disabled(viewModel.isExporting || viewModel.isImporting)
+
+                    // Import button
+                    Button(action: {
+                        analytics.trackEvent("import_data_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "import_data"
+                        ])
+
+                        showImportFilePicker = true
+                    }) {
+                        HStack {
+                            if viewModel.isImporting {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Image(systemName: "square.and.arrow.down")
+                                    .foregroundColor(.orange)
+                            }
+
+                            Text(viewModel.isImporting ? L("Importing data...") : L("Import Data..."))
+                                .padding(.leading, 4)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .disabled(viewModel.isExporting || viewModel.isImporting)
+
+                    // Info text
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(L("Export your data to back it up or transfer to another device."))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(L("Import will replace all existing data."))
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                }
+
                 if (viewModel.isSpecialDeveloperModeEnabled()) {
 
                     Section(header: Text(L("Developer section"))) {
@@ -407,6 +629,7 @@ struct UserSettingsView: SwiftUICore.View {
             .onAppear {
                 analytics.trackScreen("user_settings_screen")
                 refreshData()
+                viewModel.refreshAutomaticBackupState()
             }
             .refreshable {
                 refreshData()
@@ -432,7 +655,86 @@ struct UserSettingsView: SwiftUICore.View {
             } message: {
                 Text("Developer mode has been enabled. You can now access additional debugging tools and options.")
             }
+            .sheet(isPresented: $showExportShareSheet) {
+                if let url = exportFileURL {
+                    ShareSheet(items: [url])
+                }
+            }
+            .sheet(isPresented: $viewModel.showBackupList) {
+                iCloudBackupListView(viewModel: viewModel)
+            }
+            .fileImporter(
+                isPresented: $showImportFilePicker,
+                allowedContentTypes: [.json],
+                allowsMultipleSelection: false
+            ) { result in
+                switch result {
+                case .success(let urls):
+                    if let url = urls.first {
+                        Task {
+                            await viewModel.prepareImport(from: url)
+                        }
+                    }
+                case .failure(let error):
+                    viewModel.importError = error.localizedDescription
+                }
+            }
+            .alert(L("Export Error"), isPresented: .constant(viewModel.exportError != nil)) {
+                Button(L("OK")) {
+                    viewModel.exportError = nil
+                }
+            } message: {
+                if let error = viewModel.exportError {
+                    Text(error)
+                }
+            }
+            .alert(L("Import Error"), isPresented: .constant(viewModel.importError != nil)) {
+                Button(L("OK")) {
+                    viewModel.importError = nil
+                }
+            } message: {
+                if let error = viewModel.importError {
+                    Text(error)
+                }
+            }
+            .alert(L("Confirm Import"), isPresented: $viewModel.showImportConfirmation) {
+                Button(L("Cancel"), role: .cancel) {
+                    viewModel.cancelImport()
+                }
+                Button(L("Import and Replace All Data"), role: .destructive) {
+                    Task {
+                        await viewModel.confirmImport()
+                    }
+                }
+            } message: {
+                if let preview = viewModel.importPreviewData {
+                    Text(buildImportPreviewMessage(preview))
+                }
+            }
         }
+    }
+
+    private func buildImportPreviewMessage(_ preview: ImportPreviewData) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+
+        return """
+        \(L("Source")): \(preview.deviceName)
+        \(L("Export Date")): \(dateFormatter.string(from: preview.exportDate))
+        \(L("App Version")): \(preview.appVersion)
+        \(L("Schema Version")): \(preview.schemaVersion)
+
+        \(L("Data Summary")):
+        • \(preview.carsCount) \(L("cars"))
+        • \(preview.expensesCount) \(L("expenses"))
+        • \(preview.maintenanceCount) \(L("maintenance records"))
+        • \(preview.notificationsCount) \(L("notifications"))
+
+        \(L("Date Range")): \(preview.dateRange)
+
+        ⚠️ \(L("Warning: Importing will DELETE ALL existing data. This cannot be undone."))
+        """
     }
 
     private func CallEditCarView(carToEdit: CarDto?) -> some SwiftUICore.View {
@@ -514,6 +816,13 @@ struct UserSettingsView: SwiftUICore.View {
                self.isNotificationsEnabled = status == .authorized
            }
        }
+    }
+
+    private func formatBackupDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 
     private func openSettings() {

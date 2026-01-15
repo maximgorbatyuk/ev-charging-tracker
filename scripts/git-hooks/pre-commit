@@ -1,0 +1,13 @@
+#!/bin/bash
+# Save as .git/hooks/pre-commit
+
+echo "🎨 Running SwiftFormat on staged files..."
+
+if which swiftformat >/dev/null; then
+  git diff --cached --name-only --diff-filter=d | grep ".swift$" | while read file; do
+    swiftformat "$file"
+    git add "$file"
+  done
+fi
+
+exit 0

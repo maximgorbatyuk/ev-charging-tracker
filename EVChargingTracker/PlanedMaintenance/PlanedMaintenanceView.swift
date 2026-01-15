@@ -58,7 +58,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
                         if viewModel.maintenanceRecords.isEmpty {
                             EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
-                        } else {
+                        } else if (viewModel.selectedCarForExpenses != nil) {
                             LazyVStack(spacing: 12) {
                                 ForEach(viewModel.maintenanceRecords) { record in
                                     PlannedMaintenanceItemView(

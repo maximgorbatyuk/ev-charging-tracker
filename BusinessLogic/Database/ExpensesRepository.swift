@@ -316,8 +316,29 @@ class ExpensesRepository {
         }
     }
 
+
+    func getTotalCost(carId: Int64?, expenseTypeFilters: [ExpenseType] = []) -> Double {
+        do {
+            var query = chargingSessionsTable
+                .filter(carIdColumn == carId)
+                .filter(cost != nil)
+
+            if !expenseTypeFilters.isEmpty {
+                let stringValues = expenseTypeFilters.map { $0.rawValue }
+                query = query.filter(stringValues.contains(expenseType))
+            }
+
+            let total = try db.scalar(query.select(cost.sum))
+            return total ?? 0
+        } catch {
+            logger.error("Failed to get total cost with filters: \(error)")
+            return 0
+        }
+    }
+
     func updateSession(_ session: Expense) -> Bool {
         let sessionId = session.id ?? 0
+
         let sessionToUpdate = chargingSessionsTable.filter(id == sessionId)
         
         do {
@@ -364,7 +385,8 @@ class ExpensesRepository {
     
     func getTotalCost() -> Double {
         do {
-            let total = try db.scalar(chargingSessionsTable.select(cost.sum))
+            let query = chargingSessionsTable.filter(cost != nil)
+            let total = try db.scalar(query.select(cost.sum))
             return total ?? 0
         } catch {
             logger.error("Failed to get total cost: \(error)")
@@ -387,6 +409,17 @@ class ExpensesRepository {
             try db.run(recordsToDelete.delete())
         } catch {
             logger.error("Delete failed: \(error)")
+        }
+    }
+
+    func updateSession(_ car: Car) -> Bool {
+        let recordToUpdateQuery = chargingSessionsTable.filter(carIdColumn == car.id)
+        do {
+            try db.run(recordToUpdateQuery.update(currency <- car.expenseCurrency.rawValue))
+            return true
+        } catch {
+            logger.error("Update failed: \(error)")
+            return false
         }
     }
 

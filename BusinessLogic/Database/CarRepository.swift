@@ -95,7 +95,7 @@ class CarRepository : CarRepositoryProtocol {
                 batteryCapacityColumn <- car.batteryCapacity,
                 expenseCurrencyColumn <- car.expenseCurrency.rawValue,
                 currentMileageColumn <- car.currentMileage,
-                initialMileageColumn <- car.currentMileage,
+                initialMileageColumn <- car.initialMileage,
                 milleageSyncedAtColumn <- car.milleageSyncedAt,
                 createdAtColumn <- currentDate
             )
