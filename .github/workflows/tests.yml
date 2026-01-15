@@ -1,56 +1,52 @@
-#name: Swift Tests
-#
-#on:
-#  pull_request:
-#    branches:
-#      - develop
-#    types:
-#      - opened
-#      - synchronize
-#      - reopened
-#
-#concurrency:
-#  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-#  cancel-in-progress: true
-#
-#jobs:
-#  test:
-#    name: Swift Tests
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup Swift
-#        uses: swift-actions/setup-swift@v2
-#        with:
-#          swift-version: '5.10'
-#
-#      - name: Show Swift version
-#        run: swift --version
-#
-#      - name: Cache Swift Package Manager
-#        uses: actions/cache@v4
-#        with:
-#          path: .build
-#          key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
-#          restore-keys: |
-#            ${{ runner.os }}-swift-
-#
-#      - name: Resolve dependencies
-#        run: swift package resolve
-#
-#      - name: Build
-#        run: swift build --configuration release
-#
-#      - name: Run tests
-#        run: swift test --parallel --xunit-output TestResults/results.xml
-#
-#      - name: Upload test results
-#        uses: actions/upload-artifact@v4
-#        if: always()
-#        with:
-#          name: test-results
-#          path: TestResults/results.xml
-#          retention-days: 30
+name: Swift Build
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Swift Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '5.10'
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run SwiftLint (optional)
+        run: swiftlint lint --strict
+        continue-on-error: true
+
+      - name: Cache Swift Package Manager
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swift-
+
+      - name: Resolve dependencies
+        run: swift package resolve
+
+      - name: Build
+        run: swift build --configuration release
