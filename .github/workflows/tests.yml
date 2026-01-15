@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    name: Swift Build
+    name: Swift Build and Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,7 @@ jobs:
         run: swift --version
 
       - name: Run SwiftLint (optional)
-        uses: norio-nomura/action-swiftlint@v6
+        uses: norio-nomura/action-swiftlint@3.2.1
         continue-on-error: true
 
       - name: Cache Swift Package Manager
