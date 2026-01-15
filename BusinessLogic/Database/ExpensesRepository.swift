@@ -116,7 +116,7 @@ class ExpensesRepository {
         var sessionsList: [Expense] = []
         let query = carId != nil
             ? chargingSessionsTable.filter(carIdColumn == carId).order(id.desc)
-            : chargingSessionsTable.filter(carIdColumn == carId).order(id.desc)
+            : chargingSessionsTable.order(id.desc)
 
         do {
             for session in try db.prepare(query) {
