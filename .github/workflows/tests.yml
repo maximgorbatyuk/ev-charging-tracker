@@ -16,16 +16,11 @@ concurrency:
 jobs:
   build:
     name: Swift Build and Lint
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Swift
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: '5.10'
 
       - name: Show Swift version
         run: swift --version
@@ -34,16 +29,10 @@ jobs:
         uses: norio-nomura/action-swiftlint@3.2.1
         continue-on-error: true
 
-      - name: Cache Swift Package Manager
-        uses: actions/cache@v4
-        with:
-          path: .build
-          key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-swift-
-
-      - name: Resolve dependencies
-        run: swift package resolve
-
       - name: Build
-        run: swift build --configuration release
+        run: |
+          xcodebuild -project EVChargingTracker.xcodeproj \
+            -scheme EVChargingTracker \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
+            -configuration Release \
+            clean build
