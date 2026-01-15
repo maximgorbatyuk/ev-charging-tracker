@@ -16,5 +16,9 @@
 	<string>$(DEVELOPER_NAME)</string>
 	<key>GithubRepoUrl</key>
 	<string>$(GITHUB_REPO_URL)</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.evchargingtracker.daily-backup</string>
+	</array>
 </dict>
 </plist>

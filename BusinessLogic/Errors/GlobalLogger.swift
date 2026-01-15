@@ -19,4 +19,8 @@ class GlobalLogger {
     func error(_ message: String) {
         logger.error("\(message, privacy: .public)")
     }
+
+    func getLogger() -> Logger {
+        return logger
+    }
 }

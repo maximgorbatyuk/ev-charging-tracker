@@ -37,7 +37,7 @@ class Migration_20251021_CreateCarsTable {
             try db.run(addColumnToExpensesCommand)
             logger.debug("car_id column added to expenses table successfully")
 
-            let allExpenses = expensesRepository.fetchAllSessions()
+            let allExpenses = expensesRepository.fetchAllSessions(nil)
             if (allExpenses.count > 0) {
                 
                 let now = Date()

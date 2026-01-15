@@ -9,14 +9,48 @@ import Foundation
 import UIKit
 import os
 
+@MainActor
 class UserSettingsViewModel: ObservableObject {
+
+    // MARK: - Haptic Feedback
+
+    private func triggerSuccessHaptic() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+
+    private func triggerErrorHaptic() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.error)
+    }
 
     static let onboardingCompletedKey = "isOnboardingComplete"
 
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
+    @Published var isExporting: Bool = false
+    @Published var isImporting: Bool = false
+    @Published var exportError: String?
+    @Published var importError: String?
+    @Published var showImportConfirmation: Bool = false
+    @Published var pendingImportURL: URL?
+    @Published var importPreviewData: ImportPreviewData?
+
+    // iCloud Backup
+    @Published var isBackingUp: Bool = false
+    @Published var backupError: String?
+    @Published var lastBackupDate: Date?
+    @Published var iCloudBackups: [BackupInfo] = []
+    @Published var isLoadingBackups: Bool = false
+    @Published var showBackupList: Bool = false
+
+    // Automatic Backup
+    @Published var isAutomaticBackupEnabled: Bool = false
+    @Published var lastAutomaticBackupDate: Date?
 
     private let environment: EnvironmentService
+    private let backupService: BackupService
+    private let backgroundTaskManager: BackgroundTaskManager
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
     private let expensesRepository: ExpensesRepository
@@ -29,12 +63,16 @@ class UserSettingsViewModel: ObservableObject {
         environment: EnvironmentService = .shared,
         db: DatabaseManager = .shared,
         logger: Logger? = nil,
-        developerMode: DeveloperModeManager = .shared
+        developerMode: DeveloperModeManager = .shared,
+        backupService: BackupService = .shared,
+        backgroundTaskManager: BackgroundTaskManager = .shared
     ) {
         self.environment = environment
         self.db = db
         self.logger = logger ?? Logger(subsystem: "UserSettingsViewModel", category: "Views")
         self.developerMode = developerMode
+        self.backupService = backupService
+        self.backgroundTaskManager = backgroundTaskManager
 
         self.expensesRepository = db.expensesRepository!
         self.userSettingsRepository = db.userSettingsRepository
@@ -52,6 +90,10 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency)
             } ?? []
+
+        // Sync automatic backup state from BackgroundTaskManager
+        self.isAutomaticBackupEnabled = backgroundTaskManager.isAutomaticBackupEnabled
+        self.lastAutomaticBackupDate = backgroundTaskManager.lastAutomaticBackupDate
     }
 
     func handleVersionTap() -> Void {
@@ -423,4 +465,264 @@ class UserSettingsViewModel: ObservableObject {
     var allCars : [CarDto] {
         return _allCars
     }
+
+    // MARK: - Export/Import
+
+    func exportData() async -> URL? {
+        isExporting = true
+        exportError = nil
+
+        do {
+            let fileURL = try await backupService.exportData()
+            isExporting = false
+            triggerSuccessHaptic()
+            logger.info("Export successful: \(fileURL.path)")
+            return fileURL
+        } catch {
+            isExporting = false
+            exportError = error.localizedDescription
+            triggerErrorHaptic()
+            logger.error("Export failed: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    func prepareImport(from fileURL: URL) async {
+        isImporting = true
+        importError = nil
+
+        let accessing = fileURL.startAccessingSecurityScopedResource()
+        defer {
+            if accessing {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        do {
+            let exportData = try await backupService.parseExportFile(fileURL)
+
+            // Validate data
+            try backupService.validateExportData(exportData)
+
+            // Create preview data
+            let preview = ImportPreviewData(
+                deviceName: exportData.metadata.deviceName,
+                exportDate: exportData.metadata.createdAt,
+                appVersion: exportData.metadata.appVersion,
+                schemaVersion: exportData.metadata.databaseSchemaVersion,
+                carsCount: exportData.cars.count,
+                expensesCount: exportData.expenses.count,
+                maintenanceCount: exportData.plannedMaintenance.count,
+                notificationsCount: exportData.delayedNotifications.count,
+                dateRange: calculateDateRange(from: exportData.expenses)
+            )
+
+            isImporting = false
+            importPreviewData = preview
+            pendingImportURL = fileURL
+            showImportConfirmation = true
+        } catch {
+            isImporting = false
+            importError = error.localizedDescription
+            logger.error("Import preparation failed: \(error.localizedDescription)")
+        }
+    }
+
+    func confirmImport() async {
+        guard let fileURL = pendingImportURL else {
+            logger.error("No pending import URL")
+            return
+        }
+
+        isImporting = true
+        importError = nil
+        showImportConfirmation = false
+
+        let accessing = fileURL.startAccessingSecurityScopedResource()
+        defer {
+            if accessing {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        do {
+            try await backupService.importData(from: fileURL)
+
+            isImporting = false
+            pendingImportURL = nil
+            importPreviewData = nil
+
+            // Refresh all data
+            refetchCars()
+
+            triggerSuccessHaptic()
+            logger.info("Import successful")
+        } catch {
+            isImporting = false
+            importError = error.localizedDescription
+            triggerErrorHaptic()
+            logger.error("Import failed: \(error.localizedDescription)")
+        }
+    }
+
+    func cancelImport() {
+        pendingImportURL = nil
+        importPreviewData = nil
+        showImportConfirmation = false
+    }
+
+    private func calculateDateRange(from expenses: [ExportExpense]) -> String {
+        guard !expenses.isEmpty else {
+            return String(localized: "export.preview.no_expenses")
+        }
+
+        let dates = expenses.map { $0.date }
+        let earliest = dates.min() ?? Date()
+        let latest = dates.max() ?? Date()
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+
+        return "\(formatter.string(from: earliest)) - \(formatter.string(from: latest))"
+    }
+
+    // MARK: - iCloud Backup
+
+    func createiCloudBackup() async {
+        guard backupService.isiCloudAvailable() else {
+            backupError = String(localized: "backup.error.icloud_not_available")
+            triggerErrorHaptic()
+            return
+        }
+
+        isBackingUp = true
+        backupError = nil
+
+        do {
+            let backupInfo = try await backupService.createiCloudBackup()
+            isBackingUp = false
+            lastBackupDate = backupInfo.createdAt
+            triggerSuccessHaptic()
+            logger.info("iCloud backup created successfully")
+        } catch {
+            isBackingUp = false
+            backupError = error.localizedDescription
+            triggerErrorHaptic()
+            logger.error("iCloud backup failed: \(error.localizedDescription)")
+        }
+    }
+
+    func loadiCloudBackups() async {
+        guard backupService.isiCloudAvailable() else {
+            backupError = String(localized: "backup.error.icloud_not_available")
+            return
+        }
+
+        isLoadingBackups = true
+        backupError = nil
+
+        do {
+            let backups = try await backupService.listiCloudBackups()
+            isLoadingBackups = false
+            iCloudBackups = backups
+
+            // Update last backup date
+            if let latest = backups.first {
+                lastBackupDate = latest.createdAt
+            }
+        } catch {
+            isLoadingBackups = false
+            backupError = error.localizedDescription
+            logger.error("Failed to load iCloud backups: \(error.localizedDescription)")
+        }
+    }
+
+    func restoreFromiCloudBackup(_ backupInfo: BackupInfo) async {
+        isImporting = true
+        importError = nil
+
+        do {
+            if backupInfo.isDevBackup && !environment.isDevelopmentMode() {
+                throw BackupError.devBackupRestoreOnProdApp
+            }
+
+            try await backupService.restoreFromiCloudBackup(backupInfo)
+            isImporting = false
+
+            // Refresh all data
+            refetchCars()
+
+            triggerSuccessHaptic()
+            logger.info("Restored from iCloud backup successfully")
+        } catch {
+            isImporting = false
+            importError = error.localizedDescription
+            triggerErrorHaptic()
+            logger.error("Failed to restore from iCloud backup: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteiCloudBackup(_ backupInfo: BackupInfo) async {
+        do {
+            try await backupService.deleteiCloudBackup(backupInfo)
+
+            // Reload backups
+            await loadiCloudBackups()
+
+            triggerSuccessHaptic()
+            logger.info("Deleted iCloud backup successfully")
+        } catch {
+            backupError = error.localizedDescription
+            triggerErrorHaptic()
+            logger.error("Failed to delete iCloud backup: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteAlliCloudBackups() async {
+        do {
+            try await backupService.deleteAlliCloudBackups()
+
+            // Reload backups
+            await loadiCloudBackups()
+
+            triggerSuccessHaptic()
+            logger.info("Deleted all iCloud backups successfully")
+        } catch {
+            backupError = error.localizedDescription
+            triggerErrorHaptic()
+            logger.error("Failed to delete all iCloud backups: \(error.localizedDescription)")
+        }
+    }
+
+    func isiCloudAvailable() -> Bool {
+        return backupService.isiCloudAvailable()
+    }
+
+    // MARK: - Automatic Backup
+
+    func toggleAutomaticBackup(_ enabled: Bool) {
+        isAutomaticBackupEnabled = enabled
+        backgroundTaskManager.isAutomaticBackupEnabled = enabled
+        logger.info("Automatic backup \(enabled ? "enabled" : "disabled")")
+    }
+
+    func refreshAutomaticBackupState() {
+        isAutomaticBackupEnabled = backgroundTaskManager.isAutomaticBackupEnabled
+        lastAutomaticBackupDate = backgroundTaskManager.lastAutomaticBackupDate
+    }
+}
+
+// MARK: - Import Preview Data
+
+struct ImportPreviewData {
+    let deviceName: String
+    let exportDate: Date
+    let appVersion: String
+    let schemaVersion: Int
+    let carsCount: Int
+    let expensesCount: Int
+    let maintenanceCount: Int
+    let notificationsCount: Int
+    let dateRange: String
 }

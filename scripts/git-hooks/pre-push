@@ -1,0 +1,8 @@
+#!/bin/bash
+# Save as .git/hooks/pre-push
+
+echo "🧪 Running tests before push..."
+
+./scripts/run_tests.sh
+
+exit $?

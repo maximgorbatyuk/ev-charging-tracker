@@ -192,3 +192,79 @@
 "other" = "other";
 "Total records: %d, total pages: %d" = "Total records: %d, total pages: %d";
 "Previous" = "Previous";
+
+/* Export & Import */
+"Export & Import" = "Export & Import";
+"Export Data..." = "Export Data...";
+"Import Data..." = "Import Data...";
+"Preparing export..." = "Preparing export...";
+"Importing data..." = "Importing data...";
+"Export your data to back it up or transfer to another device." = "Export your data to back it up or transfer to another device.";
+"Import will replace all existing data." = "Import will replace all existing data.";
+"Export Error" = "Export Error";
+"Import Error" = "Import Error";
+"Confirm Import" = "Confirm Import";
+"Import and Replace All Data" = "Import and Replace All Data";
+"Source" = "Source";
+"Export Date" = "Export Date";
+"Schema Version" = "Schema Version";
+"Data Summary" = "Data Summary";
+"cars" = "cars";
+"expenses" = "expenses";
+"maintenance records" = "maintenance records";
+"notifications" = "notifications";
+"Date Range" = "Date Range";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Warning: Importing will DELETE ALL existing data. This cannot be undone.";
+"export.preview.no_expenses" = "No expenses";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Invalid file format. Please select a valid backup file.";
+"export.error.missing_metadata" = "Missing metadata in backup file.";
+"export.error.missing_fields" = "Missing required fields in backup file.";
+"export.error.incompatible_schema %d %d" = "This backup is from an incompatible version (current: %d, file: %d).";
+"export.error.newer_schema %d %d" = "This backup was created with a newer version of the app (current: %d, file: %d). Import may fail or cause data loss.";
+"export.error.invalid_date" = "Invalid date found in backup file.";
+"export.error.invalid_numeric %@" = "Invalid numeric value for field: %@";
+"export.error.invalid_currency %@" = "Invalid currency code: %@";
+"export.error.invalid_enum %@ %@" = "Invalid %@ value: %@";
+"export.error.invalid_reference %@ %lld" = "Invalid reference: %@ with ID %lld not found.";
+"export.error.corrupted" = "The backup file is corrupted and cannot be restored.";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud Backup";
+"iCloud Not Available" = "iCloud Not Available";
+"Please sign in to iCloud in Settings to enable backups." = "Please sign in to iCloud in Settings to enable backups.";
+"Backup Now" = "Backup Now";
+"Creating backup..." = "Creating backup...";
+"Last backup" = "Last backup";
+"View Backup History" = "View Backup History";
+"Automatic backups to iCloud keep your data safe." = "Automatic backups to iCloud keep your data safe.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Maximum 5 backups kept, older than 30 days auto-deleted.";
+"iCloud Backups" = "iCloud Backups";
+"Loading backups..." = "Loading backups...";
+"No backups found" = "No backups found";
+"Create your first backup to get started" = "Create your first backup to get started";
+"Delete Backup?" = "Delete Backup?";
+"Are you sure you want to delete the backup from %@?" = "Are you sure you want to delete the backup from %@?";
+"Delete All Backups?" = "Delete All Backups?";
+"Are you sure you want to delete all backups? This cannot be undone." = "Are you sure you want to delete all backups? This cannot be undone.";
+"Delete All" = "Delete All";
+"Delete All Backups" = "Delete All Backups";
+"Restore from Backup?" = "Restore from Backup?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "This will replace all current data with the backup from %@. This cannot be undone.";
+"Restore" = "Restore";
+"Backup Error" = "Backup Error";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud is not available. Please sign in to iCloud in Settings.";
+"backup.error.network_unavailable" = "No internet connection. Please check your network.";
+"backup.error.icloud_storage_full" = "iCloud storage is full. Please free up space or upgrade your plan.";
+"backup.error.dev_backup_restore_on_prod_app" = "Development backup cannot be restored on a production build. Use a production backup instead.";
+
+/* Network Warning */
+"No Internet Connection" = "No Internet Connection";
+"Connect to the internet to create or restore backups." = "Connect to the internet to create or restore backups.";
+
+/* Automatic Backup */
+"Automatic Backup" = "Automatic Backup";
+"Last: " = "Last: ";

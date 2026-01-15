@@ -195,3 +195,79 @@
 "other" = "sonstiges";
 "Total records: %d, total pages: %d" = "Gesamtaufzeichnungen: %d, Gesamtseiten: %d";
 "Previous" = "Vorherige";
+
+/* Export & Import */
+"Export & Import" = "Export & Import";
+"Export Data..." = "Daten exportieren...";
+"Import Data..." = "Daten importieren...";
+"Preparing export..." = "Export vorbereiten...";
+"Importing data..." = "Daten importieren...";
+"Export your data to back it up or transfer to another device." = "Exportieren Sie Ihre Daten, um sie zu sichern oder auf ein anderes Gerät zu übertragen.";
+"Import will replace all existing data." = "Der Import ersetzt alle vorhandenen Daten.";
+"Export Error" = "Exportfehler";
+"Import Error" = "Importfehler";
+"Confirm Import" = "Import bestätigen";
+"Import and Replace All Data" = "Importieren und alle Daten ersetzen";
+"Source" = "Quelle";
+"Export Date" = "Exportdatum";
+"Schema Version" = "Schemaversion";
+"Data Summary" = "Datenzusammenfassung";
+"cars" = "Autos";
+"expenses" = "Ausgaben";
+"maintenance records" = "Wartungseinträge";
+"notifications" = "Benachrichtigungen";
+"Date Range" = "Datumsbereich";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "Warnung: Der Import LÖSCHT ALLE vorhandenen Daten. Dies kann nicht rückgängig gemacht werden.";
+"export.preview.no_expenses" = "Keine Ausgaben";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "Ungültiges Dateiformat. Bitte wählen Sie eine gültige Sicherungsdatei.";
+"export.error.missing_metadata" = "Metadaten fehlen in der Sicherungsdatei.";
+"export.error.missing_fields" = "Erforderliche Felder fehlen in der Sicherungsdatei.";
+"export.error.incompatible_schema %d %d" = "Diese Sicherung stammt von einer inkompatiblen Version (aktuell: %d, Datei: %d).";
+"export.error.newer_schema %d %d" = "Diese Sicherung wurde mit einer neueren Version der App erstellt (aktuell: %d, Datei: %d). Der Import kann fehlschlagen oder zu Datenverlust führen.";
+"export.error.invalid_date" = "Ungültiges Datum in der Sicherungsdatei gefunden.";
+"export.error.invalid_numeric %@" = "Ungültiger numerischer Wert für Feld: %@";
+"export.error.invalid_currency %@" = "Ungültiger Währungscode: %@";
+"export.error.invalid_enum %@ %@" = "Ungültiger %@-Wert: %@";
+"export.error.invalid_reference %@ %lld" = "Ungültige Referenz: %@ mit ID %lld nicht gefunden.";
+"export.error.corrupted" = "Die Sicherungsdatei ist beschädigt und kann nicht wiederhergestellt werden.";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud-Sicherung";
+"iCloud Not Available" = "iCloud nicht verfügbar";
+"Please sign in to iCloud in Settings to enable backups." = "Bitte melden Sie sich in den Einstellungen bei iCloud an, um Sicherungen zu aktivieren.";
+"Backup Now" = "Jetzt sichern";
+"Creating backup..." = "Sicherung wird erstellt...";
+"Last backup" = "Letzte Sicherung";
+"View Backup History" = "Sicherungsverlauf anzeigen";
+"Automatic backups to iCloud keep your data safe." = "Automatische Sicherungen in iCloud halten Ihre Daten sicher.";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "Maximal 5 Sicherungen werden gespeichert, ältere als 30 Tage werden automatisch gelöscht.";
+"iCloud Backups" = "iCloud-Sicherungen";
+"Loading backups..." = "Sicherungen werden geladen...";
+"No backups found" = "Keine Sicherungen gefunden";
+"Create your first backup to get started" = "Erstellen Sie Ihre erste Sicherung, um loszulegen";
+"Delete Backup?" = "Sicherung löschen?";
+"Are you sure you want to delete the backup from %@?" = "Möchten Sie die Sicherung vom %@ wirklich löschen?";
+"Delete All Backups?" = "Alle Sicherungen löschen?";
+"Are you sure you want to delete all backups? This cannot be undone." = "Möchten Sie wirklich alle Sicherungen löschen? Dies kann nicht rückgängig gemacht werden.";
+"Delete All" = "Alle löschen";
+"Delete All Backups" = "Alle Sicherungen löschen";
+"Restore from Backup?" = "Aus Sicherung wiederherstellen?";
+"This will replace all current data with the backup from %@. This cannot be undone." = "Dies ersetzt alle aktuellen Daten durch die Sicherung vom %@. Dies kann nicht rückgängig gemacht werden.";
+"Restore" = "Wiederherstellen";
+"Backup Error" = "Sicherungsfehler";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud ist nicht verfügbar. Bitte melden Sie sich in den Einstellungen bei iCloud an.";
+"backup.error.network_unavailable" = "Keine Internetverbindung. Bitte überprüfen Sie Ihr Netzwerk.";
+"backup.error.icloud_storage_full" = "iCloud-Speicher ist voll. Bitte geben Sie Speicherplatz frei oder upgraden Sie Ihren Plan.";
+"backup.error.dev_backup_restore_on_prod_app" = "Entwicklungssicherung kann nicht auf Production-Build wiederhergestellt werden. Verwenden Sie eine Production-Sicherung.";
+
+/* Network Warning */
+"No Internet Connection" = "Keine Internetverbindung";
+"Connect to the internet to create or restore backups." = "Verbinden Sie sich mit dem Internet, um Sicherungen zu erstellen oder wiederherzustellen.";
+
+/* Automatic Backup */
+"Automatic Backup" = "Automatische Sicherung";
+"Last: " = "Letzte: ";

@@ -140,9 +140,9 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             selectedCarForExpense!.updateMileage(newMileage: chargingSessionResult.expense.odometer)
             _ = db.carRepository!.updateMilleage(selectedCarForExpense!)
         }
-        
+
         do {
-            try chargingSessionResult.expense.setCarId(carId)
+            try chargingSessionResult.expense.setCarIdWithNoValidation(carId)
         } catch {
             logger.error("Failed to set car ID for initial expense: \(error.localizedDescription)")
             return
