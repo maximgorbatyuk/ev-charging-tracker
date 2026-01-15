@@ -491,6 +491,13 @@ class UserSettingsViewModel: ObservableObject {
         isImporting = true
         importError = nil
 
+        let accessing = fileURL.startAccessingSecurityScopedResource()
+        defer {
+            if accessing {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+        }
+
         do {
             let exportData = try await backupService.parseExportFile(fileURL)
 
@@ -530,6 +537,13 @@ class UserSettingsViewModel: ObservableObject {
         isImporting = true
         importError = nil
         showImportConfirmation = false
+
+        let accessing = fileURL.startAccessingSecurityScopedResource()
+        defer {
+            if accessing {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+        }
 
         do {
             try await backupService.importData(from: fileURL)

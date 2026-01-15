@@ -449,10 +449,6 @@ final class BackupService: ObservableObject {
             }
         }
 
-        // Also fetch expenses without car association
-        let orphanExpenses = expensesRepository.fetchAllSessions(nil)
-        allExpenses.append(contentsOf: orphanExpenses)
-
         return allExpenses
     }
 
@@ -552,6 +548,8 @@ final class BackupService: ObservableObject {
         var coordinatorError: NSError?
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            var didResume = false
+
             coordinator.coordinate(
                 writingItemAt: fileURL,
                 options: .forReplacing,
@@ -566,14 +564,21 @@ final class BackupService: ObservableObject {
                     try jsonData.write(to: url)
 
                     self.logger.info("iCloud backup created: \(filename)")
-                    continuation.resume()
+                    if !didResume {
+                        didResume = true
+                        continuation.resume()
+                    }
                 } catch {
                     self.logger.error("Failed to write iCloud backup: \(error)")
-                    continuation.resume(throwing: error)
+                    if !didResume {
+                        didResume = true
+                        continuation.resume(throwing: error)
+                    }
                 }
             }
 
-            if let error = coordinatorError {
+            if let error = coordinatorError, !didResume {
+                didResume = true
                 continuation.resume(throwing: error)
             }
         }
@@ -596,6 +601,7 @@ final class BackupService: ObservableObject {
         return try await withCheckedThrowingContinuation { continuation in
             let coordinator = NSFileCoordinator()
             var coordinatorError: NSError?
+            var didResume = false
 
             coordinator.coordinate(
                 readingItemAt: backupDirectory,
@@ -611,7 +617,10 @@ final class BackupService: ObservableObject {
                             at: url,
                             withIntermediateDirectories: true
                         )
-                        continuation.resume(returning: [])
+                        if !didResume {
+                            didResume = true
+                            continuation.resume(returning: [])
+                        }
                         return
                     }
 
@@ -633,14 +642,21 @@ final class BackupService: ObservableObject {
                     // Sort by creation date (newest first)
                     backups.sort { $0.createdAt > $1.createdAt }
 
-                    continuation.resume(returning: backups)
+                    if !didResume {
+                        didResume = true
+                        continuation.resume(returning: backups)
+                    }
                 } catch {
                     self.logger.error("Failed to list iCloud backups: \(error)")
-                    continuation.resume(throwing: error)
+                    if !didResume {
+                        didResume = true
+                        continuation.resume(throwing: error)
+                    }
                 }
             }
 
-            if let error = coordinatorError {
+            if let error = coordinatorError, !didResume {
+                didResume = true
                 continuation.resume(throwing: error)
             }
         }
@@ -657,6 +673,7 @@ final class BackupService: ObservableObject {
             let exportData = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExportData, Error>) in
                 let coordinator = NSFileCoordinator()
                 var coordinatorError: NSError?
+                var didResume = false
 
                 coordinator.coordinate(
                     readingItemAt: backupInfo.fileURL,
@@ -670,14 +687,21 @@ final class BackupService: ObservableObject {
                         decoder.dateDecodingStrategy = .iso8601
 
                         let exportData = try decoder.decode(ExportData.self, from: data)
-                        continuation.resume(returning: exportData)
+                        if !didResume {
+                            didResume = true
+                            continuation.resume(returning: exportData)
+                        }
                     } catch {
                         self.logger.error("Failed to read iCloud backup: \(error)")
-                        continuation.resume(throwing: error)
+                        if !didResume {
+                            didResume = true
+                            continuation.resume(throwing: error)
+                        }
                     }
                 }
 
-                if let error = coordinatorError {
+                if let error = coordinatorError, !didResume {
+                    didResume = true
                     continuation.resume(throwing: error)
                 }
             }
@@ -703,6 +727,7 @@ final class BackupService: ObservableObject {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             let coordinator = NSFileCoordinator()
             var coordinatorError: NSError?
+            var didResume = false
 
             coordinator.coordinate(
                 writingItemAt: backupInfo.fileURL,
@@ -712,14 +737,21 @@ final class BackupService: ObservableObject {
                 do {
                     try FileManager.default.removeItem(at: url)
                     self.logger.info("Deleted iCloud backup: \(backupInfo.fileName)")
-                    continuation.resume()
+                    if !didResume {
+                        didResume = true
+                        continuation.resume()
+                    }
                 } catch {
                     self.logger.error("Failed to delete iCloud backup: \(error)")
-                    continuation.resume(throwing: error)
+                    if !didResume {
+                        didResume = true
+                        continuation.resume(throwing: error)
+                    }
                 }
             }
 
-            if let error = coordinatorError {
+            if let error = coordinatorError, !didResume {
+                didResume = true
                 continuation.resume(throwing: error)
             }
         }

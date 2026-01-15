@@ -228,7 +228,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
             carId = self.addCar(car: car)
             do {
-                try newExpenseResult.initialExpenseForNewCar!.setCarId(carId!)
+                try newExpenseResult.initialExpenseForNewCar!.setCarIdWithNoValidation(carId!)
             } catch {
                 logger.error("Error setting car ID for initial expense of new car: \(error.localizedDescription)")
                 return
@@ -242,7 +242,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         }
 
         do {
-            try newExpenseResult.expense.setCarId(carId)
+            try newExpenseResult.expense.setCarIdWithNoValidation(carId)
         } catch {
             logger.error("Error setting car ID for new expense: \(error.localizedDescription)")
             return

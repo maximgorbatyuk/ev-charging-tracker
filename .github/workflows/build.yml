@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    name: Swift Build and Lint
+    name: Swift Build
     runs-on: macos-latest
 
     steps:

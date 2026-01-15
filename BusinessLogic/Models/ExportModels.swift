@@ -119,10 +119,12 @@ struct ExportExpense: Codable {
             expenseType: ExpenseType(rawValue: expenseType) ?? .other,
             currency: Currency(rawValue: currency) ?? .usd
         )
+
         expense.id = id
+
         // Use the special setter for carId
         if let carId = carId {
-            try expense.setCarId(carId)
+            try expense.setCarIdWithNoValidation(carId)
         }
         return expense
     }
