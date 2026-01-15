@@ -30,11 +30,8 @@ jobs:
       - name: Show Swift version
         run: swift --version
 
-      - name: Install SwiftLint
-        run: brew install swiftlint
-
       - name: Run SwiftLint (optional)
-        run: swiftlint lint --strict
+        uses: norio-nomura/action-swiftlint@v6
         continue-on-error: true
 
       - name: Cache Swift Package Manager
