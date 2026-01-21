@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026.1.5 (2026-01-21)
+
+- **Expenses Sorting**
+  - Added ability to sort expenses by creation date or odometer
+  - Sorting preference is saved and persists across app sessions
+
+- **UI/UX Improvements**
+  - Reworked Expenses screen with floating action button (FAB) for adding new expenses
+  - Reworked Planned Maintenance screen with floating action button design
+  - Added helpful hints for swipe actions ("swipe left to edit/delete")
+  - Improved spacing and layout consistency across screens
+
+- **User Settings**
+  - Added debug view for user settings table (developer feature)
+
+- **Website & Documentation**
+  - New brutalist-style website design
+  - Updated privacy policy
+  - Added documentation improvements
+
 ## 2026.1.4 (2026-01-16)
 
 - **Export/Import functionality**
