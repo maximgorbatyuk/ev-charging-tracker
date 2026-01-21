@@ -20,39 +20,14 @@ struct ExpensesView: SwiftUICore.View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some SwiftUICore.View {
-        ZStack {
+        ZStack(alignment: .bottomTrailing) {
             NavigationView {
                 ScrollView {
-                    VStack(spacing: 20) {
-
-                        Button(action: {
-                            showingAddSession = true
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text(L("Add Expense"))
-                                    .fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.green, Color.green.opacity(0.8)],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                                .background(.black)
-                            )
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
-                        }
-                        .padding(.horizontal)
-
-                        if (!viewModel.hasAnyExpense) {
+                    VStack(spacing: 16) {
+                        if !viewModel.hasAnyExpense {
                             emptyStateView
                         } else {
-
-                            if (viewModel.selectedCarForExpenses != nil) {
+                            if viewModel.selectedCarForExpenses != nil {
                                 CostsBlockView(
                                     title: L("Total costs"),
                                     hint: nil,
@@ -63,7 +38,7 @@ struct ExpensesView: SwiftUICore.View {
 
                             FilterButtonsView(
                                 filterButtons: viewModel.filterButtons)
-                            .padding(.bottom, 8)
+                            .padding(.bottom, 4)
                             .padding(.horizontal)
 
                             sortingSelectorView
@@ -71,9 +46,9 @@ struct ExpensesView: SwiftUICore.View {
                             if viewModel.expenses.isEmpty {
                                 emptyStateForThisTypeView
                             } else {
-                                VStack(spacing: 16) {
+                                VStack(spacing: 12) {
                                     sessionsListView
-                                    
+
                                     if viewModel.totalPages > 1 {
                                         paginationControlsView
                                     }
@@ -81,11 +56,12 @@ struct ExpensesView: SwiftUICore.View {
                             }
                         }
 
-                        
+                        /// Extra padding at the bottom for FAB clearance
+                        Spacer()
+                            .frame(height: 80)
                     }
-                    // end of VStack
                     .padding(.vertical)
-                } // end of ScrollView
+                }
                 .navigationTitle(L("All car expenses"))
                 .navigationBarTitleDisplayMode(.automatic)
                 .sheet(isPresented: $showingAddSession) {
@@ -137,8 +113,35 @@ struct ExpensesView: SwiftUICore.View {
                     deleteConfirmationAlert()
                 }
             }
-         }
-     }
+
+            floatingAddButton
+        }
+    }
+
+    private var floatingAddButton: some SwiftUICore.View {
+        Button(action: {
+            showingAddSession = true
+        }) {
+            Image(systemName: "plus")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.green, Color.green.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .shadow(color: .green.opacity(0.4), radius: 8, x: 0, y: 4)
+                )
+        }
+        .padding(.trailing, 20)
+        .padding(.bottom, 20)
+    }
 
      private var emptyStateView: some SwiftUICore.View {
         VStack(spacing: 16) {
@@ -195,33 +198,48 @@ struct ExpensesView: SwiftUICore.View {
     }
 
     private var sessionsListView: some SwiftUICore.View {
-        LazyVStack(spacing: 12) {
+        List {
             ForEach(viewModel.expenses) { session in
-                SessionCard(
-                    session: session,
-                    onDelete: {
-                        analytics.trackEvent("expense_delete_button_clicked", properties: [
-                                "button_name": "delete",
-                                "screen": viewModel.analyticsScreenName,
-                                "action": "delete_expense"
-                            ])
+                SessionCard(session: session)
+                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                            analytics.trackEvent(
+                                "expense_delete_button_clicked",
+                                properties: [
+                                    "button_name": "delete",
+                                    "screen": viewModel.analyticsScreenName,
+                                    "action": "delete_expense"
+                                ])
 
-                        // ask for confirmation before deleting
-                        expenseToDelete = session
-                        showingDeleteConfirmation = true
-                    },
-                    onEdit: {
-                        analytics.trackEvent("expense_edit_button_clicked", properties: [
-                                "button_name": "edit",
-                                "screen": viewModel.analyticsScreenName,
-                                "action": "edit_expense"
-                            ])
-                        
-                        expenseToEdit = session
-                    })
+                            expenseToDelete = session
+                            showingDeleteConfirmation = true
+                        } label: {
+                            Label(L("Delete"), systemImage: "trash")
+                        }
+
+                        Button {
+                            analytics.trackEvent(
+                                "expense_edit_button_clicked",
+                                properties: [
+                                    "button_name": "edit",
+                                    "screen": viewModel.analyticsScreenName,
+                                    "action": "edit_expense"
+                                ])
+
+                            expenseToEdit = session
+                        } label: {
+                            Label(L("Edit"), systemImage: "pencil")
+                        }
+                        .tint(.blue)
+                    }
             }
         }
-        .padding(.horizontal)
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .frame(minHeight: CGFloat(viewModel.expenses.count) * 120)
     }
     
     private var paginationControlsView: some SwiftUICore.View {

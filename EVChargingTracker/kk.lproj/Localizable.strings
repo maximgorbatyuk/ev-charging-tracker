@@ -85,6 +85,7 @@
 "Delete expense on %@? This action cannot be undone." = "%@ күнгі шығынды жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
 "Delete selected expense? This action cannot be undone." = "Таңдалған шығынды жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
 "Delete" = "Жою";
+"Edit" = "Өңдеу";
 
 "Energy" = "Энергия";
 "Expense type" = "Шығын түрі";

@@ -81,6 +81,7 @@
 "Delete expense on %@? This action cannot be undone." = "Видалити витрату від %@? Цю дію неможливо скасувати.";
 "Delete selected expense? This action cannot be undone." = "Видалити обрану витрату? Цю дію неможливо скасувати.";
 "Delete" = "Видалити";
+"Edit" = "Редагувати";
 
 "Energy" = "Енергія";
 "Expense type" = "Тип витрат";

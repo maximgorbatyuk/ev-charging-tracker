@@ -10,97 +10,55 @@ import SwiftUI
 struct SessionCard: SwiftUICore.View {
 
     @Environment(\.colorScheme) var colorScheme
-    
+
     let session: Expense
-    let onDelete: () -> Void
-    let onEdit: () -> Void
-    
+
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                
-                if (session.expenseType == .charging) {
-                    HStack {
-                        Image(systemName: "bolt.fill")
-                            .foregroundColor(.yellow)
-                            .font(.headline)
+                if session.expenseType == .charging {
+                    Image(systemName: "bolt.fill")
+                        .foregroundColor(.yellow)
+                        .font(.headline)
 
-                        Text(String(format: L("%.1f kWh"), session.energyCharged))
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(colorScheme == .dark ? .white : .primary)
-                    }
+                    Text(String(format: L("%.1f kWh"), session.energyCharged))
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(colorScheme == .dark ? .white : .primary)
                 } else {
-                    HStack {
+                    expenseTypeIcon
 
-                        if (session.expenseType == .maintenance || session.expenseType == .repair) {
-                            Image(systemName: "wrench.fill")
-                                .foregroundColor(.blue)
-                                .font(.headline)
-                        } else if (session.expenseType == .carwash) {
-                            Image(systemName: "drop.fill")
-                                .foregroundColor(.cyan)
-                                .font(.headline)
-                        } else {
-                            Image(systemName: "creditcard.fill")
-                                .foregroundColor(.green)
-                                .font(.headline)
-                        }
-
-                        Text(L(session.expenseType.rawValue))
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(colorScheme == .dark ? .white : .primary)
-                    }
+                    Text(L(session.expenseType.rawValue))
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(colorScheme == .dark ? .white : .primary)
                 }
 
                 Spacer()
 
-                Button(action: onEdit) {
-                    Image(systemName: "pencil")
-                        .foregroundColor(.blue)
-                }
-                .padding(.trailing, 8)
-                
-                Button(action: onDelete) {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
+                if let cost = session.cost {
+                    Text(String(format: "%@%.2f", session.currency.rawValue, cost))
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.green)
                 }
             }
 
-            HStack(spacing: 20) {
+            HStack(spacing: 16) {
+                Label(
+                    session.date.formatted(as: "yyyy-MM-dd"),
+                    systemImage: "calendar"
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(L("Date"))
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                Label(
+                    "\(session.odometer.formatted()) km",
+                    systemImage: "speedometer"
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
 
-                    Text(session.date.formatted(as: "yyyy-MM-dd"))
-                        .font(.subheadline)
-                        .foregroundColor(colorScheme == .dark ? .white : .primary)
-                }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(L("Odometer"))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    Text("\(session.odometer.formatted()) km")
-                        .font(.subheadline)
-                        .foregroundColor(colorScheme == .dark ? .white : .primary)
-                }
-                
-                if let cost = session.cost {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L("Cost"))
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Text(String(format: "%@%.2f", session.currency.rawValue, cost))
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.green)
-                    }
-                }
-                
                 Spacer()
             }
 
@@ -120,5 +78,25 @@ struct SessionCard: SwiftUICore.View {
                         .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                 )
         )
+    }
+
+    @ViewBuilder
+    private var expenseTypeIcon: some SwiftUICore.View {
+        switch session.expenseType {
+        case .maintenance, .repair:
+            Image(systemName: "wrench.fill")
+                .foregroundColor(.blue)
+                .font(.headline)
+
+        case .carwash:
+            Image(systemName: "drop.fill")
+                .foregroundColor(.cyan)
+                .font(.headline)
+
+        default:
+            Image(systemName: "creditcard.fill")
+                .foregroundColor(.green)
+                .font(.headline)
+        }
     }
 }

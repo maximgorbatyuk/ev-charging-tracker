@@ -81,6 +81,7 @@
 "Delete expense on %@? This action cannot be undone." = "Ausgabe vom %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
 "Delete selected expense? This action cannot be undone." = "Ausgewählte Ausgabe löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
 "Delete" = "Löschen";
+"Edit" = "Bearbeiten";
 
 "Energy" = "Energie";
 "Expense type" = "Ausgabentyp";
