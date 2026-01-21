@@ -28,6 +28,7 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showExportShareSheet = false
     @State private var exportFileURL: URL?
     @State private var showImportFilePicker = false
+    @State private var showUserSettingsTable = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -608,6 +609,20 @@ struct UserSettingsView: SwiftUICore.View {
                             Text("Delete all data")
                         }
                         .buttonStyle(.plain)
+
+                        Button(action: {
+                            showUserSettingsTable = true
+                        }) {
+                            HStack {
+                                Image(systemName: "tablecells")
+                                    .foregroundColor(.purple)
+
+                                Text("View user Settings")
+                                    .padding(.leading, 4)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -662,6 +677,11 @@ struct UserSettingsView: SwiftUICore.View {
             }
             .sheet(isPresented: $viewModel.showBackupList) {
                 iCloudBackupListView(viewModel: viewModel)
+            }
+            .sheet(isPresented: $showUserSettingsTable) {
+                UserSettingsTableView(
+                    settings: DatabaseManager.shared.userSettingsRepository?.fetchAllSettings() ?? []
+                )
             }
             .fileImporter(
                 isPresented: $showImportFilePicker,

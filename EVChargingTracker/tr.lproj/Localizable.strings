@@ -81,6 +81,7 @@
 "Delete expense on %@? This action cannot be undone." = "Delete expense on %@? This action cannot be undone.";
 "Delete selected expense? This action cannot be undone." = "Seçilen harcamayı silmek ister misiniz? Bu işlem geri alınamaz.";
 "Delete" = "Sil";
+"Edit" = "Düzenle";
 "Rides" = "Sürüşler";
 
 "Energy" = "Enerji";
@@ -161,6 +162,11 @@
 "Filter.Maintenance" = "Bakım";
 "Filter.Carwash" = "Araba Yıkama";
 "Filter.Other" = "Diğer";
+
+/* Sorting */
+"Sort by" = "Sırala";
+"Sort.CreationDate" = "Tarih";
+"Sort.Odometer" = "Kilometre";
 
 /* Onboarding pages */
 "Welcome to" = "Hoş geldiniz";
@@ -270,3 +276,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Otomatik Yedekleme";
 "Last: " = "Son: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "Kaydı düzenlemek veya silmek için sola kaydırın";
+
+"For deleting record, please swipe left" = "Kaydı silmek için sola kaydırın";

@@ -15,6 +15,20 @@ enum ExpenseType: String, CaseIterable, Codable {
     case other = "other"
 }
 
+enum ExpensesSortingOption: String, CaseIterable, Codable {
+    case creationDate = "creation_date"
+    case odometer = "odometer"
+
+    var localizedTitle: String {
+        switch self {
+        case .creationDate:
+            return L("Sort.CreationDate")
+        case .odometer:
+            return L("Sort.Odometer")
+        }
+    }
+}
+
 enum ChargerType: String, CaseIterable, Codable {
     case home3kW = "Home (3kW)"
     case home7kW = "Home (7kW)"

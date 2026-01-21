@@ -198,12 +198,14 @@ class ExpensesRepository {
     ///   - expenseTypeFilters: Optional filters for expense types
     ///   - page: The page number (1-indexed)
     ///   - pageSize: Number of items per page
-    /// - Returns: Array of expenses for the requested page, ordered by id desc (created_at desc)
+    ///   - sortBy: The field to sort by (default: `.creationDate`)
+    /// - Returns: Array of expenses for the requested page
     func fetchCarSessionsPaginated(
         carId: Int64?,
         expenseTypeFilters: [ExpenseType] = [],
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        sortBy: ExpensesSortingOption = .creationDate
     ) -> [Expense] {
         // Validate pagination inputs
         guard page > 0 else {
@@ -218,13 +220,14 @@ class ExpensesRepository {
         
         // Calculate offset
         let offset = (page - 1) * pageSize
-        
+
         // Build query using helper
         let query = buildPaginatedQuery(
             carId: carId,
             expenseTypeFilters: expenseTypeFilters,
             limit: pageSize,
-            offset: offset
+            offset: offset,
+            sortBy: sortBy
         )
         
         // Fetch and map results using helper
@@ -249,25 +252,33 @@ class ExpensesRepository {
     ///   - expenseTypeFilters: Optional filters for expense types
     ///   - limit: Maximum number of results to return
     ///   - offset: Number of results to skip
+    ///   - sortBy: The field to sort by
     /// - Returns: A configured query ready for execution
     private func buildPaginatedQuery(
         carId: Int64?,
         expenseTypeFilters: [ExpenseType],
         limit: Int,
-        offset: Int
+        offset: Int,
+        sortBy: ExpensesSortingOption
     ) -> QueryType {
         var query = chargingSessionsTable.filter(carIdColumn == carId)
-        
+
         // Apply expense type filters if provided
         if !expenseTypeFilters.isEmpty {
             let stringValues = expenseTypeFilters.map { $0.rawValue }
             query = query.filter(stringValues.contains(expenseType))
         }
-        
-        // Apply ordering and pagination
-        return query
-            .order(id.desc)
-            .limit(limit, offset: offset)
+
+        // Apply ordering based on sorting option
+        switch sortBy {
+        case .creationDate:
+            query = query.order(id.desc)
+        case .odometer:
+            query = query.order(odometer.desc)
+        }
+
+        // Apply pagination
+        return query.limit(limit, offset: offset)
     }
     
     /// Maps a database row to an Expense object

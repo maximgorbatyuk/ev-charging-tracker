@@ -115,4 +115,58 @@ class UserSettingsRepository {
     func fetchUserId() -> String? {
         return fetchValue(for: "user_id")
     }
+
+    // MARK: - Expenses Sorting Preference
+
+    private static let expensesSortingKey = "ExpensesDefaultSortingValue"
+
+    /// Fetches the expenses sorting preference from the database
+    /// - Returns: The sorting option, defaults to `.creationDate` if not set
+    func fetchExpensesSortingOption() -> ExpensesSortingOption {
+        if let value = fetchValue(for: Self.expensesSortingKey),
+           let option = ExpensesSortingOption(rawValue: value)
+        {
+            return option
+        }
+
+        return .creationDate
+    }
+
+    /// Saves the expenses sorting preference to the database
+    /// - Parameter option: The sorting option to save
+    /// - Returns: `true` if the operation succeeded
+    @discardableResult
+    func upsertExpensesSortingOption(_ option: ExpensesSortingOption) -> Bool {
+        return upsertValue(key: Self.expensesSortingKey, value: option.rawValue)
+    }
+
+    // MARK: - Debug / Developer Mode
+
+    /// Fetches all settings from the user_settings table
+    /// - Returns: Array of key-value pairs
+    func fetchAllSettings() -> [UserSettingEntry] {
+        var results: [UserSettingEntry] = []
+
+        do {
+            for row in try db.prepare(table.order(id.asc)) {
+                let entry = UserSettingEntry(
+                    id: row[id],
+                    key: row[keyColumn],
+                    value: row[valueColumn]
+                )
+                results.append(entry)
+            }
+        } catch {
+            logger.error("Failed to fetch all user settings: \(error)")
+        }
+
+        return results
+    }
+}
+
+/// Represents a single entry from the user_settings table
+struct UserSettingEntry: Identifiable {
+    let id: Int64
+    let key: String
+    let value: String
 }

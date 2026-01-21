@@ -28,60 +28,31 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     }
 
     var body: some SwiftUICore.View {
-        ZStack {
+        ZStack(alignment: .bottomTrailing) {
             NavigationView {
                 ScrollView {
-                    VStack(spacing: 20) {
-                        Button(action: {
-                            showingAddMaintenanceRecord = true
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text(L("Add maintenance"))
-                                    .fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.cyan, Color.blue.opacity(0.8)],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                                .background(.black)
-                            )
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
-                        }
-                        .padding(.horizontal)
-                        .disabled(viewModel.selectedCarForExpenses == nil)
-
+                    VStack(spacing: 16) {
                         if viewModel.maintenanceRecords.isEmpty {
                             EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
-                        } else if (viewModel.selectedCarForExpenses != nil) {
-                            LazyVStack(spacing: 12) {
-                                ForEach(viewModel.maintenanceRecords) { record in
-                                    PlannedMaintenanceItemView(
-                                        selectedCar: viewModel.selectedCarForExpenses!,
-                                        record: record,
-                                        onDelete: {
-                                            analytics.trackEvent("delete_maintenance_button_clicked", properties: [
-                                                    "button_name": "delete",
-                                                    "screen": "planned_maintenance_screen",
-                                                    "action": "delete_maintenance_record"
-                                                ])
+                        } else if viewModel.selectedCarForExpenses != nil {
+                            VStack(spacing: 12) {
+                                Text(L("For deleting record, please swipe left"))
+                                    .font(.caption)
+                                    .fontWeight(.regular)
+                                    .padding(.horizontal)
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                                            recordToDelete = record
-                                            showingDeleteConfirmation = true
-                                        })
-                                }
+                                maintenanceListView
                             }
-                            .padding(.horizontal)
+
+                            /// Extra padding at the bottom for FAB clearance
+                            Spacer()
+                                .frame(height: 80)
                         }
                     }
-                    // end of VStack
                     .padding(.vertical)
-                } // end of ScrollView
+                }
                 .navigationTitle(L("Planned maintenance"))
                 .navigationBarTitleDisplayMode(.automatic)
                 .onAppear {
@@ -110,10 +81,71 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             onPlannedMaintenaceRecordsUpdated()
                         }
                     )
-                        
                 }
-            } // end of NavigationView
-        } // end of ZStack
+            }
+
+            floatingAddButton
+        }
+    }
+
+    private var floatingAddButton: some SwiftUICore.View {
+        Button(action: {
+            showingAddMaintenanceRecord = true
+        }) {
+            Image(systemName: "plus")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.cyan, Color.blue.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .shadow(color: .blue.opacity(0.4), radius: 8, x: 0, y: 4)
+                )
+        }
+        .disabled(viewModel.selectedCarForExpenses == nil)
+        .opacity(viewModel.selectedCarForExpenses == nil ? 0.5 : 1.0)
+        .padding(.trailing, 20)
+        .padding(.bottom, 20)
+    }
+
+    private var maintenanceListView: some SwiftUICore.View {
+        List {
+            ForEach(viewModel.maintenanceRecords) { record in
+                PlannedMaintenanceItemView(
+                    selectedCar: viewModel.selectedCarForExpenses!,
+                    record: record
+                )
+                .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button(role: .destructive) {
+                        analytics.trackEvent(
+                            "delete_maintenance_button_clicked",
+                            properties: [
+                                "button_name": "delete",
+                                "screen": "planned_maintenance_screen",
+                                "action": "delete_maintenance_record"
+                            ])
+
+                        recordToDelete = record
+                        showingDeleteConfirmation = true
+                    } label: {
+                        Label(L("Delete"), systemImage: "trash")
+                    }
+                }
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .frame(minHeight: CGFloat(viewModel.maintenanceRecords.count) * 140)
     }
 
     private func loadData() {

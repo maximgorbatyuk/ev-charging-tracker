@@ -81,6 +81,7 @@
 "Delete expense on %@? This action cannot be undone." = "Ausgabe vom %@ löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
 "Delete selected expense? This action cannot be undone." = "Ausgewählte Ausgabe löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
 "Delete" = "Löschen";
+"Edit" = "Bearbeiten";
 
 "Energy" = "Energie";
 "Expense type" = "Ausgabentyp";
@@ -162,6 +163,11 @@
 "Filter.Maintenance" = "Wartung";
 "Filter.Carwash" = "Autowäsche";
 "Filter.Other" = "Sonstiges";
+
+/* Sorting */
+"Sort by" = "Sortieren nach";
+"Sort.CreationDate" = "Datum";
+"Sort.Odometer" = "Kilometerstand";
 
 /* Onboarding pages */
 "Welcome to" = "Willkommen bei";
@@ -271,3 +277,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Automatische Sicherung";
 "Last: " = "Letzte: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "Zum Bearbeiten oder Löschen eines Eintrags nach links wischen";
+
+"For deleting record, please swipe left" = "Zum Löschen eines Eintrags nach links wischen";
