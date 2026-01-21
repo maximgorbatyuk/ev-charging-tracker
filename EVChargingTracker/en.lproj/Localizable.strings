@@ -81,6 +81,7 @@
 "Delete expense on %@? This action cannot be undone." = "Delete expense on %@? This action cannot be undone.";
 "Delete selected expense? This action cannot be undone." = "Delete selected expense? This action cannot be undone.";
 "Delete" = "Delete";
+"Edit" = "Edit";
 
 "Energy" = "Energy";
 "Expense type" = "Expense type";
@@ -159,6 +160,11 @@
 "Filter.Maintenance" = "Maintenance";
 "Filter.Carwash" = "Car wash";
 "Filter.Other" = "Other";
+
+/* Sorting */
+"Sort by" = "Sort by";
+"Sort.CreationDate" = "Date";
+"Sort.Odometer" = "Odometer";
 
 /* Onboarding pages */
 "Welcome to" = "Welcome to";
@@ -268,3 +274,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Automatic Backup";
 "Last: " = "Last: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "For editing or deleting record, please swipe left";
+
+"For deleting record, please swipe left" = "For deleting record, please swipe left";

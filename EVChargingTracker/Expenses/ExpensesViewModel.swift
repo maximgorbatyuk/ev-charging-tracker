@@ -15,6 +15,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     @Published var currentPage: Int = 1
     @Published var totalRecords: Int = 0
     @Published var totalPages: Int = 0
+    @Published var selectedSortingOption: ExpensesSortingOption = .creationDate
 
     var totalCost: Double = 0.0
     var hasAnyExpense = false
@@ -47,6 +48,9 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         self.chargingSessionsRepository = db.expensesRepository!
         self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
+
+        // Load saved sorting preference
+        self.selectedSortingOption = db.userSettingsRepository?.fetchExpensesSortingOption() ?? .creationDate
 
         self.filterButtons = [
             FilterButtonItem(
@@ -110,6 +114,32 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         currentPage = 1 // Reset to first page when filtering
         loadSessionsForCurrentPage()
     }
+
+    func setSortingOption(_ option: ExpensesSortingOption) -> Void {
+        guard option != selectedSortingOption else {
+            return
+        }
+
+        selectedSortingOption = option
+        currentPage = 1 // Reset to first page when changing sort order
+
+        // Persist to database only if not the default option
+        if option != .creationDate {
+            db.userSettingsRepository?.upsertExpensesSortingOption(option)
+        } else {
+            // Remove the setting when returning to default
+            db.userSettingsRepository?.upsertExpensesSortingOption(option)
+        }
+
+        loadSessionsForCurrentPage()
+
+        analytics.trackEvent(
+            "expenses_sorting_changed",
+            properties: [
+                "screen": analyticsScreenName,
+                "sorting_option": option.rawValue
+            ])
+    }
     
     private func loadSessionsForCurrentPage() -> Void {
         let car = self.reloadSelectedCarForExpenses()
@@ -138,7 +168,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 carId: carId,
                 expenseTypeFilters: _currentExpenseTypeFilters,
                 page: currentPage,
-                pageSize: pageSize
+                pageSize: pageSize,
+                sortBy: selectedSortingOption
             )
             totalCost = getTotalCost()
         } else {

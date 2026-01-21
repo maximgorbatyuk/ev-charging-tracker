@@ -85,6 +85,7 @@
 "Delete expense on %@? This action cannot be undone." = "%@ күнгі шығынды жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
 "Delete selected expense? This action cannot be undone." = "Таңдалған шығынды жою керек пе? Бұл әрекетті қайтару мүмкін емес.";
 "Delete" = "Жою";
+"Edit" = "Өңдеу";
 
 "Energy" = "Энергия";
 "Expense type" = "Шығын түрі";
@@ -168,6 +169,11 @@
 "Filter.Maintenance" = "Қызмет көрсету";
 "Filter.Carwash" = "Көлік жуу";
 "Filter.Other" = "Басқа";
+
+/* Sorting */
+"Sort by" = "Сұрыптау";
+"Sort.CreationDate" = "Күні";
+"Sort.Odometer" = "Одометр";
 
 /* Onboarding pages */
 "Welcome to" = "Қош келдіңіз";
@@ -277,3 +283,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Автоматты сақтық көшірме";
 "Last: " = "Соңғы: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "Жазбаны өңдеу немесе жою үшін солға сырғытыңыз";
+
+"For deleting record, please swipe left" = "Жазбаны жою үшін солға сырғытыңыз";
