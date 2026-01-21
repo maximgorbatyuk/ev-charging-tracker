@@ -9,31 +9,20 @@ import Foundation
 import SwiftUI
 
 struct PlannedMaintenanceItemView: SwiftUICore.View {
-    
+
     @Environment(\.colorScheme) var colorScheme
 
     let selectedCar: Car
     let record: PlannedMaintenanceItem
-    let onDelete: () -> Void
 
     var body: some SwiftUICore.View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text(record.name)
-                    .font(.headline)
-                    .foregroundColor(colorScheme == .dark ? .white : .primary)
+        VStack(alignment: .leading, spacing: 8) {
+            Text(record.name)
+                .font(.headline)
+                .foregroundColor(colorScheme == .dark ? .white : .primary)
 
-                Spacer()
-
-                Button(action: onDelete) {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
-                }
-            }
-
-            if (record.when != nil || record.odometer != nil) {
+            if record.when != nil || record.odometer != nil {
                 PlannedOnView(record: record, selectedCar: selectedCar)
-                    .padding(.top, 8)
             }
 
             if !record.notes.isEmpty {
@@ -41,9 +30,9 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
                     .font(.caption)
                     .foregroundColor(.gray)
                     .lineLimit(3)
-                    .padding(.top, 8)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)

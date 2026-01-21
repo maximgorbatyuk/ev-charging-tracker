@@ -69,6 +69,7 @@ struct SessionCard: SwiftUICore.View {
                     .lineLimit(2)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
