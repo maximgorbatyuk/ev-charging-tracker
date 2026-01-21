@@ -139,4 +139,34 @@ class UserSettingsRepository {
     func upsertExpensesSortingOption(_ option: ExpensesSortingOption) -> Bool {
         return upsertValue(key: Self.expensesSortingKey, value: option.rawValue)
     }
+
+    // MARK: - Debug / Developer Mode
+
+    /// Fetches all settings from the user_settings table
+    /// - Returns: Array of key-value pairs
+    func fetchAllSettings() -> [UserSettingEntry] {
+        var results: [UserSettingEntry] = []
+
+        do {
+            for row in try db.prepare(table.order(id.asc)) {
+                let entry = UserSettingEntry(
+                    id: row[id],
+                    key: row[keyColumn],
+                    value: row[valueColumn]
+                )
+                results.append(entry)
+            }
+        } catch {
+            logger.error("Failed to fetch all user settings: \(error)")
+        }
+
+        return results
+    }
+}
+
+/// Represents a single entry from the user_settings table
+struct UserSettingEntry: Identifiable {
+    let id: Int64
+    let key: String
+    let value: String
 }

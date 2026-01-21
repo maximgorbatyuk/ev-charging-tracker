@@ -47,6 +47,14 @@ struct ExpensesView: SwiftUICore.View {
                                 emptyStateForThisTypeView
                             } else {
                                 VStack(spacing: 12) {
+
+                                    Text("For editing or deleting record, please swipe left")
+                                        .font(.caption)
+                                        .fontWeight(.regular)
+                                        .padding(.horizontal)
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+
                                     sessionsListView
 
                                     if viewModel.totalPages > 1 {
