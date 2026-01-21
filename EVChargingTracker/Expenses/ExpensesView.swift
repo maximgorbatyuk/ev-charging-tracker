@@ -66,6 +66,8 @@ struct ExpensesView: SwiftUICore.View {
                             .padding(.bottom, 8)
                             .padding(.horizontal)
 
+                            sortingSelectorView
+
                             if viewModel.expenses.isEmpty {
                                 emptyStateForThisTypeView
                             } else {
@@ -167,7 +169,31 @@ struct ExpensesView: SwiftUICore.View {
        }
        .padding(.top, 60)
    }
-    
+
+    private var sortingSelectorView: some SwiftUICore.View {
+        HStack {
+            Text(L("Sort by"))
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            Picker(L("Sort by"), selection: sortingOptionBinding) {
+                ForEach(ExpensesSortingOption.allCases, id: \.self) { option in
+                    Text(option.localizedTitle).tag(option)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+    }
+
+    private var sortingOptionBinding: SwiftUI.Binding<ExpensesSortingOption> {
+        SwiftUI.Binding(
+            get: { viewModel.selectedSortingOption },
+            set: { viewModel.setSortingOption($0) }
+        )
+    }
+
     private var sessionsListView: some SwiftUICore.View {
         LazyVStack(spacing: 12) {
             ForEach(viewModel.expenses) { session in

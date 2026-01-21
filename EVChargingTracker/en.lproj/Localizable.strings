@@ -160,6 +160,11 @@
 "Filter.Carwash" = "Car wash";
 "Filter.Other" = "Other";
 
+/* Sorting */
+"Sort by" = "Sort by";
+"Sort.CreationDate" = "Date";
+"Sort.Odometer" = "Odometer";
+
 /* Onboarding pages */
 "Welcome to" = "Welcome to";
 "Select your language" = "Select your language";

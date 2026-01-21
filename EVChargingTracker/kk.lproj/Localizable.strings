@@ -169,6 +169,11 @@
 "Filter.Carwash" = "Көлік жуу";
 "Filter.Other" = "Басқа";
 
+/* Sorting */
+"Sort by" = "Сұрыптау";
+"Sort.CreationDate" = "Күні";
+"Sort.Odometer" = "Одометр";
+
 /* Onboarding pages */
 "Welcome to" = "Қош келдіңіз";
 "Select your language" = "Тіліңізді таңдаңыз";

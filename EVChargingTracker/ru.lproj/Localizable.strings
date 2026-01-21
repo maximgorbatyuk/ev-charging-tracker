@@ -162,6 +162,11 @@
 "Filter.Carwash" = "Мойка";
 "Filter.Other" = "Другое";
 
+/* Sorting */
+"Sort by" = "Сортировка";
+"Sort.CreationDate" = "Дата";
+"Sort.Odometer" = "Одометр";
+
 /* Onboarding pages */
 "Welcome to" = "Добро пожаловать в";
 "Select your language" = "Выберите ваш язык";

@@ -163,6 +163,11 @@
 "Filter.Carwash" = "Autowäsche";
 "Filter.Other" = "Sonstiges";
 
+/* Sorting */
+"Sort by" = "Sortieren nach";
+"Sort.CreationDate" = "Datum";
+"Sort.Odometer" = "Kilometerstand";
+
 /* Onboarding pages */
 "Welcome to" = "Willkommen bei";
 "Select your language" = "Wählen Sie Ihre Sprache";

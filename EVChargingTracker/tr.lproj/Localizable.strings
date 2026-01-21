@@ -162,6 +162,11 @@
 "Filter.Carwash" = "Araba Yıkama";
 "Filter.Other" = "Diğer";
 
+/* Sorting */
+"Sort by" = "Sırala";
+"Sort.CreationDate" = "Tarih";
+"Sort.Odometer" = "Kilometre";
+
 /* Onboarding pages */
 "Welcome to" = "Hoş geldiniz";
 "Select your language" = "Dil seçin";

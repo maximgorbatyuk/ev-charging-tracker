@@ -160,6 +160,11 @@
 "Filter.Carwash" = "Мийка";
 "Filter.Other" = "Інше";
 
+/* Sorting */
+"Sort by" = "Сортування";
+"Sort.CreationDate" = "Дата";
+"Sort.Odometer" = "Одометр";
+
 /* Onboarding pages */
 "Welcome to" = "Ласкаво просимо до";
 "Select your language" = "Оберіть мову";
