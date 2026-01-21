@@ -274,3 +274,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Automatic Backup";
 "Last: " = "Last: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "For editing or deleting record, please swipe left";
+
+"For deleting record, please swipe left" = "For deleting record, please swipe left";

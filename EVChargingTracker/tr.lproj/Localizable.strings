@@ -276,3 +276,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Otomatik Yedekleme";
 "Last: " = "Son: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "Kaydı düzenlemek veya silmek için sola kaydırın";
+
+"For deleting record, please swipe left" = "Kaydı silmek için sola kaydırın";

@@ -283,3 +283,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Автоматты сақтық көшірме";
 "Last: " = "Соңғы: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "Жазбаны өңдеу немесе жою үшін солға сырғытыңыз";
+
+"For deleting record, please swipe left" = "Жазбаны жою үшін солға сырғытыңыз";

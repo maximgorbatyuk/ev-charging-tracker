@@ -272,3 +272,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Автоматичне резервне копіювання";
 "Last: " = "Останнє: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "Для редагування або видалення запису, проведіть вліво";
+
+"For deleting record, please swipe left" = "Для видалення запису, проведіть вліво";

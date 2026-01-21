@@ -48,7 +48,7 @@ struct ExpensesView: SwiftUICore.View {
                             } else {
                                 VStack(spacing: 12) {
 
-                                    Text("For editing or deleting record, please swipe left")
+                                    Text(L("For editing or deleting record, please swipe left"))
                                         .font(.caption)
                                         .fontWeight(.regular)
                                         .padding(.horizontal)

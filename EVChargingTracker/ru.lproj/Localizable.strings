@@ -276,3 +276,8 @@
 /* Automatic Backup */
 "Automatic Backup" = "Автоматическое резервное копирование";
 "Last: " = "Последнее: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "Для редактирования или удаления записи, проведите влево";
+
+"For deleting record, please swipe left" = "Для удаления записи, проведите влево";

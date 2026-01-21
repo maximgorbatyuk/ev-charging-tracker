@@ -35,7 +35,16 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         if viewModel.maintenanceRecords.isEmpty {
                             EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
                         } else if viewModel.selectedCarForExpenses != nil {
-                            maintenanceListView
+                            VStack(spacing: 12) {
+                                Text(L("For deleting record, please swipe left"))
+                                    .font(.caption)
+                                    .fontWeight(.regular)
+                                    .padding(.horizontal)
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                                maintenanceListView
+                            }
 
                             /// Extra padding at the bottom for FAB clearance
                             Spacer()
