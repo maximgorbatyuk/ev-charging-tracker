@@ -287,3 +287,6 @@
 "System" = "Системная";
 "Light" = "Светлая";
 "Dark" = "Тёмная";
+
+/* Launch Screen */
+"EV Charge Tracker" = "EV Charge Tracker";

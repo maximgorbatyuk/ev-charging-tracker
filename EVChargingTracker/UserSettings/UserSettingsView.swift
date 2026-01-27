@@ -29,6 +29,7 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var exportFileURL: URL?
     @State private var showImportFilePicker = false
     @State private var showUserSettingsTable = false
+    @State private var showLaunchScreen = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -641,6 +642,20 @@ struct UserSettingsView: SwiftUICore.View {
                             }
                         }
                         .buttonStyle(.plain)
+
+                        Button(action: {
+                            showLaunchScreen = true
+                        }) {
+                            HStack {
+                                Image(systemName: "app.badge")
+                                    .foregroundColor(.green)
+
+                                Text("Show Launch Screen")
+                                    .padding(.leading, 4)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -700,6 +715,9 @@ struct UserSettingsView: SwiftUICore.View {
                 UserSettingsTableView(
                     settings: DatabaseManager.shared.userSettingsRepository?.fetchAllSettings() ?? []
                 )
+            }
+            .sheet(isPresented: $showLaunchScreen) {
+                LaunchScreenView()
             }
             .fileImporter(
                 isPresented: $showImportFilePicker,

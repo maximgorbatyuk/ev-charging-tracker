@@ -288,3 +288,6 @@
 "System" = "System";
 "Light" = "Hell";
 "Dark" = "Dunkel";
+
+/* Launch Screen */
+"EV Charge Tracker" = "EV Charge Tracker";

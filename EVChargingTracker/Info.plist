@@ -20,5 +20,9 @@
 	<array>
 		<string>com.evchargingtracker.daily-backup</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 </dict>
 </plist>

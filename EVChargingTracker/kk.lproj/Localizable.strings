@@ -294,3 +294,6 @@
 "System" = "Жүйелік";
 "Light" = "Ашық";
 "Dark" = "Қараңғы";
+
+/* Launch Screen */
+"EV Charge Tracker" = "EV Charge Tracker";

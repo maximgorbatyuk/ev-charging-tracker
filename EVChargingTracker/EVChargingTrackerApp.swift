@@ -17,41 +17,59 @@ struct EVChargingTrackerApp: App {
     @AppStorage(UserSettingsViewModel.onboardingCompletedKey) private var isOnboardingComplete = false
 
     @ObservedObject private var appearanceManager = AppearanceManager.shared
+    @State private var isAppReady = false
     private var analytics = AnalyticsService.shared
 
     var body: some Scene {
         WindowGroup {
-            if !isOnboardingComplete {
-                OnboardingView(
-                    onOnboardingSkipped: {
-                        isOnboardingComplete = true
-                        UserDefaults.standard.set(true, forKey: UserSettingsViewModel.onboardingCompletedKey)
-                        analytics.trackEvent(
-                            "onboarding_skipped",
-                            properties: [
-                                "screen": "main_screen"
-                            ])
-                    },
-                    onOnboardingCompleted: {
-                        isOnboardingComplete = true
-                        UserDefaults.standard.set(true, forKey: UserSettingsViewModel.onboardingCompletedKey)
-                        analytics.trackEvent(
-                            "onboarding_completed",
-                            properties: [
-                                "screen": "main_screen"
-                            ])
-                    })
-                .onAppear {
-                    analytics.trackEvent("app_opened")
-                }
-                .preferredColorScheme(appearanceManager.colorScheme)
+            ZStack {
+                if isAppReady {
+                    if !isOnboardingComplete {
+                        OnboardingView(
+                            onOnboardingSkipped: {
+                                isOnboardingComplete = true
+                                UserDefaults.standard.set(true, forKey: UserSettingsViewModel.onboardingCompletedKey)
+                                analytics.trackEvent(
+                                    "onboarding_skipped",
+                                    properties: [
+                                        "screen": "main_screen"
+                                    ])
+                            },
+                            onOnboardingCompleted: {
+                                isOnboardingComplete = true
+                                UserDefaults.standard.set(true, forKey: UserSettingsViewModel.onboardingCompletedKey)
+                                analytics.trackEvent(
+                                    "onboarding_completed",
+                                    properties: [
+                                        "screen": "main_screen"
+                                    ])
+                            })
+                        .onAppear {
+                            analytics.trackEvent("app_opened")
+                        }
+                        .transition(.opacity)
 
-            } else {
-                MainTabView()
-                    .onAppear {
-                        analytics.trackEvent("app_opened")
+                    } else {
+                        MainTabView()
+                            .onAppear {
+                                analytics.trackEvent("app_opened")
+                            }
+                            .transition(.opacity)
                     }
-                    .preferredColorScheme(appearanceManager.colorScheme)
+                } else {
+                    LaunchScreenView()
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut(duration: 0.3), value: isAppReady)
+            .preferredColorScheme(appearanceManager.colorScheme)
+            .onAppear {
+                /// Simulate a brief loading delay for smooth transition
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    withAnimation {
+                        isAppReady = true
+                    }
+                }
             }
         }
     }
@@ -71,10 +89,9 @@ final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNU
         #endif
 
         // Register background tasks for automatic backups
-        Task { @MainActor in
-            BackgroundTaskManager.shared.registerBackgroundTasks()
-            BackgroundTaskManager.shared.scheduleNextBackup()
-        }
+        // IMPORTANT: Must be registered synchronously before this method returns
+        BackgroundTaskManager.shared.registerBackgroundTasks()
+        BackgroundTaskManager.shared.scheduleNextBackup()
 
         return true
     }

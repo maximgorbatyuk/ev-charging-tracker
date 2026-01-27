@@ -18,6 +18,9 @@ final class BackgroundTaskManager: ObservableObject {
     /// Background task identifier - must match Info.plist
     static let dailyBackupTaskIdentifier = "com.evchargingtracker.daily-backup"
 
+    /// Static logger for use in nonisolated contexts (background task callbacks)
+    private static let backgroundLogger = Logger(subsystem: "com.evchargingtracker", category: "BackgroundTaskManager")
+
     /// UserDefaults keys
     private enum UserDefaultsKey {
         static let automaticBackupEnabled = "automaticBackupEnabled"
@@ -73,31 +76,33 @@ final class BackgroundTaskManager: ObservableObject {
     // MARK: - Registration
 
     /// Register background task handler. Call this in App initialization.
-    func registerBackgroundTasks() {
+    /// This method is nonisolated to allow synchronous registration from app delegate.
+    nonisolated func registerBackgroundTasks() {
         BGTaskScheduler.shared.register(
             forTaskWithIdentifier: Self.dailyBackupTaskIdentifier,
             using: nil
-        ) { [weak self] task in
-            guard let self = self else {
-                task.setTaskCompleted(success: false)
-                return
-            }
-
-            self.logger.info("Background backup task started")
+        ) { task in
+            Self.backgroundLogger.info("Background backup task started")
 
             // Handle early termination
             task.expirationHandler = {
-                self.logger.warning("Background task expired before completion")
+                Self.backgroundLogger.warning("Background task expired before completion")
                 task.setTaskCompleted(success: false)
             }
 
-            // Perform backup
+            // Perform backup on MainActor
             Task { @MainActor in
-                await self.handleBackgroundBackup(task: task)
+                let success = await BackgroundTaskManager.shared.performSilentBackup()
+
+                // Schedule next backup
+                BackgroundTaskManager.shared.scheduleNextBackup()
+
+                // Mark task as completed
+                task.setTaskCompleted(success: success)
             }
         }
 
-        logger.info("Background task handler registered")
+        Self.backgroundLogger.info("Background task handler registered")
     }
 
     // MARK: - Scheduling
@@ -175,21 +180,10 @@ final class BackgroundTaskManager: ObservableObject {
 
     // MARK: - Private Methods
 
-    /// Handle background backup task execution
-    private func handleBackgroundBackup(task: BGTask) async {
-        let success = await performSilentBackup()
-
-        // Schedule next backup
-        scheduleNextBackup()
-
-        // Mark task as completed
-        task.setTaskCompleted(success: success)
-    }
-
     /// Perform a silent automatic backup
     /// - Returns: true if backup succeeded, false otherwise
     @discardableResult
-    private func performSilentBackup() async -> Bool {
+    func performSilentBackup() async -> Bool {
         // Record attempt
         UserDefaults.standard.set(Date(), forKey: UserDefaultsKey.lastBackupAttemptDate)
 
