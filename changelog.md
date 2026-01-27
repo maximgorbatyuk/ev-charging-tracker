@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026.1.6 (2026-01-27)
+
+- **Appearance Mode**
+  - Added appearance mode setting to User Settings (Light, Dark, System)
+  - Preference is saved locally and applied instantly across the app
+  - Respects system appearance when set to "System" mode
+
+- **Launch Screen**
+  - New branded launch screen with app logo, name, version, and developer info
+  - Smooth fade transition to main content
+  - Green-tinted background for brand consistency
+
+- **Bug Fixes**
+  - Fixed automatic iCloud backup not triggering in the background
+  - Added missing `UIBackgroundModes` capability for background fetch
+  - Fixed background task registration timing issue (now registers synchronously)
+  - Improved MainActor isolation for background task callbacks
+
+- **Localization**
+  - Added translations for appearance mode (System, Light, Dark) in all supported languages
+  - Added app name localization for launch screen
+
 ## 2026.1.5 (2026-01-21)
 
 - **Expenses Sorting**
