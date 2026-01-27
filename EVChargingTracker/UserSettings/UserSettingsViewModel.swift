@@ -28,6 +28,7 @@ class UserSettingsViewModel: ObservableObject {
 
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
+    @Published var selectedAppearanceMode: AppearanceMode
     @Published var isExporting: Bool = false
     @Published var isImporting: Bool = false
     @Published var exportError: String?
@@ -79,6 +80,7 @@ class UserSettingsViewModel: ObservableObject {
 
         self.defaultCurrency = userSettingsRepository?.fetchCurrency() ?? .kzt
         self.selectedLanguage = userSettingsRepository?.fetchLanguage() ?? .en
+        self.selectedAppearanceMode = AppearanceManager.shared.currentMode
         self._allCars = db.carRepository?.getAllCars()
             .map {
                 CarDto(
@@ -145,7 +147,17 @@ class UserSettingsViewModel: ObservableObject {
         catch {
             logger.error("Failed to set language to \(language.rawValue): \(error.localizedDescription)")
         }
-        
+
+    }
+
+    /// Saves the selected appearance mode to the database and updates the app appearance
+    func saveAppearanceMode(_ mode: AppearanceMode) {
+        DispatchQueue.main.async {
+            self.selectedAppearanceMode = mode
+        }
+
+        /// Update the global appearance manager so the UI reacts immediately
+        AppearanceManager.shared.setMode(mode)
     }
 
     func getCars() -> [CarDto] {

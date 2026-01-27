@@ -279,3 +279,12 @@
 "For editing or deleting record, please swipe left" = "For editing or deleting record, please swipe left";
 
 "For deleting record, please swipe left" = "For deleting record, please swipe left";
+
+/* Appearance Mode */
+"Appearance" = "Appearance";
+"System" = "System";
+"Light" = "Light";
+"Dark" = "Dark";
+
+/* Launch Screen */
+"EV Charge Tracker" = "EV Charge Tracker";

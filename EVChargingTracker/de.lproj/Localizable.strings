@@ -282,3 +282,12 @@
 "For editing or deleting record, please swipe left" = "Zum Bearbeiten oder Löschen eines Eintrags nach links wischen";
 
 "For deleting record, please swipe left" = "Zum Löschen eines Eintrags nach links wischen";
+
+/* Appearance Mode */
+"Appearance" = "Erscheinungsbild";
+"System" = "System";
+"Light" = "Hell";
+"Dark" = "Dunkel";
+
+/* Launch Screen */
+"EV Charge Tracker" = "EV Charge Tracker";

@@ -288,3 +288,12 @@
 "For editing or deleting record, please swipe left" = "Жазбаны өңдеу немесе жою үшін солға сырғытыңыз";
 
 "For deleting record, please swipe left" = "Жазбаны жою үшін солға сырғытыңыз";
+
+/* Appearance Mode */
+"Appearance" = "Сыртқы түрі";
+"System" = "Жүйелік";
+"Light" = "Ашық";
+"Dark" = "Қараңғы";
+
+/* Launch Screen */
+"EV Charge Tracker" = "EV Charge Tracker";

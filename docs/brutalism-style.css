@@ -6,6 +6,7 @@
   --ink: #121212;
   --muted: #4f4f4f;
   --call-to-action: #90ee90;
+  --call-to-action-dark: #007500;
   --call-to-action-secondary: #ffeddb;
   --accent: #a388ee;
   --accent-dark: #9723c9;
@@ -38,13 +39,11 @@ body {
     linear-gradient(135deg, rgba(22, 219, 101, 0.06), transparent 60%),
     radial-gradient(circle at 10% 20%, rgba(11, 88, 244, 0.08), transparent 45%),
     radial-gradient(circle at 80% 10%, rgba(255, 107, 26, 0.1), transparent 50%),
-    repeating-linear-gradient(
-      90deg,
+    repeating-linear-gradient(90deg,
       rgba(0, 0, 0, 0.03),
       rgba(0, 0, 0, 0.03) 1px,
       transparent 1px,
-      transparent 10px
-    );
+      transparent 10px);
 }
 
 .page {
@@ -300,6 +299,17 @@ body {
   font-size: 1.1rem;
 }
 
+.card h3 a.screen-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.card h3 a.screen-link:hover {
+  color: var(--call-to-action-dark);
+  text-decoration: underline;
+}
+
 .card p,
 .card li {
   margin: 0;
@@ -371,6 +381,7 @@ body {
     transform: scale(0.7) rotate(-6deg);
     opacity: 0;
   }
+
   100% {
     transform: scale(1) rotate(0deg);
     opacity: 1;
@@ -382,6 +393,7 @@ body {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
