@@ -281,3 +281,9 @@
 "For editing or deleting record, please swipe left" = "Kaydı düzenlemek veya silmek için sola kaydırın";
 
 "For deleting record, please swipe left" = "Kaydı silmek için sola kaydırın";
+
+/* Appearance Mode */
+"Appearance" = "Görünüm";
+"System" = "Sistem";
+"Light" = "Açık";
+"Dark" = "Koyu";

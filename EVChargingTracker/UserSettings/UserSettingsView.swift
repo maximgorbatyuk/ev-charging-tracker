@@ -90,6 +90,24 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                     }
 
+                    HStack {
+                        Picker(L("Appearance"), selection: $viewModel.selectedAppearanceMode) {
+                            ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                                Text(mode.displayName).tag(mode)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .onChange(of: viewModel.selectedAppearanceMode) { _, newMode in
+                            analytics.trackEvent("appearance_mode_changed", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "appearance_picker",
+                                "new_mode": newMode.rawValue
+                            ])
+
+                            viewModel.saveAppearanceMode(newMode)
+                        }
+                    }
+
                     VStack {
                         HStack {
                             Text(L("Notifications enabled"))

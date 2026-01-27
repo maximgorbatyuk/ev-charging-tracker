@@ -35,3 +35,18 @@ enum AppLanguage: String, CaseIterable, Codable {
 extension UserSettingKey {
     static let language = UserSettingKey(rawValue: "language")!
 }
+
+/// Appearance mode for the app (light, dark, or system)
+enum AppearanceMode: String, CaseIterable, Codable {
+    case system = "system"
+    case light = "light"
+    case dark = "dark"
+
+    var displayName: String {
+        switch self {
+        case .system: return L("System")
+        case .light: return L("Light")
+        case .dark: return L("Dark")
+        }
+    }
+}

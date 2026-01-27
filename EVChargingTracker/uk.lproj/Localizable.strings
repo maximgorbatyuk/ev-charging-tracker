@@ -277,3 +277,9 @@
 "For editing or deleting record, please swipe left" = "Для редагування або видалення запису, проведіть вліво";
 
 "For deleting record, please swipe left" = "Для видалення запису, проведіть вліво";
+
+/* Appearance Mode */
+"Appearance" = "Оформлення";
+"System" = "Системна";
+"Light" = "Світла";
+"Dark" = "Темна";

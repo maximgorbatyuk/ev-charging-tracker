@@ -16,6 +16,7 @@ struct EVChargingTrackerApp: App {
     @UIApplicationDelegateAdaptor(ForegroundNotificationDelegate.self) var appDelegate
     @AppStorage(UserSettingsViewModel.onboardingCompletedKey) private var isOnboardingComplete = false
 
+    @ObservedObject private var appearanceManager = AppearanceManager.shared
     private var analytics = AnalyticsService.shared
 
     var body: some Scene {
@@ -43,12 +44,14 @@ struct EVChargingTrackerApp: App {
                 .onAppear {
                     analytics.trackEvent("app_opened")
                 }
+                .preferredColorScheme(appearanceManager.colorScheme)
 
             } else {
                 MainTabView()
                     .onAppear {
                         analytics.trackEvent("app_opened")
                     }
+                    .preferredColorScheme(appearanceManager.colorScheme)
             }
         }
     }
