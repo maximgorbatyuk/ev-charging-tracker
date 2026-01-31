@@ -330,3 +330,16 @@
 "Swipe right to mark as done, left to edit or delete" = "Свайп вправо — виконано, вліво — редагувати або видалити";
 "Edit maintenance" = "Редагувати";
 
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Деталі обслуговування";
+"Title" = "Назва";
+"Scheduled Date" = "Запланована дата";
+"Target Odometer" = "Цільовий пробіг";
+"Remaining Distance" = "Залишилось";
+"Created" = "Створено";
+"Mark as Done" = "Позначити виконаним";
+"Duplicate" = "Дублювати";
+"Due Soon" = "Скоро";
+"Overdue" = "Прострочено";
+"Scheduled" = "Заплановано";
+

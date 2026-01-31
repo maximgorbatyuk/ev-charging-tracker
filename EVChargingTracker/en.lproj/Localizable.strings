@@ -332,3 +332,16 @@
 "Swipe right to mark as done, left to edit or delete" = "Swipe right to mark as done, left to edit or delete";
 "Edit maintenance" = "Edit maintenance";
 
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Maintenance Details";
+"Title" = "Title";
+"Scheduled Date" = "Scheduled Date";
+"Target Odometer" = "Target Odometer";
+"Remaining Distance" = "Remaining Distance";
+"Created" = "Created";
+"Mark as Done" = "Mark as Done";
+"Duplicate" = "Duplicate";
+"Due Soon" = "Due Soon";
+"Overdue" = "Overdue";
+"Scheduled" = "Scheduled";
+

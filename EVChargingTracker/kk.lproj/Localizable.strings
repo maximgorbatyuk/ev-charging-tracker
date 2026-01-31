@@ -341,3 +341,16 @@
 "Swipe right to mark as done, left to edit or delete" = "Орындау үшін оңға, өңдеу немесе жою үшін солға сырғытыңыз";
 "Edit maintenance" = "Қызметті өңдеу";
 
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Қызмет көрсету мәліметтері";
+"Title" = "Атауы";
+"Scheduled Date" = "Жоспарланған күні";
+"Target Odometer" = "Мақсатты жүріс";
+"Remaining Distance" = "Қалған қашықтық";
+"Created" = "Жасалған";
+"Mark as Done" = "Орындалды деп белгілеу";
+"Duplicate" = "Көшірме жасау";
+"Due Soon" = "Жақында";
+"Overdue" = "Мерзімі өтті";
+"Scheduled" = "Жоспарланған";
+

@@ -335,3 +335,16 @@
 "Swipe right to mark as done, left to edit or delete" = "Nach rechts wischen zum Erledigen, nach links zum Bearbeiten oder Löschen";
 "Edit maintenance" = "Wartung bearbeiten";
 
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Wartungsdetails";
+"Title" = "Titel";
+"Scheduled Date" = "Geplantes Datum";
+"Target Odometer" = "Ziel-Kilometerstand";
+"Remaining Distance" = "Verbleibende Strecke";
+"Created" = "Erstellt";
+"Mark as Done" = "Als erledigt markieren";
+"Duplicate" = "Duplizieren";
+"Due Soon" = "Bald fällig";
+"Overdue" = "Überfällig";
+"Scheduled" = "Geplant";
+

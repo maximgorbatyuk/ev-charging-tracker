@@ -21,6 +21,8 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     @State private var recordToDelete: PlannedMaintenanceItem? = nil
     @State private var recordToEdit: PlannedMaintenanceItem? = nil
     @State private var recordToMarkAsDone: PlannedMaintenanceItem? = nil
+    @State private var recordToShowDetails: PlannedMaintenanceItem? = nil
+    @State private var recordToDuplicate: PlannedMaintenanceItem? = nil
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
@@ -131,6 +133,47 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         )
                     }
                 }
+                .sheet(item: $recordToShowDetails) { record in
+                    if let selectedCar = viewModel.selectedCarForExpenses {
+                        PlannedMaintenanceDetailsView(
+                            record: record,
+                            selectedCar: selectedCar,
+                            onMarkAsDone: { rec in
+                                recordToMarkAsDone = rec
+                            },
+                            onEdit: { rec in
+                                recordToEdit = rec
+                            },
+                            onDelete: { rec in
+                                viewModel.deleteMaintenanceRecord(rec)
+                                loadData()
+                                onPlannedMaintenaceRecordsUpdated()
+                            },
+                            onDuplicate: { rec in
+                                recordToDuplicate = rec
+                            }
+                        )
+                    }
+                }
+                .sheet(item: $recordToDuplicate) { record in
+                    if let selectedCar = viewModel.selectedCarForExpenses {
+                        AddMaintenanceRecordView(
+                            selectedCar: selectedCar,
+                            prefilledName: record.name,
+                            prefilledNotes: record.notes,
+                            onAdd: { newRecord in
+                                analytics.trackEvent("maintenance_record_duplicated", properties: [
+                                    "screen": "planned_maintenance_screen"
+                                ])
+
+                                viewModel.addNewMaintenanceRecord(newRecord: newRecord)
+
+                                loadData()
+                                onPlannedMaintenaceRecordsUpdated()
+                            }
+                        )
+                    }
+                }
             }
 
             floatingAddButton
@@ -198,10 +241,18 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     private var maintenanceListView: some SwiftUICore.View {
         List {
             ForEach(viewModel.filteredRecords) { record in
-                PlannedMaintenanceItemView(
-                    selectedCar: viewModel.selectedCarForExpenses!,
-                    record: record
-                )
+                Button {
+                    analytics.trackEvent(
+                        "maintenance_item_clicked",
+                        properties: [
+                            "screen": "planned_maintenance_screen",
+                            "action": "view_details"
+                        ])
+                    recordToShowDetails = record
+                } label: {
+                    PlannedMaintenanceItemView(record: record)
+                }
+                .buttonStyle(.plain)
                 .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)

@@ -10,6 +10,8 @@ import SwiftUI
 struct AddMaintenanceRecordView: SwiftUICore.View {
     let selectedCar: Car?
     let existingRecord: PlannedMaintenanceItem?
+    let prefilledName: String?
+    let prefilledNotes: String?
     let onAdd: (PlannedMaintenance) -> Void
     let onUpdate: ((PlannedMaintenance) -> Void)?
 
@@ -32,11 +34,15 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     init(
         selectedCar: Car?,
         existingRecord: PlannedMaintenanceItem? = nil,
+        prefilledName: String? = nil,
+        prefilledNotes: String? = nil,
         onAdd: @escaping (PlannedMaintenance) -> Void,
         onUpdate: ((PlannedMaintenance) -> Void)? = nil
     ) {
         self.selectedCar = selectedCar
         self.existingRecord = existingRecord
+        self.prefilledName = prefilledName
+        self.prefilledNotes = prefilledNotes
         self.onAdd = onAdd
         self.onUpdate = onUpdate
 
@@ -52,6 +58,15 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
             if let recordOdometer = record.odometer {
                 _odometer = State(initialValue: String(recordOdometer))
                 _remindByOdometer = State(initialValue: true)
+            }
+        } else {
+            /// Pre-fill name and notes for duplicate mode
+            if let name = prefilledName {
+                _name = State(initialValue: name)
+            }
+
+            if let notes = prefilledNotes {
+                _notes = State(initialValue: notes)
             }
         }
     }

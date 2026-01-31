@@ -334,3 +334,16 @@
 "Swipe right to mark as done, left to edit or delete" = "Tamamlamak için sağa, düzenlemek veya silmek için sola kaydırın";
 "Edit maintenance" = "Bakımı düzenle";
 
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Bakım Detayları";
+"Title" = "Başlık";
+"Scheduled Date" = "Planlanan Tarih";
+"Target Odometer" = "Hedef Kilometre";
+"Remaining Distance" = "Kalan Mesafe";
+"Created" = "Oluşturuldu";
+"Mark as Done" = "Tamamlandı olarak işaretle";
+"Duplicate" = "Çoğalt";
+"Due Soon" = "Yakında";
+"Overdue" = "Gecikmiş";
+"Scheduled" = "Planlandı";
+

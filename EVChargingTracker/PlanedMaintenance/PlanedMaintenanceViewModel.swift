@@ -172,6 +172,18 @@ class PlanedMaintenanceViewModel: ObservableObject {
         return carRepo.getAllCars()
     }
 
+    func duplicateMaintenanceRecord(_ record: PlannedMaintenanceItem) {
+        let duplicate = PlannedMaintenance(
+            when: record.when,
+            odometer: record.odometer,
+            name: record.name,
+            notes: record.notes,
+            carId: record.carId
+        )
+
+        addNewMaintenanceRecord(newRecord: duplicate)
+    }
+
     func reloadSelectedCarForExpenses() -> Car? {
         _selectedCarForExpenses = carRepo.getSelectedForExpensesCar()
         return _selectedCarForExpenses
