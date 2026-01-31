@@ -288,3 +288,60 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Wheel details";
+"Front wheel size" = "Front wheel size";
+"Rear wheel size" = "Rear wheel size";
+"Front = Rear" = "Front = Rear";
+"e.g. 225/45R18, 20x9.5" = "e.g. 225/45R18, 20x9.5";
+"Wheel Size Info" = "Wheel Size Info";
+"Wheel Size Formats" = "Wheel Size Formats";
+"Metric format:" = "Metric format:";
+"Example: 225/45R18" = "Example: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Tire width in mm";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - Aspect ratio (height/width %)";
+"• R - Radial construction" = "• R - Radial construction";
+"• 18 - Rim diameter in inches" = "• 18 - Rim diameter in inches";
+"Imperial format:" = "Imperial format:";
+"Example: 20x9.5" = "Example: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Rim diameter in inches";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Wheel width in inches";
+"Done" = "Done";
+
+/* Expense Filters */
+"expense.filter.all" = "All";
+"expense.filter.charging" = "Charging";
+"expense.filter.maintenance" = "Maintenance";
+"expense.filter.repair" = "Repair";
+"expense.filter.carwash" = "Car wash";
+"expense.filter.other" = "Other";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "All";
+"maintenance.filter.overdue" = "Overdue";
+"maintenance.filter.due_soon" = "Due soon";
+"maintenance.filter.scheduled" = "Scheduled";
+"maintenance.filter.by_mileage" = "By mileage";
+"maintenance.filter.by_date" = "By date";
+
+/* Filter Empty State */
+"No records match the selected filter" = "No records match the selected filter";
+
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Swipe right to mark as done, left to edit or delete";
+"Edit maintenance" = "Edit maintenance";
+
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Maintenance Details";
+"Title" = "Title";
+"Scheduled Date" = "Scheduled Date";
+"Target Odometer" = "Target Odometer";
+"Remaining Distance" = "Remaining Distance";
+"Created" = "Created";
+"Mark as Done" = "Mark as Done";
+"Duplicate" = "Duplicate";
+"Due Soon" = "Due Soon";
+"Overdue" = "Overdue";
+"Scheduled" = "Scheduled";
+

@@ -15,9 +15,13 @@ struct EditCarView: SwiftUICore.View {
     @State private var mileageText: String
     @State private var expenseCurrency: Currency
     @State private var selectedForTracking: Bool
+    @State private var frontWheelSize: String
+    @State private var rearWheelSize: String
+    @State private var sameWheelSizeForFrontAndRear: Bool
 
     @State private var showDeleteConfirmation = false
     @State private var alertMessage: String? = nil
+    @State private var showingWheelInfoSheet = false
 
     init(
         car: CarDto?,
@@ -40,6 +44,12 @@ struct EditCarView: SwiftUICore.View {
         _initialMileageText = State(initialValue: car != nil ? String(car!.initialMileage) : "")
         _selectedForTracking = State(initialValue: car?.selectedForTracking ?? defaultValueForSelectedForTracking)
         _expenseCurrency = State(initialValue: car?.expenseCurrency ?? defaultCurrency)
+
+        let frontWheel = car?.frontWheelSize ?? ""
+        let rearWheel = car?.rearWheelSize ?? ""
+        _frontWheelSize = State(initialValue: frontWheel)
+        _rearWheelSize = State(initialValue: rearWheel)
+        _sameWheelSizeForFrontAndRear = State(initialValue: frontWheel.isEmpty && rearWheel.isEmpty || frontWheel == rearWheel)
     }
 
     var body: some SwiftUICore.View {
@@ -120,6 +130,60 @@ struct EditCarView: SwiftUICore.View {
                     }
                 }
 
+                Section(header: Text(L("Wheel details"))) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text(L("Front wheel size"))
+                                .foregroundColor(.secondary)
+
+                            Button(action: {
+                                showingWheelInfoSheet = true
+                            }) {
+                                Image(systemName: "info.circle.fill")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+
+                        TextField(L("e.g. 225/45R18, 20x9.5"), text: $frontWheelSize)
+                            .textContentType(.none)
+                            .textInputAutocapitalization(.never)
+
+                        Toggle(L("Front = Rear"), isOn: $sameWheelSizeForFrontAndRear)
+                            .toggleStyle(SwitchToggleStyle(tint: .orange))
+
+                        if !sameWheelSizeForFrontAndRear {
+                            HStack {
+                                Text(L("Rear wheel size"))
+                                    .foregroundColor(.secondary)
+
+                                Button(action: {
+                                    showingWheelInfoSheet = true
+                                }) {
+                                    Image(systemName: "info.circle.fill")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+
+                            TextField(L("e.g. 225/45R18, 20x9.5"), text: $rearWheelSize)
+                                .textContentType(.none)
+                                .textInputAutocapitalization(.never)
+                        }
+                    }
+                    .onChange(of: sameWheelSizeForFrontAndRear) { _, newValue in
+                        if newValue {
+                            rearWheelSize = frontWheelSize
+                        }
+                    }
+                    .onChange(of: frontWheelSize) { _, newValue in
+                        if sameWheelSizeForFrontAndRear {
+                            rearWheelSize = newValue
+                        }
+                    }
+                    .sheet(isPresented: $showingWheelInfoSheet) {
+                        WheelInfoSheetView()
+                    }
+                }
+
                 if (car != nil) {
                     Section(header: Text(L("Danger zone"))) {
                         Button(role: .destructive, action: {
@@ -147,7 +211,7 @@ struct EditCarView: SwiftUICore.View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(L("Save")) {
                         let battery = Double(batteryText)
-                        
+
                         var batteryToSave: Double? = nil
                         if (battery != nil && battery! <= 200) {
                             batteryToSave = battery
@@ -155,7 +219,7 @@ struct EditCarView: SwiftUICore.View {
 
                         var currentMileageToSave = car?.currentMileage ?? 0
                         var initialMileageToSave = car?.initialMileage ?? 0
-                        
+
                         if (car != nil) {
                             currentMileageToSave = Int(mileageText) ?? car!.currentMileage
                             initialMileageToSave = Int(initialMileageText) ?? car!.initialMileage
@@ -172,6 +236,9 @@ struct EditCarView: SwiftUICore.View {
 
                         let selectedForTracking = self.selectedForTracking
 
+                        let frontWheelToSave: String? = frontWheelSize.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : frontWheelSize.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let rearWheelToSave: String? = rearWheelSize.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : rearWheelSize.trimmingCharacters(in: .whitespacesAndNewlines)
+
                         let updated = CarDto(
                             id: car?.id,
                             name: name,
@@ -179,7 +246,9 @@ struct EditCarView: SwiftUICore.View {
                             batteryCapacity: batteryToSave,
                             currentMileage: currentMileageToSave,
                             initialMileage: initialMileageToSave,
-                            expenseCurrency: expenseCurrency
+                            expenseCurrency: expenseCurrency,
+                            frontWheelSize: frontWheelToSave,
+                            rearWheelSize: rearWheelToSave
                         )
                         onSave(updated)
                     }
@@ -204,6 +273,68 @@ struct EditCarView: SwiftUICore.View {
     }
 }
 
+struct WheelInfoSheetView: SwiftUICore.View {
+    @Environment(\.dismiss) var dismiss
+
+    var body: some SwiftUICore.View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(L("Wheel Size Formats"))
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.bottom, 8)
+
+                    Text(L("Metric format:"))
+                        .font(.headline)
+                        .padding(.top, 8)
+
+                    Text(L("Example: 225/45R18"))
+                        .font(.subheadline)
+                        .padding(.leading, 12)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(L("• 225 - Tire width in mm"))
+                        Text(L("• 45 - Aspect ratio (height/width %)"))
+                        Text(L("• R - Radial construction"))
+                        Text(L("• 18 - Rim diameter in inches"))
+                    }
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 16)
+
+                    Text(L("Imperial format:"))
+                        .font(.headline)
+                        .padding(.top, 16)
+
+                    Text(L("Example: 20x9.5"))
+                        .font(.subheadline)
+                        .padding(.leading, 12)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(L("• 20 - Rim diameter in inches"))
+                        Text(L("• 9.5 - Wheel width in inches"))
+                    }
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 16)
+                }
+                .padding()
+            }
+            .navigationTitle(L("Wheel Size Info"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(L("Done")) {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 #Preview {
     EditCarView(
         car: CarDto(
@@ -213,7 +344,9 @@ struct EditCarView: SwiftUICore.View {
             batteryCapacity: 75.5,
             currentMileage: 12345,
             initialMileage: 0,
-            expenseCurrency: .usd),
+            expenseCurrency: .usd,
+            frontWheelSize: "225/45R18",
+            rearWheelSize: "225/45R18"),
         defaultCurrency: .usd,
         defaultValueForSelectedForTracking: true,
         hasOtherCars: true,

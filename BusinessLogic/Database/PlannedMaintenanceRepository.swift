@@ -12,6 +12,7 @@ import os
 protocol PlannedMaintenanceRepositoryProtocol {
     func getAllRecords(carId: Int64) -> [PlannedMaintenance]
     func insertRecord(_ record: PlannedMaintenance) -> Int64?
+    func updateRecord(_ record: PlannedMaintenance) -> Bool
     func deleteRecord(id recordId: Int64) -> Bool
 }
 

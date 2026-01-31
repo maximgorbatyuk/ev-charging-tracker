@@ -9,14 +9,16 @@
 import Foundation
 
 class PlanedMaintenanceViewModel: ObservableObject {
-    
+
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
+    @Published var selectedFilter: PlannedMaintenanceFilter = .all
     
     private let notificationsService: NotificationManagerProtocol
     private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol
     private let delayedNotificationsRepo: DelayedNotificationsRepositoryProtocol
     private let carRepo: CarRepositoryProtocol
-    
+    private let expensesRepo: ExpensesRepository
+
     private var _selectedCarForExpenses: Car?
     
     // MARK: - Convenience properties for backward compatibility
@@ -38,6 +40,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
         self.maintenanceRepository = db.getPlannedMaintenanceRepository()
         self.delayedNotificationsRepo = db.getDelayedNotificationsRepository()
         self.carRepo = db.getCarRepository()
+        self.expensesRepo = db.getExpensesRepository()
 
         loadData()
     }
@@ -79,18 +82,106 @@ class PlanedMaintenanceViewModel: ObservableObject {
         }
     }
     
-    func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) -> Void {
+    func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) {
         _ = maintenanceRepository.deleteRecord(id: recordToDelete.id)
-        
-        if (recordToDelete.when != nil) {
+
+        if recordToDelete.when != nil {
             let delayedNotification = delayedNotificationsRepo.getRecordByMaintenanceId(recordToDelete.id)
-            if (delayedNotification == nil) {
+            guard let delayedNotification = delayedNotification else {
                 return
             }
-            
-            notificationsService.cancelNotification(delayedNotification!.notificationId)
-            _ = delayedNotificationsRepo.deleteRecord(id: delayedNotification!.id!)
+
+            notificationsService.cancelNotification(delayedNotification.notificationId)
+            _ = delayedNotificationsRepo.deleteRecord(id: delayedNotification.id!)
         }
+    }
+
+    func updateMaintenanceRecord(_ record: PlannedMaintenance) {
+        _ = maintenanceRepository.updateRecord(record)
+
+        /// Cancel existing notification if any
+        if let existingNotification = delayedNotificationsRepo.getRecordByMaintenanceId(record.id!) {
+            notificationsService.cancelNotification(existingNotification.notificationId)
+            _ = delayedNotificationsRepo.deleteRecord(id: existingNotification.id!)
+        }
+
+        /// Schedule new notification if date is set
+        if let when = record.when {
+            let notificationId = notificationsService.scheduleNotification(
+                title: L("Maintenance reminder"),
+                body: record.name,
+                on: when)
+
+            _ = delayedNotificationsRepo.insertRecord(
+                DelayedNotification(
+                    when: when,
+                    notificationId: notificationId,
+                    maintenanceRecord: record.id!,
+                    carId: record.carId
+                )
+            )
+        }
+    }
+
+    func markMaintenanceAsDone(_ record: PlannedMaintenanceItem, expenseResult: AddExpenseViewResult) {
+        /// Save the expense first
+        saveExpense(expenseResult)
+
+        /// Then delete the maintenance record
+        deleteMaintenanceRecord(record)
+    }
+
+    func saveExpense(_ expenseResult: AddExpenseViewResult) {
+        /// Handle new car creation if needed
+        if let carName = expenseResult.carName,
+           expenseResult.carId == nil
+        {
+            let newCar = Car(
+                name: carName,
+                selectedForTracking: true,
+                batteryCapacity: expenseResult.batteryCapacity,
+                expenseCurrency: expenseResult.expense.currency,
+                currentMileage: expenseResult.initialOdometr,
+                initialMileage: expenseResult.initialOdometr,
+                milleageSyncedAt: Date(),
+                createdAt: Date()
+            )
+
+            if let carId = carRepo.insert(newCar) {
+                expenseResult.expense.carId = carId
+
+                if let initialExpense = expenseResult.initialExpenseForNewCar {
+                    initialExpense.carId = carId
+                    _ = expensesRepo.insertSession(initialExpense)
+                }
+            }
+        }
+
+        /// Save the expense
+        _ = expensesRepo.insertSession(expenseResult.expense)
+
+        /// Update car mileage if needed
+        if let car = selectedCarForExpenses {
+            var updatedCar = car
+            updatedCar.currentMileage = expenseResult.expense.odometer
+            _ = carRepo.updateMilleage(updatedCar)
+        }
+    }
+
+    func getAllCars() -> [Car] {
+        return carRepo.getAllCars()
+    }
+
+    func duplicateMaintenanceRecord(_ record: PlannedMaintenanceItem) {
+        let duplicate = PlannedMaintenance(
+            when: record.when,
+            odometer: record.odometer,
+            name: record.name,
+            notes: record.notes,
+            carId: record.carId
+        )
+
+        addNewMaintenanceRecord(newRecord: duplicate)
     }
 
     func reloadSelectedCarForExpenses() -> Car? {
@@ -104,6 +195,81 @@ class PlanedMaintenanceViewModel: ObservableObject {
         }
 
         return _selectedCarForExpenses
+    }
+
+    var filteredRecords: [PlannedMaintenanceItem] {
+        switch selectedFilter {
+        case .all:
+            return maintenanceRecords
+
+        case .overdue:
+            return maintenanceRecords.filter { isOverdue($0) }
+
+        case .dueSoon:
+            return maintenanceRecords.filter { isDueSoon($0) }
+
+        case .scheduled:
+            return maintenanceRecords.filter { isScheduled($0) }
+
+        case .byMileage:
+            return maintenanceRecords.filter { $0.odometer != nil }
+
+        case .byDate:
+            return maintenanceRecords.filter { $0.when != nil }
+        }
+    }
+
+    func setFilter(_ filter: PlannedMaintenanceFilter) {
+        guard filter != selectedFilter else {
+            return
+        }
+
+        selectedFilter = filter
+    }
+
+    /// Overdue: mileage passed target OR date passed
+    private func isOverdue(_ item: PlannedMaintenanceItem) -> Bool {
+        if let mileageDiff = item.mileageDifference,
+           mileageDiff > 0
+        {
+            return true
+        }
+
+        if let daysDiff = item.daysDifference,
+           daysDiff < 0
+        {
+            return true
+        }
+
+        return false
+    }
+
+    /// Due soon: within 7 days OR within 500 km (not overdue)
+    private func isDueSoon(_ item: PlannedMaintenanceItem) -> Bool {
+        guard !isOverdue(item) else {
+            return false
+        }
+
+        if let daysDiff = item.daysDifference,
+           daysDiff >= 0,
+           daysDiff <= 7
+        {
+            return true
+        }
+
+        if let mileageDiff = item.mileageDifference,
+           mileageDiff >= -500,
+           mileageDiff <= 0
+        {
+            return true
+        }
+
+        return false
+    }
+
+    /// Scheduled: not overdue and not due soon
+    private func isScheduled(_ item: PlannedMaintenanceItem) -> Bool {
+        return !isOverdue(item) && !isDueSoon(item)
     }
 }
 

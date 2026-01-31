@@ -286,3 +286,60 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Деталі коліс";
+"Front wheel size" = "Розмір передніх коліс";
+"Rear wheel size" = "Розмір задніх коліс";
+"Front = Rear" = "Передні = Задні";
+"e.g. 225/45R18, 20x9.5" = "напр. 225/45R18, 20x9.5";
+"Wheel Size Info" = "Інформація про розмір коліс";
+"Wheel Size Formats" = "Формати розмірів коліс";
+"Metric format:" = "Метричний формат:";
+"Example: 225/45R18" = "Приклад: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Ширина шини в мм";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - Профіль (висота/ширина %)";
+"• R - Radial construction" = "• R - Радіальна конструкція";
+"• 18 - Rim diameter in inches" = "• 18 - Діаметр диска в дюймах";
+"Imperial format:" = "Імперський формат:";
+"Example: 20x9.5" = "Приклад: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Діаметр диска в дюймах";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Ширина колеса в дюймах";
+"Done" = "Готово";
+
+/* Expense Filters */
+"expense.filter.all" = "Всі";
+"expense.filter.charging" = "Зарядки";
+"expense.filter.maintenance" = "Обслуговування";
+"expense.filter.repair" = "Ремонт";
+"expense.filter.carwash" = "Мийка";
+"expense.filter.other" = "Інше";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "Всі";
+"maintenance.filter.overdue" = "Прострочено";
+"maintenance.filter.due_soon" = "Скоро";
+"maintenance.filter.scheduled" = "Заплановано";
+"maintenance.filter.by_mileage" = "За пробігом";
+"maintenance.filter.by_date" = "За датою";
+
+/* Filter Empty State */
+"No records match the selected filter" = "Немає записів, що відповідають обраному фільтру";
+
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Свайп вправо — виконано, вліво — редагувати або видалити";
+"Edit maintenance" = "Редагувати";
+
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Деталі обслуговування";
+"Title" = "Назва";
+"Scheduled Date" = "Запланована дата";
+"Target Odometer" = "Цільовий пробіг";
+"Remaining Distance" = "Залишилось";
+"Created" = "Створено";
+"Mark as Done" = "Позначити виконаним";
+"Duplicate" = "Дублювати";
+"Due Soon" = "Скоро";
+"Overdue" = "Прострочено";
+"Scheduled" = "Заплановано";
+

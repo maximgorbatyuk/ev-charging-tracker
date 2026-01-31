@@ -52,3 +52,29 @@ class PlannedMaintenance: Identifiable {
         )
     }
 }
+
+enum PlannedMaintenanceFilter: String, CaseIterable {
+  case all
+  case overdue
+  case dueSoon
+  case scheduled
+  case byMileage
+  case byDate
+
+  var displayName: String {
+    switch self {
+    case .all:
+      return L("maintenance.filter.all")
+    case .overdue:
+      return L("maintenance.filter.overdue")
+    case .dueSoon:
+      return L("maintenance.filter.due_soon")
+    case .scheduled:
+      return L("maintenance.filter.scheduled")
+    case .byMileage:
+      return L("maintenance.filter.by_mileage")
+    case .byDate:
+      return L("maintenance.filter.by_date")
+    }
+  }
+}

@@ -15,9 +15,11 @@ struct AddExpenseView: SwiftUICore.View {
     let defaultCurrency: Currency
     let selectedCar: Car?
     let allCars: [Car]
-    let existingExpense: Expense? // For edit mode
+    let existingExpense: Expense?
     let onAdd: (AddExpenseViewResult) -> Void
     let lastChargingSession: Expense?
+    let prefilledTitle: String?
+    let prefilledNotes: String?
 
     @Environment(\.dismiss) var dismiss
     @ObservedObject private var analytics = AnalyticsService.shared
@@ -57,7 +59,10 @@ struct AddExpenseView: SwiftUICore.View {
         allCars: [Car],
         existingExpense: Expense? = nil,
         lastChargingSession: Expense? = nil,
-        onAdd: @escaping (AddExpenseViewResult) -> Void) {
+        prefilledTitle: String? = nil,
+        prefilledNotes: String? = nil,
+        onAdd: @escaping (AddExpenseViewResult) -> Void
+    ) {
         self.defaultExpenseType = defaultExpenseType
         self.defaultCurrency = defaultCurrency
         self.selectedCar = selectedCar
@@ -65,9 +70,29 @@ struct AddExpenseView: SwiftUICore.View {
         self.existingExpense = existingExpense
         self.onAdd = onAdd
         self.lastChargingSession = lastChargingSession
+        self.prefilledTitle = prefilledTitle
+        self.prefilledNotes = prefilledNotes
 
         _carId = State(initialValue: self.selectedCar?.id ?? existingExpense?.carId)
         _selectedCardForExpense = State(initialValue: self.selectedCar)
+
+        /// Pre-select expense type for non-charging expenses
+        if let expType = defaultExpenseType, expType != .charging {
+            _expenseType = State(initialValue: expType)
+        }
+
+        /// Pre-fill notes from maintenance record if provided
+        if let title = prefilledTitle, let extraNotes = prefilledNotes {
+            if extraNotes.isEmpty {
+                _notes = State(initialValue: title)
+            } else {
+                _notes = State(initialValue: "\(title)\n\(extraNotes)")
+            }
+        } else if let title = prefilledTitle {
+            _notes = State(initialValue: title)
+        } else if let extraNotes = prefilledNotes {
+            _notes = State(initialValue: extraNotes)
+        }
 
         // Initialize fields with existing expense data if in edit mode
         if let expense = existingExpense {
@@ -158,8 +183,6 @@ struct AddExpenseView: SwiftUICore.View {
                                 .focused($isCountOfKWtFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .foregroundColor(isEditMode ? .gray : .primary)
-                                .disabled(isEditMode)
                                 .onChange(of: energyCharged, { oldValue, newValue in
                                     if (!isCountOfKWtFocused) {
                                         return
@@ -176,8 +199,6 @@ struct AddExpenseView: SwiftUICore.View {
                                 .focused($isPricePerKWhFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .foregroundColor(isEditMode ? .gray : .primary)
-                                .disabled(isEditMode)
                                 .onChange(of: pricePerKWh, { oldValue, newValue in
 
                                     if (!isPricePerKWhFocused) {
@@ -215,8 +236,6 @@ struct AddExpenseView: SwiftUICore.View {
                             TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
                                 .keyboardType(.numberPad)
                                 .multilineTextAlignment(.trailing)
-                                .foregroundColor(isEditMode ? .gray : .primary)
-                                .disabled(isEditMode)
                         }
 
                         Text(L("If you leave it empty, the current mileage of the selected car will be used."))
@@ -232,12 +251,16 @@ struct AddExpenseView: SwiftUICore.View {
                         TextField(L("12.50"), text: $cost)
                             .focused($isCostFocused)
                             .onChange(of: cost, { oldValue, newValue in
-                                
+
                                 if (!isCostFocused) {
                                     return
                                 }
 
-                                adjustPriceBasedOnInputs()
+                                if defaultExpenseType == .charging {
+                                    adjustEnergyBasedOnCost()
+                                } else {
+                                    adjustPriceBasedOnInputs()
+                                }
                             })
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
@@ -358,6 +381,19 @@ struct AddExpenseView: SwiftUICore.View {
             let pricePerKWhValue = costValue / energyChargedValue
             pricePerKWh = String(format: "%.2f", pricePerKWhValue)
         }
+    }
+
+    /// When Cost changes: Energy = Cost / Price (Price stays static)
+    private func adjustEnergyBasedOnCost() {
+        guard let costValue = Double(cost.replacing(",", with: ".")),
+              let priceValue = Double(pricePerKWh.replacing(",", with: ".")),
+              priceValue > 0
+        else {
+            return
+        }
+
+        let energyValue = costValue / priceValue
+        energyCharged = String(format: "%.2f", energyValue)
     }
 
     private func handleChargerTypeChange(from oldType: ChargerType, to newType: ChargerType) {

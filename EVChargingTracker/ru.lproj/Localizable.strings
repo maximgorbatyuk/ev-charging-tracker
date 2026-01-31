@@ -290,3 +290,60 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Детали колес";
+"Front wheel size" = "Размер передних колес";
+"Rear wheel size" = "Размер задних колес";
+"Front = Rear" = "Передние = Задние";
+"e.g. 225/45R18, 20x9.5" = "например, 225/45R18, 20x9.5";
+"Wheel Size Info" = "Информация о размере колес";
+"Wheel Size Formats" = "Форматы размеров колес";
+"Metric format:" = "Метрический формат:";
+"Example: 225/45R18" = "Пример: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Ширина шины в мм";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - Профиль (высота/ширина %)";
+"• R - Radial construction" = "• R - Радиальная конструкция";
+"• 18 - Rim diameter in inches" = "• 18 - Диаметр диска в дюймах";
+"Imperial format:" = "Имперский формат:";
+"Example: 20x9.5" = "Пример: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Диаметр диска в дюймах";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Ширина колеса в дюймах";
+"Done" = "Готово";
+
+/* Expense Filters */
+"expense.filter.all" = "Все";
+"expense.filter.charging" = "Зарядки";
+"expense.filter.maintenance" = "Сервис";
+"expense.filter.repair" = "Ремонт";
+"expense.filter.carwash" = "Мойка";
+"expense.filter.other" = "Другое";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "Все";
+"maintenance.filter.overdue" = "Просрочено";
+"maintenance.filter.due_soon" = "Скоро";
+"maintenance.filter.scheduled" = "Запланировано";
+"maintenance.filter.by_mileage" = "По пробегу";
+"maintenance.filter.by_date" = "По дате";
+
+/* Filter Empty State */
+"No records match the selected filter" = "Нет записей, соответствующих выбранному фильтру";
+
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Свайп вправо — выполнено, влево — редактировать или удалить";
+"Edit maintenance" = "Редактировать";
+
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Детали обслуживания";
+"Title" = "Название";
+"Scheduled Date" = "Запланированная дата";
+"Target Odometer" = "Целевой пробег";
+"Remaining Distance" = "Осталось";
+"Created" = "Создано";
+"Mark as Done" = "Отметить выполненным";
+"Duplicate" = "Дублировать";
+"Due Soon" = "Скоро";
+"Overdue" = "Просрочено";
+"Scheduled" = "Запланировано";
+

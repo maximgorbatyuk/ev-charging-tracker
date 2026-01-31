@@ -15,4 +15,6 @@ struct CarDto: Identifiable {
     let currentMileage: Int // in km
     let initialMileage: Int // in km
     let expenseCurrency: Currency
+    let frontWheelSize: String?
+    let rearWheelSize: String?
 }
