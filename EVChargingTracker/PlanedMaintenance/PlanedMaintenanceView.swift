@@ -17,8 +17,12 @@ struct PlanedMaintenanceView: SwiftUICore.View {
         db: DatabaseManager.shared)
 
     @State private var showingAddMaintenanceRecord = false
+    @State private var showingEditMaintenanceRecord = false
+    @State private var showingMarkAsDoneExpense = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var recordToDelete: PlannedMaintenanceItem? = nil
+    @State private var recordToEdit: PlannedMaintenanceItem? = nil
+    @State private var recordToMarkAsDone: PlannedMaintenanceItem? = nil
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
@@ -42,7 +46,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                                 noFilterResultsView
                             } else {
                                 VStack(spacing: 12) {
-                                    Text(L("For deleting record, please swipe left"))
+                                    Text(L("Swipe right to mark as done, left to edit or delete"))
                                         .font(.caption)
                                         .fontWeight(.regular)
                                         .padding(.horizontal)
@@ -77,10 +81,9 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                     AddMaintenanceRecordView(
                         selectedCar: selectedCar,
                         onAdd: { newRecord in
-
                             analytics.trackEvent("maintenance_record_added", properties: [
-                                    "screen": "planned_maintenance_screen"
-                                ])
+                                "screen": "planned_maintenance_screen"
+                            ])
 
                             viewModel.addNewMaintenanceRecord(newRecord: newRecord)
 
@@ -88,6 +91,53 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             onPlannedMaintenaceRecordsUpdated()
                         }
                     )
+                }
+                .sheet(isPresented: $showingEditMaintenanceRecord) {
+                    if let record = recordToEdit,
+                       let selectedCar = viewModel.selectedCarForExpenses
+                    {
+                        AddMaintenanceRecordView(
+                            selectedCar: selectedCar,
+                            existingRecord: record,
+                            onAdd: { _ in },
+                            onUpdate: { updatedRecord in
+                                analytics.trackEvent("maintenance_record_updated", properties: [
+                                    "screen": "planned_maintenance_screen"
+                                ])
+
+                                viewModel.updateMaintenanceRecord(updatedRecord)
+
+                                loadData()
+                                onPlannedMaintenaceRecordsUpdated()
+                                recordToEdit = nil
+                            }
+                        )
+                    }
+                }
+                .sheet(isPresented: $showingMarkAsDoneExpense) {
+                    if let record = recordToMarkAsDone,
+                       let selectedCar = viewModel.selectedCarForExpenses
+                    {
+                        AddExpenseView(
+                            defaultExpenseType: .maintenance,
+                            defaultCurrency: selectedCar.expenseCurrency,
+                            selectedCar: selectedCar,
+                            allCars: viewModel.getAllCars(),
+                            prefilledTitle: record.name,
+                            prefilledNotes: record.notes,
+                            onAdd: { expenseResult in
+                                analytics.trackEvent("expense_added_from_maintenance", properties: [
+                                    "screen": "planned_maintenance_screen"
+                                ])
+
+                                viewModel.markMaintenanceAsDone(record)
+
+                                loadData()
+                                onPlannedMaintenaceRecordsUpdated()
+                                recordToMarkAsDone = nil
+                            }
+                        )
+                    }
                 }
             }
 
@@ -178,6 +228,39 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                     } label: {
                         Label(L("Delete"), systemImage: "trash")
                     }
+
+                    Button {
+                        analytics.trackEvent(
+                            "edit_maintenance_button_clicked",
+                            properties: [
+                                "button_name": "edit",
+                                "screen": "planned_maintenance_screen",
+                                "action": "edit_maintenance_record"
+                            ])
+
+                        recordToEdit = record
+                        showingEditMaintenanceRecord = true
+                    } label: {
+                        Label(L("Edit"), systemImage: "pencil")
+                    }
+                    .tint(.orange)
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button {
+                        analytics.trackEvent(
+                            "mark_as_done_button_clicked",
+                            properties: [
+                                "button_name": "mark_as_done",
+                                "screen": "planned_maintenance_screen",
+                                "action": "mark_maintenance_as_done"
+                            ])
+
+                        recordToMarkAsDone = record
+                        showingMarkAsDoneExpense = true
+                    } label: {
+                        Label(L("Done"), systemImage: "checkmark.circle.fill")
+                    }
+                    .tint(.green)
                 }
             }
         }

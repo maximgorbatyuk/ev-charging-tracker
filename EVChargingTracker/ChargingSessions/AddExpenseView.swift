@@ -15,9 +15,11 @@ struct AddExpenseView: SwiftUICore.View {
     let defaultCurrency: Currency
     let selectedCar: Car?
     let allCars: [Car]
-    let existingExpense: Expense? // For edit mode
+    let existingExpense: Expense?
     let onAdd: (AddExpenseViewResult) -> Void
     let lastChargingSession: Expense?
+    let prefilledTitle: String?
+    let prefilledNotes: String?
 
     @Environment(\.dismiss) var dismiss
     @ObservedObject private var analytics = AnalyticsService.shared
@@ -57,7 +59,10 @@ struct AddExpenseView: SwiftUICore.View {
         allCars: [Car],
         existingExpense: Expense? = nil,
         lastChargingSession: Expense? = nil,
-        onAdd: @escaping (AddExpenseViewResult) -> Void) {
+        prefilledTitle: String? = nil,
+        prefilledNotes: String? = nil,
+        onAdd: @escaping (AddExpenseViewResult) -> Void
+    ) {
         self.defaultExpenseType = defaultExpenseType
         self.defaultCurrency = defaultCurrency
         self.selectedCar = selectedCar
@@ -65,9 +70,24 @@ struct AddExpenseView: SwiftUICore.View {
         self.existingExpense = existingExpense
         self.onAdd = onAdd
         self.lastChargingSession = lastChargingSession
+        self.prefilledTitle = prefilledTitle
+        self.prefilledNotes = prefilledNotes
 
         _carId = State(initialValue: self.selectedCar?.id ?? existingExpense?.carId)
         _selectedCardForExpense = State(initialValue: self.selectedCar)
+
+        /// Pre-fill notes from maintenance record if provided
+        if let title = prefilledTitle, let extraNotes = prefilledNotes {
+            if extraNotes.isEmpty {
+                _notes = State(initialValue: title)
+            } else {
+                _notes = State(initialValue: "\(title)\n\(extraNotes)")
+            }
+        } else if let title = prefilledTitle {
+            _notes = State(initialValue: title)
+        } else if let extraNotes = prefilledNotes {
+            _notes = State(initialValue: extraNotes)
+        }
 
         // Initialize fields with existing expense data if in edit mode
         if let expense = existingExpense {

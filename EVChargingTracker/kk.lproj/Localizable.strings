@@ -337,3 +337,7 @@
 /* Filter Empty State */
 "No records match the selected filter" = "Таңдалған сүзгіге сәйкес жазбалар жоқ";
 
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Орындау үшін оңға, өңдеу немесе жою үшін солға сырғытыңыз";
+"Edit maintenance" = "Қызметті өңдеу";
+

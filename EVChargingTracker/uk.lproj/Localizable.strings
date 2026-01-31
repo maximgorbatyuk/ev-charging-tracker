@@ -326,3 +326,7 @@
 /* Filter Empty State */
 "No records match the selected filter" = "Немає записів, що відповідають обраному фільтру";
 
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Свайп вправо — виконано, вліво — редагувати або видалити";
+"Edit maintenance" = "Редагувати";
+

@@ -328,3 +328,7 @@
 /* Filter Empty State */
 "No records match the selected filter" = "No records match the selected filter";
 
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Swipe right to mark as done, left to edit or delete";
+"Edit maintenance" = "Edit maintenance";
+

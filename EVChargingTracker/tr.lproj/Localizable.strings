@@ -330,3 +330,7 @@
 /* Filter Empty State */
 "No records match the selected filter" = "Seçilen filtreyle eşleşen kayıt yok";
 
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Tamamlamak için sağa, düzenlemek veya silmek için sola kaydırın";
+"Edit maintenance" = "Bakımı düzenle";
+

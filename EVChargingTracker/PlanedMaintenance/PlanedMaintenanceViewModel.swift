@@ -80,18 +80,53 @@ class PlanedMaintenanceViewModel: ObservableObject {
         }
     }
     
-    func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) -> Void {
+    func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) {
         _ = maintenanceRepository.deleteRecord(id: recordToDelete.id)
-        
-        if (recordToDelete.when != nil) {
+
+        if recordToDelete.when != nil {
             let delayedNotification = delayedNotificationsRepo.getRecordByMaintenanceId(recordToDelete.id)
-            if (delayedNotification == nil) {
+            guard let delayedNotification = delayedNotification else {
                 return
             }
-            
-            notificationsService.cancelNotification(delayedNotification!.notificationId)
-            _ = delayedNotificationsRepo.deleteRecord(id: delayedNotification!.id!)
+
+            notificationsService.cancelNotification(delayedNotification.notificationId)
+            _ = delayedNotificationsRepo.deleteRecord(id: delayedNotification.id!)
         }
+    }
+
+    func updateMaintenanceRecord(_ record: PlannedMaintenance) {
+        _ = maintenanceRepository.updateRecord(record)
+
+        /// Cancel existing notification if any
+        if let existingNotification = delayedNotificationsRepo.getRecordByMaintenanceId(record.id!) {
+            notificationsService.cancelNotification(existingNotification.notificationId)
+            _ = delayedNotificationsRepo.deleteRecord(id: existingNotification.id!)
+        }
+
+        /// Schedule new notification if date is set
+        if let when = record.when {
+            let notificationId = notificationsService.scheduleNotification(
+                title: L("Maintenance reminder"),
+                body: record.name,
+                on: when)
+
+            _ = delayedNotificationsRepo.insertRecord(
+                DelayedNotification(
+                    when: when,
+                    notificationId: notificationId,
+                    maintenanceRecord: record.id!,
+                    carId: record.carId
+                )
+            )
+        }
+    }
+
+    func markMaintenanceAsDone(_ record: PlannedMaintenanceItem) {
+        deleteMaintenanceRecord(record)
+    }
+
+    func getAllCars() -> [Car] {
+        return carRepo.getAllCars()
     }
 
     func reloadSelectedCarForExpenses() -> Car? {

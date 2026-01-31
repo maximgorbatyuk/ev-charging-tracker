@@ -9,8 +9,10 @@ import SwiftUI
 
 struct AddMaintenanceRecordView: SwiftUICore.View {
     let selectedCar: Car?
+    let existingRecord: PlannedMaintenanceItem?
     let onAdd: (PlannedMaintenance) -> Void
-    
+    let onUpdate: ((PlannedMaintenance) -> Void)?
+
     @Environment(\.dismiss) var dismiss
     @ObservedObject private var analytics = AnalyticsService.shared
 
@@ -22,6 +24,37 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     @State private var remindByDate = false
     @State private var remindByOdometer = false
     @State private var alertMessage: String? = nil
+
+    private var isEditMode: Bool {
+        existingRecord != nil
+    }
+
+    init(
+        selectedCar: Car?,
+        existingRecord: PlannedMaintenanceItem? = nil,
+        onAdd: @escaping (PlannedMaintenance) -> Void,
+        onUpdate: ((PlannedMaintenance) -> Void)? = nil
+    ) {
+        self.selectedCar = selectedCar
+        self.existingRecord = existingRecord
+        self.onAdd = onAdd
+        self.onUpdate = onUpdate
+
+        if let record = existingRecord {
+            _name = State(initialValue: record.name)
+            _notes = State(initialValue: record.notes)
+
+            if let recordWhen = record.when {
+                _when = State(initialValue: recordWhen)
+                _remindByDate = State(initialValue: true)
+            }
+
+            if let recordOdometer = record.odometer {
+                _odometer = State(initialValue: String(recordOdometer))
+                _remindByOdometer = State(initialValue: true)
+            }
+        }
+    }
     
     var body: some SwiftUICore.View {
         NavigationView {
@@ -99,7 +132,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
                     .listRowInsets(EdgeInsets())
                 }
             } // Form end
-            .navigationTitle(L("Plan a maintenance"))
+            .navigationTitle(L(isEditMode ? "Edit maintenance" : "Plan a maintenance"))
             .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -117,22 +150,21 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     }
     
     private func save() {
-        
         alertMessage = nil
-        if (selectedCar == nil) {
+
+        if selectedCar == nil {
             alertMessage = L("Please select a car first.")
             return
         }
-        
-        if (name == "") {
+
+        if name.isEmpty {
             alertMessage = L("Please type service title.")
             return
         }
 
         var odo: Int? = nil
-        if (remindByOdometer && odometer != "") {
+        if remindByOdometer && !odometer.isEmpty {
             guard let odometerValue = Int(odometer) else {
-                // TODO mgorbatyuk: show alert
                 alertMessage = L("Please type a valid value for Odometer.")
                 return
             }
@@ -141,14 +173,21 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
         }
 
         let record = PlannedMaintenance(
+            id: existingRecord?.id,
             when: remindByDate ? when : nil,
             odometer: remindByOdometer ? odo : nil,
             name: name,
             notes: notes,
-            carId: selectedCar!.id!
+            carId: selectedCar!.id!,
+            createdAt: existingRecord?.createdAt
         )
 
-        onAdd(record)
+        if isEditMode {
+            onUpdate?(record)
+        } else {
+            onAdd(record)
+        }
+
         dismiss()
     }
 }

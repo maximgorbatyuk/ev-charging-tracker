@@ -330,3 +330,7 @@
 /* Filter Empty State */
 "No records match the selected filter" = "Нет записей, соответствующих выбранному фильтру";
 
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Свайп вправо — выполнено, влево — редактировать или удалить";
+"Edit maintenance" = "Редактировать";
+
