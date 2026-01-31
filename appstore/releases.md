@@ -1,5 +1,39 @@
 # Release notes
 
+## 2026.1.7
+
+### English
+
+```
+Filter your expenses by type — charging, maintenance, repairs, and more. We've also improved planned maintenance with filtering, a detailed view, and the ability to edit or duplicate records. Plus, you can now edit all charging session fields and store your car's wheel sizes.
+```
+
+### Русский (RU)
+
+```
+Фильтруйте расходы по типу — зарядка, обслуживание, ремонт и другие. Мы также улучшили планирование ТО: добавили фильтры, детальный просмотр и возможность редактировать или дублировать записи. Теперь можно редактировать все поля зарядных сессий и сохранять размеры колёс автомобиля.
+
+Шығындарды түрі бойынша сүзгілеңіз — зарядтау, техникалық қызмет көрсету, жөндеу және т.б. Жоспарланған техникалық қызметті де жақсарттық: сүзгілер, толық көрініс және жазбаларды өңдеу немесе көшіру мүмкіндігін қостық. Енді зарядтау сеанстарының барлық өрістерін өңдеуге және дөңгелек өлшемдерін сақтауға болады.
+```
+
+### Türkçe (TR)
+
+```
+Giderlerinizi türe göre filtreleyin — şarj, bakım, onarım ve daha fazlası. Planlı bakımı da geliştirdik: filtreler, detaylı görünüm ve kayıtları düzenleme veya çoğaltma özelliği ekledik. Artık tüm şarj oturumu alanlarını düzenleyebilir ve araç lastik ölçülerini kaydedebilirsiniz.
+```
+
+### Українська (UK)
+
+```
+Фільтруйте витрати за типом — зарядка, обслуговування, ремонт та інші. Ми також покращили планування ТО: додали фільтри, детальний перегляд і можливість редагувати або дублювати записи. Тепер можна редагувати всі поля зарядних сесій і зберігати розміри коліс автомобіля.
+```
+
+### Deutsch (DE)
+
+```
+Filtern Sie Ihre Ausgaben nach Typ — Laden, Wartung, Reparaturen und mehr. Wir haben auch die geplante Wartung verbessert: Filter, Detailansicht und die Möglichkeit, Einträge zu bearbeiten oder zu duplizieren. Außerdem können Sie jetzt alle Ladefelder bearbeiten und die Reifengrößen Ihres Fahrzeugs speichern.
+```
+
 ## 2026.1.6
 
 • New: Appearance mode setting (Light/Dark/System)
