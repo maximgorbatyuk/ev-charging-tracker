@@ -12,6 +12,8 @@ import os
 protocol CarRepositoryProtocol {
     func getSelectedForExpensesCar() -> Car?
     func getAllCars() -> [Car]
+    func insert(_ car: Car) -> Int64?
+    func updateMilleage(_ car: Car) -> Bool
 }
 
 class CarRepository : CarRepositoryProtocol {

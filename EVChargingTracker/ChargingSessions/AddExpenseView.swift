@@ -76,6 +76,11 @@ struct AddExpenseView: SwiftUICore.View {
         _carId = State(initialValue: self.selectedCar?.id ?? existingExpense?.carId)
         _selectedCardForExpense = State(initialValue: self.selectedCar)
 
+        /// Pre-select expense type for non-charging expenses
+        if let expType = defaultExpenseType, expType != .charging {
+            _expenseType = State(initialValue: expType)
+        }
+
         /// Pre-fill notes from maintenance record if provided
         if let title = prefilledTitle, let extraNotes = prefilledNotes {
             if extraNotes.isEmpty {

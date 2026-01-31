@@ -17,7 +17,8 @@ class PlanedMaintenanceViewModel: ObservableObject {
     private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol
     private let delayedNotificationsRepo: DelayedNotificationsRepositoryProtocol
     private let carRepo: CarRepositoryProtocol
-    
+    private let expensesRepo: ExpensesRepository
+
     private var _selectedCarForExpenses: Car?
     
     // MARK: - Convenience properties for backward compatibility
@@ -39,6 +40,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
         self.maintenanceRepository = db.getPlannedMaintenanceRepository()
         self.delayedNotificationsRepo = db.getDelayedNotificationsRepository()
         self.carRepo = db.getCarRepository()
+        self.expensesRepo = db.getExpensesRepository()
 
         loadData()
     }
@@ -121,8 +123,49 @@ class PlanedMaintenanceViewModel: ObservableObject {
         }
     }
 
-    func markMaintenanceAsDone(_ record: PlannedMaintenanceItem) {
+    func markMaintenanceAsDone(_ record: PlannedMaintenanceItem, expenseResult: AddExpenseViewResult) {
+        /// Save the expense first
+        saveExpense(expenseResult)
+
+        /// Then delete the maintenance record
         deleteMaintenanceRecord(record)
+    }
+
+    func saveExpense(_ expenseResult: AddExpenseViewResult) {
+        /// Handle new car creation if needed
+        if let carName = expenseResult.carName,
+           expenseResult.carId == nil
+        {
+            let newCar = Car(
+                name: carName,
+                selectedForTracking: true,
+                batteryCapacity: expenseResult.batteryCapacity,
+                expenseCurrency: expenseResult.expense.currency,
+                currentMileage: expenseResult.initialOdometr,
+                initialMileage: expenseResult.initialOdometr,
+                milleageSyncedAt: Date(),
+                createdAt: Date()
+            )
+
+            if let carId = carRepo.insert(newCar) {
+                expenseResult.expense.carId = carId
+
+                if let initialExpense = expenseResult.initialExpenseForNewCar {
+                    initialExpense.carId = carId
+                    _ = expensesRepo.insertSession(initialExpense)
+                }
+            }
+        }
+
+        /// Save the expense
+        _ = expensesRepo.insertSession(expenseResult.expense)
+
+        /// Update car mileage if needed
+        if let car = selectedCarForExpenses {
+            var updatedCar = car
+            updatedCar.currentMileage = expenseResult.expense.odometer
+            _ = carRepo.updateMilleage(updatedCar)
+        }
     }
 
     func getAllCars() -> [Car] {

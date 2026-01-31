@@ -12,6 +12,7 @@ protocol DatabaseManagerProtocol {
     func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepository
     func getDelayedNotificationsRepository() -> DelayedNotificationsRepository
     func getCarRepository() -> CarRepository
+    func getExpensesRepository() -> ExpensesRepository
 }
 
 class DatabaseManager : DatabaseManagerProtocol {
@@ -88,6 +89,10 @@ class DatabaseManager : DatabaseManagerProtocol {
 
     func getCarRepository() -> CarRepository {
         return carRepository!
+    }
+
+    func getExpensesRepository() -> ExpensesRepository {
+        return expensesRepository!
     }
 
     func migrateIfNeeded() {

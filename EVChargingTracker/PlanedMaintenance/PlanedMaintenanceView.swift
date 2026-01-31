@@ -17,8 +17,6 @@ struct PlanedMaintenanceView: SwiftUICore.View {
         db: DatabaseManager.shared)
 
     @State private var showingAddMaintenanceRecord = false
-    @State private var showingEditMaintenanceRecord = false
-    @State private var showingMarkAsDoneExpense = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var recordToDelete: PlannedMaintenanceItem? = nil
     @State private var recordToEdit: PlannedMaintenanceItem? = nil
@@ -92,10 +90,8 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         }
                     )
                 }
-                .sheet(isPresented: $showingEditMaintenanceRecord) {
-                    if let record = recordToEdit,
-                       let selectedCar = viewModel.selectedCarForExpenses
-                    {
+                .sheet(item: $recordToEdit) { record in
+                    if let selectedCar = viewModel.selectedCarForExpenses {
                         AddMaintenanceRecordView(
                             selectedCar: selectedCar,
                             existingRecord: record,
@@ -109,15 +105,12 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
                                 loadData()
                                 onPlannedMaintenaceRecordsUpdated()
-                                recordToEdit = nil
                             }
                         )
                     }
                 }
-                .sheet(isPresented: $showingMarkAsDoneExpense) {
-                    if let record = recordToMarkAsDone,
-                       let selectedCar = viewModel.selectedCarForExpenses
-                    {
+                .sheet(item: $recordToMarkAsDone) { record in
+                    if let selectedCar = viewModel.selectedCarForExpenses {
                         AddExpenseView(
                             defaultExpenseType: .maintenance,
                             defaultCurrency: selectedCar.expenseCurrency,
@@ -130,11 +123,10 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                                     "screen": "planned_maintenance_screen"
                                 ])
 
-                                viewModel.markMaintenanceAsDone(record)
+                                viewModel.markMaintenanceAsDone(record, expenseResult: expenseResult)
 
                                 loadData()
                                 onPlannedMaintenaceRecordsUpdated()
-                                recordToMarkAsDone = nil
                             }
                         )
                     }
@@ -239,7 +231,6 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             ])
 
                         recordToEdit = record
-                        showingEditMaintenanceRecord = true
                     } label: {
                         Label(L("Edit"), systemImage: "pencil")
                     }
@@ -256,7 +247,6 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             ])
 
                         recordToMarkAsDone = record
-                        showingMarkAsDoneExpense = true
                     } label: {
                         Label(L("Done"), systemImage: "checkmark.circle.fill")
                     }
