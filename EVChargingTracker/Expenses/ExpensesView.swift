@@ -36,10 +36,8 @@ struct ExpensesView: SwiftUICore.View {
                                     perKilometer: false)
                             }
 
-                            FilterButtonsView(
-                                filterButtons: viewModel.filterButtons)
-                            .padding(.bottom, 4)
-                            .padding(.horizontal)
+                            filterSection
+                                .padding(.bottom, 4)
 
                             sortingSelectorView
 
@@ -180,6 +178,22 @@ struct ExpensesView: SwiftUICore.View {
        }
        .padding(.top, 60)
    }
+
+    private var filterSection: some SwiftUICore.View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(ExpensesFilter.allCases, id: \.self) { filter in
+                    FilterChip(
+                        title: filter.displayName,
+                        isSelected: viewModel.selectedFilter == filter
+                    ) {
+                        viewModel.setFilter(filter)
+                    }
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
 
     private var sortingSelectorView: some SwiftUICore.View {
         HStack {

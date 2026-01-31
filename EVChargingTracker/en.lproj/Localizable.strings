@@ -309,3 +309,22 @@
 "• 9.5 - Wheel width in inches" = "• 9.5 - Wheel width in inches";
 "Done" = "Done";
 
+/* Expense Filters */
+"expense.filter.all" = "All";
+"expense.filter.charging" = "Charging";
+"expense.filter.maintenance" = "Maintenance";
+"expense.filter.repair" = "Repair";
+"expense.filter.carwash" = "Car wash";
+"expense.filter.other" = "Other";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "All";
+"maintenance.filter.overdue" = "Overdue";
+"maintenance.filter.due_soon" = "Due soon";
+"maintenance.filter.scheduled" = "Scheduled";
+"maintenance.filter.by_mileage" = "By mileage";
+"maintenance.filter.by_date" = "By date";
+
+/* Filter Empty State */
+"No records match the selected filter" = "No records match the selected filter";
+

@@ -9,8 +9,9 @@
 import Foundation
 
 class PlanedMaintenanceViewModel: ObservableObject {
-    
+
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
+    @Published var selectedFilter: PlannedMaintenanceFilter = .all
     
     private let notificationsService: NotificationManagerProtocol
     private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol
@@ -104,6 +105,81 @@ class PlanedMaintenanceViewModel: ObservableObject {
         }
 
         return _selectedCarForExpenses
+    }
+
+    var filteredRecords: [PlannedMaintenanceItem] {
+        switch selectedFilter {
+        case .all:
+            return maintenanceRecords
+
+        case .overdue:
+            return maintenanceRecords.filter { isOverdue($0) }
+
+        case .dueSoon:
+            return maintenanceRecords.filter { isDueSoon($0) }
+
+        case .scheduled:
+            return maintenanceRecords.filter { isScheduled($0) }
+
+        case .byMileage:
+            return maintenanceRecords.filter { $0.odometer != nil }
+
+        case .byDate:
+            return maintenanceRecords.filter { $0.when != nil }
+        }
+    }
+
+    func setFilter(_ filter: PlannedMaintenanceFilter) {
+        guard filter != selectedFilter else {
+            return
+        }
+
+        selectedFilter = filter
+    }
+
+    /// Overdue: mileage passed target OR date passed
+    private func isOverdue(_ item: PlannedMaintenanceItem) -> Bool {
+        if let mileageDiff = item.mileageDifference,
+           mileageDiff > 0
+        {
+            return true
+        }
+
+        if let daysDiff = item.daysDifference,
+           daysDiff < 0
+        {
+            return true
+        }
+
+        return false
+    }
+
+    /// Due soon: within 7 days OR within 500 km (not overdue)
+    private func isDueSoon(_ item: PlannedMaintenanceItem) -> Bool {
+        guard !isOverdue(item) else {
+            return false
+        }
+
+        if let daysDiff = item.daysDifference,
+           daysDiff >= 0,
+           daysDiff <= 7
+        {
+            return true
+        }
+
+        if let mileageDiff = item.mileageDifference,
+           mileageDiff >= -500,
+           mileageDiff <= 0
+        {
+            return true
+        }
+
+        return false
+    }
+
+    /// Scheduled: not overdue and not due soon
+    private func isScheduled(_ item: PlannedMaintenanceItem) -> Bool {
+        return !isOverdue(item) && !isDueSoon(item)
     }
 }
 

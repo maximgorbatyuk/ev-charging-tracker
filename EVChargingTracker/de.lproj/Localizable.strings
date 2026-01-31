@@ -312,3 +312,22 @@
 "• 9.5 - Wheel width in inches" = "• 9.5 - Radbreite in Zoll";
 "Done" = "Fertig";
 
+/* Expense Filters */
+"expense.filter.all" = "Alle";
+"expense.filter.charging" = "Laden";
+"expense.filter.maintenance" = "Wartung";
+"expense.filter.repair" = "Reparatur";
+"expense.filter.carwash" = "Autowäsche";
+"expense.filter.other" = "Sonstiges";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "Alle";
+"maintenance.filter.overdue" = "Überfällig";
+"maintenance.filter.due_soon" = "Bald fällig";
+"maintenance.filter.scheduled" = "Geplant";
+"maintenance.filter.by_mileage" = "Nach km";
+"maintenance.filter.by_date" = "Nach Datum";
+
+/* Filter Empty State */
+"No records match the selected filter" = "Keine Einträge entsprechen dem ausgewählten Filter";
+

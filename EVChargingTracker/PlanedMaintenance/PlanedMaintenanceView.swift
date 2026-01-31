@@ -35,15 +35,22 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         if viewModel.maintenanceRecords.isEmpty {
                             EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
                         } else if viewModel.selectedCarForExpenses != nil {
-                            VStack(spacing: 12) {
-                                Text(L("For deleting record, please swipe left"))
-                                    .font(.caption)
-                                    .fontWeight(.regular)
-                                    .padding(.horizontal)
-                                    .foregroundColor(.gray)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            filterSection
+                                .padding(.bottom, 4)
 
-                                maintenanceListView
+                            if viewModel.filteredRecords.isEmpty {
+                                noFilterResultsView
+                            } else {
+                                VStack(spacing: 12) {
+                                    Text(L("For deleting record, please swipe left"))
+                                        .font(.caption)
+                                        .fontWeight(.regular)
+                                        .padding(.horizontal)
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                                    maintenanceListView
+                                }
                             }
 
                             /// Extra padding at the bottom for FAB clearance
@@ -115,9 +122,40 @@ struct PlanedMaintenanceView: SwiftUICore.View {
         .padding(.bottom, 20)
     }
 
+    private var filterSection: some SwiftUICore.View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(PlannedMaintenanceFilter.allCases, id: \.self) { filter in
+                    FilterChip(
+                        title: filter.displayName,
+                        isSelected: viewModel.selectedFilter == filter
+                    ) {
+                        viewModel.setFilter(filter)
+                    }
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+
+    private var noFilterResultsView: some SwiftUICore.View {
+        VStack(spacing: 16) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 48))
+                .foregroundColor(.gray.opacity(0.5))
+
+            Text(L("No records match the selected filter"))
+                .font(.title3)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.top, 60)
+        .padding(.horizontal, 20)
+    }
+
     private var maintenanceListView: some SwiftUICore.View {
         List {
-            ForEach(viewModel.maintenanceRecords) { record in
+            ForEach(viewModel.filteredRecords) { record in
                 PlannedMaintenanceItemView(
                     selectedCar: viewModel.selectedCarForExpenses!,
                     record: record
@@ -145,7 +183,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
-        .frame(minHeight: CGFloat(viewModel.maintenanceRecords.count) * 140)
+        .frame(minHeight: CGFloat(viewModel.filteredRecords.count) * 140)
     }
 
     private func loadData() {

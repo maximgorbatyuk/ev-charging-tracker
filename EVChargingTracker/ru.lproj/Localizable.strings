@@ -311,3 +311,22 @@
 "• 9.5 - Wheel width in inches" = "• 9.5 - Ширина колеса в дюймах";
 "Done" = "Готово";
 
+/* Expense Filters */
+"expense.filter.all" = "Все";
+"expense.filter.charging" = "Зарядки";
+"expense.filter.maintenance" = "Сервис";
+"expense.filter.repair" = "Ремонт";
+"expense.filter.carwash" = "Мойка";
+"expense.filter.other" = "Другое";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "Все";
+"maintenance.filter.overdue" = "Просрочено";
+"maintenance.filter.due_soon" = "Скоро";
+"maintenance.filter.scheduled" = "Запланировано";
+"maintenance.filter.by_mileage" = "По пробегу";
+"maintenance.filter.by_date" = "По дате";
+
+/* Filter Empty State */
+"No records match the selected filter" = "Нет записей, соответствующих выбранному фильтру";
+

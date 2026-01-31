@@ -311,3 +311,22 @@
 "• 9.5 - Wheel width in inches" = "• 9.5 - Jant genişliği (inç)";
 "Done" = "Tamamlandı";
 
+/* Expense Filters */
+"expense.filter.all" = "Tümü";
+"expense.filter.charging" = "Şarj";
+"expense.filter.maintenance" = "Bakım";
+"expense.filter.repair" = "Tamir";
+"expense.filter.carwash" = "Yıkama";
+"expense.filter.other" = "Diğer";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "Tümü";
+"maintenance.filter.overdue" = "Gecikmiş";
+"maintenance.filter.due_soon" = "Yakında";
+"maintenance.filter.scheduled" = "Planlandı";
+"maintenance.filter.by_mileage" = "Km'ye göre";
+"maintenance.filter.by_date" = "Tarihe göre";
+
+/* Filter Empty State */
+"No records match the selected filter" = "Seçilen filtreyle eşleşen kayıt yok";
+

@@ -318,3 +318,22 @@
 "• 9.5 - Wheel width in inches" = "• 9.5 - Дөңге ені (дюйм)";
 "Done" = "Дайын";
 
+/* Expense Filters */
+"expense.filter.all" = "Барлығы";
+"expense.filter.charging" = "Зарядтау";
+"expense.filter.maintenance" = "Қызмет";
+"expense.filter.repair" = "Жөндеу";
+"expense.filter.carwash" = "Жуу";
+"expense.filter.other" = "Басқа";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "Барлығы";
+"maintenance.filter.overdue" = "Мерзімі өтті";
+"maintenance.filter.due_soon" = "Жақында";
+"maintenance.filter.scheduled" = "Жоспарланған";
+"maintenance.filter.by_mileage" = "Км бойынша";
+"maintenance.filter.by_date" = "Күні бойынша";
+
+/* Filter Empty State */
+"No records match the selected filter" = "Таңдалған сүзгіге сәйкес жазбалар жоқ";
+
