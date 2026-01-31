@@ -26,6 +26,8 @@ class CarRepository : CarRepositoryProtocol {
     private let initialMileageColumn = Expression<Int>("initial_mileage")
     private let milleageSyncedAtColumn = Expression<Date>("milleage_synced_at")
     private let createdAtColumn = Expression<Date>("created_at")
+    private let frontWheelSizeColumn = Expression<String?>("front_wheel_size")
+    private let rearWheelSizeColumn = Expression<String?>("rear_wheel_size")
 
     private let userSettingsRepository: UserSettingsRepository
     private var db: Connection
@@ -56,6 +58,8 @@ class CarRepository : CarRepositoryProtocol {
             t.column(initialMileageColumn)
             t.column(milleageSyncedAtColumn)
             t.column(createdAtColumn)
+            t.column(frontWheelSizeColumn)
+            t.column(rearWheelSizeColumn)
         }
     }
 
@@ -86,7 +90,7 @@ class CarRepository : CarRepositoryProtocol {
     }
 
     func insert(_ car: Car) -> Int64? {
-        
+
         let currentDate = Date()
         do {
             let insert = table.insert(
@@ -97,7 +101,9 @@ class CarRepository : CarRepositoryProtocol {
                 currentMileageColumn <- car.currentMileage,
                 initialMileageColumn <- car.initialMileage,
                 milleageSyncedAtColumn <- car.milleageSyncedAt,
-                createdAtColumn <- currentDate
+                createdAtColumn <- currentDate,
+                frontWheelSizeColumn <- car.frontWheelSize,
+                rearWheelSizeColumn <- car.rearWheelSize
             )
 
             let rowId = try db.run(insert)
@@ -133,7 +139,7 @@ class CarRepository : CarRepositoryProtocol {
         do {
             let query = table.filter(idColumn == id).limit(1)
             if let row = try db.pluck(query) {
-                
+
                 let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
 
                 return Car(
@@ -145,7 +151,9 @@ class CarRepository : CarRepositoryProtocol {
                     currentMileage: row[currentMileageColumn],
                     initialMileage: row[initialMileageColumn],
                     milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn]
+                    createdAt: row[createdAtColumn],
+                    frontWheelSize: row[frontWheelSizeColumn],
+                    rearWheelSize: row[rearWheelSizeColumn]
                 )
             }
         } catch {
@@ -155,7 +163,6 @@ class CarRepository : CarRepositoryProtocol {
         return nil
     }
 
-    // Update general editable fields for a car (name, batteryCapacity, currentMileage)
     func updateCar(car: Car) -> Bool {
         let carToUpdate = table.filter(idColumn == car.id!)
         do {
@@ -166,7 +173,9 @@ class CarRepository : CarRepositoryProtocol {
                 currentMileageColumn <- car.currentMileage,
                 expenseCurrencyColumn <- car.expenseCurrency.rawValue,
                 milleageSyncedAtColumn <- car.milleageSyncedAt,
-                selectedForTrackingColumn <- car.selectedForTracking
+                selectedForTrackingColumn <- car.selectedForTracking,
+                frontWheelSizeColumn <- car.frontWheelSize,
+                rearWheelSizeColumn <- car.rearWheelSize
             )
             let updated = try db.run(update)
             return updated > 0
@@ -263,7 +272,9 @@ class CarRepository : CarRepositoryProtocol {
                     currentMileage: row[currentMileageColumn],
                     initialMileage: row[initialMileageColumn],
                     milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn]
+                    createdAt: row[createdAtColumn],
+                    frontWheelSize: row[frontWheelSizeColumn],
+                    rearWheelSize: row[rearWheelSizeColumn]
                 )
             } else {
                 return nil
@@ -293,7 +304,9 @@ class CarRepository : CarRepositoryProtocol {
                     currentMileage: row[currentMileageColumn],
                     initialMileage: row[initialMileageColumn],
                     milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn]
+                    createdAt: row[createdAtColumn],
+                    frontWheelSize: row[frontWheelSizeColumn],
+                    rearWheelSize: row[rearWheelSizeColumn]
                 )
                 cars.append(carItems)
             }
@@ -309,7 +322,7 @@ class CarRepository : CarRepositoryProtocol {
         do {
             let query = table.filter(selectedForTrackingColumn == true).limit(1)
             if let row = try db.pluck(query) {
-                
+
                 var expenseCurrency = Currency(rawValue: row[expenseCurrencyColumn])
                 if (expenseCurrency == nil) {
                     expenseCurrency = userSettingsRepository.fetchCurrency()
@@ -324,7 +337,9 @@ class CarRepository : CarRepositoryProtocol {
                     currentMileage: row[currentMileageColumn],
                     initialMileage: row[initialMileageColumn],
                     milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn]
+                    createdAt: row[createdAtColumn],
+                    frontWheelSize: row[frontWheelSizeColumn],
+                    rearWheelSize: row[rearWheelSizeColumn]
                 )
             }
         } catch {

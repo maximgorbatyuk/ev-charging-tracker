@@ -827,7 +827,9 @@ struct UserSettingsView: SwiftUICore.View {
                         intialMileage: updated.initialMileage,
                         currentMileage: updated.currentMileage,
                         expenseCurrency: updated.expenseCurrency,
-                        selectedForTracking: updated.selectedForTracking)
+                        selectedForTracking: updated.selectedForTracking,
+                        frontWheelSize: updated.frontWheelSize,
+                        rearWheelSize: updated.rearWheelSize)
 
                     _ = viewModel.updateCar(car: carToUpdate)
 
@@ -841,7 +843,9 @@ struct UserSettingsView: SwiftUICore.View {
                         currentMileage: updated.currentMileage,
                         initialMileage: updated.initialMileage,
                         milleageSyncedAt: Date(),
-                        createdAt: Date()
+                        createdAt: Date(),
+                        frontWheelSize: updated.frontWheelSize,
+                        rearWheelSize: updated.rearWheelSize
                     )
 
                     _ = viewModel.insertCar(newCar)

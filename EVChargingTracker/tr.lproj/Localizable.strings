@@ -290,3 +290,24 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Jant Detayları";
+"Front wheel size" = "Ön jant boyutu";
+"Rear wheel size" = "Arka jant boyutu";
+"Front = Rear" = "Ön = Arka";
+"e.g. 225/45R18, 20x9.5" = "ör. 225/45R18, 20x9.5";
+"Wheel Size Info" = "Jant Boyutu Bilgisi";
+"Wheel Size Formats" = "Jant Boyutu Formatları";
+"Metric format:" = "Metrik format:";
+"Example: 225/45R18" = "Örnek: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Lastik genişliği (mm)";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - En-oran (yükseklik/genişlik %)";
+"• R - Radial construction" = "• R - Radyal yapı";
+"• 18 - Rim diameter in inches" = "• 18 - Jant çapı (inç)";
+"Imperial format:" = "İmparatorluk formatı:";
+"Example: 20x9.5" = "Örnek: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Jant çapı (inç)";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Jant genişliği (inç)";
+"Done" = "Tamamlandı";
+

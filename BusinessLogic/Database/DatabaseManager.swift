@@ -34,7 +34,7 @@ class DatabaseManager : DatabaseManagerProtocol {
 
     private var db: Connection?
     private let logger: Logger
-    private let latestVersion = 5
+    private let latestVersion = 6
     
     private init() {
        
@@ -122,6 +122,10 @@ class DatabaseManager : DatabaseManagerProtocol {
             case 5:
                 let migration5 = Migration_20251114_CreateDelayedNotificationTable(db: db!)
                 migration5.execute()
+
+            case 6:
+                let migration6 = Migration_20250131_AddWheelDetailsToCarsTable(db: db!)
+                migration6.execute()
 
             default:
                 break

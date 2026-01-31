@@ -288,3 +288,24 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Wheel details";
+"Front wheel size" = "Front wheel size";
+"Rear wheel size" = "Rear wheel size";
+"Front = Rear" = "Front = Rear";
+"e.g. 225/45R18, 20x9.5" = "e.g. 225/45R18, 20x9.5";
+"Wheel Size Info" = "Wheel Size Info";
+"Wheel Size Formats" = "Wheel Size Formats";
+"Metric format:" = "Metric format:";
+"Example: 225/45R18" = "Example: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Tire width in mm";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - Aspect ratio (height/width %)";
+"• R - Radial construction" = "• R - Radial construction";
+"• 18 - Rim diameter in inches" = "• 18 - Rim diameter in inches";
+"Imperial format:" = "Imperial format:";
+"Example: 20x9.5" = "Example: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Rim diameter in inches";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Wheel width in inches";
+"Done" = "Done";
+

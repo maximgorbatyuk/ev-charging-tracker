@@ -17,6 +17,8 @@ class Car: Codable, Identifiable {
     var initialMileage: Int // in km
     var milleageSyncedAt: Date
     var createdAt: Date
+    var frontWheelSize: String?
+    var rearWheelSize: String?
 
     init(
         id: Int64? = nil,
@@ -27,7 +29,9 @@ class Car: Codable, Identifiable {
         currentMileage: Int,
         initialMileage: Int,
         milleageSyncedAt: Date,
-        createdAt: Date) {
+        createdAt: Date,
+        frontWheelSize: String? = nil,
+        rearWheelSize: String? = nil) {
 
         self.id = id
         self.name = name
@@ -39,6 +43,8 @@ class Car: Codable, Identifiable {
 
         self.milleageSyncedAt = milleageSyncedAt
         self.createdAt = createdAt
+        self.frontWheelSize = frontWheelSize
+        self.rearWheelSize = rearWheelSize
     }
     
     func updateMileage(newMileage: Int) {
@@ -60,7 +66,9 @@ class Car: Codable, Identifiable {
         intialMileage: Int,
         currentMileage: Int,
         expenseCurrency: Currency,
-        selectedForTracking: Bool) -> Void {
+        selectedForTracking: Bool,
+        frontWheelSize: String?,
+        rearWheelSize: String?) -> Void {
         if (!name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
             self.name = name
         }
@@ -80,5 +88,7 @@ class Car: Codable, Identifiable {
 
         self.expenseCurrency = expenseCurrency
         self.selectedForTracking = selectedForTracking
+        self.frontWheelSize = frontWheelSize
+        self.rearWheelSize = rearWheelSize
     }
 }

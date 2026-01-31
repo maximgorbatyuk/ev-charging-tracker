@@ -290,3 +290,24 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Детали колес";
+"Front wheel size" = "Размер передних колес";
+"Rear wheel size" = "Размер задних колес";
+"Front = Rear" = "Передние = Задние";
+"e.g. 225/45R18, 20x9.5" = "например, 225/45R18, 20x9.5";
+"Wheel Size Info" = "Информация о размере колес";
+"Wheel Size Formats" = "Форматы размеров колес";
+"Metric format:" = "Метрический формат:";
+"Example: 225/45R18" = "Пример: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Ширина шины в мм";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - Профиль (высота/ширина %)";
+"• R - Radial construction" = "• R - Радиальная конструкция";
+"• 18 - Rim diameter in inches" = "• 18 - Диаметр диска в дюймах";
+"Imperial format:" = "Имперский формат:";
+"Example: 20x9.5" = "Пример: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Диаметр диска в дюймах";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Ширина колеса в дюймах";
+"Done" = "Готово";
+

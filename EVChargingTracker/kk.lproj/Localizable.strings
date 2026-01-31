@@ -297,3 +297,24 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Дөңгелер туралы";
+"Front wheel size" = "Алдың дөңге аяқтар аяғы";
+"Rear wheel size" = "Артық дөңге аяқтар аяғы";
+"Front = Rear" = "Алдың = Артық";
+"e.g. 225/45R18, 20x9.5" = "мысалы, 225/45R18, 20x9.5";
+"Wheel Size Info" = "Дөңге аяғы туралы ақпарат";
+"Wheel Size Formats" = "Дөңге аяғы пішімдері";
+"Metric format:" = "Метрикалық пішім:";
+"Example: 225/45R18" = "Мысалы: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Шина ені (мм)";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - Профиль (биікті/ені %)";
+"• R - Radial construction" = "• R - Радиальды құрылым";
+"• 18 - Rim diameter in inches" = "• 18 - Диск диаметрі (дюйм)";
+"Imperial format:" = "Империялық пішім:";
+"Example: 20x9.5" = "Мысалы: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Диск диаметрі (дюйм)";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Дөңге ені (дюйм)";
+"Done" = "Дайын";
+
