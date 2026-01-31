@@ -297,3 +297,60 @@
 
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "Дөңгелер туралы";
+"Front wheel size" = "Алдың дөңге аяқтар аяғы";
+"Rear wheel size" = "Артық дөңге аяқтар аяғы";
+"Front = Rear" = "Алдың = Артық";
+"e.g. 225/45R18, 20x9.5" = "мысалы, 225/45R18, 20x9.5";
+"Wheel Size Info" = "Дөңге аяғы туралы ақпарат";
+"Wheel Size Formats" = "Дөңге аяғы пішімдері";
+"Metric format:" = "Метрикалық пішім:";
+"Example: 225/45R18" = "Мысалы: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - Шина ені (мм)";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - Профиль (биікті/ені %)";
+"• R - Radial construction" = "• R - Радиальды құрылым";
+"• 18 - Rim diameter in inches" = "• 18 - Диск диаметрі (дюйм)";
+"Imperial format:" = "Империялық пішім:";
+"Example: 20x9.5" = "Мысалы: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - Диск диаметрі (дюйм)";
+"• 9.5 - Wheel width in inches" = "• 9.5 - Дөңге ені (дюйм)";
+"Done" = "Дайын";
+
+/* Expense Filters */
+"expense.filter.all" = "Барлығы";
+"expense.filter.charging" = "Зарядтау";
+"expense.filter.maintenance" = "Қызмет";
+"expense.filter.repair" = "Жөндеу";
+"expense.filter.carwash" = "Жуу";
+"expense.filter.other" = "Басқа";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "Барлығы";
+"maintenance.filter.overdue" = "Мерзімі өтті";
+"maintenance.filter.due_soon" = "Жақында";
+"maintenance.filter.scheduled" = "Жоспарланған";
+"maintenance.filter.by_mileage" = "Км бойынша";
+"maintenance.filter.by_date" = "Күні бойынша";
+
+/* Filter Empty State */
+"No records match the selected filter" = "Таңдалған сүзгіге сәйкес жазбалар жоқ";
+
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "Орындау үшін оңға, өңдеу немесе жою үшін солға сырғытыңыз";
+"Edit maintenance" = "Қызметті өңдеу";
+
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "Қызмет көрсету мәліметтері";
+"Title" = "Атауы";
+"Scheduled Date" = "Жоспарланған күні";
+"Target Odometer" = "Мақсатты жүріс";
+"Remaining Distance" = "Қалған қашықтық";
+"Created" = "Жасалған";
+"Mark as Done" = "Орындалды деп белгілеу";
+"Duplicate" = "Көшірме жасау";
+"Due Soon" = "Жақында";
+"Overdue" = "Мерзімі өтті";
+"Scheduled" = "Жоспарланған";
+

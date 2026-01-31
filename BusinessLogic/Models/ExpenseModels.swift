@@ -16,17 +16,60 @@ enum ExpenseType: String, CaseIterable, Codable {
 }
 
 enum ExpensesSortingOption: String, CaseIterable, Codable {
-    case creationDate = "creation_date"
-    case odometer = "odometer"
+  case creationDate = "creation_date"
+  case odometer = "odometer"
 
-    var localizedTitle: String {
-        switch self {
-        case .creationDate:
-            return L("Sort.CreationDate")
-        case .odometer:
-            return L("Sort.Odometer")
-        }
+  var localizedTitle: String {
+    switch self {
+    case .creationDate:
+      return L("Sort.CreationDate")
+    case .odometer:
+      return L("Sort.Odometer")
     }
+  }
+}
+
+enum ExpensesFilter: String, CaseIterable {
+  case all
+  case charging
+  case maintenance
+  case repair
+  case carwash
+  case other
+
+  var displayName: String {
+    switch self {
+    case .all:
+      return L("expense.filter.all")
+    case .charging:
+      return L("expense.filter.charging")
+    case .maintenance:
+      return L("expense.filter.maintenance")
+    case .repair:
+      return L("expense.filter.repair")
+    case .carwash:
+      return L("expense.filter.carwash")
+    case .other:
+      return L("expense.filter.other")
+    }
+  }
+
+  var expenseTypes: [ExpenseType] {
+    switch self {
+    case .all:
+      return []
+    case .charging:
+      return [.charging]
+    case .maintenance:
+      return [.maintenance]
+    case .repair:
+      return [.repair]
+    case .carwash:
+      return [.carwash]
+    case .other:
+      return [.other]
+    }
+  }
 }
 
 enum ChargerType: String, CaseIterable, Codable {

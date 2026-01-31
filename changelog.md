@@ -1,5 +1,37 @@
 # Changelog
 
+## 2026.1.7 (2026-01-31)
+
+- **Expense Filtering**
+  - Added filter chips to Expenses screen (All, Charging, Maintenance, Repair, Car Wash, Other)
+  - Filter selection updates the expense list in real-time
+  - Maintains pagination and sorting when filtering
+
+- **Planned Maintenance Improvements**
+  - New filter chips for maintenance records (All, Overdue, Due Soon, Scheduled, By Mileage, By Date)
+  - New detailed view for maintenance records with status badges (Overdue, Due Soon, Scheduled)
+  - Quick actions from details view: Mark as Done, Edit, Duplicate, Delete
+  - Ability to edit existing maintenance records
+  - Duplicate maintenance records for recurring tasks
+  - Streamlined maintenance item display with cleaner layout
+
+- **Editable Charging Sessions**
+  - Energy, Price per kWh, and Odometer fields are now editable when editing a charging expense
+  - Interconnected calculations: changing Cost recalculates Energy (Price stays static)
+  - Car odometer automatically updates if the new expense odometer is higher than current
+
+- **Car Wheel Details**
+  - Added front and rear wheel size fields to car settings
+  - Toggle for same wheel size front and rear
+  - Info sheet explaining metric (225/45R18) and imperial (20x9.5) wheel size formats
+
+- **Expense Creation from Maintenance**
+  - When marking maintenance as done, expense notes are pre-filled with the maintenance title and notes
+  - Simplifies tracking maintenance costs
+
+- **Localization**
+  - Added translations for all new features in all supported languages (EN, DE, RU, TR, KK, UK)
+
 ## 2026.1.6 (2026-01-27)
 
 - **Appearance Mode**

@@ -11,7 +11,7 @@ import os
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
-    @Published var filterButtons: [FilterButtonItem] = []
+    @Published var selectedFilter: ExpensesFilter = .all
     @Published var currentPage: Int = 1
     @Published var totalRecords: Int = 0
     @Published var totalPages: Int = 0
@@ -32,7 +32,6 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     private let analytics: AnalyticsService
 
     private var _selectedCarForExpenses: Car?
-    private var _currentExpenseTypeFilters: [ExpenseType] = []
     private let logger: Logger
 
     init(
@@ -52,67 +51,29 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         // Load saved sorting preference
         self.selectedSortingOption = db.userSettingsRepository?.fetchExpensesSortingOption() ?? .creationDate
 
-        self.filterButtons = [
-            FilterButtonItem(
-                title: L("Filter.All"),
-                innerAction: {
-                    self.loadSessions([])
-
-                    self.analytics.trackEvent(
-                        "expenses_filter_all_selected",
-                        properties: [
-                            "screen": self.analyticsScreenName
-                        ])
-                },
-                isSelected: true),
-
-            FilterButtonItem(
-                title: L("Filter.Charges"),
-                innerAction: {
-                    self.loadSessions([ExpenseType.charging])
-
-                    self.analytics.trackEvent(
-                        "expenses_filter_charges_selected",
-                        properties: [
-                            "screen": self.analyticsScreenName
-                        ])
-                },
-                isSelected: false),
-
-            FilterButtonItem(
-                title: L("Filter.Repair/maintenance"),
-                innerAction: {
-                    self.loadSessions([ExpenseType.repair, ExpenseType.maintenance])
-
-                    self.analytics.trackEvent(
-                        "expenses_filter_maintenance_selected",
-                        properties: [
-                            "screen": self.analyticsScreenName
-                        ])
-                },
-                isSelected: false),
-
-            FilterButtonItem(
-                title: L("Filter.Carwash"),
-                innerAction: {
-                    self.loadSessions([ExpenseType.carwash])
-
-                    self.analytics.trackEvent(
-                        "expenses_filter_carwash_selected",
-                        properties: [
-                            "screen": self.analyticsScreenName
-                        ])
-                },
-                isSelected: false),
-        ]
-
         loadSessions()
     }
 
-    func loadSessions(_ expenseTypeFilters: [ExpenseType] = []) -> Void {
-        _currentExpenseTypeFilters = expenseTypeFilters
-        currentPage = 1 // Reset to first page when filtering
+    func loadSessions() {
+        currentPage = 1
         loadSessionsForCurrentPage()
+    }
+
+    func setFilter(_ filter: ExpensesFilter) {
+        guard filter != selectedFilter else {
+            return
+        }
+
+        selectedFilter = filter
+        currentPage = 1
+        loadSessionsForCurrentPage()
+
+        analytics.trackEvent(
+            "expenses_filter_changed",
+            properties: [
+                "screen": analyticsScreenName,
+                "filter": filter.rawValue
+            ])
     }
 
     func setSortingOption(_ option: ExpensesSortingOption) -> Void {
@@ -149,7 +110,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             // Get total count for current filters
             totalRecords = chargingSessionsRepository.getExpensesCount(
                 carId: carId,
-                expenseTypeFilters: _currentExpenseTypeFilters
+                expenseTypeFilters: selectedFilter.expenseTypes
             )
             
             // Calculate total pages
@@ -166,7 +127,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             // Fetch paginated expenses
             expenses = chargingSessionsRepository.fetchCarSessionsPaginated(
                 carId: carId,
-                expenseTypeFilters: _currentExpenseTypeFilters,
+                expenseTypeFilters: selectedFilter.expenseTypes,
                 page: currentPage,
                 pageSize: pageSize,
                 sortBy: selectedSortingOption
@@ -216,6 +177,24 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         expenseToEdit.cost = expenseEditResult.expense.cost
         expenseToEdit.date = expenseEditResult.expense.date
         expenseToEdit.notes = expenseEditResult.expense.notes
+
+        /// Update charging-specific fields
+        if expenseToEdit.expenseType == .charging {
+            expenseToEdit.energyCharged = expenseEditResult.expense.energyCharged
+            expenseToEdit.chargerType = expenseEditResult.expense.chargerType
+        }
+
+        /// Update odometer
+        let newOdometer = expenseEditResult.expense.odometer
+        expenseToEdit.odometer = newOdometer
+
+        /// Update car's odometer if new value is higher than current
+        if let carId = expenseToEdit.carId,
+           let car = db.carRepository?.getCarById(carId),
+           newOdometer > car.currentMileage {
+            car.updateMileage(newMileage: newOdometer)
+            _ = self.updateMilleage(car)
+        }
 
         self.updateSession(expenseToEdit)
     }
@@ -348,12 +327,15 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func getTotalCost() -> Double {
-        guard let car = selectedCarForExpenses, let carId = car.id else {
+        guard let car = selectedCarForExpenses,
+              let carId = car.id
+        else {
             return 0
         }
+
         return chargingSessionsRepository.getTotalCost(
             carId: carId,
-            expenseTypeFilters: _currentExpenseTypeFilters)
+            expenseTypeFilters: selectedFilter.expenseTypes)
     }
 
     var selectedCarForExpenses: Car? {
