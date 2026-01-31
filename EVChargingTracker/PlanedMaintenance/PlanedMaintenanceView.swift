@@ -139,6 +139,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             record: record,
                             selectedCar: selectedCar,
                             onMarkAsDone: { rec in
+                                recordToShowDetails = nil
                                 recordToMarkAsDone = rec
                             },
                             onEdit: { rec in

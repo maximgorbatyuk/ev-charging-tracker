@@ -183,8 +183,6 @@ struct AddExpenseView: SwiftUICore.View {
                                 .focused($isCountOfKWtFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .foregroundColor(isEditMode ? .gray : .primary)
-                                .disabled(isEditMode)
                                 .onChange(of: energyCharged, { oldValue, newValue in
                                     if (!isCountOfKWtFocused) {
                                         return
@@ -201,8 +199,6 @@ struct AddExpenseView: SwiftUICore.View {
                                 .focused($isPricePerKWhFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .foregroundColor(isEditMode ? .gray : .primary)
-                                .disabled(isEditMode)
                                 .onChange(of: pricePerKWh, { oldValue, newValue in
 
                                     if (!isPricePerKWhFocused) {
@@ -240,8 +236,6 @@ struct AddExpenseView: SwiftUICore.View {
                             TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
                                 .keyboardType(.numberPad)
                                 .multilineTextAlignment(.trailing)
-                                .foregroundColor(isEditMode ? .gray : .primary)
-                                .disabled(isEditMode)
                         }
 
                         Text(L("If you leave it empty, the current mileage of the selected car will be used."))
@@ -257,12 +251,16 @@ struct AddExpenseView: SwiftUICore.View {
                         TextField(L("12.50"), text: $cost)
                             .focused($isCostFocused)
                             .onChange(of: cost, { oldValue, newValue in
-                                
+
                                 if (!isCostFocused) {
                                     return
                                 }
 
-                                adjustPriceBasedOnInputs()
+                                if defaultExpenseType == .charging {
+                                    adjustEnergyBasedOnCost()
+                                } else {
+                                    adjustPriceBasedOnInputs()
+                                }
                             })
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
@@ -383,6 +381,19 @@ struct AddExpenseView: SwiftUICore.View {
             let pricePerKWhValue = costValue / energyChargedValue
             pricePerKWh = String(format: "%.2f", pricePerKWhValue)
         }
+    }
+
+    /// When Cost changes: Energy = Cost / Price (Price stays static)
+    private func adjustEnergyBasedOnCost() {
+        guard let costValue = Double(cost.replacing(",", with: ".")),
+              let priceValue = Double(pricePerKWh.replacing(",", with: ".")),
+              priceValue > 0
+        else {
+            return
+        }
+
+        let energyValue = costValue / priceValue
+        energyCharged = String(format: "%.2f", energyValue)
     }
 
     private func handleChargerTypeChange(from oldType: ChargerType, to newType: ChargerType) {

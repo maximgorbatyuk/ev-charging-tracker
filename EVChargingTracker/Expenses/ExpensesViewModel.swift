@@ -178,6 +178,24 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         expenseToEdit.date = expenseEditResult.expense.date
         expenseToEdit.notes = expenseEditResult.expense.notes
 
+        /// Update charging-specific fields
+        if expenseToEdit.expenseType == .charging {
+            expenseToEdit.energyCharged = expenseEditResult.expense.energyCharged
+            expenseToEdit.chargerType = expenseEditResult.expense.chargerType
+        }
+
+        /// Update odometer
+        let newOdometer = expenseEditResult.expense.odometer
+        expenseToEdit.odometer = newOdometer
+
+        /// Update car's odometer if new value is higher than current
+        if let carId = expenseToEdit.carId,
+           let car = db.carRepository?.getCarById(carId),
+           newOdometer > car.currentMileage {
+            car.updateMileage(newMileage: newOdometer)
+            _ = self.updateMilleage(car)
+        }
+
         self.updateSession(expenseToEdit)
     }
 
