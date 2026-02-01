@@ -2,7 +2,21 @@
 import Foundation
 import os
 
-class UserSettingsRepository {
+protocol UserSettingsRepositoryProtocol {
+    func fetchValue(for key: String) -> String?
+    func upsertValue(key: String, value: String) -> Bool
+    func fetchCurrency() -> Currency
+    func upsertCurrency(_ currencyValue: String) -> Bool
+    func fetchLanguage() -> AppLanguage
+    func upsertLanguage(_ languageValue: String) -> Bool
+    func fetchOrGenerateUserId() -> String
+    func fetchUserId() -> String?
+    func fetchExpensesSortingOption() -> ExpensesSortingOption
+    func upsertExpensesSortingOption(_ option: ExpensesSortingOption) -> Bool
+    func fetchAllSettings() -> [UserSettingEntry]
+}
+
+class UserSettingsRepository: UserSettingsRepositoryProtocol {
     private let table: Table
 
     private let id = Expression<Int64>("id")
