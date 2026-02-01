@@ -17,7 +17,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
     private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol
     private let delayedNotificationsRepo: DelayedNotificationsRepositoryProtocol
     private let carRepo: CarRepositoryProtocol
-    private let expensesRepo: ExpensesRepository
+    private let expensesRepo: ExpensesRepositoryProtocol
 
     private var _selectedCarForExpenses: Car?
     

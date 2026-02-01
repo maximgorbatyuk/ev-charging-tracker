@@ -9,7 +9,30 @@
 import Foundation
 import os
 
-class ExpensesRepository {
+protocol ExpensesRepositoryProtocol {
+    func insertSession(_ session: Expense) -> Int64?
+    func fetchAllSessions(_ carId: Int64?) -> [Expense]
+    func fetchCarSessions(carId: Int64?, expenseTypeFilters: [ExpenseType]) -> [Expense]
+    func fetchCarSessionsPaginated(
+        carId: Int64?,
+        expenseTypeFilters: [ExpenseType],
+        page: Int,
+        pageSize: Int,
+        sortBy: ExpensesSortingOption
+    ) -> [Expense]
+    func updateSession(_ session: Expense) -> Bool
+    func deleteSession(id sessionId: Int64) -> Bool
+    func expensesCount(_ carId: Int64?) -> Int
+    func getExpensesCount(carId: Int64?, expenseTypeFilters: [ExpenseType]) -> Int
+    func getTotalCost(carId: Int64?, expenseTypeFilters: [ExpenseType]) -> Double
+    func getTotalEnergy() -> Double
+    func getTotalCost() -> Double
+    func getSessionCount() -> Int
+    func deleteRecordsForCar(_ carId: Int64)
+    func updateCarExpensesCurrency(_ car: Car) -> Bool
+}
+
+class ExpensesRepository: ExpensesRepositoryProtocol {
 
     // TODO mgorbatyuk: rename the table to "expenses"
     private let chargingSessionsTable: Table

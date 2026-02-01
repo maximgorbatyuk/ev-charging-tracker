@@ -8,8 +8,8 @@ import SwiftUI
 
 struct AddExpenseView: SwiftUICore.View {
 
-    static let ExpenseFormatWithTwoDigits = "%.2f";
-    static let ExpenseFormatWithNoDigits = "%.0f";
+    static let ExpenseFormatWithTwoDigits = "%.2f"
+    static let ExpenseFormatWithThreeDigits = "%.3f"
 
     let defaultExpenseType: ExpenseType?
     let defaultCurrency: Currency
@@ -107,9 +107,9 @@ struct AddExpenseView: SwiftUICore.View {
             // Calculate price per kWh if it's a charging expense
             if expense.expenseType == .charging && expense.energyCharged > 0, let costValue = expense.cost {
                 let pricePerKWh = costValue / expense.energyCharged
-                let pricePerKWhString = String(format: AddExpenseView.ExpenseFormatWithNoDigits, pricePerKWh)
+                let pricePerKWhString = String(format: AddExpenseView.ExpenseFormatWithThreeDigits, pricePerKWh)
                 _pricePerKWh = State(initialValue: pricePerKWhString)
-                
+
                 // Store the price and charger type from the expense
                 _storedPricePerKWh = State(initialValue: pricePerKWhString)
                 _storedChargerType = State(initialValue: expense.chargerType)
@@ -120,10 +120,10 @@ struct AddExpenseView: SwiftUICore.View {
 
             if let lastChargingPricePerKWh = lastChargingSession.getPricePerKWh() {
                 let pricePerKWhString = String(
-                    format: AddExpenseView.ExpenseFormatWithNoDigits,
+                    format: AddExpenseView.ExpenseFormatWithThreeDigits,
                     lastChargingPricePerKWh)
                 _pricePerKWh = State(initialValue: pricePerKWhString)
-                
+
                 // Store the price and charger type from the last session
                 _storedPricePerKWh = State(initialValue: pricePerKWhString)
                 _storedChargerType = State(initialValue: lastChargingSession.chargerType)
@@ -377,9 +377,9 @@ struct AddExpenseView: SwiftUICore.View {
             return
         }
 
-        if (energyChargedValue > 0) {
+        if energyChargedValue > 0 {
             let pricePerKWhValue = costValue / energyChargedValue
-            pricePerKWh = String(format: "%.2f", pricePerKWhValue)
+            pricePerKWh = String(format: AddExpenseView.ExpenseFormatWithThreeDigits, pricePerKWhValue)
         }
     }
 
