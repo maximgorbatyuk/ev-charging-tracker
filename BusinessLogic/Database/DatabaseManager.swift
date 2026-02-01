@@ -9,10 +9,11 @@ import Foundation
 import os
 
 protocol DatabaseManagerProtocol {
-    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepository
-    func getDelayedNotificationsRepository() -> DelayedNotificationsRepository
-    func getCarRepository() -> CarRepository
-    func getExpensesRepository() -> ExpensesRepository
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol
+    func getCarRepository() -> CarRepositoryProtocol
+    func getExpensesRepository() -> ExpensesRepositoryProtocol
+    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol
 }
 
 class DatabaseManager : DatabaseManagerProtocol {
@@ -79,20 +80,24 @@ class DatabaseManager : DatabaseManagerProtocol {
         return latestVersion;
     }
 
-    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepository {
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol {
         return plannedMaintenanceRepository!
     }
 
-    func getDelayedNotificationsRepository() -> DelayedNotificationsRepository {
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol {
         return delayedNotificationsRepository!
     }
 
-    func getCarRepository() -> CarRepository {
+    func getCarRepository() -> CarRepositoryProtocol {
         return carRepository!
     }
 
-    func getExpensesRepository() -> ExpensesRepository {
+    func getExpensesRepository() -> ExpensesRepositoryProtocol {
         return expensesRepository!
+    }
+
+    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol {
+        return userSettingsRepository!
     }
 
     func migrateIfNeeded() {
