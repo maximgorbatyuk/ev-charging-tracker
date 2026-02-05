@@ -235,12 +235,12 @@ struct MonthlyExpenseData: Identifiable {
         for monthDate in months {
             guard
                 let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate)),
-                let monthEnd = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: monthStart) else {
+                let nextMonthStart = calendar.date(byAdding: .month, value: 1, to: monthStart) else {
                 continue
             }
 
             let monthExpenses = expensesToShow.filter { expense in
-                expense.date >= monthStart && expense.date <= monthEnd
+                expense.date >= monthStart && expense.date < nextMonthStart
             }
             
             // Group by expense type for this month

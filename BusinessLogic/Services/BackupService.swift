@@ -769,7 +769,7 @@ final class BackupService: ObservableObject {
     func deleteAlliCloudBackups() async throws {
         try checkiCloudStatus()
 
-        guard let backupDirectory = iCloudBackupDirectory else {
+        guard iCloudBackupDirectory != nil else {
             throw BackupError.iCloudNotAvailable
         }
 

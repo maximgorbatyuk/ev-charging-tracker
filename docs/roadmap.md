@@ -7,6 +7,7 @@
 - [x] EVF-3. When user mark Planned Maintenance Record as "Done", the "Add Expense" screen should appear. Title field and notes should be pre-filled with the data from the Planned Maintenance record.
 - [x] EVF-4. Create "Planned Maintenance Details" screen that should open when user clicks on item in the list of planned maintenance records. On the screen all details should be visible including "created_at" date in format YYYY-MM-DD. There should be buttons "Mark as Done", "edit", "Delete", and "Duplicate".
 - [x] EVF-5. Filters. Read file /docs/plans/filters.md
+- [ ] EVF-6. Export to CSV from User Settings view
 
 
 ## Ideas

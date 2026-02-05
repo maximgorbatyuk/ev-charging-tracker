@@ -371,7 +371,10 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
     }
 
     func updateSession(_ session: Expense) -> Bool {
-        let sessionId = session.id ?? 0
+        guard let sessionId = session.id else {
+            logger.error("Update failed: session id is nil")
+            return false
+        }
 
         let sessionToUpdate = chargingSessionsTable.filter(id == sessionId)
         
@@ -443,17 +446,6 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             try db.run(recordsToDelete.delete())
         } catch {
             logger.error("Delete failed: \(error)")
-        }
-    }
-
-    func updateSession(_ car: Car) -> Bool {
-        let recordToUpdateQuery = chargingSessionsTable.filter(carIdColumn == car.id)
-        do {
-            try db.run(recordToUpdateQuery.update(currency <- car.expenseCurrency.rawValue))
-            return true
-        } catch {
-            logger.error("Update failed: \(error)")
-            return false
         }
     }
 

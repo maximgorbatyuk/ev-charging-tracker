@@ -121,7 +121,10 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     }
     
     func updateRecord(_ record: DelayedNotification) -> Bool {
-        let recordId = record.id ?? 0
+        guard let recordId = record.id else {
+            logger.error("Update failed: record id is nil")
+            return false
+        }
         let recordToUpdate = table.filter(id == recordId)
         
         do {

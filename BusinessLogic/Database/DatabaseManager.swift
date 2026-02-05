@@ -9,11 +9,11 @@ import Foundation
 import os
 
 protocol DatabaseManagerProtocol {
-    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol
-    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol
-    func getCarRepository() -> CarRepositoryProtocol
-    func getExpensesRepository() -> ExpensesRepositoryProtocol
-    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol?
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol?
+    func getCarRepository() -> CarRepositoryProtocol?
+    func getExpensesRepository() -> ExpensesRepositoryProtocol?
+    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol?
 }
 
 class DatabaseManager : DatabaseManagerProtocol {
@@ -37,6 +37,7 @@ class DatabaseManager : DatabaseManagerProtocol {
     private var db: Connection?
     private let logger: Logger
     private let latestVersion = 6
+    private(set) var isInitialized: Bool = false
     
     private init() {
        
@@ -71,6 +72,7 @@ class DatabaseManager : DatabaseManagerProtocol {
             self.userSettingsRepository?.createTable()
 
             migrateIfNeeded()
+            self.isInitialized = true
         } catch {
             logger.error("Unable to setup database: \(error)")
         }
@@ -80,24 +82,24 @@ class DatabaseManager : DatabaseManagerProtocol {
         return latestVersion;
     }
 
-    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol {
-        return plannedMaintenanceRepository!
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol? {
+        return plannedMaintenanceRepository
     }
 
-    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol {
-        return delayedNotificationsRepository!
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol? {
+        return delayedNotificationsRepository
     }
 
-    func getCarRepository() -> CarRepositoryProtocol {
-        return carRepository!
+    func getCarRepository() -> CarRepositoryProtocol? {
+        return carRepository
     }
 
-    func getExpensesRepository() -> ExpensesRepositoryProtocol {
-        return expensesRepository!
+    func getExpensesRepository() -> ExpensesRepositoryProtocol? {
+        return expensesRepository
     }
 
-    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol {
-        return userSettingsRepository!
+    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol? {
+        return userSettingsRepository
     }
 
     func migrateIfNeeded() {

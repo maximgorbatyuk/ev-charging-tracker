@@ -31,14 +31,14 @@ class ChargingConsumptionChartViewModel: ObservableObject {
         for monthOffset in (0..<self.monthsCount).reversed() {
             guard let monthDate = calendar.date(byAdding: .month, value: -monthOffset, to: today),
                   let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate)),
-                  let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth) else {
+                  let nextMonthStart = calendar.date(byAdding: .month, value: 1, to: startOfMonth) else {
                 continue
             }
-            
+
             // Filter expenses for this month that are charging sessions
             let monthExpenses = self.expenses.filter { expense in
                 return expense.expenseType == .charging &&
-                        expense.date >= startOfMonth && expense.date <= endOfMonth
+                        expense.date >= startOfMonth && expense.date < nextMonthStart
             }
 
             // Calculate average consumption for this month
@@ -101,9 +101,4 @@ struct MonthlyConsumption: Identifiable {
         return formatter.string(from: month)
     }
     
-    var shortMonthName: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM"
-        return formatter.string(from: month)
-    }
 }

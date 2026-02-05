@@ -38,26 +38,13 @@ class MigrationsRepository {
     }
 
     func getLatestMigrationVersion() -> Int64 {
-        var migrationsList: [SqlMigration] = []
-        
         do {
-            for record in try db.prepare(table.order(id.desc)) {
-                
-                let migration = SqlMigration(
-                    id: record[id],
-                    date: record[date],
-                )
-
-                migrationsList.append(migration)
+            if let row = try db.pluck(table.select(id).order(id.desc)) {
+                return row[id]
             }
         } catch {
             logger.error("Fetch failed: \(error)")
         }
-        
-        if (migrationsList.count > 0) {
-            return migrationsList[0].id ?? 0
-        }
-
         return 0
     }
 

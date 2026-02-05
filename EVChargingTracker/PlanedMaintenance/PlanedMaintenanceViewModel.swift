@@ -14,22 +14,22 @@ class PlanedMaintenanceViewModel: ObservableObject {
     @Published var selectedFilter: PlannedMaintenanceFilter = .all
     
     private let notificationsService: NotificationManagerProtocol
-    private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol
-    private let delayedNotificationsRepo: DelayedNotificationsRepositoryProtocol
-    private let carRepo: CarRepositoryProtocol
-    private let expensesRepo: ExpensesRepositoryProtocol
+    private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol?
+    private let delayedNotificationsRepo: DelayedNotificationsRepositoryProtocol?
+    private let carRepo: CarRepositoryProtocol?
+    private let expensesRepo: ExpensesRepositoryProtocol?
 
     private var _selectedCarForExpenses: Car?
-    
+
     // MARK: - Convenience properties for backward compatibility
-    var repository: PlannedMaintenanceRepositoryProtocol {
+    var repository: PlannedMaintenanceRepositoryProtocol? {
         return maintenanceRepository
     }
-    
-    var delayedNotificationsRepository: DelayedNotificationsRepositoryProtocol {
+
+    var delayedNotificationsRepository: DelayedNotificationsRepositoryProtocol? {
         return delayedNotificationsRepo
     }
-    
+
     // MARK: - Production initializer
     init(
         notifications: NotificationManagerProtocol,
@@ -46,13 +46,13 @@ class PlanedMaintenanceViewModel: ObservableObject {
     }
 
     func loadData() -> Void {
-        let selectedCar = self.reloadSelectedCarForExpenses()
-        if (selectedCar == nil) {
+        guard let selectedCar = self.reloadSelectedCarForExpenses(),
+              let carId = selectedCar.id else {
             return
         }
 
         let now = Date()
-        var records = maintenanceRepository.getAllRecords(carId: selectedCar!.id!).map { dbRecord in
+        var records = (maintenanceRepository?.getAllRecords(carId: carId) ?? []).compactMap { dbRecord in
             PlannedMaintenanceItem(maintenance: dbRecord, car: selectedCar, now: now)
         }
         
@@ -63,7 +63,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
     }
     
     func addNewMaintenanceRecord(newRecord: PlannedMaintenance) -> Void {
-        let recordId = maintenanceRepository.insertRecord(newRecord)
+        let recordId = maintenanceRepository?.insertRecord(newRecord)
         
         if (newRecord.when != nil) {
             let notificationId = notificationsService.scheduleNotification(
@@ -71,7 +71,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
                 body: newRecord.name,
                 on: newRecord.when!)
             
-            _ = delayedNotificationsRepo.insertRecord(
+            _ = delayedNotificationsRepo?.insertRecord(
                 DelayedNotification(
                     when: newRecord.when!,
                     notificationId: notificationId,
@@ -83,26 +83,26 @@ class PlanedMaintenanceViewModel: ObservableObject {
     }
     
     func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) {
-        _ = maintenanceRepository.deleteRecord(id: recordToDelete.id)
+        _ = maintenanceRepository?.deleteRecord(id: recordToDelete.id)
 
         if recordToDelete.when != nil {
-            let delayedNotification = delayedNotificationsRepo.getRecordByMaintenanceId(recordToDelete.id)
+            let delayedNotification = delayedNotificationsRepo?.getRecordByMaintenanceId(recordToDelete.id)
             guard let delayedNotification = delayedNotification else {
                 return
             }
 
             notificationsService.cancelNotification(delayedNotification.notificationId)
-            _ = delayedNotificationsRepo.deleteRecord(id: delayedNotification.id!)
+            _ = delayedNotificationsRepo?.deleteRecord(id: delayedNotification.id!)
         }
     }
 
     func updateMaintenanceRecord(_ record: PlannedMaintenance) {
-        _ = maintenanceRepository.updateRecord(record)
+        _ = maintenanceRepository?.updateRecord(record)
 
         /// Cancel existing notification if any
-        if let existingNotification = delayedNotificationsRepo.getRecordByMaintenanceId(record.id!) {
+        if let existingNotification = delayedNotificationsRepo?.getRecordByMaintenanceId(record.id!) {
             notificationsService.cancelNotification(existingNotification.notificationId)
-            _ = delayedNotificationsRepo.deleteRecord(id: existingNotification.id!)
+            _ = delayedNotificationsRepo?.deleteRecord(id: existingNotification.id!)
         }
 
         /// Schedule new notification if date is set
@@ -112,7 +112,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
                 body: record.name,
                 on: when)
 
-            _ = delayedNotificationsRepo.insertRecord(
+            _ = delayedNotificationsRepo?.insertRecord(
                 DelayedNotification(
                     when: when,
                     notificationId: notificationId,
@@ -147,29 +147,29 @@ class PlanedMaintenanceViewModel: ObservableObject {
                 createdAt: Date()
             )
 
-            if let carId = carRepo.insert(newCar) {
+            if let carId = carRepo?.insert(newCar) {
                 expenseResult.expense.carId = carId
 
                 if let initialExpense = expenseResult.initialExpenseForNewCar {
                     initialExpense.carId = carId
-                    _ = expensesRepo.insertSession(initialExpense)
+                    _ = expensesRepo?.insertSession(initialExpense)
                 }
             }
         }
 
         /// Save the expense
-        _ = expensesRepo.insertSession(expenseResult.expense)
+        _ = expensesRepo?.insertSession(expenseResult.expense)
 
         /// Update car mileage if needed
         if let car = selectedCarForExpenses {
             var updatedCar = car
             updatedCar.currentMileage = expenseResult.expense.odometer
-            _ = carRepo.updateMilleage(updatedCar)
+            _ = carRepo?.updateMilleage(updatedCar)
         }
     }
 
     func getAllCars() -> [Car] {
-        return carRepo.getAllCars()
+        return carRepo?.getAllCars() ?? []
     }
 
     func duplicateMaintenanceRecord(_ record: PlannedMaintenanceItem) {
@@ -185,7 +185,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
     }
 
     func reloadSelectedCarForExpenses() -> Car? {
-        _selectedCarForExpenses = carRepo.getSelectedForExpensesCar()
+        _selectedCarForExpenses = carRepo?.getSelectedForExpensesCar()
         return _selectedCarForExpenses
     }
 
@@ -286,8 +286,9 @@ struct PlannedMaintenanceItem: Identifiable, Comparable {
     let mileageDifference: Int?
     let daysDifference: Int?
 
-    init(maintenance: PlannedMaintenance, car: Car? = nil, now: Date = Date()) {
-        self.id = maintenance.id!
+    init?(maintenance: PlannedMaintenance, car: Car? = nil, now: Date = Date()) {
+        guard let maintenanceId = maintenance.id else { return nil }
+        self.id = maintenanceId
         self.name = maintenance.name
         self.notes = maintenance.notes
         self.odometer = maintenance.odometer
@@ -308,11 +309,7 @@ struct PlannedMaintenanceItem: Identifiable, Comparable {
         }
     }
 
-    static func == (first: PlannedMaintenanceItem, second: PlannedMaintenanceItem) -> Bool {
-        return first.when == second.when && first.mileageDifference == second.mileageDifference
-      }
-
-      static func < (first: PlannedMaintenanceItem, second: PlannedMaintenanceItem) -> Bool {
+    static func < (first: PlannedMaintenanceItem, second: PlannedMaintenanceItem) -> Bool {
           if (first.mileageDifference != nil && second.mileageDifference != nil) {
                 return first.mileageDifference! > second.mileageDifference!
           }

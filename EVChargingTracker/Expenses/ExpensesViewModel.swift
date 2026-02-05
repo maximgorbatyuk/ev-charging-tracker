@@ -8,6 +8,7 @@
 import Foundation
 import os
 
+@MainActor
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
