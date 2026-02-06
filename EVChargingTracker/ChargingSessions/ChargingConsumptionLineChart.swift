@@ -17,10 +17,10 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             VStack(alignment: .leading, spacing: 4) {
-                Text(L("Average charging trend"))
+                Text(L("Energy per month"))
                     .font(.headline)
                     .fontWeight(.bold)
-                
+
                 if viewModel.hasData {
                     Text(String(format: L("%.1f kWh/month average"), viewModel.overallAverage))
                         .font(.subheadline)
@@ -38,7 +38,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                     ForEach(viewModel.monthlyData) { data in
                         LineMark(
                             x: .value("Month", data.monthName),
-                            y: .value("Charging", data.averageChargeSession)
+                            y: .value("Charging", data.totalEnergy)
                         )
                         .foregroundStyle(
                             LinearGradient(
@@ -52,7 +52,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                         
                         AreaMark(
                             x: .value("Month", data.monthName),
-                            y: .value("Charging", data.averageChargeSession)
+                            y: .value("Charging", data.totalEnergy)
                         )
                         .foregroundStyle(
                             LinearGradient(
@@ -68,7 +68,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                         
                         PointMark(
                             x: .value("Month", data.monthName),
-                            y: .value("Charging", data.averageChargeSession)
+                            y: .value("Charging", data.totalEnergy)
                         )
                         .foregroundStyle(Color.orange)
                         .symbolSize(60)

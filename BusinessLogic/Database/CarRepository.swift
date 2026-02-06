@@ -167,7 +167,11 @@ class CarRepository : CarRepositoryProtocol {
     }
 
     func updateCar(car: Car) -> Bool {
-        let carToUpdate = table.filter(idColumn == car.id!)
+        guard let carId = car.id else {
+            logger.info("Update failed: Car id is nil")
+            return false
+        }
+        let carToUpdate = table.filter(idColumn == carId)
         do {
             let update = carToUpdate.update(
                 nameColumn <- car.name,

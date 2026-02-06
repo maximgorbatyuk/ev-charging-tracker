@@ -410,3 +410,45 @@ When modifying existing code:
 2. Make minimal changes to achieve the goal
 3. Maintain consistency with surrounding code style
 4. Don't refactor unrelated code unless asked
+
+---
+
+## App Store Release Notes Style Guide
+
+When writing App Store release notes (`appstore/releases.md`), follow these rules strictly:
+
+### Tone & Voice
+- **Conversational and warm**, like a small team talking to a friend — not corporate
+- Use "we" (Мы/We) addressing "you" (вы/you) directly
+- No hype, no exclamation marks, no marketing buzzwords
+
+### Structure
+- **One flowing paragraph**, not bullet points
+- Connect ideas naturally with commas, "а также", "чтобы", dashes, "and"
+- One sentence can carry 2-3 ideas linked together, like spoken language
+- Keep it short — 2-3 sentences max
+
+### Content Selection
+- Pick only **1-2 user-visible features** + a general stability/fix mention
+- Focus on **user benefit**, not technical detail ("so you never forget them when buying new tires" — the *why*, not the *what*)
+- Downplay internal/technical work vaguely: "improved app stability" — no specifics about database optimization, memory leaks, refactoring, etc.
+- Mention bug fixes casually without drama: "fixed incorrect chart calculations"
+
+### What to NEVER include
+- Technical jargon (no "database-level pagination", "SQL filtering", "optional unwrapping", "@MainActor")
+- Bullet points or structured lists
+- Feature counts ("5 new features!")
+- Developer-facing changes (refactoring, code quality, architecture)
+
+### Example (good)
+```
+We added the ability to store your wheel sizes so you never forget them when buying new tires. We also improved app stability and fixed incorrect chart calculations on the main screen.
+```
+
+### Example (bad — too technical, too structured)
+```
+- Added database-level pagination for maintenance records
+- Optimized SQL queries for filtering
+- Fixed memory leaks in chart view models
+- Added @MainActor annotations to all ViewModels
+```

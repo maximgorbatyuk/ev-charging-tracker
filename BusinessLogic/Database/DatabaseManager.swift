@@ -9,11 +9,11 @@ import Foundation
 import os
 
 protocol DatabaseManagerProtocol {
-    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol
-    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol
-    func getCarRepository() -> CarRepositoryProtocol
-    func getExpensesRepository() -> ExpensesRepositoryProtocol
-    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol?
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol?
+    func getCarRepository() -> CarRepositoryProtocol?
+    func getExpensesRepository() -> ExpensesRepositoryProtocol?
+    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol?
 }
 
 class DatabaseManager : DatabaseManagerProtocol {
@@ -37,6 +37,7 @@ class DatabaseManager : DatabaseManagerProtocol {
     private var db: Connection?
     private let logger: Logger
     private let latestVersion = 6
+    private(set) var isInitialized: Bool = false
     
     private init() {
        
@@ -71,6 +72,7 @@ class DatabaseManager : DatabaseManagerProtocol {
             self.userSettingsRepository?.createTable()
 
             migrateIfNeeded()
+            self.isInitialized = true
         } catch {
             logger.error("Unable to setup database: \(error)")
         }
@@ -80,32 +82,38 @@ class DatabaseManager : DatabaseManagerProtocol {
         return latestVersion;
     }
 
-    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol {
-        return plannedMaintenanceRepository!
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol? {
+        return plannedMaintenanceRepository
     }
 
-    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol {
-        return delayedNotificationsRepository!
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol? {
+        return delayedNotificationsRepository
     }
 
-    func getCarRepository() -> CarRepositoryProtocol {
-        return carRepository!
+    func getCarRepository() -> CarRepositoryProtocol? {
+        return carRepository
     }
 
-    func getExpensesRepository() -> ExpensesRepositoryProtocol {
-        return expensesRepository!
+    func getExpensesRepository() -> ExpensesRepositoryProtocol? {
+        return expensesRepository
     }
 
-    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol {
-        return userSettingsRepository!
+    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol? {
+        return userSettingsRepository
     }
 
     func migrateIfNeeded() {
+        guard let db = db,
+              let migrationRepository = migrationRepository,
+              let expensesRepository = expensesRepository,
+              let userSettingsRepository = userSettingsRepository
+        else {
+            logger.error("Cannot run migrations: database or repositories not initialized")
+            return
+        }
 
-        guard let _ = db else { return }
-        
-        migrationRepository!.createTableIfNotExists()
-        let currentVersion = migrationRepository!.getLatestMigrationVersion()
+        migrationRepository.createTableIfNotExists()
+        let currentVersion = migrationRepository.getLatestMigrationVersion()
 
         if (currentVersion == latestVersion) {
             return
@@ -114,53 +122,69 @@ class DatabaseManager : DatabaseManagerProtocol {
         for version in (Int(currentVersion) + 1)...latestVersion {
             switch version {
             case 1:
-                expensesRepository!.deleteTable()
-                expensesRepository!.createTable()
+                expensesRepository.deleteTable()
+                expensesRepository.createTable()
 
             case 2:
-                userSettingsRepository!.createTable()
-                _ = userSettingsRepository!.upsertCurrency(Currency.kzt.rawValue)
+                userSettingsRepository.createTable()
+                _ = userSettingsRepository.upsertCurrency(Currency.kzt.rawValue)
 
             case 3:
-                let migration3 = Migration_20251021_CreateCarsTable(db: db!)
+                let migration3 = Migration_20251021_CreateCarsTable(db: db)
                 migration3.execute()
 
             case 4:
-                let migration4 = Migration_20251104_CreatePlannedMaintenanceTable(db: db!)
+                let migration4 = Migration_20251104_CreatePlannedMaintenanceTable(db: db)
                 migration4.execute()
-                
+
             case 5:
-                let migration5 = Migration_20251114_CreateDelayedNotificationTable(db: db!)
+                let migration5 = Migration_20251114_CreateDelayedNotificationTable(db: db)
                 migration5.execute()
 
             case 6:
-                let migration6 = Migration_20250131_AddWheelDetailsToCarsTable(db: db!)
+                let migration6 = Migration_20250131_AddWheelDetailsToCarsTable(db: db)
                 migration6.execute()
 
             default:
                 break
             }
 
-            migrationRepository!.addMigrationVersion()
+            migrationRepository.addMigrationVersion()
         }
     }
 
     func deleteAllData() -> Void {
-        expensesRepository!.truncateTable()
-        plannedMaintenanceRepository!.truncateTable()
-        delayedNotificationsRepository!.truncateTable()
-        carRepository!.truncateTable()
+        guard let expensesRepository = expensesRepository,
+              let plannedMaintenanceRepository = plannedMaintenanceRepository,
+              let delayedNotificationsRepository = delayedNotificationsRepository,
+              let carRepository = carRepository
+        else {
+            logger.error("Cannot delete all data: repositories not initialized")
+            return
+        }
+
+        expensesRepository.truncateTable()
+        plannedMaintenanceRepository.truncateTable()
+        delayedNotificationsRepository.truncateTable()
+        carRepository.truncateTable()
     }
 
     func deleteAllExpenses(_ selectedCar: Car) -> Void {
-
         guard let carId = selectedCar.id else {
             logger.error("Cannot delete expenses: car ID is nil")
             return
         }
 
-        expensesRepository!.deleteRecordsForCar(carId)
-        plannedMaintenanceRepository!.deleteRecordsForCar(carId)
-        delayedNotificationsRepository!.truncateTable()
+        guard let expensesRepository = expensesRepository,
+              let plannedMaintenanceRepository = plannedMaintenanceRepository,
+              let delayedNotificationsRepository = delayedNotificationsRepository
+        else {
+            logger.error("Cannot delete expenses: repositories not initialized")
+            return
+        }
+
+        expensesRepository.deleteRecordsForCar(carId)
+        plannedMaintenanceRepository.deleteRecordsForCar(carId)
+        delayedNotificationsRepository.truncateTable()
     }
 }

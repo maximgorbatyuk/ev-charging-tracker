@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 class ExpensesChartViewModel: ObservableObject {
     static let ScreenName = "expenses_chart_screen"
 
@@ -43,10 +44,9 @@ class ExpensesChartViewModel: ObservableObject {
         self.filterButtons = [
             FilterButtonItem(
                 title: L("Filter.All"),
-                innerAction: {
-                    self.recreateExpensesToShow(nil)
-
-                    self.analytics.trackEvent(
+                innerAction: { [weak self] in
+                    self?.recreateExpensesToShow(nil)
+                    self?.analytics.trackEvent(
                         "expenses_chart_filter_all_selected",
                         properties: [
                             "screen": ExpensesChartViewModel.ScreenName
@@ -56,10 +56,9 @@ class ExpensesChartViewModel: ObservableObject {
 
             FilterButtonItem(
                 title: L("Filter.Charges"),
-                innerAction: {
-                    self.recreateExpensesToShow(ExpenseType.charging)
-
-                    self.analytics.trackEvent(
+                innerAction: { [weak self] in
+                    self?.recreateExpensesToShow(ExpenseType.charging)
+                    self?.analytics.trackEvent(
                         "expenses_chart_filter_charges_selected",
                         properties: [
                             "screen": ExpensesChartViewModel.ScreenName
@@ -70,10 +69,9 @@ class ExpensesChartViewModel: ObservableObject {
 
             FilterButtonItem(
                 title: L("Filter.Repair"),
-                innerAction: {
-                    self.recreateExpensesToShow(ExpenseType.repair)
-
-                    self.analytics.trackEvent(
+                innerAction: { [weak self] in
+                    self?.recreateExpensesToShow(ExpenseType.repair)
+                    self?.analytics.trackEvent(
                         "expenses_chart_filter_repair_selected",
                         properties: [
                             "screen": ExpensesChartViewModel.ScreenName
@@ -81,13 +79,12 @@ class ExpensesChartViewModel: ObservableObject {
                 },
                 customColor: ExpensesChartViewModel.colorForExpenseType(.repair),
                 isSelected: false),
-            
+
             FilterButtonItem(
                 title: L("Filter.Maintenance"),
-                innerAction: {
-                    self.recreateExpensesToShow(ExpenseType.maintenance)
-
-                    self.analytics.trackEvent(
+                innerAction: { [weak self] in
+                    self?.recreateExpensesToShow(ExpenseType.maintenance)
+                    self?.analytics.trackEvent(
                         "expenses_chart_filter_maintenance_selected",
                         properties: [
                             "screen": ExpensesChartViewModel.ScreenName
@@ -98,9 +95,9 @@ class ExpensesChartViewModel: ObservableObject {
 
             FilterButtonItem(
                 title: L("Filter.Carwash"),
-                innerAction: {
-                    self.recreateExpensesToShow(ExpenseType.carwash)
-                    self.analytics.trackEvent(
+                innerAction: { [weak self] in
+                    self?.recreateExpensesToShow(ExpenseType.carwash)
+                    self?.analytics.trackEvent(
                         "expenses_chart_filter_carwash_selected",
                         properties: [
                             "screen": ExpensesChartViewModel.ScreenName
@@ -111,9 +108,9 @@ class ExpensesChartViewModel: ObservableObject {
 
             FilterButtonItem(
                 title: L("Filter.Other"),
-                innerAction: {
-                    self.recreateExpensesToShow(ExpenseType.other)
-                    self.analytics.trackEvent(
+                innerAction: { [weak self] in
+                    self?.recreateExpensesToShow(ExpenseType.other)
+                    self?.analytics.trackEvent(
                         "expenses_chart_filter_other_selected",
                         properties: [
                             "screen": ExpensesChartViewModel.ScreenName
@@ -235,12 +232,12 @@ struct MonthlyExpenseData: Identifiable {
         for monthDate in months {
             guard
                 let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate)),
-                let monthEnd = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: monthStart) else {
+                let nextMonthStart = calendar.date(byAdding: .month, value: 1, to: monthStart) else {
                 continue
             }
 
             let monthExpenses = expensesToShow.filter { expense in
-                expense.date >= monthStart && expense.date <= monthEnd
+                expense.date >= monthStart && expense.date < nextMonthStart
             }
             
             // Group by expense type for this month

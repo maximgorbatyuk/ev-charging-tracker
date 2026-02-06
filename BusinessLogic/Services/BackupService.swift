@@ -54,12 +54,12 @@ final class BackupService: ObservableObject {
 
     // MARK: - Dependencies
 
-    private let currentSchemaVersion: Int // Matches DatabaseManager migration version
-    private let carRepository: CarRepository
-    private let expensesRepository: ExpensesRepository
-    private let maintenanceRepository: PlannedMaintenanceRepository
-    private let notificationsRepository: DelayedNotificationsRepository
-    private let settingsRepository: UserSettingsRepository
+    private let currentSchemaVersion: Int
+    private let carRepository: CarRepository?
+    private let expensesRepository: ExpensesRepository?
+    private let maintenanceRepository: PlannedMaintenanceRepository?
+    private let notificationsRepository: DelayedNotificationsRepository?
+    private let settingsRepository: UserSettingsRepository?
     private let databaseManager: DatabaseManager
     private let networkMonitor: NetworkMonitor
     private let logger: Logger
@@ -74,11 +74,11 @@ final class BackupService: ObservableObject {
         self.networkMonitor = networkMonitor
         self.currentSchemaVersion = self.databaseManager.getDatabaseSchemaVersion()
 
-        self.carRepository = self.databaseManager.carRepository!
-        self.expensesRepository = self.databaseManager.expensesRepository!
-        self.maintenanceRepository = self.databaseManager.plannedMaintenanceRepository!
-        self.notificationsRepository = self.databaseManager.delayedNotificationsRepository!
-        self.settingsRepository = self.databaseManager.userSettingsRepository!
+        self.carRepository = self.databaseManager.carRepository
+        self.expensesRepository = self.databaseManager.expensesRepository
+        self.maintenanceRepository = self.databaseManager.plannedMaintenanceRepository
+        self.notificationsRepository = self.databaseManager.delayedNotificationsRepository
+        self.settingsRepository = self.databaseManager.userSettingsRepository
         self.logger = Logger(subsystem: "com.evchargingtracker.businesslogic", category: "BackupService")
     }
 
@@ -355,20 +355,20 @@ final class BackupService: ObservableObject {
         // 1. Import user settings
         let settings = exportData.userSettings
         if let currency = Currency.allCases.first(where: { $0.rawValue == settings.preferredCurrency }) {
-            _ = settingsRepository.upsertCurrency(currency.rawValue)
+            _ = settingsRepository?.upsertCurrency(currency.rawValue)
         }
         if let language = AppLanguage.allCases.first(where: { $0.rawValue == settings.preferredLanguage }) {
-            _ = settingsRepository.upsertLanguage(language.rawValue)
+            _ = settingsRepository?.upsertLanguage(language.rawValue)
         }
 
         // 2. Import cars and build ID mapping
-        var carIdMapping: [Int64: Int64] = [:] // oldId -> newId
+        var carIdMapping: [Int64: Int64] = [:]
         for exportCar in exportData.cars {
             let car = exportCar.toCar()
             let oldId = car.id
-            car.id = nil // Let database assign new ID
+            car.id = nil
 
-            if let newId = carRepository.insert(car) {
+            if let newId = carRepository?.insert(car) {
                 if let oldId = oldId {
                     carIdMapping[oldId] = newId
                 }
@@ -380,9 +380,8 @@ final class BackupService: ObservableObject {
         // 3. Import expenses with updated car IDs
         for exportExpense in exportData.expenses {
             let expense = try exportExpense.toExpense()
-            expense.id = nil // Let database assign new ID
+            expense.id = nil
 
-            // Map old car ID to new car ID
             if let oldCarId = exportExpense.carId, let newCarId = carIdMapping[oldCarId] {
                 do {
                     try expense.setCarIdWithNoValidation(newCarId)
@@ -391,24 +390,23 @@ final class BackupService: ObservableObject {
                 }
             }
 
-            if expensesRepository.insertSession(expense) == nil {
+            if expensesRepository?.insertSession(expense) == nil {
                 throw ExportValidationError.corruptedData
             }
         }
 
         // 4. Import planned maintenance with updated car IDs and build ID mapping
-        var maintenanceIdMapping: [Int64: Int64] = [:] // oldId -> newId
+        var maintenanceIdMapping: [Int64: Int64] = [:]
         for exportMaintenance in exportData.plannedMaintenance {
             let maintenance = exportMaintenance.toPlannedMaintenance()
             let oldMaintenanceId = maintenance.id
-            maintenance.id = nil // Let database assign new ID
+            maintenance.id = nil
 
-            // Map old car ID to new car ID
             if let newCarId = carIdMapping[exportMaintenance.carId] {
                 maintenance.carId = newCarId
             }
 
-            if let newMaintenanceId = maintenanceRepository.insertRecord(maintenance) {
+            if let newMaintenanceId = maintenanceRepository?.insertRecord(maintenance) {
                 if let oldId = oldMaintenanceId {
                     maintenanceIdMapping[oldId] = newMaintenanceId
                 }
@@ -420,20 +418,19 @@ final class BackupService: ObservableObject {
         // 5. Import delayed notifications with updated car IDs and maintenance IDs
         for exportNotification in exportData.delayedNotifications {
             let notification = exportNotification.toDelayedNotification()
-            notification.id = nil // Let database assign new ID
+            notification.id = nil
 
-            // Map old car ID to new car ID
             if let newCarId = carIdMapping[exportNotification.carId] {
                 notification.carId = newCarId
             }
 
-            // Map old maintenance record ID to new maintenance record ID
             if let oldMaintenanceId = exportNotification.maintenanceRecord,
-               let newMaintenanceId = maintenanceIdMapping[oldMaintenanceId] {
+               let newMaintenanceId = maintenanceIdMapping[oldMaintenanceId]
+            {
                 notification.maintenanceRecord = newMaintenanceId
             }
 
-            if notificationsRepository.insertRecord(notification) == nil {
+            if notificationsRepository?.insertRecord(notification) == nil {
                 throw ExportValidationError.corruptedData
             }
         }
@@ -444,7 +441,7 @@ final class BackupService: ObservableObject {
     // MARK: - Helper Methods
 
     private func fetchAllCars() async throws -> [Car] {
-        return carRepository.getAllCars()
+        return carRepository?.getAllCars() ?? []
     }
 
     private func fetchAllExpenses() async throws -> [Expense] {
@@ -453,7 +450,7 @@ final class BackupService: ObservableObject {
 
         for car in cars {
             if let carId = car.id {
-                let expenses = expensesRepository.fetchAllSessions(carId)
+                let expenses = expensesRepository?.fetchAllSessions(carId) ?? []
                 allExpenses.append(contentsOf: expenses)
             }
         }
@@ -466,7 +463,7 @@ final class BackupService: ObservableObject {
 
         for car in cars {
             if let carId = car.id {
-                let maintenance = maintenanceRepository.getAllRecords(carId: carId)
+                let maintenance = maintenanceRepository?.getAllRecords(carId: carId) ?? []
                 allMaintenance.append(contentsOf: maintenance)
             }
         }
@@ -479,7 +476,7 @@ final class BackupService: ObservableObject {
 
         for car in cars {
             if let carId = car.id {
-                let notifications = notificationsRepository.getAllRecords(carId: carId)
+                let notifications = notificationsRepository?.getAllRecords(carId: carId) ?? []
                 allNotifications.append(contentsOf: notifications)
             }
         }
@@ -488,8 +485,8 @@ final class BackupService: ObservableObject {
     }
 
     private func fetchUserSettings() async throws -> ExportUserSettings {
-        let currency = settingsRepository.fetchCurrency()
-        let language = settingsRepository.fetchLanguage()
+        let currency = settingsRepository?.fetchCurrency() ?? .kzt
+        let language = settingsRepository?.fetchLanguage() ?? .en
 
         return ExportUserSettings(currency: currency, language: language)
     }
@@ -769,7 +766,7 @@ final class BackupService: ObservableObject {
     func deleteAlliCloudBackups() async throws {
         try checkiCloudStatus()
 
-        guard let backupDirectory = iCloudBackupDirectory else {
+        guard iCloudBackupDirectory != nil else {
             throw BackupError.iCloudNotAvailable
         }
 

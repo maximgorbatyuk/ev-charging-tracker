@@ -49,6 +49,8 @@ struct ExportCar: Codable {
     let initialMileage: Int
     let milleageSyncedAt: Date
     let createdAt: Date
+    let frontWheelSize: String?
+    let rearWheelSize: String?
 
     init(from car: Car) {
         self.id = car.id
@@ -60,6 +62,8 @@ struct ExportCar: Codable {
         self.initialMileage = car.initialMileage
         self.milleageSyncedAt = car.milleageSyncedAt
         self.createdAt = car.createdAt
+        self.frontWheelSize = car.frontWheelSize
+        self.rearWheelSize = car.rearWheelSize
     }
 
     func toCar() -> Car {
@@ -71,7 +75,9 @@ struct ExportCar: Codable {
             currentMileage: currentMileage,
             initialMileage: initialMileage,
             milleageSyncedAt: milleageSyncedAt,
-            createdAt: createdAt
+            createdAt: createdAt,
+            frontWheelSize: frontWheelSize,
+            rearWheelSize: rearWheelSize
         )
         car.id = id
         return car

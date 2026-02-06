@@ -1,5 +1,43 @@
 # Release notes
 
+## 2026.1.8
+
+### English
+
+```
+We added the ability to store your wheel sizes so you never forget them when buying new tires. We also improved app stability and fixed incorrect chart calculations on the main screen.
+```
+
+### Русский (RU)
+
+```
+Мы добавили возможность вписать размеры колес, чтобы вы никогда не забыли их при покупке новых шин, а также поработали над стабильностью приложения и исправили некорректные рассчеты графика на главном экране.
+```
+
+### Қазақша (KK)
+
+```
+Жаңа шиналар сатып алғанда ұмытпау үшін дөңгелек өлшемдерін жазып қою мүмкіндігін қостық. Сонымен қатар қолданбаның тұрақтылығын жақсартып, басты экрандағы графиктің қате есептеулерін түзеттік.
+```
+
+### Türkçe (TR)
+
+```
+Yeni lastik alırken unutmamanız için lastik ölçülerinizi kaydetme özelliğini ekledik. Ayrıca uygulama kararlılığını iyileştirdik ve ana ekrandaki grafik hesaplamalarındaki hataları düzelttik.
+```
+
+### Українська (UK)
+
+```
+Ми додали можливість записати розміри коліс, щоб ви ніколи не забули їх при купівлі нових шин. Також ми попрацювали над стабільністю застосунку та виправили некоректні розрахунки графіка на головному екрані.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben die Möglichkeit hinzugefügt, Ihre Reifengrößen zu speichern, damit Sie sie beim Kauf neuer Reifen nie vergessen. Außerdem haben wir die Stabilität der App verbessert und fehlerhafte Diagrammberechnungen auf dem Hauptbildschirm korrigiert.
+```
+
 ## 2026.1.7
 
 ### English

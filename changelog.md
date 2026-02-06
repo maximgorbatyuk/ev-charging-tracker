@@ -1,5 +1,45 @@
 # Changelog
 
+## 2026.1.8 (2026-02-06)
+
+- **Pagination for Planned Maintenance**
+  - Added database-level pagination (10 records per page) with Previous/Next navigation
+  - Filtering now happens at the SQL level instead of in-memory, improving performance for large datasets
+
+- **Performance Optimizations**
+  - Moved maintenance filtering from in-memory to SQL queries (overdue, due soon, scheduled, by mileage, by date)
+  - Optimized migration version lookup to fetch only one row instead of loading all migrations
+  - Extracted reusable row mapping helper in PlannedMaintenanceRepository
+  - Fixed month boundary calculations in charts (prevents missed records on last day of month)
+  - Added `@MainActor` annotations to ViewModels, removed unnecessary `DispatchQueue.main.async` calls
+  - Fixed potential memory leak in ExpensesChartViewModel closures (added `[weak self]`)
+  - Reduced expenses page size from 15 to 10
+
+- **Safety & Code Quality**
+  - Eliminated all force unwraps (`!`) across DatabaseManager, repositories, ViewModels, and services
+  - All repository getters in DatabaseManager now return optionals with safe unwrapping
+  - PlannedMaintenanceItem init is now failable (returns nil instead of crashing)
+  - Gated sensitive logging (user IDs) behind `#if DEBUG` / development mode check
+
+- **UI Improvements**
+  - Refactored ExpensesView and PlanedMaintenanceView from ScrollView+List to unified List layout
+  - Removed fixed-height frame hacks on list views
+  - Changed consumption chart from "average per session" to "total energy per month"
+  - Excluded initial records from consumption chart calculations
+
+- **Bug Fixes**
+  - Fixed NotificationManager ignoring injected logger parameter
+  - Fixed month boundary date filtering (records on last day of month were sometimes missed)
+  - Fixed initial records inflating consumption chart data
+  - Removed duplicate `updateSession` method in ExpensesRepository
+
+- **Localization**
+  - Localized "Confirm" and "Cancel" button defaults in confirmation dialogs
+  - Added translations for "Confirm" in all 6 supported languages
+
+- **Backup**
+  - Wheel size data (front and rear) now included in backup/export
+
 ## 2026.1.7 (2026-01-31)
 
 - **Expense Filtering**

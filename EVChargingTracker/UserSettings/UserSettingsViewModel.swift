@@ -54,7 +54,7 @@ class UserSettingsViewModel: ObservableObject {
     private let backgroundTaskManager: BackgroundTaskManager
     private let db: DatabaseManager
     private let userSettingsRepository: UserSettingsRepository?
-    private let expensesRepository: ExpensesRepository
+    private let expensesRepository: ExpensesRepository?
     private let developerMode: DeveloperModeManager
 
     private var _allCars: [CarDto] = []
@@ -75,7 +75,7 @@ class UserSettingsViewModel: ObservableObject {
         self.backupService = backupService
         self.backgroundTaskManager = backgroundTaskManager
 
-        self.expensesRepository = db.expensesRepository!
+        self.expensesRepository = db.expensesRepository
         self.userSettingsRepository = db.userSettingsRepository
 
         self.defaultCurrency = userSettingsRepository?.fetchCurrency() ?? .kzt
@@ -116,7 +116,7 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     func hasAnyExpense(_ carId: Int64? = nil) -> Bool {
-        return expensesRepository.expensesCount(carId) > 0
+        return (expensesRepository?.expensesCount(carId) ?? 0) > 0
     }
 
     func getDefaultCurrency() -> Currency {
@@ -124,10 +124,7 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     func saveDefaultCurrency(_ currency: Currency) -> Void {
-        // update in-memory value first so UI updates
-        DispatchQueue.main.async {
-            self.defaultCurrency = currency
-        }
+        self.defaultCurrency = currency
 
         // persist to DB (upsert)
         let success = userSettingsRepository?.upsertCurrency(currency.rawValue) ?? false
@@ -138,9 +135,7 @@ class UserSettingsViewModel: ObservableObject {
 
     // New: save selected language
     func saveLanguage(_ language: AppLanguage) -> Void {
-        DispatchQueue.main.async {
-            self.selectedLanguage = language
-        }
+        self.selectedLanguage = language
 
         // Update runtime localization manager so UI can react immediately
         do {
@@ -154,9 +149,7 @@ class UserSettingsViewModel: ObservableObject {
 
     /// Saves the selected appearance mode to the database and updates the app appearance
     func saveAppearanceMode(_ mode: AppearanceMode) {
-        DispatchQueue.main.async {
-            self.selectedAppearanceMode = mode
-        }
+        self.selectedAppearanceMode = mode
 
         /// Update the global appearance manager so the UI reacts immediately
         AppearanceManager.shared.setMode(mode)
@@ -192,18 +185,15 @@ class UserSettingsViewModel: ObservableObject {
     }
     
     func insertCar(_ car: Car) -> Int64? {
-        let newCarId = db.carRepository?.insert(car)
-
-        if newCarId != nil {
-            if (car.selectedForTracking) {
-                _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: newCarId!)
-            }
-
-            DispatchQueue.main.async {
-                self.objectWillChange.send()
-            }
+        guard let newCarId = db.carRepository?.insert(car) else {
+            return nil
         }
 
+        if car.selectedForTracking {
+            _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: newCarId)
+        }
+
+        self.objectWillChange.send()
         return newCarId
     }
 
@@ -212,28 +202,28 @@ class UserSettingsViewModel: ObservableObject {
         let carUpdateSuccess = db.carRepository?.updateCar(car: car) ?? false
         let carExpensesUpdateSyccess = db.expensesRepository?.updateCarExpensesCurrency(car) ?? false
 
-        if (car.selectedForTracking) {
-            _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: car.id!)
+        if car.selectedForTracking,
+           let carId = car.id
+        {
+            _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: carId)
         }
 
         if carUpdateSuccess && carExpensesUpdateSyccess {
-            DispatchQueue.main.async {
-                self.objectWillChange.send()
-            }
+            self.objectWillChange.send()
         }
 
         return carUpdateSuccess && carExpensesUpdateSyccess
     }
 
     func deleteCar(_ carId: Int64, selectedForTracking: Bool) -> Void {
-        db.expensesRepository?.deleteRecordsForCar(carId)
         db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
         _ = db.carRepository?.delete(id: carId)
 
-        if (selectedForTracking) {
-            let latestCar = db.carRepository?.getLatestAddedCar()
-            if let latestCar = latestCar, let latestCarId = latestCar.id {
-                _ = db.carRepository!.markCarAsSelectedForTracking(latestCarId)
+        if selectedForTracking {
+            if let latestCar = db.carRepository?.getLatestAddedCar(),
+               let latestCarId = latestCar.id
+            {
+                _ = db.carRepository?.markCarAsSelectedForTracking(latestCarId)
             }
         }
 
@@ -241,22 +231,20 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     func refetchCars() {
-        DispatchQueue.main.async {
-            self._allCars = self.db.carRepository?.getAllCars()
-                .map {
-                    CarDto(
-                        id: $0.id ?? 0,
-                        name: $0.name,
-                        selectedForTracking: $0.selectedForTracking,
-                        batteryCapacity: $0.batteryCapacity,
-                        currentMileage: $0.currentMileage,
-                        initialMileage: $0.initialMileage,
-                        expenseCurrency: $0.expenseCurrency,
-                        frontWheelSize: $0.frontWheelSize,
-                        rearWheelSize: $0.rearWheelSize)
-                } ?? []
-            self.objectWillChange.send()
-        }
+        self._allCars = self.db.carRepository?.getAllCars()
+            .map {
+                CarDto(
+                    id: $0.id ?? 0,
+                    name: $0.name,
+                    selectedForTracking: $0.selectedForTracking,
+                    batteryCapacity: $0.batteryCapacity,
+                    currentMileage: $0.currentMileage,
+                    initialMileage: $0.initialMileage,
+                    expenseCurrency: $0.expenseCurrency,
+                    frontWheelSize: $0.frontWheelSize,
+                    rearWheelSize: $0.rearWheelSize)
+            } ?? []
+        self.objectWillChange.send()
     }
 
     func isSpecialDeveloperModeEnabled() -> Bool {
@@ -279,33 +267,31 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     func deleteAllExpenses() -> Void {
-        if (!isDevelopmentMode()) {
+        if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all expenses in non-development mode. Operation aborted.")
             return
         }
 
-        let selectedCar = db.carRepository?.getSelectedForExpensesCar()
-        if (selectedCar == nil) {
+        guard let selectedCar = db.carRepository?.getSelectedForExpensesCar() else {
             logger.warning("No car selected for expenses")
             return
         }
 
-        db.deleteAllExpenses(selectedCar!)
-        logger.info("Deleted all expenses for car: \(selectedCar!.name)")
+        db.deleteAllExpenses(selectedCar)
+        logger.info("Deleted all expenses for car: \(selectedCar.name)")
     }
 
     func deleteAllExpensesForCar() -> Void {
-        if (!isDevelopmentMode()) {
+        if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
             return
         }
 
-        let selectedCar = db.carRepository?.getSelectedForExpensesCar()
-        if (selectedCar == nil) {
+        guard let selectedCar = db.carRepository?.getSelectedForExpensesCar() else {
             return
         }
 
-        db.deleteAllExpenses(selectedCar!)
+        db.deleteAllExpenses(selectedCar)
     }
 
     func addRandomExpenses() -> Void {
@@ -370,7 +356,7 @@ class UserSettingsViewModel: ObservableObject {
                 carId: carId
             )
             
-            _ = expensesRepository.insertSession(expense)
+            _ = expensesRepository?.insertSession(expense)
         }
         
         // Generate other expenses (maintenance, carwash, repair, other)
@@ -426,7 +412,7 @@ class UserSettingsViewModel: ObservableObject {
                 carId: carId
             )
             
-            _ = expensesRepository.insertSession(expense)
+            _ = expensesRepository?.insertSession(expense)
         }
         
         // Generate planned maintenance records

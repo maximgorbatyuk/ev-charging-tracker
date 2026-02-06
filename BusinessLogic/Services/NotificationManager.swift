@@ -20,7 +20,7 @@ class NotificationManager: ObservableObject, NotificationManagerProtocol {
     private let logger: Logger
     
     init(logger: Logger? = nil) {
-        self.logger = Logger(subsystem: "NotificationManager", category: "Notifications")
+        self.logger = logger ?? Logger(subsystem: "NotificationManager", category: "Notifications")
     }
 
     func getAuthorizationStatus(completion: @escaping (UNAuthorizationStatus) -> Void) -> Void {

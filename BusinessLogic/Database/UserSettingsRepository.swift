@@ -120,7 +120,9 @@ class UserSettingsRepository: UserSettingsRepositoryProtocol {
         // Generate new UUID if no user_id exists
         let newUserId = UUID().uuidString
         _ = upsertValue(key: "user_id", value: newUserId)
+        #if DEBUG
         logger.info("Generated new user_id: \(newUserId)")
+        #endif
         return newUserId
     }
     

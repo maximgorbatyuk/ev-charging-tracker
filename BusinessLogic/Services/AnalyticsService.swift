@@ -33,7 +33,9 @@ class AnalyticsService: ObservableObject {
     private func initializeUserId() {
         if let userSettingsRepo = db.userSettingsRepository {
             self._userId = userSettingsRepo.fetchOrGenerateUserId()
-            logger.info("Initialized user_id: \(self._userId ?? "nil")")
+            if environment.isDevelopmentMode() {
+                logger.info("Initialized user_id: \(self._userId ?? "nil")")
+            }
         }
     }
 

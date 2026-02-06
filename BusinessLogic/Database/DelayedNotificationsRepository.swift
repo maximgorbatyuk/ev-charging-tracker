@@ -121,7 +121,10 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     }
     
     func updateRecord(_ record: DelayedNotification) -> Bool {
-        let recordId = record.id ?? 0
+        guard let recordId = record.id else {
+            logger.error("Update failed: record id is nil")
+            return false
+        }
         let recordToUpdate = table.filter(id == recordId)
         
         do {
@@ -161,11 +164,12 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     }
 
     func deleteMaintenanceRelatedNotificationIfExists(maintenanceRecordId: Int64) -> Void {
-        let recordToDelete = getRecordByMaintenanceId(maintenanceRecordId)
-        if (recordToDelete == nil) {
+        guard let record = getRecordByMaintenanceId(maintenanceRecordId),
+              let recordId = record.id
+        else {
             return
         }
 
-        _ = deleteRecord(id: recordToDelete!.id!)
+        _ = deleteRecord(id: recordId)
     }
 }
