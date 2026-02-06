@@ -34,36 +34,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         ZStack(alignment: .bottomTrailing) {
             NavigationView {
-                ScrollView {
-                    VStack(spacing: 16) {
-                        if viewModel.maintenanceRecords.isEmpty {
-                            EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
-                        } else if viewModel.selectedCarForExpenses != nil {
-                            filterSection
-                                .padding(.bottom, 4)
-
-                            if viewModel.filteredRecords.isEmpty {
-                                noFilterResultsView
-                            } else {
-                                VStack(spacing: 12) {
-                                    Text(L("Swipe right to mark as done, left to edit or delete"))
-                                        .font(.caption)
-                                        .fontWeight(.regular)
-                                        .padding(.horizontal)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                    maintenanceListView
-                                }
-                            }
-
-                            /// Extra padding at the bottom for FAB clearance
-                            Spacer()
-                                .frame(height: 80)
-                        }
-                    }
-                    .padding(.vertical)
-                }
+                mainContent
                 .navigationTitle(L("Planned maintenance"))
                 .navigationBarTitleDisplayMode(.automatic)
                 .onAppear {
@@ -239,76 +210,118 @@ struct PlanedMaintenanceView: SwiftUICore.View {
         .padding(.horizontal, 20)
     }
 
-    private var maintenanceListView: some SwiftUICore.View {
-        List {
-            ForEach(viewModel.filteredRecords) { record in
-                Button {
-                    analytics.trackEvent(
-                        "maintenance_item_clicked",
-                        properties: [
-                            "screen": "planned_maintenance_screen",
-                            "action": "view_details"
-                        ])
-                    recordToShowDetails = record
-                } label: {
-                    PlannedMaintenanceItemView(record: record)
-                }
-                .buttonStyle(.plain)
-                .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                    Button(role: .destructive) {
-                        analytics.trackEvent(
-                            "delete_maintenance_button_clicked",
-                            properties: [
-                                "button_name": "delete",
-                                "screen": "planned_maintenance_screen",
-                                "action": "delete_maintenance_record"
-                            ])
+    @ViewBuilder
+    private var mainContent: some SwiftUICore.View {
+        if viewModel.maintenanceRecords.isEmpty {
+            ScrollView {
+                EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
+                    .padding(.vertical)
+            }
+        } else if viewModel.selectedCarForExpenses != nil {
+            List {
+                // Filter chips row
+                filterSection
+                    .padding(.bottom, 4)
+                    .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
 
-                        recordToDelete = record
-                        showingDeleteConfirmation = true
-                    } label: {
-                        Label(L("Delete"), systemImage: "trash")
+                if viewModel.filteredRecords.isEmpty {
+                    noFilterResultsView
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                } else {
+                    // Hint text row
+                    Text(L("Swipe right to mark as done, left to edit or delete"))
+                        .font(.caption)
+                        .fontWeight(.regular)
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+
+                    // Maintenance records
+                    ForEach(viewModel.filteredRecords) { record in
+                        Button {
+                            analytics.trackEvent(
+                                "maintenance_item_clicked",
+                                properties: [
+                                    "screen": "planned_maintenance_screen",
+                                    "action": "view_details"
+                                ])
+                            recordToShowDetails = record
+                        } label: {
+                            PlannedMaintenanceItemView(record: record)
+                        }
+                        .buttonStyle(.plain)
+                        .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                analytics.trackEvent(
+                                    "delete_maintenance_button_clicked",
+                                    properties: [
+                                        "button_name": "delete",
+                                        "screen": "planned_maintenance_screen",
+                                        "action": "delete_maintenance_record"
+                                    ])
+
+                                recordToDelete = record
+                                showingDeleteConfirmation = true
+                            } label: {
+                                Label(L("Delete"), systemImage: "trash")
+                            }
+
+                            Button {
+                                analytics.trackEvent(
+                                    "edit_maintenance_button_clicked",
+                                    properties: [
+                                        "button_name": "edit",
+                                        "screen": "planned_maintenance_screen",
+                                        "action": "edit_maintenance_record"
+                                    ])
+
+                                recordToEdit = record
+                            } label: {
+                                Label(L("Edit"), systemImage: "pencil")
+                            }
+                            .tint(.orange)
+                        }
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            Button {
+                                analytics.trackEvent(
+                                    "mark_as_done_button_clicked",
+                                    properties: [
+                                        "button_name": "mark_as_done",
+                                        "screen": "planned_maintenance_screen",
+                                        "action": "mark_maintenance_as_done"
+                                    ])
+
+                                recordToMarkAsDone = record
+                            } label: {
+                                Label(L("Done"), systemImage: "checkmark.circle.fill")
+                            }
+                            .tint(.green)
+                        }
                     }
 
-                    Button {
-                        analytics.trackEvent(
-                            "edit_maintenance_button_clicked",
-                            properties: [
-                                "button_name": "edit",
-                                "screen": "planned_maintenance_screen",
-                                "action": "edit_maintenance_record"
-                            ])
-
-                        recordToEdit = record
-                    } label: {
-                        Label(L("Edit"), systemImage: "pencil")
-                    }
-                    .tint(.orange)
-                }
-                .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                    Button {
-                        analytics.trackEvent(
-                            "mark_as_done_button_clicked",
-                            properties: [
-                                "button_name": "mark_as_done",
-                                "screen": "planned_maintenance_screen",
-                                "action": "mark_maintenance_as_done"
-                            ])
-
-                        recordToMarkAsDone = record
-                    } label: {
-                        Label(L("Done"), systemImage: "checkmark.circle.fill")
-                    }
-                    .tint(.green)
+                    /// Extra padding at the bottom for FAB clearance
+                    Spacer()
+                        .frame(height: 80)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                 }
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+        } else {
+            ScrollView {
+                EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
+                    .padding(.vertical)
+            }
         }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .frame(minHeight: CGFloat(viewModel.filteredRecords.count) * 140)
     }
 
     private func loadData() {

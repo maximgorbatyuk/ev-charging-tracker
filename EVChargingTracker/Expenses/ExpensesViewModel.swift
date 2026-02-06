@@ -21,7 +21,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     var totalCost: Double = 0.0
     var hasAnyExpense = false
     
-    let pageSize: Int = 15
+    let pageSize: Int = 10
 
     let analyticsScreenName = "all_expenses_screen"
 
