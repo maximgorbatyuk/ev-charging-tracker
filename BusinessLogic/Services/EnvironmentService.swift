@@ -88,11 +88,11 @@ class EnvironmentService: ObservableObject {
     }
 
     func getAppStoreAppLink() -> String {
-        if _appStoreAppLink != nil {
-            return _appStoreAppLink!
+        if let cached = _appStoreAppLink {
+            return cached
         }
 
-        let appStoreId = self.getAppStoreId()!
+        let appStoreId = self.getAppStoreId() ?? ""
         _appStoreAppLink = "https://apps.apple.com/app/id\(appStoreId)"
         return _appStoreAppLink!
     }

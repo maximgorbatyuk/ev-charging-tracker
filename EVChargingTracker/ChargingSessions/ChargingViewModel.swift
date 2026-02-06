@@ -8,6 +8,7 @@
 import Foundation
 import os
 
+@MainActor
 class ChargingViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
@@ -22,8 +23,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     
     private let environment: EnvironmentService
     private let db: DatabaseManager
-    private let expensesRepository: ExpensesRepository
-    private let plannedMaintenanceRepository: PlannedMaintenanceRepository
+    private let expensesRepository: ExpensesRepository?
+    private let plannedMaintenanceRepository: PlannedMaintenanceRepository?
     private let notifications: NotificationManager
     private let analytics: AnalyticsService
 
@@ -43,8 +44,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         self.logger = logger ?? Logger(subsystem: "ChargingViewModel", category: "ViewModels")
         self.analytics = analytics
 
-        self.expensesRepository = db.expensesRepository!
-        self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
+        self.expensesRepository = db.expensesRepository
+        self.plannedMaintenanceRepository = db.plannedMaintenanceRepository
 
         loadSessions()
     }
@@ -55,7 +56,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         consumptionLineChartData = nil
 
         if let car = self._selectedCarForExpenses, let carId = car.id {
-            expenses = expensesRepository.fetchAllSessions(carId)
+            expenses = expensesRepository?.fetchAllSessions(carId) ?? []
             totalCost = getTotalCost()
         } else {
             expenses = []
@@ -71,10 +72,10 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             oneKmPriceBasedOnlyOnCharging: calculateOneKilometerCosts(true),
             lastUpdated: Date())
         
-        if (self._selectedCarForExpenses != nil) {
+        if let car = self._selectedCarForExpenses {
             expenseChartData = ExpensesChartData(
                 expenses: expenses,
-                currency: self._selectedCarForExpenses!.expenseCurrency,
+                currency: car.expenseCurrency,
                 analytics: self.analytics,
                 monthsCount: getMonthCountForCharts()
             )
@@ -99,46 +100,56 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         let selectedCar = self.selectedCarForExpenses
         var selectedCarForExpense = selectedCar
 
-        if (chargingSessionResult.carId != nil &&
-            selectedCar != nil &&
-            chargingSessionResult.carId != selectedCar!.id) {
-            carId = chargingSessionResult.carId
+        if let resultCarId = chargingSessionResult.carId,
+           let currentCar = selectedCar,
+           resultCarId != currentCar.id
+        {
+            carId = resultCarId
             selectedCarForExpense = allCars.first(where: { $0.id == carId })
         }
 
-        if (selectedCarForExpense == nil) {
-            if (chargingSessionResult.carName == nil) {
-
+        if selectedCarForExpense == nil {
+            guard let carName = chargingSessionResult.carName else {
                 // TODO mgorbatyuk: show error alert to user
                 logger.error("Error: First expense must have a car name!")
+                return
+            }
+
+            guard let initialExpense = chargingSessionResult.initialExpenseForNewCar else {
+                logger.error("Error: First expense must have an initial expense!")
                 return
             }
 
             let now = Date()
             let car = Car(
                 id: nil,
-                name: chargingSessionResult.carName!,
+                name: carName,
                 selectedForTracking: true,
                 batteryCapacity: chargingSessionResult.batteryCapacity,
-                expenseCurrency: chargingSessionResult.initialExpenseForNewCar!.currency,
-                currentMileage: chargingSessionResult.initialExpenseForNewCar!.odometer,
-                initialMileage: chargingSessionResult.initialExpenseForNewCar!.odometer,
+                expenseCurrency: initialExpense.currency,
+                currentMileage: initialExpense.odometer,
+                initialMileage: initialExpense.odometer,
                 milleageSyncedAt: now,
                 createdAt: now)
 
-            carId = db.carRepository!.insert(car)
+            carId = db.carRepository?.insert(car)
+            guard let newCarId = carId else {
+                logger.error("Failed to insert new car")
+                return
+            }
+
             do {
-                try chargingSessionResult.initialExpenseForNewCar!.setCarId(carId!)
+                try initialExpense.setCarId(newCarId)
             } catch {
                 logger.error("Failed to set car ID for initial expense: \(error.localizedDescription)")
                 return
             }
 
-            self.insertExpense(chargingSessionResult.initialExpenseForNewCar!)
-        } else {
-            carId = selectedCarForExpense!.id
-            selectedCarForExpense!.updateMileage(newMileage: chargingSessionResult.expense.odometer)
-            _ = db.carRepository!.updateMilleage(selectedCarForExpense!)
+            self.insertExpense(initialExpense)
+        } else if var carForExpense = selectedCarForExpense {
+            carId = carForExpense.id
+            carForExpense.updateMileage(newMileage: chargingSessionResult.expense.odometer)
+            _ = db.carRepository?.updateMilleage(carForExpense)
         }
 
         do {
@@ -152,28 +163,30 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     func insertExpense(_ session: Expense) -> Void {
-        if let id = expensesRepository.insertSession(session) {
+        if let id = expensesRepository?.insertSession(session) {
             let newSession = session
             newSession.id = id
             expenses.insert(newSession, at: 0)
         }
     }
-    
+
     func deleteSession(_ session: Expense) {
-        guard let sessionId = session.id else { return }
-        
-        if expensesRepository.deleteSession(id: sessionId) {
+        guard let sessionId = session.id else {
+            return
+        }
+
+        if expensesRepository?.deleteSession(id: sessionId) == true {
             expenses.removeAll { $0.id == sessionId }
         }
     }
-    
+
     func updateSession(_ session: Expense) {
-        if expensesRepository.updateSession(session) {
+        if expensesRepository?.updateSession(session) == true {
             if let index = expenses.firstIndex(where: { $0.id == session.id }) {
                 expenses[index] = session
             }
 
-            loadSessions() // Reload to get proper sorting
+            loadSessions()
         }
     }
 
@@ -191,8 +204,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         var totalDistance: Int
         let selectedCarForExpenses = self.selectedCarForExpenses
 
-        if (selectedCarForExpenses != nil) {
-            totalDistance = selectedCarForExpenses!.getTotalMileage()
+        if let car = selectedCarForExpenses {
+            totalDistance = car.getTotalMileage()
         } else {
             totalDistance = (lastRecord?.odometer ?? 0) - (initialRecord?.odometer ?? 0)
         }
@@ -212,15 +225,15 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     func getAllCars() -> [Car] {
-        return db.carRepository!.getAllCars()
+        return db.carRepository?.getAllCars() ?? []
     }
 
     func getAddExpenseCurrency() -> Currency {
-        if selectedCarForExpenses != nil {
-            return selectedCarForExpenses!.expenseCurrency
+        if let car = selectedCarForExpenses {
+            return car.expenseCurrency
         }
 
-        return self.db.userSettingsRepository!.fetchCurrency()
+        return self.db.userSettingsRepository?.fetchCurrency() ?? .kzt
     }
     
     func getChargingSessionsCount() -> Int {
@@ -250,7 +263,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     func reloadSelectedCarForExpenses() -> Car? {
-        _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+        _selectedCarForExpenses = db.carRepository?.getSelectedForExpensesCar()
         return _selectedCarForExpenses
     }
 
@@ -291,17 +304,14 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     func getLastChargingSessionOrNull(_ car: Car?) -> Expense? {
-        
-        if (car == nil || expenses.isEmpty) {
+        guard let car = car, !expenses.isEmpty else {
             return nil
         }
 
         let expensesSortedByDesc = expenses
-            .filter({ $0.expenseType == .charging && $0.carId == car!.id })
+            .filter({ $0.expenseType == .charging && $0.carId == car.id })
             .sorted(by: { $0.date > $1.date })
 
-        let chargingSession = expensesSortedByDesc.first
-
-        return chargingSession
+        return expensesSortedByDesc.first
     }
 }

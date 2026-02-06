@@ -8,6 +8,7 @@
 import Foundation
 import os
 
+@MainActor
 class ExpensesViewModel: ObservableObject, IExpenseView {
 
     @Published var expenses: [Expense] = []
@@ -20,13 +21,13 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     var totalCost: Double = 0.0
     var hasAnyExpense = false
     
-    let pageSize: Int = 15
+    let pageSize: Int = 10
 
     let analyticsScreenName = "all_expenses_screen"
 
     private let db: DatabaseManager
-    private let chargingSessionsRepository: ExpensesRepository
-    private let plannedMaintenanceRepository: PlannedMaintenanceRepository
+    private let chargingSessionsRepository: ExpensesRepository?
+    private let plannedMaintenanceRepository: PlannedMaintenanceRepository?
 
     private let notifications: NotificationManager
     private let analytics: AnalyticsService
@@ -45,8 +46,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         self.analytics = analytics
         self.logger = logger ?? Logger(subsystem: "ExpensesViewModel", category: "Views")
 
-        self.chargingSessionsRepository = db.expensesRepository!
-        self.plannedMaintenanceRepository = db.plannedMaintenanceRepository!
+        self.chargingSessionsRepository = db.expensesRepository
+        self.plannedMaintenanceRepository = db.plannedMaintenanceRepository
 
         // Load saved sorting preference
         self.selectedSortingOption = db.userSettingsRepository?.fetchExpensesSortingOption() ?? .creationDate
@@ -84,13 +85,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         selectedSortingOption = option
         currentPage = 1 // Reset to first page when changing sort order
 
-        // Persist to database only if not the default option
-        if option != .creationDate {
-            db.userSettingsRepository?.upsertExpensesSortingOption(option)
-        } else {
-            // Remove the setting when returning to default
-            db.userSettingsRepository?.upsertExpensesSortingOption(option)
-        }
+        db.userSettingsRepository?.upsertExpensesSortingOption(option)
 
         loadSessionsForCurrentPage()
 
@@ -108,14 +103,14 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             hasAnyExpense = (db.expensesRepository?.expensesCount(carId) ?? 0) > 0
 
             // Get total count for current filters
-            totalRecords = chargingSessionsRepository.getExpensesCount(
+            totalRecords = chargingSessionsRepository?.getExpensesCount(
                 carId: carId,
                 expenseTypeFilters: selectedFilter.expenseTypes
-            )
-            
+            ) ?? 0
+
             // Calculate total pages
             totalPages = totalRecords > 0 ? (totalRecords + pageSize - 1) / pageSize : 0
-            
+
             // Ensure current page is within bounds
             if currentPage > totalPages && totalPages > 0 {
                 currentPage = totalPages
@@ -125,13 +120,13 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             }
 
             // Fetch paginated expenses
-            expenses = chargingSessionsRepository.fetchCarSessionsPaginated(
+            expenses = chargingSessionsRepository?.fetchCarSessionsPaginated(
                 carId: carId,
                 expenseTypeFilters: selectedFilter.expenseTypes,
                 page: currentPage,
                 pageSize: pageSize,
                 sortBy: selectedSortingOption
-            )
+            ) ?? []
             totalCost = getTotalCost()
         } else {
             hasAnyExpense = false
@@ -170,7 +165,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func getAllCars() -> [Car] {
-        return db.carRepository!.getAllCars()
+        return db.carRepository?.getAllCars() ?? []
     }
 
     func updateExistingExpense(_ expenseEditResult: AddExpenseViewResult, expenseToEdit: Expense) -> Void {
@@ -208,47 +203,56 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         var selectedCar = self.selectedCarForExpenses
         var selectedCarForExpense = selectedCar
 
-        if (newExpenseResult.carId != nil &&
-            selectedCar != nil &&
-            newExpenseResult.carId != selectedCar!.id) {
-
-            carId = newExpenseResult.carId
+        if let resultCarId = newExpenseResult.carId,
+           let currentCar = selectedCar,
+           resultCarId != currentCar.id
+        {
+            carId = resultCarId
             selectedCarForExpense = allCars.first(where: { $0.id == carId })
         }
 
-        if (selectedCarForExpense == nil) {
-            if (newExpenseResult.carName == nil) {
-
+        if selectedCarForExpense == nil {
+            guard let carName = newExpenseResult.carName else {
                 // TODO mgorbatyuk: show error alert to user
                 logger.error("Error: First expense must have a car name!")
+                return
+            }
+
+            guard let initialExpense = newExpenseResult.initialExpenseForNewCar else {
+                logger.error("Error: First expense must have an initial expense!")
                 return
             }
 
             let now = Date()
             let car = Car(
                 id: nil,
-                name: newExpenseResult.carName!,
+                name: carName,
                 selectedForTracking: true,
                 batteryCapacity: newExpenseResult.batteryCapacity,
-                expenseCurrency: newExpenseResult.initialExpenseForNewCar!.currency,
-                currentMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
-                initialMileage: newExpenseResult.initialExpenseForNewCar!.odometer,
+                expenseCurrency: initialExpense.currency,
+                currentMileage: initialExpense.odometer,
+                initialMileage: initialExpense.odometer,
                 milleageSyncedAt: now,
                 createdAt: now)
 
             carId = self.addCar(car: car)
+            guard let newCarId = carId else {
+                logger.error("Failed to insert new car")
+                return
+            }
+
             do {
-                try newExpenseResult.initialExpenseForNewCar!.setCarIdWithNoValidation(carId!)
+                try initialExpense.setCarIdWithNoValidation(newCarId)
             } catch {
                 logger.error("Error setting car ID for initial expense of new car: \(error.localizedDescription)")
                 return
             }
-            
-            self.insertExpense(newExpenseResult.initialExpenseForNewCar!)
-        } else {
-            carId = selectedCarForExpense!.id
-            selectedCarForExpense!.updateMileage(newMileage: newExpenseResult.expense.odometer)
-            _ = self.updateMilleage(selectedCarForExpense!)
+
+            self.insertExpense(initialExpense)
+        } else if var carForExpense = selectedCarForExpense {
+            carId = carForExpense.id
+            carForExpense.updateMileage(newMileage: newExpenseResult.expense.odometer)
+            _ = self.updateMilleage(carForExpense)
         }
 
         do {
@@ -262,13 +266,13 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         loadSessionsForCurrentPage()
 
-        if (newExpenseResult.expense.expenseType == .maintenance ||
-            newExpenseResult.expense.expenseType == .repair) {
-
+        if newExpenseResult.expense.expenseType == .maintenance ||
+           newExpenseResult.expense.expenseType == .repair
+        {
             selectedCar = self.reloadSelectedCarForExpenses()
-            let countOfMaintenanceRecordsToNotify = plannedMaintenanceRepository.getRecordsCountForOdometerValue(carCurrentMileage: selectedCar!.currentMileage)
+            let countOfMaintenanceRecordsToNotify = plannedMaintenanceRepository?.getRecordsCountForOdometerValue(carCurrentMileage: selectedCar?.currentMileage ?? 0) ?? 0
 
-            if (countOfMaintenanceRecordsToNotify > 0) {
+            if countOfMaintenanceRecordsToNotify > 0 {
                 let notificationBody = String(format: L("You have %d maintenance task(s) due based on your car's current mileage."), countOfMaintenanceRecordsToNotify)
                 _ = notifications.scheduleNotification(
                     title: L("Planned maintenance"),
@@ -279,51 +283,53 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     func reloadSelectedCarForExpenses() -> Car? {
-        _selectedCarForExpenses = db.carRepository!.getSelectedForExpensesCar()
+        _selectedCarForExpenses = db.carRepository?.getSelectedForExpensesCar()
         return _selectedCarForExpenses
     }
 
     func insertExpense(_ session: Expense) {
-        _ = chargingSessionsRepository.insertSession(session)
+        _ = chargingSessionsRepository?.insertSession(session)
     }
-    
+
     func updateMilleage(_ car: Car) -> Bool {
-        return db.carRepository!.updateMilleage(car)
+        return db.carRepository?.updateMilleage(car) ?? false
     }
 
     func deleteSession(_ session: Expense) {
-        guard let sessionId = session.id else { return }
-        
-        if chargingSessionsRepository.deleteSession(id: sessionId) {
+        guard let sessionId = session.id else {
+            return
+        }
+
+        if chargingSessionsRepository?.deleteSession(id: sessionId) == true {
             expenses.removeAll { $0.id == sessionId }
-            loadSessionsForCurrentPage() // Reload to update pagination
+            loadSessionsForCurrentPage()
         }
     }
-    
+
     func updateSession(_ session: Expense) {
-        if chargingSessionsRepository.updateSession(session) {
+        if chargingSessionsRepository?.updateSession(session) == true {
             if let index = expenses.firstIndex(where: { $0.id == session.id }) {
                 expenses[index] = session
             }
 
-            loadSessionsForCurrentPage() // Reload to reflect updates
+            loadSessionsForCurrentPage()
         }
     }
 
     func getAddExpenseCurrency() -> Currency {
-        if (selectedCarForExpenses != nil) {
-            return selectedCarForExpenses!.expenseCurrency
+        if let car = selectedCarForExpenses {
+            return car.expenseCurrency
         }
 
-        return db.userSettingsRepository!.fetchCurrency()
+        return db.userSettingsRepository?.fetchCurrency() ?? .kzt
     }
 
     func hasAnyCar() -> Bool {
-        return db.carRepository!.getCarsCount() > 0
+        return (db.carRepository?.getCarsCount() ?? 0) > 0
     }
 
     func addCar(car: Car) -> Int64? {
-        return db.carRepository!.insert(car)
+        return db.carRepository?.insert(car)
     }
 
     func getTotalCost() -> Double {
@@ -333,9 +339,9 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             return 0
         }
 
-        return chargingSessionsRepository.getTotalCost(
+        return chargingSessionsRepository?.getTotalCost(
             carId: carId,
-            expenseTypeFilters: selectedFilter.expenseTypes)
+            expenseTypeFilters: selectedFilter.expenseTypes) ?? 0
     }
 
     var selectedCarForExpenses: Car? {

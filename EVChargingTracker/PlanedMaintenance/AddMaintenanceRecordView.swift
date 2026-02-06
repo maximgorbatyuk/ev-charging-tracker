@@ -92,11 +92,11 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
 
                 Section(header: Text(L("Maintenance details"))) {
 
-                    if (selectedCar != nil) {
+                    if let car = selectedCar {
                         HStack {
                             Text(L("Car"))
                             Spacer()
-                            Text(selectedCar!.name)
+                            Text(car.name)
                                 .disabled(true)
                         }
                     }
@@ -112,7 +112,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
 
                     VStack {
                         Toggle(L("Remind by odometer (optional)"), isOn: $remindByOdometer)
-                        TextField(selectedCar!.currentMileage.formatted(), text: $odometer)
+                        TextField(selectedCar?.currentMileage.formatted() ?? "0", text: $odometer)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.leading)
                             .disabled(!remindByOdometer)
@@ -167,7 +167,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
     private func save() {
         alertMessage = nil
 
-        if selectedCar == nil {
+        guard let selectedCar = selectedCar, let carId = selectedCar.id else {
             alertMessage = L("Please select a car first.")
             return
         }
@@ -193,7 +193,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
             odometer: remindByOdometer ? odo : nil,
             name: name,
             notes: notes,
-            carId: selectedCar!.id!,
+            carId: carId,
             createdAt: existingRecord?.createdAt
         )
 

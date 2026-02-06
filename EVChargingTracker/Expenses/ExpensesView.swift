@@ -15,59 +15,14 @@ struct ExpensesView: SwiftUICore.View {
     @State private var expenseToDelete: Expense? = nil
     @State private var expenseToEdit: Expense? = nil
 
-    @ObservedObject private var analytics = AnalyticsService.shared
-
     @Environment(\.colorScheme) var colorScheme
+
+    private let analytics = AnalyticsService.shared
 
     var body: some SwiftUICore.View {
         ZStack(alignment: .bottomTrailing) {
             NavigationView {
-                ScrollView {
-                    VStack(spacing: 16) {
-                        if !viewModel.hasAnyExpense {
-                            emptyStateView
-                        } else {
-                            if viewModel.selectedCarForExpenses != nil {
-                                CostsBlockView(
-                                    title: L("Total costs"),
-                                    hint: nil,
-                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
-                                    costsValue: viewModel.totalCost,
-                                    perKilometer: false)
-                            }
-
-                            filterSection
-                                .padding(.bottom, 4)
-
-                            sortingSelectorView
-
-                            if viewModel.expenses.isEmpty {
-                                emptyStateForThisTypeView
-                            } else {
-                                VStack(spacing: 12) {
-
-                                    Text(L("For editing or deleting record, please swipe left"))
-                                        .font(.caption)
-                                        .fontWeight(.regular)
-                                        .padding(.horizontal)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                    sessionsListView
-
-                                    if viewModel.totalPages > 1 {
-                                        paginationControlsView
-                                    }
-                                }
-                            }
-                        }
-
-                        /// Extra padding at the bottom for FAB clearance
-                        Spacer()
-                            .frame(height: 80)
-                    }
-                    .padding(.vertical)
-                }
+                expensesMainContent
                 .navigationTitle(L("All car expenses"))
                 .navigationBarTitleDisplayMode(.automatic)
                 .sheet(isPresented: $showingAddSession) {
@@ -110,7 +65,6 @@ struct ExpensesView: SwiftUICore.View {
                 }
                 .onAppear {
                     analytics.trackScreen(viewModel.analyticsScreenName)
-                    viewModel.loadSessions()
                 }
                 .refreshable {
                     viewModel.loadSessions()
@@ -219,49 +173,113 @@ struct ExpensesView: SwiftUICore.View {
         )
     }
 
-    private var sessionsListView: some SwiftUICore.View {
-        List {
-            ForEach(viewModel.expenses) { session in
-                SessionCard(session: session)
-                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+    @ViewBuilder
+    private var expensesMainContent: some SwiftUICore.View {
+        if !viewModel.hasAnyExpense {
+            ScrollView {
+                emptyStateView
+                    .padding(.vertical)
+            }
+        } else {
+            List {
+                // Total costs row
+                if let car = viewModel.selectedCarForExpenses {
+                    CostsBlockView(
+                        title: L("Total costs"),
+                        hint: nil,
+                        currency: car.expenseCurrency,
+                        costsValue: viewModel.totalCost,
+                        perKilometer: false)
+                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            analytics.trackEvent(
-                                "expense_delete_button_clicked",
-                                properties: [
-                                    "button_name": "delete",
-                                    "screen": viewModel.analyticsScreenName,
-                                    "action": "delete_expense"
-                                ])
+                }
 
-                            expenseToDelete = session
-                            showingDeleteConfirmation = true
-                        } label: {
-                            Label(L("Delete"), systemImage: "trash")
-                        }
+                // Filter chips row
+                filterSection
+                    .padding(.bottom, 4)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
 
-                        Button {
-                            analytics.trackEvent(
-                                "expense_edit_button_clicked",
-                                properties: [
-                                    "button_name": "edit",
-                                    "screen": viewModel.analyticsScreenName,
-                                    "action": "edit_expense"
-                                ])
+                // Sorting selector row
+                sortingSelectorView
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
 
-                            expenseToEdit = session
-                        } label: {
-                            Label(L("Edit"), systemImage: "pencil")
-                        }
-                        .tint(.blue)
+                if viewModel.expenses.isEmpty {
+                    emptyStateForThisTypeView
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                } else {
+                    // Hint text row
+                    Text(L("For editing or deleting record, please swipe left"))
+                        .font(.caption)
+                        .fontWeight(.regular)
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+
+                    // Expense records
+                    ForEach(viewModel.expenses) { session in
+                        SessionCard(session: session)
+                            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    analytics.trackEvent(
+                                        "expense_delete_button_clicked",
+                                        properties: [
+                                            "button_name": "delete",
+                                            "screen": viewModel.analyticsScreenName,
+                                            "action": "delete_expense"
+                                        ])
+
+                                    expenseToDelete = session
+                                    showingDeleteConfirmation = true
+                                } label: {
+                                    Label(L("Delete"), systemImage: "trash")
+                                }
+
+                                Button {
+                                    analytics.trackEvent(
+                                        "expense_edit_button_clicked",
+                                        properties: [
+                                            "button_name": "edit",
+                                            "screen": viewModel.analyticsScreenName,
+                                            "action": "edit_expense"
+                                        ])
+
+                                    expenseToEdit = session
+                                } label: {
+                                    Label(L("Edit"), systemImage: "pencil")
+                                }
+                                .tint(.blue)
+                            }
                     }
+
+                    // Pagination controls
+                    if viewModel.totalPages > 1 {
+                        paginationControlsView
+                            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                    }
+
+                    /// Extra padding at the bottom for FAB clearance
+                    Spacer()
+                        .frame(height: 80)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                }
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
         }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .frame(minHeight: CGFloat(viewModel.expenses.count) * 120)
     }
     
     private var paginationControlsView: some SwiftUICore.View {
@@ -285,8 +303,9 @@ struct ExpensesView: SwiftUICore.View {
                             .fill(Color.gray.opacity(0.1))
                     )
                 }
+                .buttonStyle(.borderless)
                 .disabled(viewModel.currentPage <= 1)
-                
+
                 // Current page indicator
                 Text("\(viewModel.currentPage)")
                     .font(.headline)
@@ -316,6 +335,7 @@ struct ExpensesView: SwiftUICore.View {
                             .fill(Color.gray.opacity(0.1))
                     )
                 }
+                .buttonStyle(.borderless)
                 .disabled(viewModel.currentPage >= viewModel.totalPages)
             }
             
@@ -324,10 +344,11 @@ struct ExpensesView: SwiftUICore.View {
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal)
         .padding(.bottom, 8)
     }
-    
+
     // Confirmation alert attached to the view
     private func deleteConfirmationAlert() -> Alert {
         let title = Text(L("Delete expense"))

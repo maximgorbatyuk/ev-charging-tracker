@@ -29,23 +29,23 @@ class DatabaseManagerFake: DatabaseManagerProtocol {
         self.userSettingsRepository = userSettingsRepository
     }
 
-    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol {
+    func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol? {
         return maintenanceRepository
     }
 
-    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol {
+    func getDelayedNotificationsRepository() -> DelayedNotificationsRepositoryProtocol? {
         return delayedNotificationsRepository
     }
 
-    func getCarRepository() -> CarRepositoryProtocol {
+    func getCarRepository() -> CarRepositoryProtocol? {
         return carRepository
     }
 
-    func getExpensesRepository() -> ExpensesRepositoryProtocol {
+    func getExpensesRepository() -> ExpensesRepositoryProtocol? {
         return expensesRepository
     }
 
-    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol {
+    func getUserSettingsRepository() -> UserSettingsRepositoryProtocol? {
         return userSettingsRepository
     }
 }
