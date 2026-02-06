@@ -11,6 +11,20 @@ import os
 
 protocol PlannedMaintenanceRepositoryProtocol {
     func getAllRecords(carId: Int64) -> [PlannedMaintenance]
+    func getFilteredRecordsPaginated(
+        carId: Int64,
+        filter: PlannedMaintenanceFilter,
+        currentMileage: Int,
+        currentDate: Date,
+        page: Int,
+        pageSize: Int
+    ) -> [PlannedMaintenance]
+    func getFilteredRecordsCount(
+        carId: Int64,
+        filter: PlannedMaintenanceFilter,
+        currentMileage: Int,
+        currentDate: Date
+    ) -> Int
     func insertRecord(_ record: PlannedMaintenance) -> Int64?
     func updateRecord(_ record: PlannedMaintenance) -> Bool
     func deleteRecord(id recordId: Int64) -> Bool
@@ -65,18 +79,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
 
         do {
             for record in try db.prepare(table.filter(carIdColumn == carId).order(id.desc)) {
-
-                let recordItem = PlannedMaintenance(
-                    id: record[id],
-                    when: record[whenColumn],
-                    odometer: record[odometerColumn],
-                    name: record[nameColumn],
-                    notes: record[notesColumn],
-                    carId: record[carIdColumn],
-                    createdAt: record[createdAtColumn]
-                )
-
-                recordsList.append(recordItem)
+                recordsList.append(mapRowToPlannedMaintenance(record))
             }
         } catch {
             logger.error("Fetch failed: \(error)")
@@ -163,6 +166,121 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
             logger.error("Delete failed: \(error)")
             return false
         }
+    }
+
+    // MARK: - Filtered Paginated Fetching
+
+    func getFilteredRecordsPaginated(
+        carId: Int64,
+        filter: PlannedMaintenanceFilter,
+        currentMileage: Int,
+        currentDate: Date,
+        page: Int,
+        pageSize: Int
+    ) -> [PlannedMaintenance] {
+        guard page > 0, pageSize > 0 else {
+            return []
+        }
+
+        let offset = (page - 1) * pageSize
+        let query = buildFilteredQuery(
+            carId: carId,
+            filter: filter,
+            currentMileage: currentMileage,
+            currentDate: currentDate
+        )
+        .order(id.desc)
+        .limit(pageSize, offset: offset)
+
+        var recordsList: [PlannedMaintenance] = []
+        do {
+            for record in try db.prepare(query) {
+                recordsList.append(mapRowToPlannedMaintenance(record))
+            }
+        } catch {
+            logger.error("Fetch filtered paginated failed: \(error)")
+        }
+
+        return recordsList
+    }
+
+    func getFilteredRecordsCount(
+        carId: Int64,
+        filter: PlannedMaintenanceFilter,
+        currentMileage: Int,
+        currentDate: Date
+    ) -> Int {
+        let query = buildFilteredQuery(
+            carId: carId,
+            filter: filter,
+            currentMileage: currentMileage,
+            currentDate: currentDate
+        )
+
+        do {
+            return try db.scalar(query.count)
+        } catch {
+            logger.error("Fetch filtered count failed: \(error)")
+            return 0
+        }
+    }
+
+    // MARK: - Private Helpers
+
+    private func buildFilteredQuery(
+        carId: Int64,
+        filter: PlannedMaintenanceFilter,
+        currentMileage: Int,
+        currentDate: Date
+    ) -> Table {
+        var query = table.filter(carIdColumn == carId)
+
+        let sevenDaysLater = Calendar.current.date(byAdding: .day, value: 7, to: currentDate) ?? currentDate
+        let mileagePlus500 = currentMileage + 500
+
+        /// Overdue condition: mileage target already passed OR date already passed
+        let overdueByMileage = odometerColumn != nil && odometerColumn < currentMileage
+        let overdueByDate = whenColumn != nil && whenColumn < currentDate
+        let overdueCondition = overdueByMileage || overdueByDate
+
+        /// Due soon condition: within 7 days OR within 500 km, but NOT overdue
+        let dueSoonByDate = whenColumn != nil && whenColumn >= currentDate && whenColumn <= sevenDaysLater
+        let dueSoonByMileage = odometerColumn != nil && odometerColumn >= currentMileage && odometerColumn <= mileagePlus500
+        let dueSoonCondition = !overdueCondition && (dueSoonByDate || dueSoonByMileage)
+
+        switch filter {
+        case .all:
+            break
+
+        case .overdue:
+            query = query.filter(overdueCondition)
+
+        case .dueSoon:
+            query = query.filter(dueSoonCondition)
+
+        case .scheduled:
+            query = query.filter(!overdueCondition && !dueSoonCondition)
+
+        case .byMileage:
+            query = query.filter(odometerColumn != nil)
+
+        case .byDate:
+            query = query.filter(whenColumn != nil)
+        }
+
+        return query
+    }
+
+    private func mapRowToPlannedMaintenance(_ row: Row) -> PlannedMaintenance {
+        return PlannedMaintenance(
+            id: row[id],
+            when: row[whenColumn],
+            odometer: row[odometerColumn],
+            name: row[nameColumn],
+            notes: row[notesColumn],
+            carId: row[carIdColumn],
+            createdAt: row[createdAtColumn]
+        )
     }
 
     func getPendingMaintenanceRecords(

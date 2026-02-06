@@ -12,7 +12,16 @@ class PlanedMaintenanceViewModel: ObservableObject {
 
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
     @Published var selectedFilter: PlannedMaintenanceFilter = .all
-    
+    @Published var currentPage: Int = 1
+    @Published var totalRecords: Int = 0
+    @Published var totalPages: Int = 0
+    @Published var totalAllRecords: Int = 0
+
+    let pageSize: Int = 10
+
+    let analyticsScreenName = "planned_maintenance_screen"
+
+    private let analytics: AnalyticsService
     private let notificationsService: NotificationManagerProtocol
     private let maintenanceRepository: PlannedMaintenanceRepositoryProtocol?
     private let delayedNotificationsRepo: DelayedNotificationsRepositoryProtocol?
@@ -33,9 +42,11 @@ class PlanedMaintenanceViewModel: ObservableObject {
     // MARK: - Production initializer
     init(
         notifications: NotificationManagerProtocol,
-        db: DatabaseManagerProtocol
+        db: DatabaseManagerProtocol,
+        analytics: AnalyticsService = .shared
     ) {
         self.notificationsService = notifications
+        self.analytics = analytics
 
         self.maintenanceRepository = db.getPlannedMaintenanceRepository()
         self.delayedNotificationsRepo = db.getDelayedNotificationsRepository()
@@ -45,19 +56,55 @@ class PlanedMaintenanceViewModel: ObservableObject {
         loadData()
     }
 
-    func loadData() -> Void {
+    func loadData() {
         guard let selectedCar = self.reloadSelectedCarForExpenses(),
-              let carId = selectedCar.id else {
+              let carId = selectedCar.id
+        else {
             return
         }
 
         let now = Date()
-        var records = (maintenanceRepository?.getAllRecords(carId: carId) ?? []).compactMap { dbRecord in
+        let currentMileage = selectedCar.currentMileage
+
+        let allCount = maintenanceRepository?.getFilteredRecordsCount(
+            carId: carId,
+            filter: .all,
+            currentMileage: currentMileage,
+            currentDate: now
+        ) ?? 0
+
+        let count: Int
+        if selectedFilter == .all {
+            count = allCount
+        } else {
+            count = maintenanceRepository?.getFilteredRecordsCount(
+                carId: carId,
+                filter: selectedFilter,
+                currentMileage: currentMileage,
+                currentDate: now
+            ) ?? 0
+        }
+
+        let pages = max(1, Int(ceil(Double(count) / Double(pageSize))))
+        if currentPage > pages {
+            currentPage = pages
+        }
+
+        let records = (maintenanceRepository?.getFilteredRecordsPaginated(
+            carId: carId,
+            filter: selectedFilter,
+            currentMileage: currentMileage,
+            currentDate: now,
+            page: currentPage,
+            pageSize: pageSize
+        ) ?? []).compactMap { dbRecord in
             PlannedMaintenanceItem(maintenance: dbRecord, car: selectedCar, now: now)
         }
-        
-        records.sort()
+
         DispatchQueue.main.async {
+            self.totalAllRecords = allCount
+            self.totalRecords = count
+            self.totalPages = pages
             self.maintenanceRecords = records
         }
     }
@@ -197,80 +244,46 @@ class PlanedMaintenanceViewModel: ObservableObject {
         return _selectedCarForExpenses
     }
 
-    var filteredRecords: [PlannedMaintenanceItem] {
-        switch selectedFilter {
-        case .all:
-            return maintenanceRecords
-
-        case .overdue:
-            return maintenanceRecords.filter { isOverdue($0) }
-
-        case .dueSoon:
-            return maintenanceRecords.filter { isDueSoon($0) }
-
-        case .scheduled:
-            return maintenanceRecords.filter { isScheduled($0) }
-
-        case .byMileage:
-            return maintenanceRecords.filter { $0.odometer != nil }
-
-        case .byDate:
-            return maintenanceRecords.filter { $0.when != nil }
-        }
-    }
-
     func setFilter(_ filter: PlannedMaintenanceFilter) {
         guard filter != selectedFilter else {
             return
         }
 
         selectedFilter = filter
+        currentPage = 1
+        loadData()
     }
 
-    /// Overdue: mileage passed target OR date passed
-    private func isOverdue(_ item: PlannedMaintenanceItem) -> Bool {
-        if let mileageDiff = item.mileageDifference,
-           mileageDiff > 0
-        {
-            return true
-        }
+    func goToNextPage() {
+        if currentPage < totalPages {
+            currentPage += 1
 
-        if let daysDiff = item.daysDifference,
-           daysDiff < 0
-        {
-            return true
-        }
+            analytics.trackEvent(
+                "maintenance_page_next",
+                properties: [
+                    "screen": analyticsScreenName,
+                    "page": currentPage
+                ])
 
-        return false
+            loadData()
+        }
     }
 
-    /// Due soon: within 7 days OR within 500 km (not overdue)
-    private func isDueSoon(_ item: PlannedMaintenanceItem) -> Bool {
-        guard !isOverdue(item) else {
-            return false
-        }
+    func goToPreviousPage() {
+        if currentPage > 1 {
+            currentPage -= 1
 
-        if let daysDiff = item.daysDifference,
-           daysDiff >= 0,
-           daysDiff <= 7
-        {
-            return true
-        }
+            analytics.trackEvent(
+                "maintenance_page_previous",
+                properties: [
+                    "screen": analyticsScreenName,
+                    "page": currentPage
+                ])
 
-        if let mileageDiff = item.mileageDifference,
-           mileageDiff >= -500,
-           mileageDiff <= 0
-        {
-            return true
+            loadData()
         }
-
-        return false
     }
 
-    /// Scheduled: not overdue and not due soon
-    private func isScheduled(_ item: PlannedMaintenanceItem) -> Bool {
-        return !isOverdue(item) && !isDueSoon(item)
-    }
 }
 
 // TODO mgorbatyuk: implement date difference in days, propably

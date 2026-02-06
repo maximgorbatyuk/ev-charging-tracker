@@ -195,6 +195,73 @@ struct PlanedMaintenanceView: SwiftUICore.View {
         }
     }
 
+    private var paginationControlsView: some SwiftUICore.View {
+        VStack(spacing: 12) {
+            // Navigation buttons
+            HStack(spacing: 16) {
+                // Previous button
+                Button(action: {
+                    viewModel.goToPreviousPage()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text(L("Previous"))
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(viewModel.currentPage > 1 ? .blue : .gray)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.gray.opacity(0.1))
+                    )
+                }
+                .buttonStyle(.borderless)
+                .disabled(viewModel.currentPage <= 1)
+
+                // Current page indicator
+                Text("\(viewModel.currentPage)")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .frame(minWidth: 40)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.blue.opacity(0.1))
+                    )
+
+                // Next button
+                Button(action: {
+                    viewModel.goToNextPage()
+                }) {
+                    HStack(spacing: 4) {
+                        Text(L("Next"))
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(viewModel.currentPage < viewModel.totalPages ? .blue : .gray)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.gray.opacity(0.1))
+                    )
+                }
+                .buttonStyle(.borderless)
+                .disabled(viewModel.currentPage >= viewModel.totalPages)
+            }
+
+            // Information text
+            Text(String(format: L("Total records: %d, total pages: %d"), viewModel.totalRecords, viewModel.totalPages))
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+    }
+
     private var noFilterResultsView: some SwiftUICore.View {
         VStack(spacing: 16) {
             Image(systemName: "magnifyingglass")
@@ -212,7 +279,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
     @ViewBuilder
     private var mainContent: some SwiftUICore.View {
-        if viewModel.maintenanceRecords.isEmpty {
+        if viewModel.totalAllRecords == 0, viewModel.selectedCarForExpenses != nil {
             ScrollView {
                 EmptyStateView(selectedCar: viewModel.selectedCarForExpenses)
                     .padding(.vertical)
@@ -226,7 +293,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
 
-                if viewModel.filteredRecords.isEmpty {
+                if viewModel.maintenanceRecords.isEmpty {
                     noFilterResultsView
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
@@ -242,7 +309,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         .listRowBackground(Color.clear)
 
                     // Maintenance records
-                    ForEach(viewModel.filteredRecords) { record in
+                    ForEach(viewModel.maintenanceRecords) { record in
                         Button {
                             analytics.trackEvent(
                                 "maintenance_item_clicked",
@@ -305,6 +372,14 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             }
                             .tint(.green)
                         }
+                    }
+
+                    // Pagination controls
+                    if viewModel.totalPages > 1 {
+                        paginationControlsView
+                            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
                     }
 
                     /// Extra padding at the bottom for FAB clearance
