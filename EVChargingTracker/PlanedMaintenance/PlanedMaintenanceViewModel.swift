@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 class PlanedMaintenanceViewModel: ObservableObject {
 
     @Published var maintenanceRecords: [PlannedMaintenanceItem] = []
@@ -101,26 +102,24 @@ class PlanedMaintenanceViewModel: ObservableObject {
             PlannedMaintenanceItem(maintenance: dbRecord, car: selectedCar, now: now)
         }
 
-        DispatchQueue.main.async {
-            self.totalAllRecords = allCount
-            self.totalRecords = count
-            self.totalPages = pages
-            self.maintenanceRecords = records
-        }
+        self.totalAllRecords = allCount
+        self.totalRecords = count
+        self.totalPages = pages
+        self.maintenanceRecords = records
     }
     
     func addNewMaintenanceRecord(newRecord: PlannedMaintenance) -> Void {
         let recordId = maintenanceRepository?.insertRecord(newRecord)
-        
-        if (newRecord.when != nil) {
+
+        if let when = newRecord.when {
             let notificationId = notificationsService.scheduleNotification(
                 title: L("Maintenance reminder"),
                 body: newRecord.name,
-                on: newRecord.when!)
-            
+                on: when)
+
             _ = delayedNotificationsRepo?.insertRecord(
                 DelayedNotification(
-                    when: newRecord.when!,
+                    when: when,
                     notificationId: notificationId,
                     maintenanceRecord: recordId,
                     carId: newRecord.carId
@@ -133,23 +132,30 @@ class PlanedMaintenanceViewModel: ObservableObject {
         _ = maintenanceRepository?.deleteRecord(id: recordToDelete.id)
 
         if recordToDelete.when != nil {
-            let delayedNotification = delayedNotificationsRepo?.getRecordByMaintenanceId(recordToDelete.id)
-            guard let delayedNotification = delayedNotification else {
+            guard let delayedNotification = delayedNotificationsRepo?.getRecordByMaintenanceId(recordToDelete.id),
+                  let notificationRecordId = delayedNotification.id
+            else {
                 return
             }
 
             notificationsService.cancelNotification(delayedNotification.notificationId)
-            _ = delayedNotificationsRepo?.deleteRecord(id: delayedNotification.id!)
+            _ = delayedNotificationsRepo?.deleteRecord(id: notificationRecordId)
         }
     }
 
     func updateMaintenanceRecord(_ record: PlannedMaintenance) {
         _ = maintenanceRepository?.updateRecord(record)
 
+        guard let recordId = record.id else {
+            return
+        }
+
         /// Cancel existing notification if any
-        if let existingNotification = delayedNotificationsRepo?.getRecordByMaintenanceId(record.id!) {
+        if let existingNotification = delayedNotificationsRepo?.getRecordByMaintenanceId(recordId),
+           let existingNotificationId = existingNotification.id
+        {
             notificationsService.cancelNotification(existingNotification.notificationId)
-            _ = delayedNotificationsRepo?.deleteRecord(id: existingNotification.id!)
+            _ = delayedNotificationsRepo?.deleteRecord(id: existingNotificationId)
         }
 
         /// Schedule new notification if date is set
@@ -163,7 +169,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
                 DelayedNotification(
                     when: when,
                     notificationId: notificationId,
-                    maintenanceRecord: record.id!,
+                    maintenanceRecord: recordId,
                     carId: record.carId
                 )
             )

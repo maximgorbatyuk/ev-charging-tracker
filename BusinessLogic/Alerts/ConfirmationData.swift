@@ -17,8 +17,8 @@ class ConfirmationData: ObservableObject {
     
     @Published var title: String
     @Published var message: String
-    @Published var confirmButtonTitle: String = "Confirm"
-    @Published var cancelButtonTitle: String = "Cancel"
+    @Published var confirmButtonTitle: String = L("Confirm")
+    @Published var cancelButtonTitle: String = L("Cancel")
     @Published var action: () -> Void
     @Published var showDialog = true
     
@@ -27,8 +27,8 @@ class ConfirmationData: ObservableObject {
         message: String,
         action: @escaping () -> Void,
         showDialog: Bool = true,
-        confirmButtonTitle: String = "Confirm",
-        cancelButtonTitle: String = "Cancel") {
+        confirmButtonTitle: String = L("Confirm"),
+        cancelButtonTitle: String = L("Cancel")) {
         self.title = title
         self.message = message
         self.action = action

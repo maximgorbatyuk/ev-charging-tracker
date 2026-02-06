@@ -164,11 +164,12 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     }
 
     func deleteMaintenanceRelatedNotificationIfExists(maintenanceRecordId: Int64) -> Void {
-        let recordToDelete = getRecordByMaintenanceId(maintenanceRecordId)
-        if (recordToDelete == nil) {
+        guard let record = getRecordByMaintenanceId(maintenanceRecordId),
+              let recordId = record.id
+        else {
             return
         }
 
-        _ = deleteRecord(id: recordToDelete!.id!)
+        _ = deleteRecord(id: recordId)
     }
 }

@@ -48,20 +48,21 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                     deleteConfirmationAlert()
                 }
                 .sheet(isPresented: $showingAddMaintenanceRecord) {
-                    let selectedCar = viewModel.selectedCarForExpenses!
-                    AddMaintenanceRecordView(
-                        selectedCar: selectedCar,
-                        onAdd: { newRecord in
-                            analytics.trackEvent("maintenance_record_added", properties: [
-                                "screen": "planned_maintenance_screen"
-                            ])
+                    if let selectedCar = viewModel.selectedCarForExpenses {
+                        AddMaintenanceRecordView(
+                            selectedCar: selectedCar,
+                            onAdd: { newRecord in
+                                analytics.trackEvent("maintenance_record_added", properties: [
+                                    "screen": "planned_maintenance_screen"
+                                ])
 
-                            viewModel.addNewMaintenanceRecord(newRecord: newRecord)
+                                viewModel.addNewMaintenanceRecord(newRecord: newRecord)
 
-                            loadData()
-                            onPlannedMaintenaceRecordsUpdated()
-                        }
-                    )
+                                loadData()
+                                onPlannedMaintenaceRecordsUpdated()
+                            }
+                        )
+                    }
                 }
                 .sheet(item: $recordToEdit) { record in
                     if let selectedCar = viewModel.selectedCarForExpenses {

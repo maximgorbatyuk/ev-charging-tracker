@@ -20,14 +20,15 @@ class MainTabViewModel {
     }
 
     func getPendingMaintenanceRecords() -> Int {
-        let selectedCarForExpenses = db.carRepository?.getSelectedForExpensesCar()
-        if (selectedCarForExpenses == nil) {
+        guard let selectedCar = db.carRepository?.getSelectedForExpensesCar(),
+              let carId = selectedCar.id
+        else {
             return 0
         }
 
         let result = db.plannedMaintenanceRepository?.getPendingMaintenanceRecords(
-            carId: selectedCarForExpenses!.id!,
-            currentOdometer: selectedCarForExpenses!.currentMileage,
+            carId: carId,
+            currentOdometer: selectedCar.currentMileage,
             currentDate: Date()) ?? 0
 
         return result
