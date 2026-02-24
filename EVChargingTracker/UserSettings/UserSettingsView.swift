@@ -735,7 +735,7 @@ struct UserSettingsView: SwiftUICore.View {
                     viewModel.importError = error.localizedDescription
                 }
             }
-            .alert(L("Export Error"), isPresented: .constant(viewModel.exportError != nil)) {
+            .alert(L("Export Error"), isPresented: isExportErrorPresented) {
                 Button(L("OK")) {
                     viewModel.exportError = nil
                 }
@@ -744,7 +744,7 @@ struct UserSettingsView: SwiftUICore.View {
                     Text(error)
                 }
             }
-            .alert(L("Import Error"), isPresented: .constant(viewModel.importError != nil)) {
+            .alert(L("Import Error"), isPresented: isImportErrorPresented) {
                 Button(L("OK")) {
                     viewModel.importError = nil
                 }
@@ -768,6 +768,32 @@ struct UserSettingsView: SwiftUICore.View {
                 }
             }
         }
+    }
+
+    private var isExportErrorPresented: SwiftUI.Binding<Bool> {
+        SwiftUI.Binding(
+            get: {
+                viewModel.exportError != nil
+            },
+            set: { isPresented in
+                if !isPresented {
+                    viewModel.exportError = nil
+                }
+            }
+        )
+    }
+
+    private var isImportErrorPresented: SwiftUI.Binding<Bool> {
+        SwiftUI.Binding(
+            get: {
+                viewModel.importError != nil
+            },
+            set: { isPresented in
+                if !isPresented {
+                    viewModel.importError = nil
+                }
+            }
+        )
     }
 
     private func buildImportPreviewMessage(_ preview: ImportPreviewData) -> String {
