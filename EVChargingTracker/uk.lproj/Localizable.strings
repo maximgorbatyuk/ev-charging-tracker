@@ -344,3 +344,22 @@
 "Overdue" = "Прострочено";
 "Scheduled" = "Заплановано";
 
+/* Share Extension */
+"share.title" = "Зберегти в EV Tracker";
+"share.cancel" = "Скасувати";
+"share.save" = "Зберегти";
+"share.section.content" = "Спільний вміст";
+"share.section.car" = "Автомобіль";
+"share.car_picker" = "Автомобіль";
+"share.car_picker.placeholder" = "Оберіть автомобіль";
+"share.section.type" = "Тип витрат";
+"share.type_picker" = "Тип";
+"share.section.notes" = "Нотатки";
+"share.no_cars.title" = "Немає автомобілів";
+"share.no_cars.message" = "Спочатку додайте автомобіль у EVChargingTracker, потім спробуйте знову.";
+"share.error.no_car_selected" = "Будь ласка, оберіть автомобіль.";
+"share.error.save_failed" = "Не вдалося зберегти. Спробуйте ще раз.";
+"share.migration_required.title" = "Потрібне налаштування";
+"share.migration_required.message" = "Відкрийте EVChargingTracker один раз для завершення налаштування, потім спробуйте знову.";
+"share.migration_required.dismiss" = "OK";
+

@@ -40,15 +40,15 @@ class DatabaseManager : DatabaseManagerProtocol {
     private(set) var isInitialized: Bool = false
     
     private init() {
-       
+
         self.logger = Logger(subsystem: "com.evchargingtracker.database", category: "DatabaseManager")
 
+        // Migrate database from Documents to App Group container (one-time, safe)
+        DatabaseMigrationHelper.migrateToAppGroupIfNeeded()
+
         do {
-            let path = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory, .userDomainMask, true
-            ).first!
-            
-            let dbPath = "\(path)/tesla_charging.sqlite3"
+            let dbURL = AppGroupContainer.databaseURL
+            let dbPath = dbURL.path
             logger.debug("Database path: \(dbPath)")
 
             self.db = try Connection(dbPath)

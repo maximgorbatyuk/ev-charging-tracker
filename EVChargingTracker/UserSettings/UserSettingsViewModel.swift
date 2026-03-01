@@ -256,6 +256,23 @@ class UserSettingsViewModel: ObservableObject {
                 developerMode.isDeveloperModeEnabled
     }
 
+    func resetMigrationFlag() {
+        guard isDevelopmentMode() else {
+            logger.info("Attempt to reset migration flag in non-development mode. Operation aborted.")
+            return
+        }
+        DatabaseMigrationHelper.resetMigrationFlag()
+        logger.info("Migration flag reset via developer tools")
+    }
+
+    func getMigrationStatus() -> String {
+        let migrated = DatabaseMigrationHelper.isMigrationCompleted()
+        let legacyExists = AppGroupContainer.legacyDatabaseExists
+        let sharedConfigured = AppGroupContainer.isConfigured
+
+        return "Migrated: \(migrated ? "Yes" : "No") | Legacy DB: \(legacyExists ? "Exists" : "None") | App Group: \(sharedConfigured ? "OK" : "N/A")"
+    }
+
     func deleteAllData() -> Void {
         if (!isDevelopmentMode()) {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")

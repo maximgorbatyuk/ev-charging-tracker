@@ -348,3 +348,22 @@
 "Overdue" = "Gecikmiş";
 "Scheduled" = "Planlandı";
 
+/* Share Extension */
+"share.title" = "EV Tracker'a Kaydet";
+"share.cancel" = "İptal";
+"share.save" = "Kaydet";
+"share.section.content" = "Paylaşılan İçerik";
+"share.section.car" = "Araç";
+"share.car_picker" = "Araç";
+"share.car_picker.placeholder" = "Bir araç seçin";
+"share.section.type" = "Gider Türü";
+"share.type_picker" = "Tür";
+"share.section.notes" = "Notlar";
+"share.no_cars.title" = "Araç Yok";
+"share.no_cars.message" = "Önce EVChargingTracker'da bir araç ekleyin, ardından tekrar paylaşmayı deneyin.";
+"share.error.no_car_selected" = "Lütfen bir araç seçin.";
+"share.error.save_failed" = "Kaydedilemedi. Lütfen tekrar deneyin.";
+"share.migration_required.title" = "Kurulum Gerekli";
+"share.migration_required.message" = "Kurulumu tamamlamak için EVChargingTracker'ı bir kez açın, ardından tekrar deneyin.";
+"share.migration_required.dismiss" = "Tamam";
+

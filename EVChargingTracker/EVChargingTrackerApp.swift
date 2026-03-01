@@ -20,6 +20,11 @@ struct EVChargingTrackerApp: App {
     @State private var isAppReady = false
     private var analytics = AnalyticsService.shared
 
+    init() {
+        // Warm up DatabaseManager early so migration runs before any DB-backed UI state
+        _ = DatabaseManager.shared
+    }
+
     var body: some Scene {
         WindowGroup {
             ZStack {

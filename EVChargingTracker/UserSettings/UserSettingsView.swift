@@ -656,6 +656,41 @@ struct UserSettingsView: SwiftUICore.View {
                             }
                         }
                         .buttonStyle(.plain)
+
+                        // Migration diagnostics
+                        HStack {
+                            Image(systemName: "internaldrive")
+                                .foregroundColor(.cyan)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Migration Status")
+                                    .foregroundColor(.primary)
+                                Text(viewModel.getMigrationStatus())
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.leading, 4)
+                        }
+
+                        Button(action: {
+                            confirmationModalDialogData = ConfirmationData(
+                                title: "Reset Migration Flag?",
+                                message: "This will reset the App Group migration marker. The migration will run again on next app launch. Use this only for QA testing.",
+                                action: {
+                                    viewModel.resetMigrationFlag()
+                                }
+                            )
+                        }) {
+                            HStack {
+                                Image(systemName: "arrow.counterclockwise")
+                                    .foregroundColor(.orange)
+
+                                Text("Reset Migration Flag")
+                                    .padding(.leading, 4)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }

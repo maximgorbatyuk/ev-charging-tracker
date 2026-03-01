@@ -349,3 +349,22 @@
 "Overdue" = "Überfällig";
 "Scheduled" = "Geplant";
 
+/* Share Extension */
+"share.title" = "In EV Tracker speichern";
+"share.cancel" = "Abbrechen";
+"share.save" = "Speichern";
+"share.section.content" = "Geteilter Inhalt";
+"share.section.car" = "Auto";
+"share.car_picker" = "Auto";
+"share.car_picker.placeholder" = "Auto auswählen";
+"share.section.type" = "Ausgabenart";
+"share.type_picker" = "Art";
+"share.section.notes" = "Notizen";
+"share.no_cars.title" = "Keine Autos";
+"share.no_cars.message" = "Füge zuerst ein Auto in EVChargingTracker hinzu und versuche es dann erneut.";
+"share.error.no_car_selected" = "Bitte wähle ein Auto aus.";
+"share.error.save_failed" = "Speichern fehlgeschlagen. Bitte versuche es erneut.";
+"share.migration_required.title" = "Einrichtung erforderlich";
+"share.migration_required.message" = "Öffne EVChargingTracker einmal, um die Einrichtung abzuschließen, und versuche es dann erneut.";
+"share.migration_required.dismiss" = "OK";
+

@@ -355,3 +355,22 @@
 "Overdue" = "Мерзімі өтті";
 "Scheduled" = "Жоспарланған";
 
+/* Share Extension */
+"share.title" = "EV Tracker-ге сақтау";
+"share.cancel" = "Болдырмау";
+"share.save" = "Сақтау";
+"share.section.content" = "Бөлісілген мазмұн";
+"share.section.car" = "Көлік";
+"share.car_picker" = "Көлік";
+"share.car_picker.placeholder" = "Көлікті таңдаңыз";
+"share.section.type" = "Шығын түрі";
+"share.type_picker" = "Түрі";
+"share.section.notes" = "Жазбалар";
+"share.no_cars.title" = "Көлік жоқ";
+"share.no_cars.message" = "Алдымен EVChargingTracker-де көлік қосыңыз, содан кейін қайта бөлісіп көріңіз.";
+"share.error.no_car_selected" = "Көлікті таңдаңыз.";
+"share.error.save_failed" = "Сақтау мүмкін болмады. Қайта көріңіз.";
+"share.migration_required.title" = "Баптау қажет";
+"share.migration_required.message" = "Баптауды аяқтау үшін EVChargingTracker-ді бір рет ашыңыз, содан кейін қайта көріңіз.";
+"share.migration_required.dismiss" = "Жарайды";
+

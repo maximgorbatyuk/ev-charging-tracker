@@ -348,3 +348,22 @@
 "Overdue" = "Просрочено";
 "Scheduled" = "Запланировано";
 
+/* Share Extension */
+"share.title" = "Сохранить в EV Tracker";
+"share.cancel" = "Отмена";
+"share.save" = "Сохранить";
+"share.section.content" = "Общий контент";
+"share.section.car" = "Автомобиль";
+"share.car_picker" = "Автомобиль";
+"share.car_picker.placeholder" = "Выберите автомобиль";
+"share.section.type" = "Тип расхода";
+"share.type_picker" = "Тип";
+"share.section.notes" = "Заметки";
+"share.no_cars.title" = "Нет автомобилей";
+"share.no_cars.message" = "Сначала добавьте автомобиль в EVChargingTracker, затем попробуйте снова.";
+"share.error.no_car_selected" = "Пожалуйста, выберите автомобиль.";
+"share.error.save_failed" = "Не удалось сохранить. Попробуйте ещё раз.";
+"share.migration_required.title" = "Требуется настройка";
+"share.migration_required.message" = "Откройте EVChargingTracker один раз для завершения настройки, затем попробуйте снова.";
+"share.migration_required.dismiss" = "OK";
+
