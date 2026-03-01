@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct ShareFormView: View {
+struct ShareFormView: SwiftUI.View {
 
     @ObservedObject var viewModel: ShareFormViewModel
 
-    var body: some View {
+    var body: some SwiftUI.View {
         NavigationStack {
             Group {
                 if viewModel.hasCars {
@@ -40,7 +40,7 @@ struct ShareFormView: View {
 
     // MARK: - Form content
 
-    private var formContent: some View {
+    private var formContent: some SwiftUI.View {
         Form {
             // Content preview
             if let input = viewModel.sharedInput {
@@ -99,7 +99,7 @@ struct ShareFormView: View {
     // MARK: - Content preview
 
     @ViewBuilder
-    private func contentPreview(input: SharedInput) -> some View {
+    private func contentPreview(input: SharedInput) -> some SwiftUI.View {
         switch input.kind {
         case .link:
             if let url = input.url {
@@ -126,7 +126,7 @@ struct ShareFormView: View {
 
     // MARK: - No cars view
 
-    private var noCarsView: some View {
+    private var noCarsView: some SwiftUI.View {
         VStack(spacing: 16) {
             Image(systemName: "car.fill")
                 .font(.system(size: 48))

@@ -230,6 +230,26 @@ iCloud services: `CloudDocuments` (not CloudKit)
 - **Developer mode**: 15-tap unlock on app version row via `DeveloperModeManager`.
 - **App update check**: `AppVersionChecker` compares installed vs App Store version; result shown in Settings.
 
+## Share Extension Gotchas
+
+Known pitfalls when working with the ShareExtension target (`BusinessLogic/` is shared between the main app and extension):
+
+### `View` type ambiguity
+`DatabaseManager.swift` uses `@_exported import SQLite`, which makes `SQLite.View` visible globally. In any SwiftUI file compiled for the extension, bare `View` is ambiguous. Always use `SwiftUI.View` (or `SwiftUICore.View`) explicitly — see `ShareFormView.swift` and `UserSettingsView.swift`.
+
+### Extension-unavailable APIs
+Files in `BusinessLogic/` that use APIs unavailable in app extensions must be excluded from the ShareExtension target via `PBXFileSystemSynchronizedBuildFileExceptionSet` in `project.pbxproj`. Currently excluded:
+- `Services/AnalyticsService.swift` — imports Firebase, which the extension doesn't link
+- `Services/BackgroundTaskManager.swift` — uses `BGTaskScheduler`, unavailable in extensions
+
+When adding new services to `BusinessLogic/` that use extension-restricted APIs (`BGTaskScheduler`, `FirebaseAnalytics`, etc.), add them to the exception set.
+
+### `Bundle.main` in extensions
+`Bundle.main` in an app extension points to the extension's `.appex` bundle, not the containing app. `LocalizationManager` handles this by detecting `.appex` and navigating to the containing app bundle for `.lproj` resources. If you add other code that reads from `Bundle.main` (e.g., `Info.plist` keys), be aware it may return different values in the extension context. `EnvironmentService.getAppGroupIdentifier()` works because `AppGroupIdentifier` is duplicated in both the main app and extension `Info.plist` files.
+
+### Database path
+The SQLite database lives in the shared App Group container (not Documents). `DatabaseManager` calls `DatabaseMigrationHelper.migrateToAppGroupIfNeeded()` on first access to move existing databases. The migration flag is stored in shared `UserDefaults(suiteName:)` so both the app and extension can read it.
+
 ## CI/CD
 
 - **Xcode Cloud**: `ci_scripts/ci_post_clone.sh` generates `GoogleService-Info.plist` from secrets (`FIREBASE_API_KEY`, `FIREBASE_GCM_SENDER_ID`, `FIREBASE_APP_ID`)
