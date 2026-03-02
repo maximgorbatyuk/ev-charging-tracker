@@ -54,10 +54,9 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
 
             floatingAddButton
         }
-        .sheet(isPresented: $showCreateChooser) {
+        .sheet(isPresented: $showCreateChooser, onDismiss: handleCreateChooserDismiss) {
             CarQuickAddSheet { option in
                 pendingAddAction = option.route
-                path.append(option.route)
             }
         }
     }
@@ -73,6 +72,12 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
         case .ideas:
             triggerAddIdea = true
         }
+    }
+
+    private func handleCreateChooserDismiss() {
+        guard let route = pendingAddAction else { return }
+
+        path.append(route)
     }
 
     private var floatingAddButton: some SwiftUI.View {

@@ -149,6 +149,10 @@ struct ShareFormView: SwiftUI.View {
 
     private var documentFields: some SwiftUI.View {
         Group {
+            Section(header: Text(L("Rename document"))) {
+                TextField(L("New title"), text: $viewModel.documentTitle)
+            }
+
             if let input = viewModel.sharedInput, let fileName = input.fileName {
                 Section(header: Text(L("share.section.document_info"))) {
                     HStack {

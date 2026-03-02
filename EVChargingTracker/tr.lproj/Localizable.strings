@@ -422,9 +422,11 @@
 "Preview" = "Önizleme";
 "File not found" = "Dosya bulunamadı";
 "Unable to load image" = "Görsel yüklenemedi";
+"document.file_path" = "Dosya yolu";
+"document.file_size" = "Dosya boyutu";
+"documents.list.interaction_hint" = "Görüntülemek için belgeye dokunun. Düzenlemek veya silmek için sola kaydırın.";
 
 // Import preview - data types
 "documents" = "belge";
 "ideas" = "fikir";
 "import.documents_metadata_only" = "Not: Belge dosyaları yedeklemeye dahil değildir. Yalnızca belge meta verileri geri yüklenecektir.";
-

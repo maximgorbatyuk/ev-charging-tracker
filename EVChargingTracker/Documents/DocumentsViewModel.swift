@@ -115,8 +115,9 @@ class DocumentsViewModel: ObservableObject {
     }
 
     func renameDocument(_ document: CarDocument, newTitle: String) {
+        let trimmedTitle = newTitle.trimmingCharacters(in: .whitespacesAndNewlines)
         let updated = document
-        updated.customTitle = newTitle.isEmpty ? nil : newTitle
+        updated.customTitle = trimmedTitle.isEmpty ? nil : trimmedTitle
         _ = documentsRepo?.updateRecord(updated)
         loadData()
     }

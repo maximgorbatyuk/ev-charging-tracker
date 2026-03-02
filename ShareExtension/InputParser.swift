@@ -17,9 +17,10 @@ class InputParser {
     private static let maxFileSizeBytes = 50 * 1024 * 1024 // 50 MB
 
     /// Parses NSExtensionItem attachments into a SharedInput.
-    /// Priority: URL → plain text → image → file.
+    /// Priority: image/file -> URL -> plain text.
     func parse(inputItems: [NSExtensionItem]) async -> SharedInput? {
         var suggestedTitle: String?
+        var providers: [NSItemProvider] = []
 
         for item in inputItems {
             // Collect title from attributedContentText
@@ -29,34 +30,53 @@ class InputParser {
             }
 
             guard let attachments = item.attachments else { continue }
+            providers.append(contentsOf: attachments)
+        }
 
-            for provider in attachments {
-                // Try URL first
-                if provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-                    if let input = await extractURL(from: provider, suggestedTitle: suggestedTitle) {
-                        return input
-                    }
+        for provider in providers {
+            if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+                if let input = await extractFileData(
+                    from: provider,
+                    typeIdentifier: UTType.image.identifier,
+                    suggestedTitle: suggestedTitle
+                ) {
+                    return input
                 }
+            }
 
-                // Then plain text
-                if provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
-                    if let input = await extractText(from: provider, suggestedTitle: suggestedTitle) {
-                        return input
-                    }
+            if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+                if let input = await extractFileData(
+                    from: provider,
+                    typeIdentifier: UTType.fileURL.identifier,
+                    suggestedTitle: suggestedTitle
+                ) {
+                    return input
                 }
+            }
 
-                // Then image
-                if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-                    if let input = await extractFileData(from: provider, typeIdentifier: UTType.image.identifier, suggestedTitle: suggestedTitle) {
-                        return input
-                    }
+            if provider.hasItemConformingToTypeIdentifier(UTType.data.identifier) {
+                if let input = await extractFileData(
+                    from: provider,
+                    typeIdentifier: UTType.data.identifier,
+                    suggestedTitle: suggestedTitle
+                ) {
+                    return input
                 }
+            }
+        }
 
-                // Then general file (PDF, etc.)
-                if provider.hasItemConformingToTypeIdentifier(UTType.data.identifier) {
-                    if let input = await extractFileData(from: provider, typeIdentifier: UTType.data.identifier, suggestedTitle: suggestedTitle) {
-                        return input
-                    }
+        for provider in providers {
+            if provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+                if let input = await extractURL(from: provider, suggestedTitle: suggestedTitle) {
+                    return input
+                }
+            }
+        }
+
+        for provider in providers {
+            if provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
+                if let input = await extractText(from: provider, suggestedTitle: suggestedTitle) {
+                    return input
                 }
             }
         }
@@ -71,6 +91,28 @@ class InputParser {
         do {
             let item = try await provider.loadItem(forTypeIdentifier: UTType.url.identifier)
             if let url = item as? URL {
+                if url.isFileURL {
+                    let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+                    let fileSize = attributes[.size] as? Int ?? 0
+                    guard fileSize <= Self.maxFileSizeBytes else {
+                        logger.warning("File URL too large: \(fileSize) bytes, limit: \(Self.maxFileSizeBytes)")
+                        return nil
+                    }
+
+                    let name = Self.sanitizeFileName(url.lastPathComponent)
+                    let tempURL = Self.copyToTempFile(from: url, name: name)
+                    logger.debug("URL payload is file URL: \(name) (\(fileSize) bytes)")
+                    return SharedInput(
+                        kind: .file,
+                        url: nil,
+                        text: nil,
+                        suggestedTitle: suggestedTitle,
+                        tempFileURL: tempURL ?? url,
+                        fileSize: Int64(fileSize),
+                        fileName: name
+                    )
+                }
+
                 logger.debug("Extracted URL: \(url.absoluteString)")
                 return SharedInput(
                     kind: .link,
