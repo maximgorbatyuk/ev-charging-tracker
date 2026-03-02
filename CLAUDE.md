@@ -36,26 +36,32 @@ EVChargingTracker/
 ├── BusinessLogic/                          # Shared business logic layer
 │   ├── Alerts/                             # ConfirmationData
 │   ├── Database/
-│   │   ├── Migrations/                     # Schema migrations (v3–v6)
+│   │   ├── Migrations/                     # Schema migrations (v3–v7)
 │   │   ├── DatabaseManager.swift           # DatabaseManager + DatabaseManagerProtocol
 │   │   ├── CarRepository.swift
 │   │   ├── DelayedNotificationsRepository.swift
+│   │   ├── DocumentsRepository.swift
 │   │   ├── ExpensesRepository.swift
+│   │   ├── IdeasRepository.swift
 │   │   ├── MigrationsRepository.swift
 │   │   ├── PlannedMaintenanceRepository.swift
 │   │   └── UserSettingsRepository.swift
 │   ├── Errors/                             # GlobalLogger, RuntimeError
 │   ├── Extensions/                         # DateExtensions
-│   ├── Models/                             # Car, Currency, Expense, PlannedMaintenance, etc.
-│   ├── Services/                           # Analytics, Backup, Localization, etc.
+│   ├── Models/                             # Car, CarDocument, Currency, Expense, Idea, PlannedMaintenance, etc.
+│   ├── Services/                           # Analytics, Backup, DocumentService, Localization, etc.
 │   └── ValueObjects/                       # CarDto, SharedStatsData
 ├── EVChargingTracker/                      # Main app target
+│   ├── CarDetails/                         # Car tab: mileage/wheels info, maintenance/documents/ideas previews
 │   ├── ChargingSessions/                   # Stats tab: session list, charts, CO2
 │   ├── Config/                             # xcconfig files (Base, Debug, Release)
+│   ├── Developer/                          # Developer mode: document storage browser
+│   ├── Documents/                          # Car documents: add, list, detail, file viewer
 │   ├── Expenses/                           # Expenses tab: paginated, filtered by type
+│   ├── Ideas/                              # Car ideas/links: add, list, detail
 │   ├── LaunchScreen/                       # Branded launch screen
 │   ├── Onboarding/                         # First-launch onboarding flow
-│   ├── PlanedMaintenance/                  # Maintenance tab: date/odometer triggers
+│   ├── PlanedMaintenance/                  # Planned maintenance: date/odometer triggers
 │   ├── Shared/                             # Reusable UI components
 │   ├── UserSettings/                       # Settings tab: car mgmt, backup, prefs
 │   ├── EVChargingTrackerApp.swift          # App entry point
@@ -79,8 +85,10 @@ EVChargingTracker/
 |-----|------|------|-------------|
 | Stats | `ChargingSessionsView` | `bolt.car.fill` | Charging sessions, cost/consumption charts, CO2 savings |
 | Expenses | `ExpensesView` | `dollarsign.circle` | All expenses (paginated, filtered by type, sortable) |
-| Maintenance | `PlanedMaintenanceView` | `hammer.fill` | Scheduled maintenance with odometer/date triggers |
+| Car | `CarDetailsView` | `car.fill` | Car info, maintenance preview, documents, ideas (badge for pending maintenance) |
 | Settings | `UserSettingsView` | `gear` | Car management, currency, language, backup, about |
+
+The Car tab uses `CarDetailsFlowContainerView` with `NavigationStack` and `CarFlowRoute` enum for sub-navigation to `.maintenance`, `.documents`, and `.ideas` full-list views.
 
 ## Database
 
@@ -95,6 +103,8 @@ All in `BusinessLogic/Database/`. Each has a protocol (e.g., `CarRepositoryProto
 | `ExpensesRepository` | CRUD for charging sessions and expenses, filtering, pagination |
 | `CarRepository` | CRUD for vehicles (name, battery, mileage, wheel sizes) |
 | `PlannedMaintenanceRepository` | CRUD for maintenance schedules |
+| `DocumentsRepository` | CRUD for car documents (file metadata, per-car storage) |
+| `IdeasRepository` | CRUD for car ideas/links (title, URL, notes, per-car) |
 | `DelayedNotificationsRepository` | CRUD for notification queue |
 | `UserSettingsRepository` | User prefs (language, currency, user ID) |
 | `MigrationsRepository` | Schema version tracking |
@@ -124,6 +134,7 @@ init(db: DatabaseManagerProtocol = DatabaseManager.shared) { ... }
 | 4 | `Migration_20251104_CreatePlannedMaintenanceTable` | Create `planned_maintenance` table |
 | 5 | `Migration_20251114_CreateDelayedNotificationTable` | Create `delayed_notifications` table |
 | 6 | `Migration_20250131_AddWheelDetailsToCarsTable` | Add wheel size columns to `cars` |
+| 7 | `Migration_20260301_CreateDocumentsAndIdeasTables` | Create `documents` and `ideas` tables |
 
 ## Models
 
@@ -163,6 +174,38 @@ class Car: Codable, Identifiable {
 }
 ```
 
+### CarDocument (class, Codable)
+
+```swift
+class CarDocument: Identifiable, Codable {
+    var id: Int64?
+    var carId: Int64
+    var customTitle: String?
+    var fileName: String
+    var filePath: String?
+    var fileType: String       // file extension (pdf, jpg, etc.)
+    var fileSize: Int64
+    var createdAt: Date
+    var updatedAt: Date
+}
+```
+
+Files stored on disk via `DocumentService` at `AppGroup/documents/{carId}/{fileName}`.
+
+### Idea (class, Codable)
+
+```swift
+class Idea: Identifiable, Codable {
+    var id: Int64?
+    var carId: Int64
+    var title: String
+    var url: String?           // http/https only (validated)
+    var descriptionText: String?
+    var createdAt: Date
+    var updatedAt: Date
+}
+```
+
 ### Key Enums
 
 - `ChargerType`: home3kW, home7kW, home11kW, destination22kW, publicFast50kW, publicRapid100kW, superchargerV2/V3/V4, other
@@ -181,6 +224,7 @@ All in `BusinessLogic/Services/`:
 | `AppVersionChecker` | App Store version check via iTunes lookup API |
 | `BackgroundTaskManager` | BGTaskScheduler for daily automatic iCloud backups |
 | `BackupService` | JSON export/import, iCloud Drive backups, safety backups |
+| `DocumentService` | File storage for car documents (save/delete/list in App Group container) |
 | `EnvironmentService` | Info.plist values (app store ID, dev name, build env, CO2 factor) |
 | `LocalizationManager` | Runtime language switching via `.lproj` bundles; defines global `L()` function |
 | `NetworkMonitor` | Connectivity checking |
@@ -229,6 +273,30 @@ iCloud services: `CloudDocuments` (not CloudKit)
 - **Launch screen**: `LaunchScreenView` shown for 0.8s before main content.
 - **Developer mode**: 15-tap unlock on app version row via `DeveloperModeManager`.
 - **App update check**: `AppVersionChecker` compares installed vs App Store version; result shown in Settings.
+- **Car Details flow**: `CarDetailsRootView` → sections (car info, maintenance, documents, ideas) → `CarDetailsFlowContainerView` handles sub-navigation via `CarFlowRoute`.
+- **Share Extension**: Accepts URLs, text, images, and files from other apps. Saves as expenses, ideas, or documents. Uses temp files (not in-memory data) with 50MB size limit. Shared DB via App Group.
+
+## Share Extension Gotchas
+
+The ShareExtension lives in `ShareExtension/` with `InputParser.swift`, `ShareFormView.swift`, `ShareFormViewModel.swift`, `ShareViewController.swift`, and `Models/SharedInput.swift`. It shares `BusinessLogic/` with the main app.
+
+Known pitfalls:
+
+### `View` type ambiguity
+`DatabaseManager.swift` uses `@_exported import SQLite`, which makes `SQLite.View` visible globally. In any SwiftUI file compiled for the extension, bare `View` is ambiguous. Always use `SwiftUI.View` (or `SwiftUICore.View`) explicitly — see `ShareFormView.swift` and `UserSettingsView.swift`.
+
+### Extension-unavailable APIs
+Files in `BusinessLogic/` that use APIs unavailable in app extensions must be excluded from the ShareExtension target via `PBXFileSystemSynchronizedBuildFileExceptionSet` in `project.pbxproj`. Currently excluded:
+- `Services/AnalyticsService.swift` — imports Firebase, which the extension doesn't link
+- `Services/BackgroundTaskManager.swift` — uses `BGTaskScheduler`, unavailable in extensions
+
+When adding new services to `BusinessLogic/` that use extension-restricted APIs (`BGTaskScheduler`, `FirebaseAnalytics`, etc.), add them to the exception set.
+
+### `Bundle.main` in extensions
+`Bundle.main` in an app extension points to the extension's `.appex` bundle, not the containing app. `LocalizationManager` handles this by detecting `.appex` and navigating to the containing app bundle for `.lproj` resources. If you add other code that reads from `Bundle.main` (e.g., `Info.plist` keys), be aware it may return different values in the extension context. `EnvironmentService.getAppGroupIdentifier()` works because `AppGroupIdentifier` is duplicated in both the main app and extension `Info.plist` files.
+
+### Database path
+The SQLite database lives in the shared App Group container (not Documents). `DatabaseManager` calls `DatabaseMigrationHelper.migrateToAppGroupIfNeeded()` on first access to move existing databases. The migration flag is stored in shared `UserDefaults(suiteName:)` so both the app and extension can read it.
 
 ## CI/CD
 

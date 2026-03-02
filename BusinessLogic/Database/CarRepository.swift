@@ -12,11 +12,17 @@ import os
 protocol CarRepositoryProtocol {
     func getSelectedForExpensesCar() -> Car?
     func getAllCars() -> [Car]
+    func getCarById(_ id: Int64) -> Car?
     func insert(_ car: Car) -> Int64?
+    func updateCar(car: Car) -> Bool
     func updateMilleage(_ car: Car) -> Bool
+    func markAllCarsAsNoTracking(carIdToExclude: Int64) -> Bool
+    func markCarAsSelectedForTracking(_ id: Int64) -> Bool
+    func selectCarForTracking(_ id: Int64) -> Bool
+    func delete(id: Int64) -> Bool
 }
 
-class CarRepository : CarRepositoryProtocol {
+class CarRepository: CarRepositoryProtocol {
     private let table: Table
     private let expensesTable: Table
 
@@ -35,7 +41,7 @@ class CarRepository : CarRepositoryProtocol {
     private let userSettingsRepository: UserSettingsRepository
     private var db: Connection
     private let logger: Logger
-    
+
     init(
         db: Connection,
         tableName: String,
@@ -83,7 +89,7 @@ class CarRepository : CarRepositoryProtocol {
         }
     }
 
-    func truncateTable() -> Void {
+    func truncateTable() {
         do {
             try db.run(table.delete())
             logger.info("Table truncated successfully")
@@ -142,22 +148,7 @@ class CarRepository : CarRepositoryProtocol {
         do {
             let query = table.filter(idColumn == id).limit(1)
             if let row = try db.pluck(query) {
-
-                let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
-
-                return Car(
-                    id: row[idColumn],
-                    name: row[nameColumn],
-                    selectedForTracking: row[selectedForTrackingColumn],
-                    batteryCapacity: row[batteryCapacityColumn],
-                    expenseCurrency: currency,
-                    currentMileage: row[currentMileageColumn],
-                    initialMileage: row[initialMileageColumn],
-                    milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn],
-                    frontWheelSize: row[frontWheelSizeColumn],
-                    rearWheelSize: row[rearWheelSizeColumn]
-                )
+                return mapRowToCar(row)
             }
         } catch {
             logger.error("Failed to fetch car by id \(id): \(error)")
@@ -230,26 +221,37 @@ class CarRepository : CarRepositoryProtocol {
         }
     }
 
-    func delete(id: Int64) -> Bool {
-        
-        let carExpenses = expensesTable.filter(Expression<Int64>("car_id") == id)
+    func selectCarForTracking(_ id: Int64) -> Bool {
         do {
-            let deletionResult = try db.run(carExpenses.delete())
-            if (deletionResult > 0) {
-                logger.info("Deleted \(deletionResult) related expenses for car id: \(id)")
+            try db.transaction {
+                let othersToUpdate = table.filter(idColumn != id)
+                try db.run(othersToUpdate.update(selectedForTrackingColumn <- false))
+
+                let carToUpdate = table.filter(idColumn == id)
+                try db.run(carToUpdate.update(selectedForTrackingColumn <- true))
             }
+            return true
         } catch {
-            logger.error("Failed to delete related expenses: \(error)")
+            logger.error("Failed to select car for tracking in transaction: \(error)")
             return false
         }
+    }
 
-        let carCommand = table.filter(idColumn == id)
-
+    func delete(id: Int64) -> Bool {
         do {
-            let deleted = try db.run(carCommand.delete())
-            return deleted > 0
+            try db.transaction {
+                let carExpenses = expensesTable.filter(Expression<Int64>("car_id") == id)
+                let deletionResult = try db.run(carExpenses.delete())
+                if deletionResult > 0 {
+                    logger.info("Deleted \(deletionResult) related expenses for car id: \(id)")
+                }
+
+                let carCommand = table.filter(idColumn == id)
+                try db.run(carCommand.delete())
+            }
+            return true
         } catch {
-            logger.error("Delete failed: \(error)")
+            logger.error("Delete car failed: \(error)")
             return false
         }
     }
@@ -267,24 +269,7 @@ class CarRepository : CarRepositoryProtocol {
         let query = table.order(createdAtColumn.desc).limit(1)
         do {
             if let row = try db.pluck(query) {
-                let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
-
-                let rowId = row[idColumn]
-                return Car(
-                    id: rowId,
-                    name: row[nameColumn],
-                    selectedForTracking: row[selectedForTrackingColumn],
-                    batteryCapacity: row[batteryCapacityColumn],
-                    expenseCurrency: currency,
-                    currentMileage: row[currentMileageColumn],
-                    initialMileage: row[initialMileageColumn],
-                    milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn],
-                    frontWheelSize: row[frontWheelSizeColumn],
-                    rearWheelSize: row[rearWheelSizeColumn]
-                )
-            } else {
-                return nil
+                return mapRowToCar(row)
             }
         } catch {
             logger.error("Failed to fetch latest added car: \(error)")
@@ -294,66 +279,45 @@ class CarRepository : CarRepositoryProtocol {
     }
 
     func getAllCars() -> [Car] {
-        var cars: [Car] = []
         do {
             let allCars = try db.prepare(table)
-            for row in allCars {
-
-                let currency = Currency(rawValue: row[expenseCurrencyColumn]) ?? userSettingsRepository.fetchCurrency()
-
-                let rowId = row[idColumn]
-                let carItems = Car(
-                    id: rowId,
-                    name: row[nameColumn],
-                    selectedForTracking: row[selectedForTrackingColumn],
-                    batteryCapacity: row[batteryCapacityColumn],
-                    expenseCurrency: currency,
-                    currentMileage: row[currentMileageColumn],
-                    initialMileage: row[initialMileageColumn],
-                    milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn],
-                    frontWheelSize: row[frontWheelSizeColumn],
-                    rearWheelSize: row[rearWheelSizeColumn]
-                )
-                cars.append(carItems)
-            }
-        }
-        catch {
+            return allCars.map { mapRowToCar($0) }
+        } catch {
             logger.error("Failed to fetch cars: \(error)")
+            return []
         }
-
-        return cars
     }
 
     func getSelectedForExpensesCar() -> Car? {
         do {
             let query = table.filter(selectedForTrackingColumn == true).limit(1)
             if let row = try db.pluck(query) {
-
-                var expenseCurrency = Currency(rawValue: row[expenseCurrencyColumn])
-                if (expenseCurrency == nil) {
-                    expenseCurrency = userSettingsRepository.fetchCurrency()
-                }
-
-                return Car(
-                    id: row[idColumn],
-                    name: row[nameColumn],
-                    selectedForTracking: row[selectedForTrackingColumn],
-                    batteryCapacity: row[batteryCapacityColumn],
-                    expenseCurrency: expenseCurrency ?? .kzt,
-                    currentMileage: row[currentMileageColumn],
-                    initialMileage: row[initialMileageColumn],
-                    milleageSyncedAt: row[milleageSyncedAtColumn],
-                    createdAt: row[createdAtColumn],
-                    frontWheelSize: row[frontWheelSizeColumn],
-                    rearWheelSize: row[rearWheelSizeColumn]
-                )
+                return mapRowToCar(row)
             }
         } catch {
             logger.error("Failed to fetch selected car for expenses: \(error)")
         }
 
         return nil
+    }
+
+    private func mapRowToCar(_ row: Row) -> Car {
+        let currency = Currency(rawValue: row[expenseCurrencyColumn])
+            ?? userSettingsRepository.fetchCurrency()
+
+        return Car(
+            id: row[idColumn],
+            name: row[nameColumn],
+            selectedForTracking: row[selectedForTrackingColumn],
+            batteryCapacity: row[batteryCapacityColumn],
+            expenseCurrency: currency,
+            currentMileage: row[currentMileageColumn],
+            initialMileage: row[initialMileageColumn],
+            milleageSyncedAt: row[milleageSyncedAtColumn],
+            createdAt: row[createdAtColumn],
+            frontWheelSize: row[frontWheelSizeColumn],
+            rearWheelSize: row[rearWheelSizeColumn]
+        )
     }
 
 }

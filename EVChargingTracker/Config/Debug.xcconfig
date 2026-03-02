@@ -8,3 +8,5 @@
 #include "Base.xcconfig"
 
 BUILD_ENVIRONMENT = dev
+APP_GROUP_IDENTIFIER = group.dev.mgorbatyuk.evchargetracker.dev
+SHARE_EXTENSION_BUNDLE_ID = mgorbatyuk.dev.EVChargeTrackerDebug.ShareExtension

@@ -151,6 +151,8 @@
 "Car mileage" = "Araba kilometresi";
 "Initial (km)" = "İlk (km)";
 "Current (km)" = "Mevcut (km)";
+"Total mileage" = "Toplam kilometre";
+"No car selected" = "Araç seçilmedi";
 "Remain at odometer" = "Kilometrede hatırlat";
 "Maintenance reminder" = "Bakım hatırlatıcı";
 "Some maintenance tasks due" = "Some maintenance tasks due";
@@ -183,6 +185,10 @@
 "onboarding.monitor_costs__subtitle" = "Elektrikli aracınıza elektrik ve diğer masraflar dahil ne kadar harcadığınızı görün";
 "onboarding.plan_maintenance" = "Bakım planlayın";
 "onboarding.plan_maintenance__subtitle" = "Elektrikli aracınızın bakım görevlerini planlayın ve hatırlatıcılar alın";
+"onboarding.save_documents" = "Belgeleri saklayın";
+"onboarding.save_documents__subtitle" = "Sigorta, ruhsat ve diğer önemli araç belgeleriniz her zaman elinizin altında";
+"onboarding.collect_ideas" = "Fikirleri toplayın";
+"onboarding.collect_ideas__subtitle" = "Aracınızla ilgili faydalı bağlantıları, notları ve araştırmaları tek bir yerde saklayın";
 "onboarding.view_stats" = "İstatistikleri görüntüle";
 "onboarding.view_stats__subtitle" = "Elektrikli aracınızın kilometre başına ne kadara mal olduğunu ve elektrikli araç kullanarak tasarruf ettiğiniz CO₂ miktarını görün";
 
@@ -347,4 +353,78 @@
 "Due Soon" = "Yakında";
 "Overdue" = "Gecikmiş";
 "Scheduled" = "Planlandı";
+
+/* Share Extension */
+"share.title" = "EV Tracker'a Kaydet";
+"share.cancel" = "İptal";
+"share.save" = "Kaydet";
+"share.section.content" = "Paylaşılan İçerik";
+"share.section.car" = "Araç";
+"share.car_picker" = "Araç";
+"share.car_picker.placeholder" = "Bir araç seçin";
+"share.section.type" = "Gider Türü";
+"share.type_picker" = "Tür";
+"share.section.notes" = "Notlar";
+"share.no_cars.title" = "Araç Yok";
+"share.no_cars.message" = "Önce EVChargingTracker'da bir araç ekleyin, ardından tekrar paylaşmayı deneyin.";
+"share.error.no_car_selected" = "Lütfen bir araç seçin.";
+"share.error.save_failed" = "Kaydedilemedi. Lütfen tekrar deneyin.";
+"share.section.entity_type" = "Farklı kaydet";
+"share.entity_picker" = "Tür";
+"share.entity.expense" = "Harcama";
+"share.entity.idea" = "Fikir";
+"share.entity.document" = "Belge";
+"share.section.document_info" = "Belge";
+"share.migration_required.title" = "Kurulum Gerekli";
+"share.migration_required.message" = "Kurulumu tamamlamak için EVChargingTracker'ı bir kez açın, ardından tekrar deneyin.";
+"share.migration_required.dismiss" = "Tamam";
+
+/* Car details - create chooser */
+"Create new" = "Yeni oluştur";
+"New maintenance record" = "Yeni bakım kaydı";
+"New document" = "Yeni belge";
+"New idea" = "Yeni fikir";
+"Documents" = "Belgeler";
+"Ideas" = "Fikirler";
+
+/* Car details - root screen */
+"Car details" = "Araç detayları";
+"See all" = "Tümünü gör";
+"No documents yet" = "Henüz belge yok";
+"No ideas yet" = "Henüz fikir yok";
+
+/* Ideas */
+"URL" = "URL";
+"Description" = "Açıklama";
+"Edit idea" = "Fikri düzenle";
+"idea.title.placeholder" = "Fikir başlığını girin";
+"idea.url.placeholder" = "https://ornek.com (isteğe bağlı)";
+"idea.title.required" = "Başlık gereklidir";
+"idea.url.invalid" = "Lütfen geçerli bir URL girin";
+"Add your first idea" = "İlk fikrinizi ekleyin";
+"Delete idea?" = "Fikri sil?";
+"Delete selected idea? This action cannot be undone." = "Seçili fikri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"Idea Details" = "Fikir Detayları";
+"Updated" = "Güncellendi";
+"Error" = "Hata";
+"OK" = "Tamam";
+
+/* Documents */
+"Import from" = "Şuradan içe aktar";
+"Files" = "Dosyalar";
+"Photos" = "Fotoğraflar";
+"Add your first document" = "İlk belgenizi ekleyin";
+"Delete document?" = "Belgeyi sil?";
+"Delete selected document? This action cannot be undone." = "Seçili belgeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"Rename document" = "Belgeyi yeniden adlandır";
+"New title" = "Yeni başlık";
+"Rename" = "Yeniden adlandır";
+"Preview" = "Önizleme";
+"File not found" = "Dosya bulunamadı";
+"Unable to load image" = "Görsel yüklenemedi";
+
+// Import preview - data types
+"documents" = "belge";
+"ideas" = "fikir";
+"import.documents_metadata_only" = "Not: Belge dosyaları yedeklemeye dahil değildir. Yalnızca belge meta verileri geri yüklenecektir.";
 

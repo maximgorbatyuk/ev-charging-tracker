@@ -14,14 +14,14 @@ class ConfirmationData: ObservableObject {
         message: "",
         action: {},
         showDialog: false)
-    
+
     @Published var title: String
     @Published var message: String
     @Published var confirmButtonTitle: String = L("Confirm")
     @Published var cancelButtonTitle: String = L("Cancel")
     @Published var action: () -> Void
     @Published var showDialog = true
-    
+
     init(
         title: String,
         message: String,

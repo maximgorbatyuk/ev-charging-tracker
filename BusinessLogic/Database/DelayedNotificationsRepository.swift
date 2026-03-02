@@ -15,7 +15,7 @@ protocol DelayedNotificationsRepositoryProtocol {
     func deleteRecord(id recordId: Int64) -> Bool
 }
 
-class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
+class DelayedNotificationsRepository: DelayedNotificationsRepositoryProtocol {
     private let table: Table
 
     private let id = Expression<Int64>("id")
@@ -91,7 +91,7 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
     }
 
     func insertRecord(_ record: DelayedNotification) -> Int64? {
-        
+
         do {
             let insert = table.insert(
                 whenColumn <- record.when,
@@ -119,14 +119,14 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
             return 0
         }
     }
-    
+
     func updateRecord(_ record: DelayedNotification) -> Bool {
         guard let recordId = record.id else {
             logger.error("Update failed: record id is nil")
             return false
         }
         let recordToUpdate = table.filter(id == recordId)
-        
+
         do {
             try db.run(recordToUpdate.update(
                 whenColumn <- record.when,
@@ -143,7 +143,7 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
 
     func deleteRecord(id recordId: Int64) -> Bool {
         let recordToDelete = table.filter(id == recordId)
-        
+
         do {
             try db.run(recordToDelete.delete())
             logger.info("Deleted record with id: \(recordId)")
@@ -154,7 +154,7 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
         }
     }
 
-    func truncateTable() -> Void {
+    func truncateTable() {
         do {
             try db.run(table.delete())
             logger.info("Table truncated successfully")
@@ -163,7 +163,7 @@ class DelayedNotificationsRepository : DelayedNotificationsRepositoryProtocol {
         }
     }
 
-    func deleteMaintenanceRelatedNotificationIfExists(maintenanceRecordId: Int64) -> Void {
+    func deleteMaintenanceRelatedNotificationIfExists(maintenanceRecordId: Int64) {
         guard let record = getRecordByMaintenanceId(maintenanceRecordId),
               let recordId = record.id
         else {

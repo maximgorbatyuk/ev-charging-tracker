@@ -51,11 +51,23 @@ class OnboardingViewModel: ObservableObject {
                 color: .blue
             ),
             OnboardingPageViewModelItem(
+                icon: "doc.fill",
+                title: L("onboarding.save_documents", language: selectedLanguage),
+                description: L("onboarding.save_documents__subtitle", language: selectedLanguage),
+                color: .orange
+            ),
+            OnboardingPageViewModelItem(
+                icon: "lightbulb.fill",
+                title: L("onboarding.collect_ideas", language: selectedLanguage),
+                description: L("onboarding.collect_ideas__subtitle", language: selectedLanguage),
+                color: .yellow
+            ),
+            OnboardingPageViewModelItem(
                 icon: "chart.line.uptrend.xyaxis",
                 title: L("onboarding.view_stats", language: selectedLanguage),
                 description: L("onboarding.view_stats__subtitle", language: selectedLanguage),
                 color: .cyan
-            ),
+            )
         ]
         totalPages = 1 + pages.count
     }

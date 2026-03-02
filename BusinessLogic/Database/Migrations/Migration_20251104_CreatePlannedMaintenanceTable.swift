@@ -15,7 +15,7 @@ final class Migration_20251104_CreatePlannedMaintenanceTable {
     init(db: Connection) {
         self.db = db
     }
-    
+
     func execute() {
         let repository = PlannedMaintenanceRepository(db: db, tableName: DatabaseManager.PlannedMaintenanceTableName)
 

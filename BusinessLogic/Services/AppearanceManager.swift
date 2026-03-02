@@ -17,8 +17,7 @@ final class AppearanceManager: ObservableObject {
 
     private init() {
         if let stored = UserDefaults.standard.string(forKey: Self.appearanceModeKey),
-           let mode = AppearanceMode(rawValue: stored)
-        {
+           let mode = AppearanceMode(rawValue: stored) {
             self.currentMode = mode
         } else {
             self.currentMode = .system

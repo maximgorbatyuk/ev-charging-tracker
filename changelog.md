@@ -1,5 +1,68 @@
 # Changelog
 
+## 2026.2.6 (2026-03-02)
+
+- **Car Details Tab**
+  - New dedicated "Car" tab with Journey Wallet-style card sections for Maintenance, Documents, and Ideas
+  - Car selector in toolbar for switching between multiple cars
+  - Quick add sheet with colored 2-column grid (add maintenance, document, or idea)
+  - Floating action button for quick record creation
+  - Pending maintenance badge on both the tab bar and the maintenance section header
+
+- **Documents Feature**
+  - New car documents entity with full CRUD (create, view, delete)
+  - File storage in App Group container organized by car ID
+  - Upload documents via file picker or Share Extension
+  - Document preview with file type icons, sizes, and Quick Look support
+  - Documents included in backup/export
+
+- **Ideas Feature**
+  - New car ideas entity for storing links, notes, and research
+  - Idea detail view with clickable HTTP/HTTPS URLs that open in Safari
+  - Add, edit, and delete ideas with swipe actions and detail view actions
+  - Ideas included in backup/export
+
+- **Share Extension**
+  - New Share Extension target for sharing content from other apps into EVChargingTracker
+  - Supports text, URLs, images, and files
+  - Entity type picker: create an Expense, Idea, or Document from shared content
+  - Car selector with auto-selection when only one car exists
+  - File size limit (50 MB) to prevent extension memory crashes
+  - Shared App Group database access between main app and extension
+
+- **Developer Mode: Document Storage Browser**
+  - Browse all files in the app's document storage container
+  - Folder navigation with car name resolution
+  - File detail view with Quick Look preview, sharing, and deletion
+  - Storage statistics (total size, file count, folder count)
+
+- **Database & Infrastructure**
+  - New documents and ideas tables with repository protocols
+  - App Group container migration for shared database access with Share Extension
+  - Debug entitlements file for development builds
+  - Transactional car selection (both deselect-all and select-one in single transaction)
+  - Transactional car deletion (expenses + car in single transaction)
+  - Extracted reusable `mapRowToCar()` helper in CarRepository
+
+- **Safety & Code Quality**
+  - URL scheme validation restricts idea links to HTTP/HTTPS only
+  - File name sanitization in Share Extension (strips path traversal and control characters)
+  - Path containment check prevents developer browser from deleting files outside document root
+  - Fixed `isSaving` state never resetting on successful save in Share Extension
+  - Replaced in-memory file data with temp file URLs in Share Extension to reduce memory pressure
+  - Converted `totalMaintenanceCount` from computed property (DB query per render) to stored property
+  - Removed double `loadData()` call from ViewModel init (already called by onAppear)
+  - Fixed `.constant()` alert binding in AddIdeaView that could prevent alert dismissal
+  - Fixed date comparison precision for updated-at display (threshold-based instead of exact equality)
+  - Changed `@ObservedObject` on AnalyticsService singleton to `private let` to prevent unnecessary re-renders
+  - Delete confirmation added to root-level files in developer document browser
+  - Async file I/O in developer browser views (loading indicator now functional)
+  - Replaced deprecated `Alert` struct with modern `.alert` modifier in IdeasListView
+  - Extracted preview row views and IdeaRowView to dedicated files for view size compliance
+
+- **Localization**
+  - Added translations for all new features (Car Details, Documents, Ideas, Share Extension) in all 6 supported languages (EN, DE, RU, TR, KK, UK)
+
 ## 2026.1.8 (2026-02-06)
 
 - **Pagination for Planned Maintenance**

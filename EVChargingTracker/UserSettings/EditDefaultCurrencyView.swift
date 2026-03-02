@@ -16,14 +16,14 @@ struct EditDefaultCurrencyView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
-                Section() {
+                Section {
                     Picker(L("Select currency"), selection: $selectedCurrency) {
                         ForEach(Currency.allCases, id: \.self) { type in
                             Text(type.displayName)
                                 .tag(type)
                         }
                     }
-                    
+
                 }
             }
             .navigationTitle(L("Select default currency"))
@@ -34,7 +34,7 @@ struct EditDefaultCurrencyView: SwiftUICore.View {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(L("Save")) {
                         saveCurrency()
@@ -44,7 +44,7 @@ struct EditDefaultCurrencyView: SwiftUICore.View {
             }
         }
     }
-    
+
     private func saveCurrency() {
 
         guard let selectedCurrencyUnwrapped = selectedCurrency else {

@@ -35,7 +35,7 @@ final class BackupService: ObservableObject {
         }
 
         var bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.evchargingtracker.EVChargingTracker"
-        if (bundleIdentifier.contains("Debug")) {
+        if bundleIdentifier.contains("Debug") {
             bundleIdentifier = bundleIdentifier.replacingOccurrences(of: "Debug", with: "")
         }
 
@@ -60,6 +60,8 @@ final class BackupService: ObservableObject {
     private let maintenanceRepository: PlannedMaintenanceRepository?
     private let notificationsRepository: DelayedNotificationsRepository?
     private let settingsRepository: UserSettingsRepository?
+    private let documentsRepository: DocumentsRepository?
+    private let ideasRepository: IdeasRepository?
     private let databaseManager: DatabaseManager
     private let networkMonitor: NetworkMonitor
     private let logger: Logger
@@ -79,6 +81,8 @@ final class BackupService: ObservableObject {
         self.maintenanceRepository = self.databaseManager.plannedMaintenanceRepository
         self.notificationsRepository = self.databaseManager.delayedNotificationsRepository
         self.settingsRepository = self.databaseManager.userSettingsRepository
+        self.documentsRepository = self.databaseManager.documentsRepository
+        self.ideasRepository = self.databaseManager.ideasRepository
         self.logger = Logger(subsystem: "com.evchargingtracker.businesslogic", category: "BackupService")
     }
 
@@ -97,6 +101,8 @@ final class BackupService: ObservableObject {
         let maintenance = try await fetchAllPlannedMaintenance(for: cars)
         let notifications = try await fetchAllDelayedNotifications(for: cars)
         let settings = try await fetchUserSettings()
+        let documents = fetchAllDocuments(for: cars)
+        let ideas = fetchAllIdeas(for: cars)
 
         // Create metadata
         let metadata = ExportMetadata(
@@ -113,7 +119,9 @@ final class BackupService: ObservableObject {
             expenses: expenses.map { ExportExpense(from: $0) },
             plannedMaintenance: maintenance.map { ExportPlannedMaintenance(from: $0) },
             delayedNotifications: notifications.map { ExportDelayedNotification(from: $0) },
-            userSettings: settings
+            userSettings: settings,
+            documents: documents.map { ExportDocument(from: $0) },
+            ideas: ideas.map { ExportIdea(from: $0) }
         )
     }
 
@@ -158,19 +166,23 @@ final class BackupService: ObservableObject {
         let safetyBackupURL = try await createSafetyBackup()
 
         do {
-            // Step 4: Wipe existing data
-            wipeAllData()
+            // Step 4: Wipe existing data (move document files to temp backup)
+            wipeAllDataWithDocumentBackup()
 
             // Step 5: Import new data
             try await importExportData(exportData)
 
-            // Step 6: Cleanup old safety backups
+            // Step 6: Import succeeded — remove temporary document backup
+            DocumentService.shared.removeTemporaryDocumentBackup()
+
+            // Step 7: Cleanup old safety backups
             cleanupOldSafetyBackups()
 
         } catch {
-            // Step 7: Restore from safety backup if import fails
+            // Step 8: Restore DB from safety backup, then restore document files from temp backup
             self.logger.error("Import failed: \(error.localizedDescription). Restoring from safety backup.")
             try await restoreFromSafetyBackup(safetyBackupURL)
+            DocumentService.shared.restoreDocumentsFromTemporaryBackup()
             throw error
         }
     }
@@ -273,6 +285,22 @@ final class BackupService: ObservableObject {
                 throw ExportValidationError.invalidReference(type: "DelayedNotification.carId", id: notification.carId)
             }
         }
+
+        if let documents = exportData.documents {
+            for document in documents {
+                if !carIds.contains(document.carId) {
+                    throw ExportValidationError.invalidReference(type: "Document.carId", id: document.carId)
+                }
+            }
+        }
+
+        if let ideas = exportData.ideas {
+            for idea in ideas {
+                if !carIds.contains(idea.carId) {
+                    throw ExportValidationError.invalidReference(type: "Idea.carId", id: idea.carId)
+                }
+            }
+        }
     }
 
     private func createSafetyBackup() async throws -> URL {
@@ -344,9 +372,16 @@ final class BackupService: ObservableObject {
         }
     }
 
-    private func wipeAllData() -> Void {
+    private func wipeAllData() {
+        DocumentService.shared.deleteAllDocumentFiles()
         databaseManager.deleteAllData()
-        self.logger.info("All data wiped from database")
+        self.logger.info("All data wiped from database and document files deleted")
+    }
+
+    private func wipeAllDataWithDocumentBackup() {
+        DocumentService.shared.moveDocumentsToTemporaryBackup()
+        databaseManager.deleteAllData()
+        self.logger.info("All data wiped from database, document files moved to temporary backup")
     }
 
     private func importExportData(_ exportData: ExportData) async throws {
@@ -425,8 +460,7 @@ final class BackupService: ObservableObject {
             }
 
             if let oldMaintenanceId = exportNotification.maintenanceRecord,
-               let newMaintenanceId = maintenanceIdMapping[oldMaintenanceId]
-            {
+               let newMaintenanceId = maintenanceIdMapping[oldMaintenanceId] {
                 notification.maintenanceRecord = newMaintenanceId
             }
 
@@ -435,7 +469,41 @@ final class BackupService: ObservableObject {
             }
         }
 
-        self.logger.info("Successfully imported all data: \(exportData.cars.count) cars, \(exportData.expenses.count) expenses, \(exportData.plannedMaintenance.count) maintenance records, \(exportData.delayedNotifications.count) notifications")
+        // 6. Import documents with updated car IDs (metadata only, no physical files)
+        if let exportDocuments = exportData.documents {
+            for exportDocument in exportDocuments {
+                let document = exportDocument.toCarDocument()
+                document.id = nil
+
+                if let newCarId = carIdMapping[exportDocument.carId] {
+                    document.carId = newCarId
+                }
+
+                if documentsRepository?.insertRecord(document) == nil {
+                    throw ExportValidationError.corruptedData
+                }
+            }
+        }
+
+        // 7. Import ideas with updated car IDs
+        if let exportIdeas = exportData.ideas {
+            for exportIdea in exportIdeas {
+                let idea = exportIdea.toIdea()
+                idea.id = nil
+
+                if let newCarId = carIdMapping[exportIdea.carId] {
+                    idea.carId = newCarId
+                }
+
+                if ideasRepository?.insertRecord(idea) == nil {
+                    throw ExportValidationError.corruptedData
+                }
+            }
+        }
+
+        let documentsCount = exportData.documents?.count ?? 0
+        let ideasCount = exportData.ideas?.count ?? 0
+        self.logger.info("Successfully imported all data: \(exportData.cars.count) cars, \(exportData.expenses.count) expenses, \(exportData.plannedMaintenance.count) maintenance records, \(exportData.delayedNotifications.count) notifications, \(documentsCount) documents, \(ideasCount) ideas")
     }
 
     // MARK: - Helper Methods
@@ -484,6 +552,28 @@ final class BackupService: ObservableObject {
         return allNotifications
     }
 
+    private func fetchAllDocuments(for cars: [Car]) -> [CarDocument] {
+        var allDocuments: [CarDocument] = []
+        for car in cars {
+            if let carId = car.id {
+                let documents = documentsRepository?.getAllRecords(carId: carId) ?? []
+                allDocuments.append(contentsOf: documents)
+            }
+        }
+        return allDocuments
+    }
+
+    private func fetchAllIdeas(for cars: [Car]) -> [Idea] {
+        var allIdeas: [Idea] = []
+        for car in cars {
+            if let carId = car.id {
+                let ideas = ideasRepository?.getAllRecords(carId: carId) ?? []
+                allIdeas.append(contentsOf: ideas)
+            }
+        }
+        return allIdeas
+    }
+
     private func fetchUserSettings() async throws -> ExportUserSettings {
         let currency = settingsRepository?.fetchCurrency() ?? .kzt
         let language = settingsRepository?.fetchLanguage() ?? .en
@@ -504,7 +594,7 @@ final class BackupService: ObservableObject {
     // MARK: - iCloud Backup
 
     func isiCloudAvailable() -> Bool {
-        let token = FileManager.default.ubiquityIdentityToken;
+        let token = FileManager.default.ubiquityIdentityToken
         return token != nil
     }
 
@@ -714,15 +804,19 @@ final class BackupService: ObservableObject {
 
             // Validate and import
             try validateExportData(exportData)
-            wipeAllData()
+            wipeAllDataWithDocumentBackup()
             try await importExportData(exportData)
+
+            // Import succeeded — remove temporary document backup
+            DocumentService.shared.removeTemporaryDocumentBackup()
 
             self.logger.info("Successfully restored from iCloud backup: \(backupInfo.fileName)")
 
         } catch {
-            // Restore from safety backup if import fails
+            // Restore DB from safety backup, then restore document files from temp backup
             self.logger.error("Restore from iCloud failed: \(error.localizedDescription). Restoring from safety backup.")
             try await restoreFromSafetyBackup(safetyBackupURL)
+            DocumentService.shared.restoreDocumentsFromTemporaryBackup()
             throw error
         }
     }
@@ -800,7 +894,7 @@ final class BackupService: ObservableObject {
     }
 
     private func cleanupOldiCloudBackups() async throws {
-        guard let backupDirectory = iCloudBackupDirectory else {
+        guard iCloudBackupDirectory != nil else {
             return
         }
 
@@ -860,7 +954,9 @@ final class BackupService: ObservableObject {
             carsCount: exportData.cars.count,
             expensesCount: exportData.expenses.count,
             maintenanceCount: exportData.plannedMaintenance.count,
-            notificationsCount: exportData.delayedNotifications.count
+            notificationsCount: exportData.delayedNotifications.count,
+            documentsCount: exportData.documents?.count ?? 0,
+            ideasCount: exportData.ideas?.count ?? 0
         )
     }
 }
@@ -879,6 +975,8 @@ struct BackupInfo: Identifiable, Hashable {
     let expensesCount: Int
     let maintenanceCount: Int
     let notificationsCount: Int
+    let documentsCount: Int
+    let ideasCount: Int
 
     var id: String { fileURL.absoluteString }
 

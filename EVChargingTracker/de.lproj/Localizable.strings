@@ -142,6 +142,8 @@
 "Car mileage" = "Kilometerstand des Autos";
 "Initial (km)" = "Anfang (km)";
 "Current (km)" = "Aktuell (km)";
+"Total mileage" = "Gesamtkilometerstand";
+"No car selected" = "Kein Auto ausgewählt";
 "Remain at odometer" = "Verbleibend bis zum Kilometerstand";
 "Maintenance reminder" = "Wartungserinnerung";
 "Some maintenance tasks due" = "Einige Wartungsarbeiten sind fällig";
@@ -184,6 +186,10 @@
 "onboarding.monitor_costs__subtitle" = "Sehen Sie, wie viel Sie für Ihr Elektrofahrzeug ausgeben, einschließlich Strom und anderer Ausgaben";
 "onboarding.plan_maintenance" = "Wartung planen";
 "onboarding.plan_maintenance__subtitle" = "Planen Sie Wartungsaufgaben für Ihr Elektrofahrzeug und erhalten Sie Erinnerungen";
+"onboarding.save_documents" = "Dokumente speichern";
+"onboarding.save_documents__subtitle" = "Versicherung, Zulassung und andere wichtige Fahrzeugdokumente immer griffbereit";
+"onboarding.collect_ideas" = "Ideen sammeln";
+"onboarding.collect_ideas__subtitle" = "Speichern Sie nützliche Links, Notizen und Recherchen zu Ihrem Auto an einem Ort";
 "onboarding.view_stats" = "Statistiken anzeigen";
 "onboarding.view_stats__subtitle" = "Erfahren Sie, wie viel Ihr Elektrofahrzeug pro Kilometer kostet und wie viel CO₂ Sie durch das Fahren eines Elektrofahrzeugs eingespart haben";
 
@@ -348,4 +354,78 @@
 "Due Soon" = "Bald fällig";
 "Overdue" = "Überfällig";
 "Scheduled" = "Geplant";
+
+/* Share Extension */
+"share.title" = "In EV Tracker speichern";
+"share.cancel" = "Abbrechen";
+"share.save" = "Speichern";
+"share.section.content" = "Geteilter Inhalt";
+"share.section.car" = "Auto";
+"share.car_picker" = "Auto";
+"share.car_picker.placeholder" = "Auto auswählen";
+"share.section.type" = "Ausgabenart";
+"share.type_picker" = "Art";
+"share.section.notes" = "Notizen";
+"share.no_cars.title" = "Keine Autos";
+"share.no_cars.message" = "Füge zuerst ein Auto in EVChargingTracker hinzu und versuche es dann erneut.";
+"share.error.no_car_selected" = "Bitte wähle ein Auto aus.";
+"share.error.save_failed" = "Speichern fehlgeschlagen. Bitte versuche es erneut.";
+"share.section.entity_type" = "Speichern als";
+"share.entity_picker" = "Typ";
+"share.entity.expense" = "Ausgabe";
+"share.entity.idea" = "Idee";
+"share.entity.document" = "Dokument";
+"share.section.document_info" = "Dokument";
+"share.migration_required.title" = "Einrichtung erforderlich";
+"share.migration_required.message" = "Öffne EVChargingTracker einmal, um die Einrichtung abzuschließen, und versuche es dann erneut.";
+"share.migration_required.dismiss" = "OK";
+
+/* Car details - create chooser */
+"Create new" = "Neu erstellen";
+"New maintenance record" = "Neuer Wartungseintrag";
+"New document" = "Neues Dokument";
+"New idea" = "Neue Idee";
+"Documents" = "Dokumente";
+"Ideas" = "Ideen";
+
+/* Car details - root screen */
+"Car details" = "Autodetails";
+"See all" = "Alle anzeigen";
+"No documents yet" = "Noch keine Dokumente";
+"No ideas yet" = "Noch keine Ideen";
+
+/* Ideas */
+"URL" = "URL";
+"Description" = "Beschreibung";
+"Edit idea" = "Idee bearbeiten";
+"idea.title.placeholder" = "Idee-Titel eingeben";
+"idea.url.placeholder" = "https://beispiel.de (optional)";
+"idea.title.required" = "Titel ist erforderlich";
+"idea.url.invalid" = "Bitte geben Sie eine gültige URL ein";
+"Add your first idea" = "Erste Idee hinzufügen";
+"Delete idea?" = "Idee löschen?";
+"Delete selected idea? This action cannot be undone." = "Ausgewählte Idee löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Idea Details" = "Ideendetails";
+"Updated" = "Aktualisiert";
+"Error" = "Fehler";
+"OK" = "OK";
+
+/* Documents */
+"Import from" = "Importieren aus";
+"Files" = "Dateien";
+"Photos" = "Fotos";
+"Add your first document" = "Erstes Dokument hinzufügen";
+"Delete document?" = "Dokument löschen?";
+"Delete selected document? This action cannot be undone." = "Ausgewähltes Dokument löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Rename document" = "Dokument umbenennen";
+"New title" = "Neuer Titel";
+"Rename" = "Umbenennen";
+"Preview" = "Vorschau";
+"File not found" = "Datei nicht gefunden";
+"Unable to load image" = "Bild konnte nicht geladen werden";
+
+// Import preview - data types
+"documents" = "Dokumente";
+"ideas" = "Ideen";
+"import.documents_metadata_only" = "Hinweis: Dokumentdateien sind nicht im Backup enthalten. Nur Dokument-Metadaten werden wiederhergestellt.";
 

@@ -10,7 +10,7 @@ import Charts
 
 struct ExpensesChartView: SwiftUICore.View {
     let data: ExpensesChartData
-    
+
     let expenses: [Expense]
     let currency: Currency
     let monthsCount: Int
@@ -34,7 +34,7 @@ struct ExpensesChartView: SwiftUICore.View {
 
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("Expenses chart"))
                     .font(.headline)
@@ -55,7 +55,7 @@ struct ExpensesChartView: SwiftUICore.View {
                     }
                     .frame(height: 280)
                     .chartYAxis {
-                        AxisMarks(position: .leading) { value in
+                        AxisMarks(position: .leading) { _ in
                             AxisGridLine()
                                 .foregroundStyle((colorScheme == .dark ? Color.white : Color.primary).opacity(0.2))
                             AxisValueLabel()
@@ -63,14 +63,13 @@ struct ExpensesChartView: SwiftUICore.View {
                         }
                     }
                     .chartXAxis {
-                        AxisMarks { value in
+                        AxisMarks { _ in
                             AxisValueLabel()
                                 .foregroundStyle(colorScheme == .dark ? .white : .primary)
                         }
                     }
                     .chartLegend(.hidden) // Hide the automatic legend
-                }
-                else {
+                } else {
                     VStack {
                         Spacer()
 
@@ -87,7 +86,7 @@ struct ExpensesChartView: SwiftUICore.View {
                             .multilineTextAlignment(.center)
                             .padding(.top, 20)
                             .padding(.horizontal)
-                        
+
                         Spacer()
                     }
                     .frame(height: 280)

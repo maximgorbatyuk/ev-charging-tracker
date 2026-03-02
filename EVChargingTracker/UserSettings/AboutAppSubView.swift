@@ -16,7 +16,7 @@ struct AboutAppSubView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             ZStack {
-                
+
                 Image("BackgroundImage")
                     .resizable()
                     .scaledToFill()
@@ -40,7 +40,7 @@ struct AboutAppSubView: SwiftUICore.View {
                             Text(getGithubLink())
                                 .foregroundColor(.blue)
                         }
-                            
+
                     }
                     .padding(.horizontal)
 
@@ -57,7 +57,7 @@ struct AboutAppSubView: SwiftUICore.View {
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.gray)
 
-                        if (environment.getBuildEnvironment() == "dev") {
+                        if environment.getBuildEnvironment() == "dev" {
                             Text(L("Build: development"))
                                 .fontWeight(.semibold)
                                 .font(.system(size: 12, weight: .bold))

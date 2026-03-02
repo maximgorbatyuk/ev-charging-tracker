@@ -9,7 +9,7 @@ import os
 
 class GlobalLogger {
     static let shared = GlobalLogger()
-    
+
     private let logger = Logger(subsystem: "GlobalLogger", category: "Global")
 
     func info(_ message: String) {

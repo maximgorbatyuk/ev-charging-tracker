@@ -15,7 +15,7 @@ class SharedStatsData {
     let oneKmPriceIncludingAllExpenses: Double
     let totalChargingCost: Double
     let lastUpdated: Date
-    
+
     init(
         co2Saved: Double,
         avgConsumptionKWhPer100: Double,

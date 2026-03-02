@@ -15,7 +15,7 @@ class PlannedMaintenance: Identifiable {
     var when: Date?
     var carId: Int64
     var createdAt: Date
-    
+
     init(
         id: Int64? = nil,
         when: Date?,

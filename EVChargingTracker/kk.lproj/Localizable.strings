@@ -150,6 +150,8 @@
 "Car mileage" = "Көлік жүрісі";
 "Initial (km)" = "Бастапқы (км)";
 "Current (km)" = "Ағымдағы (км)";
+"Total mileage" = "Жалпы жүріс";
+"No car selected" = "Көлік таңдалмаған";
 "Remain at odometer" = "Одометрдегі қалдық";
 "Maintenance reminder" = "Техникалық қызмет туралы еске салу";
 "Some maintenance tasks due" = "Қызмет көрсету жайында бірнеше жазбалар бар";
@@ -190,6 +192,10 @@
 "onboarding.monitor_costs__subtitle" = "Электромобиліңізге қанша жұмсайтыныңызды, соның ішінде электр энергиясы мен басқа шығындарды көріңіз";
 "onboarding.plan_maintenance" = "Техқызметті жоспарлау";
 "onboarding.plan_maintenance__subtitle" = "Электромобиліңіздің техникалық қызмет көрсету тапсырмаларын жоспарлаңыз және еске салғыштар алыңыз";
+"onboarding.save_documents" = "Құжаттарды сақтаңыз";
+"onboarding.save_documents__subtitle" = "Сақтандыру, тіркеу және басқа маңызды көлік құжаттары әрқашан қолыңызда";
+"onboarding.collect_ideas" = "Идеяларды жинаңыз";
+"onboarding.collect_ideas__subtitle" = "Көлігіңіз туралы пайдалы сілтемелерді, жазбаларды және зерттеулерді бір жерде сақтаңыз";
 "onboarding.view_stats" = "Статистиканы қарау";
 "onboarding.view_stats__subtitle" = "Электромобиліңіз 1 шақырымға қанша тұратынын және электромобильді басқару арқылы үнемделген CO₂ көлемін біліңіз";
 
@@ -354,4 +360,78 @@
 "Due Soon" = "Жақында";
 "Overdue" = "Мерзімі өтті";
 "Scheduled" = "Жоспарланған";
+
+/* Share Extension */
+"share.title" = "EV Tracker-ге сақтау";
+"share.cancel" = "Болдырмау";
+"share.save" = "Сақтау";
+"share.section.content" = "Бөлісілген мазмұн";
+"share.section.car" = "Көлік";
+"share.car_picker" = "Көлік";
+"share.car_picker.placeholder" = "Көлікті таңдаңыз";
+"share.section.type" = "Шығын түрі";
+"share.type_picker" = "Түрі";
+"share.section.notes" = "Жазбалар";
+"share.no_cars.title" = "Көлік жоқ";
+"share.no_cars.message" = "Алдымен EVChargingTracker-де көлік қосыңыз, содан кейін қайта бөлісіп көріңіз.";
+"share.error.no_car_selected" = "Көлікті таңдаңыз.";
+"share.error.save_failed" = "Сақтау мүмкін болмады. Қайта көріңіз.";
+"share.section.entity_type" = "Басқаша сақтау";
+"share.entity_picker" = "Түрі";
+"share.entity.expense" = "Шығын";
+"share.entity.idea" = "Идея";
+"share.entity.document" = "Құжат";
+"share.section.document_info" = "Құжат";
+"share.migration_required.title" = "Баптау қажет";
+"share.migration_required.message" = "Баптауды аяқтау үшін EVChargingTracker-ді бір рет ашыңыз, содан кейін қайта көріңіз.";
+"share.migration_required.dismiss" = "Жарайды";
+
+/* Car details - create chooser */
+"Create new" = "Жаңа жасау";
+"New maintenance record" = "Жаңа техникалық қызмет жазбасы";
+"New document" = "Жаңа құжат";
+"New idea" = "Жаңа идея";
+"Documents" = "Құжаттар";
+"Ideas" = "Идеялар";
+
+/* Car details - root screen */
+"Car details" = "Көлік мәліметтері";
+"See all" = "Барлығын көру";
+"No documents yet" = "Құжаттар жоқ";
+"No ideas yet" = "Идеялар жоқ";
+
+/* Ideas */
+"URL" = "URL";
+"Description" = "Сипаттама";
+"Edit idea" = "Идеяны өзгерту";
+"idea.title.placeholder" = "Идея атауын енгізіңіз";
+"idea.url.placeholder" = "https://example.com (міндетті емес)";
+"idea.title.required" = "Атауы міндетті";
+"idea.url.invalid" = "Жарамды URL енгізіңіз";
+"Add your first idea" = "Бірінші идеяңызды қосыңыз";
+"Delete idea?" = "Идеяны жою?";
+"Delete selected idea? This action cannot be undone." = "Таңдалған идеяны жою керек пе? Бұл әрекетті кері қайтару мүмкін емес.";
+"Idea Details" = "Идея мәліметтері";
+"Updated" = "Жаңартылды";
+"Error" = "Қате";
+"OK" = "ОК";
+
+/* Documents */
+"Import from" = "Импорт";
+"Files" = "Файлдар";
+"Photos" = "Фото";
+"Add your first document" = "Бірінші құжатыңызды қосыңыз";
+"Delete document?" = "Құжатты жою?";
+"Delete selected document? This action cannot be undone." = "Таңдалған құжатты жою керек пе? Бұл әрекетті кері қайтару мүмкін емес.";
+"Rename document" = "Құжатты қайта атау";
+"New title" = "Жаңа атау";
+"Rename" = "Қайта атау";
+"Preview" = "Алдын ала қарау";
+"File not found" = "Файл табылмады";
+"Unable to load image" = "Суретті жүктеу мүмкін емес";
+
+// Import preview - data types
+"documents" = "құжат";
+"ideas" = "идея";
+"import.documents_metadata_only" = "Ескертпе: Құжат файлдары сақтық көшірмеге кірмейді. Тек құжат метадеректері қалпына келтіріледі.";
 

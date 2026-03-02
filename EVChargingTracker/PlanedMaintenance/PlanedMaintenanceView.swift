@@ -10,7 +10,10 @@ import SwiftUI
 
 struct PlanedMaintenanceView: SwiftUICore.View {
 
-    let onPlannedMaintenaceRecordsUpdated: () -> Void
+    let embedded: Bool
+    let onPlannedMaintenanceRecordsUpdated: () -> Void
+
+    @SwiftUI.Binding var triggerAdd: Bool
 
     @StateObject private var viewModel = PlanedMaintenanceViewModel(
         notifications: NotificationManager.shared,
@@ -18,139 +21,169 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
     @State private var showingAddMaintenanceRecord = false
     @State private var showingDeleteConfirmation: Bool = false
-    @State private var recordToDelete: PlannedMaintenanceItem? = nil
-    @State private var recordToEdit: PlannedMaintenanceItem? = nil
-    @State private var recordToMarkAsDone: PlannedMaintenanceItem? = nil
-    @State private var recordToShowDetails: PlannedMaintenanceItem? = nil
-    @State private var recordToDuplicate: PlannedMaintenanceItem? = nil
+    @State private var recordToDelete: PlannedMaintenanceItem?
+    @State private var recordToEdit: PlannedMaintenanceItem?
+    @State private var recordToMarkAsDone: PlannedMaintenanceItem?
+    @State private var recordToShowDetails: PlannedMaintenanceItem?
+    @State private var recordToDuplicate: PlannedMaintenanceItem?
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
-    init(onPlannedMaintenaceRecordsUpdated: @escaping () -> Void) {
+    init(
+        embedded: Bool = false,
+        triggerAdd: SwiftUI.Binding<Bool> = .constant(false),
+        onPlannedMaintenanceRecordsUpdated: @escaping () -> Void
+    ) {
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
-        self.onPlannedMaintenaceRecordsUpdated = onPlannedMaintenaceRecordsUpdated
+        self.embedded = embedded
+        self._triggerAdd = triggerAdd
+        self.onPlannedMaintenanceRecordsUpdated = onPlannedMaintenanceRecordsUpdated
     }
 
     var body: some SwiftUICore.View {
+        if embedded {
+            embeddedContent
+        } else {
+            standaloneContent
+        }
+    }
+
+    private var embeddedContent: some SwiftUICore.View {
+        contentWithModifiers
+            .navigationTitle(L("Planned maintenance"))
+            .navigationBarTitleDisplayMode(.automatic)
+            .onChange(of: triggerAdd) { _, newValue in
+                if newValue {
+                    showingAddMaintenanceRecord = true
+                    triggerAdd = false
+                }
+            }
+    }
+
+    private var standaloneContent: some SwiftUICore.View {
         ZStack(alignment: .bottomTrailing) {
             NavigationView {
-                mainContent
-                .navigationTitle(L("Planned maintenance"))
-                .navigationBarTitleDisplayMode(.automatic)
-                .onAppear {
-                    analytics.trackScreen("planned_maintenance_screen")
-                    loadData()
-                }
-                .refreshable {
-                    loadData()
-                }
-                .alert(isPresented: $showingDeleteConfirmation) {
-                    deleteConfirmationAlert()
-                }
-                .sheet(isPresented: $showingAddMaintenanceRecord) {
-                    if let selectedCar = viewModel.selectedCarForExpenses {
-                        AddMaintenanceRecordView(
-                            selectedCar: selectedCar,
-                            onAdd: { newRecord in
-                                analytics.trackEvent("maintenance_record_added", properties: [
-                                    "screen": "planned_maintenance_screen"
-                                ])
-
-                                viewModel.addNewMaintenanceRecord(newRecord: newRecord)
-
-                                loadData()
-                                onPlannedMaintenaceRecordsUpdated()
-                            }
-                        )
-                    }
-                }
-                .sheet(item: $recordToEdit) { record in
-                    if let selectedCar = viewModel.selectedCarForExpenses {
-                        AddMaintenanceRecordView(
-                            selectedCar: selectedCar,
-                            existingRecord: record,
-                            onAdd: { _ in },
-                            onUpdate: { updatedRecord in
-                                analytics.trackEvent("maintenance_record_updated", properties: [
-                                    "screen": "planned_maintenance_screen"
-                                ])
-
-                                viewModel.updateMaintenanceRecord(updatedRecord)
-
-                                loadData()
-                                onPlannedMaintenaceRecordsUpdated()
-                            }
-                        )
-                    }
-                }
-                .sheet(item: $recordToMarkAsDone) { record in
-                    if let selectedCar = viewModel.selectedCarForExpenses {
-                        AddExpenseView(
-                            defaultExpenseType: .maintenance,
-                            defaultCurrency: selectedCar.expenseCurrency,
-                            selectedCar: selectedCar,
-                            allCars: viewModel.getAllCars(),
-                            prefilledTitle: record.name,
-                            prefilledNotes: record.notes,
-                            onAdd: { expenseResult in
-                                analytics.trackEvent("expense_added_from_maintenance", properties: [
-                                    "screen": "planned_maintenance_screen"
-                                ])
-
-                                viewModel.markMaintenanceAsDone(record, expenseResult: expenseResult)
-
-                                loadData()
-                                onPlannedMaintenaceRecordsUpdated()
-                            }
-                        )
-                    }
-                }
-                .sheet(item: $recordToShowDetails) { record in
-                    if let selectedCar = viewModel.selectedCarForExpenses {
-                        PlannedMaintenanceDetailsView(
-                            record: record,
-                            selectedCar: selectedCar,
-                            onMarkAsDone: { rec in
-                                recordToShowDetails = nil
-                                recordToMarkAsDone = rec
-                            },
-                            onEdit: { rec in
-                                recordToEdit = rec
-                            },
-                            onDelete: { rec in
-                                viewModel.deleteMaintenanceRecord(rec)
-                                loadData()
-                                onPlannedMaintenaceRecordsUpdated()
-                            },
-                            onDuplicate: { rec in
-                                recordToDuplicate = rec
-                            }
-                        )
-                    }
-                }
-                .sheet(item: $recordToDuplicate) { record in
-                    if let selectedCar = viewModel.selectedCarForExpenses {
-                        AddMaintenanceRecordView(
-                            selectedCar: selectedCar,
-                            prefilledName: record.name,
-                            prefilledNotes: record.notes,
-                            onAdd: { newRecord in
-                                analytics.trackEvent("maintenance_record_duplicated", properties: [
-                                    "screen": "planned_maintenance_screen"
-                                ])
-
-                                viewModel.addNewMaintenanceRecord(newRecord: newRecord)
-
-                                loadData()
-                                onPlannedMaintenaceRecordsUpdated()
-                            }
-                        )
-                    }
-                }
+                contentWithModifiers
+                    .navigationTitle(L("Planned maintenance"))
+                    .navigationBarTitleDisplayMode(.automatic)
             }
 
             floatingAddButton
         }
+    }
+
+    private var contentWithModifiers: some SwiftUICore.View {
+        mainContent
+            .onAppear {
+                analytics.trackScreen("planned_maintenance_screen")
+                loadData()
+            }
+            .refreshable {
+                loadData()
+            }
+            .alert(isPresented: $showingDeleteConfirmation) {
+                deleteConfirmationAlert()
+            }
+            .sheet(isPresented: $showingAddMaintenanceRecord) {
+                if let selectedCar = viewModel.selectedCarForExpenses {
+                    AddMaintenanceRecordView(
+                        selectedCar: selectedCar,
+                        onAdd: { newRecord in
+                            analytics.trackEvent("maintenance_record_added", properties: [
+                                "screen": "planned_maintenance_screen"
+                            ])
+
+                            viewModel.addNewMaintenanceRecord(newRecord: newRecord)
+
+                            loadData()
+                            onPlannedMaintenanceRecordsUpdated()
+                        }
+                    )
+                }
+            }
+            .sheet(item: $recordToEdit) { record in
+                if let selectedCar = viewModel.selectedCarForExpenses {
+                    AddMaintenanceRecordView(
+                        selectedCar: selectedCar,
+                        existingRecord: record,
+                        onAdd: { _ in },
+                        onUpdate: { updatedRecord in
+                            analytics.trackEvent("maintenance_record_updated", properties: [
+                                "screen": "planned_maintenance_screen"
+                            ])
+
+                            viewModel.updateMaintenanceRecord(updatedRecord)
+
+                            loadData()
+                            onPlannedMaintenanceRecordsUpdated()
+                        }
+                    )
+                }
+            }
+            .sheet(item: $recordToMarkAsDone) { record in
+                if let selectedCar = viewModel.selectedCarForExpenses {
+                    AddExpenseView(
+                        defaultExpenseType: .maintenance,
+                        defaultCurrency: selectedCar.expenseCurrency,
+                        selectedCar: selectedCar,
+                        allCars: viewModel.getAllCars(),
+                        prefilledTitle: record.name,
+                        prefilledNotes: record.notes,
+                        onAdd: { expenseResult in
+                            analytics.trackEvent("expense_added_from_maintenance", properties: [
+                                "screen": "planned_maintenance_screen"
+                            ])
+
+                            viewModel.markMaintenanceAsDone(record, expenseResult: expenseResult)
+
+                            loadData()
+                            onPlannedMaintenanceRecordsUpdated()
+                        }
+                    )
+                }
+            }
+            .sheet(item: $recordToShowDetails) { record in
+                if let selectedCar = viewModel.selectedCarForExpenses {
+                    PlannedMaintenanceDetailsView(
+                        record: record,
+                        selectedCar: selectedCar,
+                        onMarkAsDone: { rec in
+                            recordToShowDetails = nil
+                            recordToMarkAsDone = rec
+                        },
+                        onEdit: { rec in
+                            recordToEdit = rec
+                        },
+                        onDelete: { rec in
+                            viewModel.deleteMaintenanceRecord(rec)
+                            loadData()
+                            onPlannedMaintenanceRecordsUpdated()
+                        },
+                        onDuplicate: { rec in
+                            recordToDuplicate = rec
+                        }
+                    )
+                }
+            }
+            .sheet(item: $recordToDuplicate) { record in
+                if let selectedCar = viewModel.selectedCarForExpenses {
+                    AddMaintenanceRecordView(
+                        selectedCar: selectedCar,
+                        prefilledName: record.name,
+                        prefilledNotes: record.notes,
+                        onAdd: { newRecord in
+                            analytics.trackEvent("maintenance_record_duplicated", properties: [
+                                "screen": "planned_maintenance_screen"
+                            ])
+
+                            viewModel.addNewMaintenanceRecord(newRecord: newRecord)
+
+                            loadData()
+                            onPlannedMaintenanceRecordsUpdated()
+                        }
+                    )
+                }
+            }
     }
 
     private var floatingAddButton: some SwiftUICore.View {
@@ -417,7 +450,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                     viewModel.deleteMaintenanceRecord(e)
 
                     loadData()
-                    onPlannedMaintenaceRecordsUpdated()
+                    onPlannedMaintenanceRecordsUpdated()
                 }
                 recordToDelete = nil
             },
@@ -429,7 +462,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 }
 
 struct EmptyStateView: SwiftUICore.View {
-    
+
     let selectedCar: Car?
 
     var body: some SwiftUICore.View {
@@ -446,7 +479,7 @@ struct EmptyStateView: SwiftUICore.View {
                .font(.subheadline)
                .foregroundColor(.gray.opacity(0.9))
 
-            if (selectedCar == nil) {
+            if selectedCar == nil {
                 Text(L("Please add car first to track maintenance records"))
                     .font(.subheadline)
                     .foregroundColor(.gray.opacity(0.9))

@@ -14,11 +14,11 @@ struct NoExpensesView: SwiftUICore.View {
             Image(systemName: "battery.100.bolt")
                 .font(.system(size: 64))
                 .foregroundColor(.gray.opacity(0.5))
-            
+
             Text(L("No charging sessions yet"))
                 .font(.title3)
                 .foregroundColor(.gray)
-            
+
             Text(L("Add your first session to start tracking"))
                 .font(.subheadline)
                 .foregroundColor(.gray.opacity(0.9))

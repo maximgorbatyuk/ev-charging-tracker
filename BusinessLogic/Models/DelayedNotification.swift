@@ -14,7 +14,7 @@ class DelayedNotification: Identifiable {
     var maintenanceRecord: Int64?
     var carId: Int64
     var createdAt: Date
-    
+
     init(
         id: Int64? = nil,
         when: Date,
