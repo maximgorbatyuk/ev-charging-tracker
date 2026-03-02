@@ -74,18 +74,9 @@ struct MainTabView: SwiftUI.View {
     }
     
     private func getTabViewColor() -> Color {
-        switch selectedTab {
-            case 0:
-                return Color.orange
-            case 1:
-                return Color.green
-            case 2:
-                return Color.cyan
-            case 3:
-                return Color.blue
-            default:
-            return Color.primary
-        }
+        colorScheme == .dark
+            ? Color.orange
+            : Color(red: 0.85, green: 0.45, blue: 0.0)
     }
 }
 

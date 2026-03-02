@@ -54,27 +54,11 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
 
             floatingAddButton
         }
-        .confirmationDialog(
-            L("Create new"),
-            isPresented: $showCreateChooser,
-            titleVisibility: .visible
-        ) {
-            Button(L("New maintenance record")) {
-                pendingAddAction = .maintenance
-                path.append(.maintenance)
+        .sheet(isPresented: $showCreateChooser) {
+            CarQuickAddSheet { option in
+                pendingAddAction = option.route
+                path.append(option.route)
             }
-
-            Button(L("New document")) {
-                pendingAddAction = .documents
-                path.append(.documents)
-            }
-
-            Button(L("New idea")) {
-                pendingAddAction = .ideas
-                path.append(.ideas)
-            }
-
-            Button(L("Cancel"), role: .cancel) {}
         }
     }
 
