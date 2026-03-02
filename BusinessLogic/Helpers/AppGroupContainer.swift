@@ -34,6 +34,10 @@ enum AppGroupContainer {
         containerURL.appendingPathComponent("tesla_charging.sqlite3")
     }
 
+    static var documentsStorageURL: URL {
+        containerURL.appendingPathComponent("CarDocuments", isDirectory: true)
+    }
+
     static var isConfigured: Bool {
         guard let identifier = EnvironmentService.shared.getAppGroupIdentifier(),
               !identifier.isEmpty else {

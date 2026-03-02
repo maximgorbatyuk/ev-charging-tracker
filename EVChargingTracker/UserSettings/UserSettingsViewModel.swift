@@ -217,6 +217,9 @@ class UserSettingsViewModel: ObservableObject {
 
     func deleteCar(_ carId: Int64, selectedForTracking: Bool) -> Void {
         db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
+        db.documentsRepository?.deleteRecordsForCar(carId)
+        db.ideasRepository?.deleteRecordsForCar(carId)
+        DocumentService.shared.deleteCarDocuments(carId: carId)
         _ = db.carRepository?.delete(id: carId)
 
         if selectedForTracking {
@@ -320,6 +323,7 @@ class UserSettingsViewModel: ObservableObject {
         let countOfExpenseRecords = 80 // maintenance, carwash, repair
         let countOfChargingSessions = 150
         let countOfPlannedMaintenanceRecords = 20
+        let countOfIdeas = 10
         let oldestDate = Calendar.current.date(byAdding: .month, value: -8, to: Date())!
 
         guard let carId = selectedCar!.id else {
@@ -479,8 +483,82 @@ class UserSettingsViewModel: ObservableObject {
             
             _ = db.plannedMaintenanceRepository?.insertRecord(maintenance)
         }
-        
-        logger.info("Successfully added random test data: \(countOfChargingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records")
+
+        // Generate ideas
+        logger.info("Adding \(countOfIdeas) ideas...")
+        let ideaTitles = [
+            "Upgrade to all-season tires",
+            "Install dashcam",
+            "Ceramic coating",
+            "Tint rear windows",
+            "Add roof rack",
+            "Custom floor mats",
+            "Upgrade sound system",
+            "Paint protection film",
+            "Add wireless charger mount",
+            "Get charging cable organizer",
+            "Install mud flaps",
+            "Upgrade headlights to LED",
+            "Add trunk organizer",
+            "Try new charging network",
+            "Compare insurance plans"
+        ]
+
+        let ideaUrls: [String?] = [
+            "https://www.tirerack.com",
+            "https://www.amazon.com/dashcams",
+            nil,
+            nil,
+            "https://www.thule.com",
+            nil,
+            "https://www.crutchfield.com",
+            "https://www.xpel.com",
+            nil,
+            "https://www.tesla.com/shop",
+            nil,
+            nil,
+            nil,
+            "https://www.plugshare.com",
+            nil
+        ]
+
+        let ideaDescriptions: [String?] = [
+            "Check Michelin CrossClimate 2 vs Continental",
+            nil,
+            "Look into ceramic coating options for paint protection",
+            nil,
+            nil,
+            "WeatherTech or Tesla OEM?",
+            nil,
+            "Compare XPEL Ultimate Plus vs 3M Pro Series",
+            "MagSafe compatible preferred",
+            nil,
+            nil,
+            nil,
+            "Collapsible organizer for groceries",
+            "Try Electrify America vs ChargePoint pricing",
+            nil
+        ]
+
+        for i in 0..<countOfIdeas {
+            let title = ideaTitles[i % ideaTitles.count]
+            let url = ideaUrls[i % ideaUrls.count]
+            let description = ideaDescriptions[i % ideaDescriptions.count]
+            let createdAt = randomDate()
+
+            let idea = Idea(
+                carId: carId,
+                title: title,
+                url: url,
+                descriptionText: description,
+                createdAt: createdAt,
+                updatedAt: createdAt
+            )
+
+            _ = db.ideasRepository?.insertRecord(idea)
+        }
+
+        logger.info("Successfully added random test data: \(countOfChargingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records, \(countOfIdeas) ideas")
     }
 
     var allCars : [CarDto] {
@@ -535,6 +613,8 @@ class UserSettingsViewModel: ObservableObject {
                 expensesCount: exportData.expenses.count,
                 maintenanceCount: exportData.plannedMaintenance.count,
                 notificationsCount: exportData.delayedNotifications.count,
+                documentsCount: exportData.documents?.count ?? 0,
+                ideasCount: exportData.ideas?.count ?? 0,
                 dateRange: calculateDateRange(from: exportData.expenses)
             )
 
@@ -745,5 +825,7 @@ struct ImportPreviewData {
     let expensesCount: Int
     let maintenanceCount: Int
     let notificationsCount: Int
+    let documentsCount: Int
+    let ideasCount: Int
     let dateRange: String
 }

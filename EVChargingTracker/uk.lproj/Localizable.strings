@@ -363,3 +363,50 @@
 "share.migration_required.message" = "Відкрийте EVChargingTracker один раз для завершення налаштування, потім спробуйте знову.";
 "share.migration_required.dismiss" = "OK";
 
+/* Car details - create chooser */
+"Create new" = "Створити";
+"New maintenance record" = "Новий запис обслуговування";
+"New document" = "Новий документ";
+"New idea" = "Нова ідея";
+"Documents" = "Документи";
+"Ideas" = "Ідеї";
+
+/* Car details - root screen */
+"Car details" = "Деталі авто";
+"See all" = "Показати все";
+"No documents yet" = "Поки немає документів";
+"No ideas yet" = "Поки немає ідей";
+
+/* Ideas */
+"URL" = "URL";
+"Description" = "Опис";
+"Edit idea" = "Редагувати ідею";
+"idea.title.placeholder" = "Введіть назву ідеї";
+"idea.url.placeholder" = "https://example.com (необов'язково)";
+"idea.title.required" = "Назва обов'язкова";
+"idea.url.invalid" = "Будь ласка, введіть коректну URL-адресу";
+"Add your first idea" = "Додайте першу ідею";
+"Delete idea?" = "Видалити ідею?";
+"Delete selected idea? This action cannot be undone." = "Видалити вибрану ідею? Цю дію не можна скасувати.";
+"Error" = "Помилка";
+"OK" = "ОК";
+
+/* Documents */
+"Import from" = "Імпорт з";
+"Files" = "Файли";
+"Photos" = "Фото";
+"Add your first document" = "Додайте перший документ";
+"Delete document?" = "Видалити документ?";
+"Delete selected document? This action cannot be undone." = "Видалити вибраний документ? Цю дію не можна скасувати.";
+"Rename document" = "Перейменувати документ";
+"New title" = "Нова назва";
+"Rename" = "Перейменувати";
+"Preview" = "Перегляд";
+"File not found" = "Файл не знайдено";
+"Unable to load image" = "Неможливо завантажити зображення";
+
+// Import preview - data types
+"documents" = "документів";
+"ideas" = "ідей";
+"import.documents_metadata_only" = "Примітка: файли документів не включені в резервну копію. Будуть відновлені лише метадані документів.";
+

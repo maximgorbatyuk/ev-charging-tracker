@@ -367,3 +367,50 @@
 "share.migration_required.message" = "Kurulumu tamamlamak için EVChargingTracker'ı bir kez açın, ardından tekrar deneyin.";
 "share.migration_required.dismiss" = "Tamam";
 
+/* Car details - create chooser */
+"Create new" = "Yeni oluştur";
+"New maintenance record" = "Yeni bakım kaydı";
+"New document" = "Yeni belge";
+"New idea" = "Yeni fikir";
+"Documents" = "Belgeler";
+"Ideas" = "Fikirler";
+
+/* Car details - root screen */
+"Car details" = "Araç detayları";
+"See all" = "Tümünü gör";
+"No documents yet" = "Henüz belge yok";
+"No ideas yet" = "Henüz fikir yok";
+
+/* Ideas */
+"URL" = "URL";
+"Description" = "Açıklama";
+"Edit idea" = "Fikri düzenle";
+"idea.title.placeholder" = "Fikir başlığını girin";
+"idea.url.placeholder" = "https://ornek.com (isteğe bağlı)";
+"idea.title.required" = "Başlık gereklidir";
+"idea.url.invalid" = "Lütfen geçerli bir URL girin";
+"Add your first idea" = "İlk fikrinizi ekleyin";
+"Delete idea?" = "Fikri sil?";
+"Delete selected idea? This action cannot be undone." = "Seçili fikri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"Error" = "Hata";
+"OK" = "Tamam";
+
+/* Documents */
+"Import from" = "Şuradan içe aktar";
+"Files" = "Dosyalar";
+"Photos" = "Fotoğraflar";
+"Add your first document" = "İlk belgenizi ekleyin";
+"Delete document?" = "Belgeyi sil?";
+"Delete selected document? This action cannot be undone." = "Seçili belgeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"Rename document" = "Belgeyi yeniden adlandır";
+"New title" = "Yeni başlık";
+"Rename" = "Yeniden adlandır";
+"Preview" = "Önizleme";
+"File not found" = "Dosya bulunamadı";
+"Unable to load image" = "Görsel yüklenemedi";
+
+// Import preview - data types
+"documents" = "belge";
+"ideas" = "fikir";
+"import.documents_metadata_only" = "Not: Belge dosyaları yedeklemeye dahil değildir. Yalnızca belge meta verileri geri yüklenecektir.";
+

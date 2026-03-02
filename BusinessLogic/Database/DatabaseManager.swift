@@ -14,6 +14,8 @@ protocol DatabaseManagerProtocol {
     func getCarRepository() -> CarRepositoryProtocol?
     func getExpensesRepository() -> ExpensesRepositoryProtocol?
     func getUserSettingsRepository() -> UserSettingsRepositoryProtocol?
+    func getDocumentsRepository() -> DocumentsRepositoryProtocol?
+    func getIdeasRepository() -> IdeasRepositoryProtocol?
 }
 
 class DatabaseManager : DatabaseManagerProtocol {
@@ -24,6 +26,8 @@ class DatabaseManager : DatabaseManagerProtocol {
     static let CarsTableName = "cars"
     static let PlannedMaintenanceTableName = "planned_maintenance"
     static let DelayedNotificationsTableName = "delayed_notifications"
+    static let DocumentsTableName = "documents"
+    static let IdeasTableName = "ideas"
 
     static let shared = DatabaseManager()
 
@@ -33,10 +37,12 @@ class DatabaseManager : DatabaseManagerProtocol {
     var carRepository: CarRepository?
     var plannedMaintenanceRepository: PlannedMaintenanceRepository?
     var delayedNotificationsRepository: DelayedNotificationsRepository?
+    var documentsRepository: DocumentsRepository?
+    var ideasRepository: IdeasRepository?
 
     private var db: Connection?
     private let logger: Logger
-    private let latestVersion = 6
+    private let latestVersion = 7
     private(set) var isInitialized: Bool = false
     
     private init() {
@@ -61,6 +67,8 @@ class DatabaseManager : DatabaseManagerProtocol {
             self.userSettingsRepository = UserSettingsRepository(db: dbConnection, tableName: DatabaseManager.UserSettingsTableName)
             self.plannedMaintenanceRepository = PlannedMaintenanceRepository(db: dbConnection, tableName: DatabaseManager.PlannedMaintenanceTableName)
             self.delayedNotificationsRepository = DelayedNotificationsRepository(db: dbConnection, tableName: DatabaseManager.DelayedNotificationsTableName)
+            self.documentsRepository = DocumentsRepository(db: dbConnection, tableName: DatabaseManager.DocumentsTableName)
+            self.ideasRepository = IdeasRepository(db: dbConnection, tableName: DatabaseManager.IdeasTableName)
 
             self.carRepository = CarRepository(
                 db: dbConnection,
@@ -100,6 +108,14 @@ class DatabaseManager : DatabaseManagerProtocol {
 
     func getUserSettingsRepository() -> UserSettingsRepositoryProtocol? {
         return userSettingsRepository
+    }
+
+    func getDocumentsRepository() -> DocumentsRepositoryProtocol? {
+        return documentsRepository
+    }
+
+    func getIdeasRepository() -> IdeasRepositoryProtocol? {
+        return ideasRepository
     }
 
     func migrateIfNeeded() {
@@ -145,6 +161,10 @@ class DatabaseManager : DatabaseManagerProtocol {
                 let migration6 = Migration_20250131_AddWheelDetailsToCarsTable(db: db)
                 migration6.execute()
 
+            case 7:
+                let migration7 = Migration_20260301_CreateDocumentsAndIdeasTables(db: db)
+                migration7.execute()
+
             default:
                 break
             }
@@ -166,6 +186,8 @@ class DatabaseManager : DatabaseManagerProtocol {
         expensesRepository.truncateTable()
         plannedMaintenanceRepository.truncateTable()
         delayedNotificationsRepository.truncateTable()
+        documentsRepository?.truncateTable()
+        ideasRepository?.truncateTable()
         carRepository.truncateTable()
     }
 

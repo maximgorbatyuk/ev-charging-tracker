@@ -30,6 +30,7 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showImportFilePicker = false
     @State private var showUserSettingsTable = false
     @State private var showLaunchScreen = false
+    @State private var showDocumentStorageBrowser = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
@@ -657,6 +658,20 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                         .buttonStyle(.plain)
 
+                        Button(action: {
+                            showDocumentStorageBrowser = true
+                        }) {
+                            HStack {
+                                Image(systemName: "folder.badge.gearshape")
+                                    .foregroundColor(.cyan)
+
+                                Text("View app documents")
+                                    .padding(.leading, 4)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .buttonStyle(.plain)
+
                         // Migration diagnostics
                         HStack {
                             Image(systemName: "internaldrive")
@@ -754,6 +769,9 @@ struct UserSettingsView: SwiftUICore.View {
             .sheet(isPresented: $showLaunchScreen) {
                 LaunchScreenView()
             }
+            .sheet(isPresented: $showDocumentStorageBrowser) {
+                DocumentStorageBrowserView()
+            }
             .fileImporter(
                 isPresented: $showImportFilePicker,
                 allowedContentTypes: [.json],
@@ -847,9 +865,11 @@ struct UserSettingsView: SwiftUICore.View {
         • \(preview.expensesCount) \(L("expenses"))
         • \(preview.maintenanceCount) \(L("maintenance records"))
         • \(preview.notificationsCount) \(L("notifications"))
+        • \(preview.documentsCount) \(L("documents"))
+        • \(preview.ideasCount) \(L("ideas"))
 
         \(L("Date Range")): \(preview.dateRange)
-
+        \(preview.documentsCount > 0 ? "\n\(L("import.documents_metadata_only"))" : "")
         ⚠️ \(L("Warning: Importing will DELETE ALL existing data. This cannot be undone."))
         """
     }

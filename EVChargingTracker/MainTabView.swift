@@ -40,14 +40,14 @@ struct MainTabView: SwiftUI.View {
                     .tint(nil)
                     .tag(1)
 
-                PlanedMaintenanceView(
+                CarDetailsView(
                     onPlannedMaintenaceRecordsUpdated: {
                         self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
                     }
                 )
                     .tag(2)
                     .tabItem {
-                        Label(L("Maintenance"), systemImage: "hammer.fill")
+                        Label(L("Car"), systemImage: "car.fill")
                     }
                     .tint(nil)
                     .badge(pendingMaintenanceRecords)

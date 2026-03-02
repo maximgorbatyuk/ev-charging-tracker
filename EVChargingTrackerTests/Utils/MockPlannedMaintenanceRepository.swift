@@ -60,4 +60,8 @@ class MockPlannedMaintenanceRepository: PlannedMaintenanceRepositoryProtocol {
         deletedRecordIds.append(recordId)
         return true
     }
+
+    func getPendingMaintenanceRecords(carId: Int64, currentOdometer: Int, currentDate: Date) -> Int {
+        return records.filter { $0.carId == carId }.count
+    }
 }
