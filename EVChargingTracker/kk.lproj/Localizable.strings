@@ -150,6 +150,8 @@
 "Car mileage" = "Көлік жүрісі";
 "Initial (km)" = "Бастапқы (км)";
 "Current (km)" = "Ағымдағы (км)";
+"Total mileage" = "Жалпы жүріс";
+"No car selected" = "Көлік таңдалмаған";
 "Remain at odometer" = "Одометрдегі қалдық";
 "Maintenance reminder" = "Техникалық қызмет туралы еске салу";
 "Some maintenance tasks due" = "Қызмет көрсету жайында бірнеше жазбалар бар";

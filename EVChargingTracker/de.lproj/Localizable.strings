@@ -142,6 +142,8 @@
 "Car mileage" = "Kilometerstand des Autos";
 "Initial (km)" = "Anfang (km)";
 "Current (km)" = "Aktuell (km)";
+"Total mileage" = "Gesamtkilometerstand";
+"No car selected" = "Kein Auto ausgewählt";
 "Remain at odometer" = "Verbleibend bis zum Kilometerstand";
 "Maintenance reminder" = "Wartungserinnerung";
 "Some maintenance tasks due" = "Einige Wartungsarbeiten sind fällig";

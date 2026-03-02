@@ -22,6 +22,7 @@ class CarDetailsViewModel: ObservableObject {
     private let maintenanceRepo: PlannedMaintenanceRepositoryProtocol?
     private let documentsRepo: DocumentsRepositoryProtocol?
     private let ideasRepo: IdeasRepositoryProtocol?
+    private let expensesRepo: ExpensesRepositoryProtocol?
 
     private let previewLimit = 3
 
@@ -30,6 +31,7 @@ class CarDetailsViewModel: ObservableObject {
         self.maintenanceRepo = db.getPlannedMaintenanceRepository()
         self.documentsRepo = db.getDocumentsRepository()
         self.ideasRepo = db.getIdeasRepository()
+        self.expensesRepo = db.getExpensesRepository()
     }
 
     func loadData() {
@@ -97,6 +99,41 @@ class CarDetailsViewModel: ObservableObject {
 
     var hasMultipleCars: Bool {
         allCars.count > 1
+    }
+
+    func hasOtherCars(carIdToExclude: Int64) -> Bool {
+        allCars.contains { $0.id != carIdToExclude }
+    }
+
+    func getDefaultCurrency() -> Currency {
+        selectedCar?.expenseCurrency ?? .usd
+    }
+
+    func getCarById(_ id: Int64) -> Car? {
+        carRepo?.getCarById(id)
+    }
+
+    func updateCar(_ car: Car) -> Bool {
+        let carUpdated = carRepo?.updateCar(car: car) ?? false
+        let expensesUpdated = expensesRepo?.updateCarExpensesCurrency(car) ?? false
+
+        if car.selectedForTracking, let carId = car.id {
+            _ = carRepo?.selectCarForTracking(carId)
+        }
+
+        return carUpdated && expensesUpdated
+    }
+
+    func deleteCar(_ carId: Int64) {
+        let maintenanceRepo = self.maintenanceRepo
+        let docsRepo = self.documentsRepo
+        let ideasRepo = self.ideasRepo
+
+        maintenanceRepo?.deleteRecordsForCar(carId)
+        docsRepo?.deleteRecordsForCar(carId)
+        ideasRepo?.deleteRecordsForCar(carId)
+        DocumentService.shared.deleteCarDocuments(carId: carId)
+        _ = carRepo?.delete(id: carId)
     }
 
     func selectCar(_ car: Car) {

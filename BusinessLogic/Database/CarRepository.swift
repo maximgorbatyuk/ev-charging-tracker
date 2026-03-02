@@ -12,11 +12,14 @@ import os
 protocol CarRepositoryProtocol {
     func getSelectedForExpensesCar() -> Car?
     func getAllCars() -> [Car]
+    func getCarById(_ id: Int64) -> Car?
     func insert(_ car: Car) -> Int64?
+    func updateCar(car: Car) -> Bool
     func updateMilleage(_ car: Car) -> Bool
     func markAllCarsAsNoTracking(carIdToExclude: Int64) -> Bool
     func markCarAsSelectedForTracking(_ id: Int64) -> Bool
     func selectCarForTracking(_ id: Int64) -> Bool
+    func delete(id: Int64) -> Bool
 }
 
 class CarRepository : CarRepositoryProtocol {

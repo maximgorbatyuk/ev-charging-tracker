@@ -145,6 +145,8 @@
 "Car mileage" = "Пробег автомобиля";
 "Initial (km)" = "Начальный (км)";
 "Current (km)" = "Текущий (км)";
+"Total mileage" = "Общий пробег";
+"No car selected" = "Автомобиль не выбран";
 "Remain at odometer" = "Осталось км";
 "Maintenance reminder" = "Напоминание о сервисе";
 "You have %d maintenance task(s) due based on your car's current mileage." = "У вас есть %d задача(и) по сервису, которые необходимо выполнить";

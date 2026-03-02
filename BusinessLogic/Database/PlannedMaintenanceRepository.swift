@@ -29,6 +29,7 @@ protocol PlannedMaintenanceRepositoryProtocol {
     func updateRecord(_ record: PlannedMaintenance) -> Bool
     func deleteRecord(id recordId: Int64) -> Bool
     func getPendingMaintenanceRecords(carId: Int64, currentOdometer: Int, currentDate: Date) -> Int
+    func deleteRecordsForCar(_ carId: Int64)
 }
 
 class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {

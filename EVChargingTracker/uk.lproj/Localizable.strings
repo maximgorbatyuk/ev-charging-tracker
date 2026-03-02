@@ -142,6 +142,8 @@
 "Car mileage" = "Пробіг авто";
 "Initial (km)" = "Початковий (км)";
 "Current (km)" = "Поточний (км)";
+"Total mileage" = "Загальний пробіг";
+"No car selected" = "Автомобіль не обрано";
 "Remain at odometer" = "Залишилось за одометром";
 "Maintenance reminder" = "Нагадування про обслуговування";
 "Some maintenance tasks due" = "Є заплановані роботи";

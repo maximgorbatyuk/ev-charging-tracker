@@ -57,4 +57,18 @@ class MockCarRepository: CarRepositoryProtocol {
     func selectCarForTracking(_ id: Int64) -> Bool {
         return true
     }
+
+    func getCarById(_ id: Int64) -> Car? {
+        return cars.first { $0.id == id }
+    }
+
+    func updateCar(car: Car) -> Bool {
+        updatedCars.append(car)
+        return true
+    }
+
+    func delete(id: Int64) -> Bool {
+        cars.removeAll { $0.id == id }
+        return true
+    }
 }

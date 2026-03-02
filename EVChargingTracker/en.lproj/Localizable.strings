@@ -142,6 +142,8 @@
 "Car mileage" = "Car mileage";
 "Initial (km)" = "Initial (km)";
 "Current (km)" = "Current (km)";
+"Total mileage" = "Total mileage";
+"No car selected" = "No car selected";
 "Remain at odometer" = "Remain at odometer";
 "Maintenance reminder" = "Maintenance reminder";
 "Some maintenance tasks due" = "Some maintenance tasks due";

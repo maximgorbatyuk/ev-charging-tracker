@@ -122,6 +122,77 @@ struct IdeaPreviewRow: SwiftUI.View {
     }
 }
 
+struct CarInfoContent: SwiftUI.View {
+
+    let car: Car
+
+    var body: some SwiftUI.View {
+        VStack(spacing: 0) {
+            CarInfoRow(
+                icon: "road.lanes",
+                label: L("Current (km)"),
+                value: "\(car.currentMileage.formatted()) km"
+            )
+
+            Divider().padding(.leading, 56)
+
+            CarInfoRow(
+                icon: "gauge.with.dots.needle.bottom.50percent",
+                label: L("Total mileage"),
+                value: "\(car.getTotalMileage().formatted()) km"
+            )
+
+            if let front = car.frontWheelSize, !front.isEmpty {
+                Divider().padding(.leading, 56)
+
+                CarInfoRow(
+                    icon: "circle.circle",
+                    label: L("Front wheel size"),
+                    value: front
+                )
+
+                if let rear = car.rearWheelSize, !rear.isEmpty, rear != front {
+                    Divider().padding(.leading, 56)
+
+                    CarInfoRow(
+                        icon: "circle.circle",
+                        label: L("Rear wheel size"),
+                        value: rear
+                    )
+                }
+            }
+        }
+    }
+}
+
+private struct CarInfoRow: SwiftUI.View {
+
+    let icon: String
+    let label: String
+    let value: String
+
+    var body: some SwiftUI.View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(.green)
+                .frame(width: 32, height: 32)
+
+            Text(label)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            Spacer()
+
+            Text(value)
+                .font(.subheadline)
+                .fontWeight(.medium)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+    }
+}
+
 struct EmptySectionView: SwiftUI.View {
 
     let icon: String

@@ -1,5 +1,43 @@
 # Release notes
 
+## 2026.2.6
+
+### English
+
+```
+We added a brand new Car tab where you can keep all your car's documents, save useful links and ideas, and quickly see upcoming maintenance — all in one place. You can also share content from other apps directly into the tracker using the system Share menu. We also improved stability and fixed a few things under the hood.
+```
+
+### Русский (RU)
+
+```
+Мы добавили новую вкладку «Авто», где можно хранить все документы автомобиля, сохранять полезные ссылки и идеи, а также быстро видеть предстоящее обслуживание — всё в одном месте. Теперь можно делиться контентом из других приложений прямо в трекер через системное меню «Поделиться». Также мы поработали над стабильностью и исправили несколько мелочей.
+```
+
+### Қазақша (KK)
+
+```
+Жаңа «Авто» қойындысын қостық — онда көліктің барлық құжаттарын сақтауға, пайдалы сілтемелер мен идеяларды жазып қоюға және алдағы техникалық қызмет көрсетуді бір жерден көруге болады. Енді басқа қолданбалардан контентті тікелей трекерге жүйелік «Бөлісу» мәзірі арқылы жіберуге болады. Сонымен қатар тұрақтылықты жақсартып, бірнеше ұсақ-түйекті түзеттік.
+```
+
+### Türkçe (TR)
+
+```
+Yeni bir "Araç" sekmesi ekledik — burada aracınızın tüm belgelerini saklayabilir, faydalı bağlantıları ve fikirleri kaydedebilir ve yaklaşan bakımları tek bir yerden görebilirsiniz. Artık diğer uygulamalardan içerik paylaşım menüsü aracılığıyla doğrudan takipçiye gönderebilirsiniz. Ayrıca kararlılığı iyileştirdik ve birkaç küçük sorunu düzelttik.
+```
+
+### Українська (UK)
+
+```
+Ми додали нову вкладку «Авто», де можна зберігати всі документи автомобіля, записувати корисні посилання та ідеї, а також швидко бачити заплановане обслуговування — все в одному місці. Тепер можна ділитися контентом з інших застосунків прямо в трекер через системне меню «Поділитися». Також ми попрацювали над стабільністю та виправили декілька дрібниць.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben einen neuen „Auto"-Tab hinzugefügt, in dem Sie alle Fahrzeugdokumente aufbewahren, nützliche Links und Ideen speichern und anstehende Wartungen auf einen Blick sehen können — alles an einem Ort. Außerdem können Sie jetzt Inhalte aus anderen Apps über das Teilen-Menü direkt in den Tracker senden. Wie immer haben wir die Stabilität verbessert und ein paar Kleinigkeiten behoben.
+```
+
 ## 2026.1.8
 
 ### English
