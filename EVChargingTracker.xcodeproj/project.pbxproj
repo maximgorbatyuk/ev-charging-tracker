@@ -607,7 +607,7 @@
 			baseConfigurationReferenceAnchor = 87756BD92E963D240055273C /* EVChargingTracker */;
 			baseConfigurationReferenceRelativePath = Config/Debug.xcconfig;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtensionDebug.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = EKKL63HDHJ;
