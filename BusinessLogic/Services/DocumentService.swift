@@ -123,6 +123,65 @@ class DocumentService {
         }
     }
 
+    // MARK: - Temporary Backup for Safe Import
+
+    private var temporaryDocumentBackupURL: URL {
+        AppGroupContainer.containerURL.appendingPathComponent("CarDocuments_backup", isDirectory: true)
+    }
+
+    func moveDocumentsToTemporaryBackup() {
+        let source = documentsDirectoryURL
+        let destination = temporaryDocumentBackupURL
+
+        // Clean up any stale temp backup first
+        if fileManager.fileExists(atPath: destination.path) {
+            try? fileManager.removeItem(at: destination)
+        }
+
+        guard fileManager.fileExists(atPath: source.path) else { return }
+
+        do {
+            try fileManager.moveItem(at: source, to: destination)
+            logger.info("Moved document files to temporary backup")
+        } catch {
+            logger.error("Failed to move documents to temporary backup: \(error)")
+        }
+    }
+
+    func restoreDocumentsFromTemporaryBackup() {
+        let source = temporaryDocumentBackupURL
+        let destination = documentsDirectoryURL
+
+        guard fileManager.fileExists(atPath: source.path) else {
+            logger.warning("No temporary document backup to restore from")
+            return
+        }
+
+        // Remove any partially-imported files
+        if fileManager.fileExists(atPath: destination.path) {
+            try? fileManager.removeItem(at: destination)
+        }
+
+        do {
+            try fileManager.moveItem(at: source, to: destination)
+            logger.info("Restored document files from temporary backup")
+        } catch {
+            logger.error("Failed to restore documents from temporary backup: \(error)")
+        }
+    }
+
+    func removeTemporaryDocumentBackup() {
+        let url = temporaryDocumentBackupURL
+        guard fileManager.fileExists(atPath: url.path) else { return }
+
+        do {
+            try fileManager.removeItem(at: url)
+            logger.info("Removed temporary document backup")
+        } catch {
+            logger.error("Failed to remove temporary document backup: \(error)")
+        }
+    }
+
     func fileSize(at path: String) -> Int64 {
         do {
             let attrs = try fileManager.attributesOfItem(atPath: path)

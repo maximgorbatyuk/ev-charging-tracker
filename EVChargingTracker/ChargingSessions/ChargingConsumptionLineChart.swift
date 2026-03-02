@@ -28,7 +28,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                 }
             }
             .padding(.horizontal)
-            
+
             if viewModel.isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity)
@@ -49,7 +49,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                         )
                         .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
                         .interpolationMethod(.catmullRom)
-                        
+
                         AreaMark(
                             x: .value("Month", data.monthName),
                             y: .value("Charging", data.totalEnergy)
@@ -65,7 +65,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                             )
                         )
                         .interpolationMethod(.catmullRom)
-                        
+
                         PointMark(
                             x: .value("Month", data.monthName),
                             y: .value("Charging", data.totalEnergy)

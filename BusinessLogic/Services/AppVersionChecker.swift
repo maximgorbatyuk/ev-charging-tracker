@@ -6,8 +6,8 @@ protocol AppVersionCheckerProtocol {
     func checkAppStoreVersion() async -> Bool?
 }
 
-class AppVersionChecker : AppVersionCheckerProtocol {
-   
+class AppVersionChecker: AppVersionCheckerProtocol {
+
     private let environment: EnvironmentService
     private let logger: Logger
 
@@ -47,7 +47,7 @@ class AppVersionChecker : AppVersionCheckerProtocol {
 
             let appStoreVersion = results?.first?["version"] as? String ?? "-"
 
-            if (appStoreVersion == "-") {
+            if appStoreVersion == "-" {
                 logger.info("No version info found in App Store response")
                 return nil
             }

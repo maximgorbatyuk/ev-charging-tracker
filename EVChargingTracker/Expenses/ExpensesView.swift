@@ -12,8 +12,8 @@ struct ExpensesView: SwiftUICore.View {
     @StateObject private var viewModel = ExpensesViewModel()
     @State private var showingAddSession = false
     @State private var showingDeleteConfirmation: Bool = false
-    @State private var expenseToDelete: Expense? = nil
-    @State private var expenseToEdit: Expense? = nil
+    @State private var expenseToDelete: Expense?
+    @State private var expenseToEdit: Expense?
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -112,7 +112,7 @@ struct ExpensesView: SwiftUICore.View {
             Text(L("No expenses yet"))
                 .font(.title3)
                 .foregroundColor(.gray)
-            
+
             Text(L("Add your first expense to start tracking"))
                 .font(.subheadline)
                 .foregroundColor(.gray.opacity(0.9))
@@ -281,7 +281,7 @@ struct ExpensesView: SwiftUICore.View {
             .scrollContentBackground(.hidden)
         }
     }
-    
+
     private var paginationControlsView: some SwiftUICore.View {
         VStack(spacing: 12) {
             // Navigation buttons
@@ -317,7 +317,7 @@ struct ExpensesView: SwiftUICore.View {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color.blue.opacity(0.1))
                     )
-                
+
                 // Next button
                 Button(action: {
                     viewModel.goToNextPage()
@@ -338,7 +338,7 @@ struct ExpensesView: SwiftUICore.View {
                 .buttonStyle(.borderless)
                 .disabled(viewModel.currentPage >= viewModel.totalPages)
             }
-            
+
             // Information text
             Text(String(format: L("Total records: %d, total pages: %d"), viewModel.totalRecords, viewModel.totalPages))
                 .font(.caption)

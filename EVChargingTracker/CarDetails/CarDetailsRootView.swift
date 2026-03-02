@@ -15,7 +15,7 @@ struct CarDetailsRootView: SwiftUI.View {
     @State private var showEditCarSheet = false
 
     let onNavigate: (CarFlowRoute) -> Void
-    let onPlannedMaintenaceRecordsUpdated: () -> Void
+    let onPlannedMaintenanceRecordsUpdated: () -> Void
 
     var body: some SwiftUI.View {
         ScrollView {
@@ -42,7 +42,7 @@ struct CarDetailsRootView: SwiftUI.View {
                         ForEach(viewModel.allCars, id: \.id) { car in
                             Button {
                                 viewModel.selectCar(car)
-                                onPlannedMaintenaceRecordsUpdated()
+                                onPlannedMaintenanceRecordsUpdated()
                             } label: {
                                 if car.id == viewModel.selectedCar?.id {
                                     Label(car.name, systemImage: "checkmark")
@@ -153,14 +153,14 @@ struct CarDetailsRootView: SwiftUI.View {
                         _ = viewModel.updateCar(carToUpdate)
                         showEditCarSheet = false
                         viewModel.loadData()
-                        onPlannedMaintenaceRecordsUpdated()
+                        onPlannedMaintenanceRecordsUpdated()
                     },
                     onDelete: { carToDelete in
                         guard let deleteId = carToDelete.id else { return }
                         viewModel.deleteCar(deleteId)
                         showEditCarSheet = false
                         viewModel.loadData()
-                        onPlannedMaintenaceRecordsUpdated()
+                        onPlannedMaintenanceRecordsUpdated()
                     },
                     onCancel: {
                         showEditCarSheet = false

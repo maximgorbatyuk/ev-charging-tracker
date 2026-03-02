@@ -18,8 +18,8 @@ protocol DatabaseManagerProtocol {
     func getIdeasRepository() -> IdeasRepositoryProtocol?
 }
 
-class DatabaseManager : DatabaseManagerProtocol {
-    
+class DatabaseManager: DatabaseManagerProtocol {
+
     static let ExpensesTableName = "charging_sessions"
     static let MigrationsTableName = "migrations"
     static let UserSettingsTableName = "user_settings"
@@ -44,7 +44,7 @@ class DatabaseManager : DatabaseManagerProtocol {
     private let logger: Logger
     private let latestVersion = 7
     private(set) var isInitialized: Bool = false
-    
+
     private init() {
 
         self.logger = Logger(subsystem: "com.evchargingtracker.database", category: "DatabaseManager")
@@ -87,7 +87,7 @@ class DatabaseManager : DatabaseManagerProtocol {
     }
 
     func getDatabaseSchemaVersion() -> Int {
-        return latestVersion;
+        return latestVersion
     }
 
     func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol? {
@@ -131,7 +131,7 @@ class DatabaseManager : DatabaseManagerProtocol {
         migrationRepository.createTableIfNotExists()
         let currentVersion = migrationRepository.getLatestMigrationVersion()
 
-        if (currentVersion == latestVersion) {
+        if currentVersion == latestVersion {
             return
         }
 
@@ -173,7 +173,7 @@ class DatabaseManager : DatabaseManagerProtocol {
         }
     }
 
-    func deleteAllData() -> Void {
+    func deleteAllData() {
         guard let expensesRepository = expensesRepository,
               let plannedMaintenanceRepository = plannedMaintenanceRepository,
               let delayedNotificationsRepository = delayedNotificationsRepository,
@@ -191,7 +191,7 @@ class DatabaseManager : DatabaseManagerProtocol {
         carRepository.truncateTable()
     }
 
-    func deleteAllExpenses(_ selectedCar: Car) -> Void {
+    func deleteAllExpenses(_ selectedCar: Car) {
         guard let carId = selectedCar.id else {
             logger.error("Cannot delete expenses: car ID is nil")
             return

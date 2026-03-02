@@ -10,15 +10,15 @@ import UIKit
 
 class EnvironmentService: ObservableObject {
 
-    var _developerName: String? = nil
-    var _gitHubRepositoryUrl: String? = nil
-    var _buildEnvironment: String? = nil
-    var _appVisibleVersion: String? = nil
-    var _developerTelegramLink: String? = nil
-    var _appStoreAppLink : String? = nil
-    var _co2EuropePollutionPerOneKilometer: Double? = nil
-    var _appBundleId: String? = nil
-    var _appGroupIdentifier: String? = nil
+    var _developerName: String?
+    var _gitHubRepositoryUrl: String?
+    var _buildEnvironment: String?
+    var _appVisibleVersion: String?
+    var _developerTelegramLink: String?
+    var _appStoreAppLink: String?
+    var _co2EuropePollutionPerOneKilometer: Double?
+    var _appBundleId: String?
+    var _appGroupIdentifier: String?
 
     static let shared = EnvironmentService()
 
@@ -43,7 +43,7 @@ class EnvironmentService: ObservableObject {
         if _appBundleId != nil {
             return _appBundleId!
         }
-   
+
         _appBundleId = Bundle.main.bundleIdentifier
         return _appBundleId
     }
@@ -103,7 +103,7 @@ class EnvironmentService: ObservableObject {
             return _co2EuropePollutionPerOneKilometer!
         }
 
-        let valueAsString = Bundle.main.object(forInfoDictionaryKey: "Co2EuropePollutionPerOneKilometer") as? String ?? "0.0";
+        let valueAsString = Bundle.main.object(forInfoDictionaryKey: "Co2EuropePollutionPerOneKilometer") as? String ?? "0.0"
         _co2EuropePollutionPerOneKilometer = Double(valueAsString) ?? 0.0
 
         return _co2EuropePollutionPerOneKilometer!

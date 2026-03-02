@@ -15,7 +15,7 @@ enum CarFlowRoute: Hashable {
 
 struct CarDetailsFlowContainerView: SwiftUI.View {
 
-    let onPlannedMaintenaceRecordsUpdated: () -> Void
+    let onPlannedMaintenanceRecordsUpdated: () -> Void
 
     @State private var path: [CarFlowRoute] = []
     @State private var showCreateChooser = false
@@ -31,7 +31,7 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
                     onNavigate: { route in
                         path.append(route)
                     },
-                    onPlannedMaintenaceRecordsUpdated: onPlannedMaintenaceRecordsUpdated
+                    onPlannedMaintenanceRecordsUpdated: onPlannedMaintenanceRecordsUpdated
                 )
                 .navigationDestination(for: CarFlowRoute.self) { route in
                     switch route {
@@ -39,7 +39,7 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
                         PlanedMaintenanceView(
                             embedded: true,
                             triggerAdd: $triggerAddMaintenance,
-                            onPlannedMaintenaceRecordsUpdated: onPlannedMaintenaceRecordsUpdated
+                            onPlannedMaintenanceRecordsUpdated: onPlannedMaintenanceRecordsUpdated
                         )
                         .onAppear { consumePendingAction(.maintenance) }
                     case .documents:

@@ -20,7 +20,7 @@ struct EditCarView: SwiftUICore.View {
     @State private var sameWheelSizeForFrontAndRear: Bool
 
     @State private var showDeleteConfirmation = false
-    @State private var alertMessage: String? = nil
+    @State private var alertMessage: String?
     @State private var showingWheelInfoSheet = false
 
     init(
@@ -30,8 +30,7 @@ struct EditCarView: SwiftUICore.View {
         hasOtherCars: Bool,
         onSave: @escaping (CarDto) -> Void,
         onDelete: @escaping (CarDto) -> Void,
-        onCancel: @escaping () -> Void)
-    {
+        onCancel: @escaping () -> Void) {
         self.car = car
         self.hasOtherCars = hasOtherCars
         self.onSave = onSave
@@ -55,7 +54,7 @@ struct EditCarView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
-                if (alertMessage != nil) {
+                if alertMessage != nil {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.orange)
@@ -69,7 +68,7 @@ struct EditCarView: SwiftUICore.View {
                     .listRowBackground(Color.yellow.opacity(0.2))
                     .background(Color.clear)
                 }
-                
+
                 Section(header: Text(L("Basic info"))) {
                     HStack {
                         Text(L("Name"))
@@ -98,7 +97,7 @@ struct EditCarView: SwiftUICore.View {
                 }
 
                 Section(header: Text(L("Car mileage"))) {
-                    
+
                     HStack {
                         Text(L("Initial (km)"))
                             .foregroundColor(.secondary)
@@ -184,7 +183,7 @@ struct EditCarView: SwiftUICore.View {
                     }
                 }
 
-                if (car != nil) {
+                if car != nil {
                     Section(header: Text(L("Danger zone"))) {
                         Button(role: .destructive, action: {
                             showDeleteConfirmation = true
@@ -212,22 +211,22 @@ struct EditCarView: SwiftUICore.View {
                     Button(L("Save")) {
                         let battery = Double(batteryText)
 
-                        var batteryToSave: Double? = nil
-                        if (battery != nil && battery! <= 200) {
+                        var batteryToSave: Double?
+                        if battery != nil && battery! <= 200 {
                             batteryToSave = battery
                         }
 
                         var currentMileageToSave = car?.currentMileage ?? 0
                         var initialMileageToSave = car?.initialMileage ?? 0
 
-                        if (car != nil) {
+                        if car != nil {
                             currentMileageToSave = Int(mileageText) ?? car!.currentMileage
                             initialMileageToSave = Int(initialMileageText) ?? car!.initialMileage
                         } else {
                             initialMileageToSave = Int(initialMileageText) ?? 0
                             let currentMileageValue = Int(mileageText) ?? 0
 
-                            if (currentMileageValue >= initialMileageToSave) {
+                            if currentMileageValue >= initialMileageToSave {
                                 currentMileageToSave = currentMileageValue
                             } else {
                                 currentMileageToSave = initialMileageToSave
@@ -333,7 +332,6 @@ struct WheelInfoSheetView: SwiftUICore.View {
         }
     }
 }
-
 
 #Preview {
     EditCarView(

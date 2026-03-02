@@ -32,7 +32,7 @@ protocol PlannedMaintenanceRepositoryProtocol {
     func deleteRecordsForCar(_ carId: Int64)
 }
 
-class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
+class PlannedMaintenanceRepository: PlannedMaintenanceRepositoryProtocol {
     private let table: Table
 
     private let id = Expression<Int64>("id")
@@ -75,7 +75,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
             return 0
         }
     }
- 
+
     func getAllRecords(carId: Int64) -> [PlannedMaintenance] {
         var recordsList: [PlannedMaintenance] = []
 
@@ -91,7 +91,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
     }
 
     func insertRecord(_ record: PlannedMaintenance) -> Int64? {
-        
+
         do {
             let insert = table.insert(
                 whenColumn <- record.when,
@@ -110,7 +110,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
         }
     }
 
-    func truncateTable() -> Void {
+    func truncateTable() {
         do {
             try db.run(table.delete())
         } catch {
@@ -133,7 +133,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
             return false
         }
         let recordToUpdate = table.filter(id == recordId)
-        
+
         do {
             try db.run(recordToUpdate.update(
                 whenColumn <- record.when,
@@ -149,7 +149,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
         }
     }
 
-    func deleteRecordsForCar(_ carId: Int64) -> Void {
+    func deleteRecordsForCar(_ carId: Int64) {
         let recordsToDelete = table.filter(carIdColumn == carId)
         do {
             try db.run(recordsToDelete.delete())
@@ -160,7 +160,7 @@ class PlannedMaintenanceRepository : PlannedMaintenanceRepositoryProtocol {
 
     func deleteRecord(id recordId: Int64) -> Bool {
         let recordToDelete = table.filter(id == recordId)
-        
+
         do {
             try db.run(recordToDelete.delete())
             return true

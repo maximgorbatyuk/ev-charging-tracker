@@ -46,9 +46,9 @@ class Car: Codable, Identifiable {
         self.frontWheelSize = frontWheelSize
         self.rearWheelSize = rearWheelSize
     }
-    
+
     func updateMileage(newMileage: Int) {
-        if (self.currentMileage >= newMileage) {
+        if self.currentMileage >= newMileage {
             return
         }
 
@@ -68,21 +68,21 @@ class Car: Codable, Identifiable {
         expenseCurrency: Currency,
         selectedForTracking: Bool,
         frontWheelSize: String?,
-        rearWheelSize: String?) -> Void {
-        if (!name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
+        rearWheelSize: String?) {
+        if !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.name = name
         }
 
-        if (batteryCapacity != nil && batteryCapacity! > 0) {
+        if batteryCapacity != nil && batteryCapacity! > 0 {
             self.batteryCapacity = batteryCapacity
         }
 
-        if (currentMileage > 0 && currentMileage >= self.initialMileage) {
+        if currentMileage > 0 && currentMileage >= self.initialMileage {
             self.currentMileage = currentMileage
             self.milleageSyncedAt = Date()
         }
 
-        if (intialMileage <= self.currentMileage) {
+        if intialMileage <= self.currentMileage {
             self.initialMileage = intialMileage
         }
 

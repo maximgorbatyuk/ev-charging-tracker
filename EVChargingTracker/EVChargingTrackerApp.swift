@@ -84,7 +84,7 @@ struct EVChargingTrackerApp: App {
 final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
   static let shared = ForegroundNotificationDelegate()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         // Set the delegate
         UNUserNotificationCenter.current().delegate = self
 

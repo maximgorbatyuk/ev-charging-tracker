@@ -190,7 +190,7 @@ struct ShareFormView: SwiftUI.View {
             }
         case .text:
             if let text = input.text {
-                Text(text.prefix(200) + (text.count > 200 ? "..." : ""))
+                Text(String(text.prefix(200)) + (text.count > 200 ? "..." : ""))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(5)

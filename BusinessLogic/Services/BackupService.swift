@@ -35,7 +35,7 @@ final class BackupService: ObservableObject {
         }
 
         var bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.evchargingtracker.EVChargingTracker"
-        if (bundleIdentifier.contains("Debug")) {
+        if bundleIdentifier.contains("Debug") {
             bundleIdentifier = bundleIdentifier.replacingOccurrences(of: "Debug", with: "")
         }
 
@@ -166,19 +166,23 @@ final class BackupService: ObservableObject {
         let safetyBackupURL = try await createSafetyBackup()
 
         do {
-            // Step 4: Wipe existing data
-            wipeAllData()
+            // Step 4: Wipe existing data (move document files to temp backup)
+            wipeAllDataWithDocumentBackup()
 
             // Step 5: Import new data
             try await importExportData(exportData)
 
-            // Step 6: Cleanup old safety backups
+            // Step 6: Import succeeded — remove temporary document backup
+            DocumentService.shared.removeTemporaryDocumentBackup()
+
+            // Step 7: Cleanup old safety backups
             cleanupOldSafetyBackups()
 
         } catch {
-            // Step 7: Restore from safety backup if import fails
+            // Step 8: Restore DB from safety backup, then restore document files from temp backup
             self.logger.error("Import failed: \(error.localizedDescription). Restoring from safety backup.")
             try await restoreFromSafetyBackup(safetyBackupURL)
+            DocumentService.shared.restoreDocumentsFromTemporaryBackup()
             throw error
         }
     }
@@ -368,10 +372,16 @@ final class BackupService: ObservableObject {
         }
     }
 
-    private func wipeAllData() -> Void {
+    private func wipeAllData() {
         DocumentService.shared.deleteAllDocumentFiles()
         databaseManager.deleteAllData()
         self.logger.info("All data wiped from database and document files deleted")
+    }
+
+    private func wipeAllDataWithDocumentBackup() {
+        DocumentService.shared.moveDocumentsToTemporaryBackup()
+        databaseManager.deleteAllData()
+        self.logger.info("All data wiped from database, document files moved to temporary backup")
     }
 
     private func importExportData(_ exportData: ExportData) async throws {
@@ -450,8 +460,7 @@ final class BackupService: ObservableObject {
             }
 
             if let oldMaintenanceId = exportNotification.maintenanceRecord,
-               let newMaintenanceId = maintenanceIdMapping[oldMaintenanceId]
-            {
+               let newMaintenanceId = maintenanceIdMapping[oldMaintenanceId] {
                 notification.maintenanceRecord = newMaintenanceId
             }
 
@@ -585,7 +594,7 @@ final class BackupService: ObservableObject {
     // MARK: - iCloud Backup
 
     func isiCloudAvailable() -> Bool {
-        let token = FileManager.default.ubiquityIdentityToken;
+        let token = FileManager.default.ubiquityIdentityToken
         return token != nil
     }
 
@@ -795,15 +804,19 @@ final class BackupService: ObservableObject {
 
             // Validate and import
             try validateExportData(exportData)
-            wipeAllData()
+            wipeAllDataWithDocumentBackup()
             try await importExportData(exportData)
+
+            // Import succeeded — remove temporary document backup
+            DocumentService.shared.removeTemporaryDocumentBackup()
 
             self.logger.info("Successfully restored from iCloud backup: \(backupInfo.fileName)")
 
         } catch {
-            // Restore from safety backup if import fails
+            // Restore DB from safety backup, then restore document files from temp backup
             self.logger.error("Restore from iCloud failed: \(error.localizedDescription). Restoring from safety backup.")
             try await restoreFromSafetyBackup(safetyBackupURL)
+            DocumentService.shared.restoreDocumentsFromTemporaryBackup()
             throw error
         }
     }

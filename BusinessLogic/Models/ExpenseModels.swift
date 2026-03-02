@@ -151,20 +151,20 @@ class Expense: Codable, Identifiable {
         )
     }
 
-    func setCarId(_ carId: Int64?) throws -> Void {
-        if (self.carId != nil) {
+    func setCarId(_ carId: Int64?) throws {
+        if self.carId != nil {
             throw RuntimeError("Car ID is already set and cannot be changed.")
         }
 
         try self.setCarIdWithNoValidation(carId)
     }
 
-    func setCarIdWithNoValidation(_ carId: Int64?) throws -> Void {
-        if (carId == nil) {
+    func setCarIdWithNoValidation(_ carId: Int64?) throws {
+        if carId == nil {
             throw RuntimeError("Provided Car ID is nil. Cannot set nil Car ID.")
         }
 
-        if (self.carId == carId) {
+        if self.carId == carId {
             return
         }
 
@@ -172,14 +172,13 @@ class Expense: Codable, Identifiable {
     }
 
     func getPricePerKWh() -> Double? {
-        if (self.cost == nil ||
+        if self.cost == nil ||
             self.energyCharged == 0 ||
-            self.expenseType != .charging) {
+            self.expenseType != .charging {
             return nil
         }
-   
+
         return self.cost! / self.energyCharged
     }
-    
 
 }

@@ -25,7 +25,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
 
     @State private var remindByDate = false
     @State private var remindByOdometer = false
-    @State private var alertMessage: String? = nil
+    @State private var alertMessage: String?
 
     private var isEditMode: Bool {
         existingRecord != nil
@@ -70,12 +70,12 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
             }
         }
     }
-    
+
     var body: some SwiftUICore.View {
         NavigationView {
             Form {
 
-                if (alertMessage != nil) {
+                if alertMessage != nil {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.orange)
@@ -123,7 +123,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
                 Section(header: Text(L("Notes (optional)"))) {
                     TextField(L("Additional information that will be helpful"), text: $notes)
                 }
-                
+
                 Section {
                     FormButtonsView(
                         onCancel: {
@@ -163,7 +163,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
             }
         } // NavigationView end
     }
-    
+
     private func save() {
         alertMessage = nil
 
@@ -177,7 +177,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
             return
         }
 
-        var odo: Int? = nil
+        var odo: Int?
         if remindByOdometer && !odometer.isEmpty {
             guard let odometerValue = Int(odometer) else {
                 alertMessage = L("Please type a valid value for Odometer.")

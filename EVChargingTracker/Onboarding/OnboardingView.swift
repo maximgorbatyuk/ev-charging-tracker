@@ -20,7 +20,7 @@ struct OnboardingView: SwiftUI.View {
     init(
         onOnboardingSkipped: @escaping () -> Void,
         onOnboardingCompleted: @escaping () -> Void) {
-            
+
         self.onOnboardingSkipped = onOnboardingSkipped
         self.onOnboardingCompleted = onOnboardingCompleted
     }
@@ -53,7 +53,7 @@ struct OnboardingView: SwiftUI.View {
                     .ignoresSafeArea()
                 }
             } // end of if..else block with language
-            
+
             VStack {
                 // Skip button (only show after language selection)
                 HStack {
@@ -89,7 +89,7 @@ struct OnboardingView: SwiftUI.View {
                         selectedLanguage: viewModel.selectedLanguage
                     )
                     .tag(0)
-                    
+
                     // Content pages (pages 1+)
                     ForEach(Array(viewModel.pages.enumerated()), id: \.element.id) { index, page in
                         OnboardingPageView(page: page)
@@ -177,7 +177,7 @@ struct PageIndicator: SwiftUI.View {
     let currentPage: Int
     let totalPages: Int
     let color: Color
-    
+
     var body: some SwiftUICore.View {
         HStack(spacing: 8) {
             ForEach(0..<totalPages, id: \.self) { index in

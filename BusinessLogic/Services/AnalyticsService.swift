@@ -13,7 +13,7 @@ class AnalyticsService: ObservableObject {
 
     static let shared = AnalyticsService()
 
-    private var _globalProps: [String: Any]? = nil
+    private var _globalProps: [String: Any]?
     private var _sessionId = UUID().uuidString
     private var _userId: String?
 
@@ -25,7 +25,7 @@ class AnalyticsService: ObservableObject {
         self.environment = EnvironmentService.shared
         self.db = DatabaseManager.shared
         self.logger = Logger(subsystem: "AnalyticsService", category: "Analytics")
-        
+
         // Initialize user_id from database
         self.initializeUserId()
     }
@@ -39,17 +39,17 @@ class AnalyticsService: ObservableObject {
         }
     }
 
-    func trackEvent(_ name: String, properties: [String: Any]? = nil) -> Void {
+    func trackEvent(_ name: String, properties: [String: Any]? = nil) {
         let mergedParams = mergeProperties(properties)
-        if (environment.isDevelopmentMode()) {
+        if environment.isDevelopmentMode() {
             logger.info("Analytics Event: \(name), properties: \(String(describing: mergedParams))")
         }
 
         Analytics.logEvent(name, parameters: mergedParams)
     }
 
-    func identifyUser(_ userId: String, properties: [String: Any]? = nil) -> Void {
-        if (environment.isDevelopmentMode()) {
+    func identifyUser(_ userId: String, properties: [String: Any]? = nil) {
+        if environment.isDevelopmentMode() {
             logger.info("Analytics Identify User: \(userId), properties: \(String(describing: properties))")
         }
 
@@ -59,12 +59,12 @@ class AnalyticsService: ObservableObject {
         }
     }
 
-    func trackScreen(_ screenName: String, properties: [String: Any]? = nil) -> Void {
+    func trackScreen(_ screenName: String, properties: [String: Any]? = nil) {
         var mergedParams = mergeProperties(properties)
         mergedParams[AnalyticsParameterScreenName] = screenName
         mergedParams[AnalyticsParameterScreenClass] = screenName
 
-        if (environment.isDevelopmentMode()) {
+        if environment.isDevelopmentMode() {
             logger.info("Analytics Screen View: \(screenName), properties: \(String(describing: mergedParams))")
         }
 
@@ -86,14 +86,14 @@ class AnalyticsService: ObservableObject {
         var merged = getGlobalProperties()
 
         if let params = parameters {
-            merged.merge(params) { current, new in new } // new value takes precedence
+            merged.merge(params) { _, new in new } // new value takes precedence
         }
 
         return merged
     }
 
     private func getGlobalProperties() -> [String: Any] {
-        if (_globalProps != nil) {
+        if _globalProps != nil {
             return _globalProps!
         }
 

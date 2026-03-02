@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct CarRecordView: SwiftUICore.View  {
-    
+struct CarRecordView: SwiftUICore.View {
+
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject private var loc = LocalizationManager.shared
 
@@ -28,9 +28,9 @@ struct CarRecordView: SwiftUICore.View  {
                 Image(systemName: "pencil")
                     .foregroundColor(.gray.opacity(0.7))
             }
-            
+
             HStack(spacing: 20) {
-                
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Current mileage"))
                         .font(.caption)

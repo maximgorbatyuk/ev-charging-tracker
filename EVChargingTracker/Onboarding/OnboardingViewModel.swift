@@ -67,7 +67,7 @@ class OnboardingViewModel: ObservableObject {
                 title: L("onboarding.view_stats", language: selectedLanguage),
                 description: L("onboarding.view_stats__subtitle", language: selectedLanguage),
                 color: .cyan
-            ),
+            )
         ]
         totalPages = 1 + pages.count
     }

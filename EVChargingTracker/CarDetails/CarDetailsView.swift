@@ -9,11 +9,11 @@ import SwiftUI
 
 struct CarDetailsView: SwiftUI.View {
 
-    let onPlannedMaintenaceRecordsUpdated: () -> Void
+    let onPlannedMaintenanceRecordsUpdated: () -> Void
 
     var body: some SwiftUI.View {
         CarDetailsFlowContainerView(
-            onPlannedMaintenaceRecordsUpdated: onPlannedMaintenaceRecordsUpdated
+            onPlannedMaintenanceRecordsUpdated: onPlannedMaintenanceRecordsUpdated
         )
     }
 }

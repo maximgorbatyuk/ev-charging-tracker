@@ -41,7 +41,7 @@ struct MainTabView: SwiftUI.View {
                     .tag(1)
 
                 CarDetailsView(
-                    onPlannedMaintenaceRecordsUpdated: {
+                    onPlannedMaintenanceRecordsUpdated: {
                         self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
                     }
                 )
@@ -72,7 +72,7 @@ struct MainTabView: SwiftUI.View {
             }
         }
     }
-    
+
     private func getTabViewColor() -> Color {
         colorScheme == .dark
             ? Color.orange

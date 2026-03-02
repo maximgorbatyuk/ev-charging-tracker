@@ -100,11 +100,11 @@ class UserSettingsViewModel: ObservableObject {
         self.lastAutomaticBackupDate = backgroundTaskManager.lastAutomaticBackupDate
     }
 
-    func handleVersionTap() -> Void {
+    func handleVersionTap() {
         self.developerMode.handleVersionTap()
     }
 
-    func openAppStoreForUpdate() -> Void {
+    func openAppStoreForUpdate() {
         let urlAddress = environment.getAppStoreAppLink()
         if let url = URL(string: urlAddress) {
             self.openWebURL(url)
@@ -123,7 +123,7 @@ class UserSettingsViewModel: ObservableObject {
         return defaultCurrency
     }
 
-    func saveDefaultCurrency(_ currency: Currency) -> Void {
+    func saveDefaultCurrency(_ currency: Currency) {
         self.defaultCurrency = currency
 
         // persist to DB (upsert)
@@ -134,14 +134,13 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     // New: save selected language
-    func saveLanguage(_ language: AppLanguage) -> Void {
+    func saveLanguage(_ language: AppLanguage) {
         self.selectedLanguage = language
 
         // Update runtime localization manager so UI can react immediately
         do {
             try LocalizationManager.shared.setLanguage(language)
-        }
-        catch {
+        } catch {
             logger.error("Failed to set language to \(language.rawValue): \(error.localizedDescription)")
         }
 
@@ -183,7 +182,7 @@ class UserSettingsViewModel: ObservableObject {
     func getCarById(_ id: Int64) -> Car? {
         return db.carRepository?.getCarById(id)
     }
-    
+
     func insertCar(_ car: Car) -> Int64? {
         guard let newCarId = db.carRepository?.insert(car) else {
             return nil
@@ -203,8 +202,7 @@ class UserSettingsViewModel: ObservableObject {
         let carExpensesUpdateSyccess = db.expensesRepository?.updateCarExpensesCurrency(car) ?? false
 
         if car.selectedForTracking,
-           let carId = car.id
-        {
+           let carId = car.id {
             _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: carId)
         }
 
@@ -215,7 +213,7 @@ class UserSettingsViewModel: ObservableObject {
         return carUpdateSuccess && carExpensesUpdateSyccess
     }
 
-    func deleteCar(_ carId: Int64, selectedForTracking: Bool) -> Void {
+    func deleteCar(_ carId: Int64, selectedForTracking: Bool) {
         db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
         db.documentsRepository?.deleteRecordsForCar(carId)
         db.ideasRepository?.deleteRecordsForCar(carId)
@@ -224,8 +222,7 @@ class UserSettingsViewModel: ObservableObject {
 
         if selectedForTracking {
             if let latestCar = db.carRepository?.getLatestAddedCar(),
-               let latestCarId = latestCar.id
-            {
+               let latestCarId = latestCar.id {
                 _ = db.carRepository?.markCarAsSelectedForTracking(latestCarId)
             }
         }
@@ -276,8 +273,8 @@ class UserSettingsViewModel: ObservableObject {
         return "Migrated: \(migrated ? "Yes" : "No") | Legacy DB: \(legacyExists ? "Exists" : "None") | App Group: \(sharedConfigured ? "OK" : "N/A")"
     }
 
-    func deleteAllData() -> Void {
-        if (!isDevelopmentMode()) {
+    func deleteAllData() {
+        if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
             return
         }
@@ -286,7 +283,7 @@ class UserSettingsViewModel: ObservableObject {
         refetchCars()
     }
 
-    func deleteAllExpenses() -> Void {
+    func deleteAllExpenses() {
         if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all expenses in non-development mode. Operation aborted.")
             return
@@ -301,7 +298,7 @@ class UserSettingsViewModel: ObservableObject {
         logger.info("Deleted all expenses for car: \(selectedCar.name)")
     }
 
-    func deleteAllExpensesForCar() -> Void {
+    func deleteAllExpensesForCar() {
         if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
             return
@@ -314,9 +311,9 @@ class UserSettingsViewModel: ObservableObject {
         db.deleteAllExpenses(selectedCar)
     }
 
-    func addRandomExpenses() -> Void {
+    func addRandomExpenses() {
         let selectedCar = db.carRepository?.getSelectedForExpensesCar()
-        if (selectedCar == nil) {
+        if selectedCar == nil {
             return
         }
 
@@ -330,11 +327,11 @@ class UserSettingsViewModel: ObservableObject {
             logger.error("Selected car has no ID")
             return
         }
-        
+
         let currency = selectedCar!.expenseCurrency
         let initialMileage = selectedCar!.initialMileage
         let currentMileage = selectedCar!.currentMileage
-        
+
         let currencyValueMultiplier = switch currency {
             case .kzt:
                 100.0
@@ -363,7 +360,7 @@ class UserSettingsViewModel: ObservableObject {
             let chargerType = chargerTypes.randomElement() ?? .home7kW
             let odometer = randomOdometer()
             let cost = Double.random(in: 5...50) * currencyValueMultiplier // Cost range
-            
+
             let expense = Expense(
                 date: date,
                 energyCharged: energyCharged,
@@ -376,10 +373,10 @@ class UserSettingsViewModel: ObservableObject {
                 currency: currency,
                 carId: carId
             )
-            
+
             _ = expensesRepository?.insertSession(expense)
         }
-        
+
         // Generate other expenses (maintenance, carwash, repair, other)
         logger.info("Adding \(countOfExpenseRecords) other expenses...")
         let otherExpenseTypes: [ExpenseType] = [.maintenance, .carwash, .repair, .other]
@@ -388,7 +385,7 @@ class UserSettingsViewModel: ObservableObject {
             let date = randomDate()
             let expenseType = otherExpenseTypes.randomElement() ?? .other
             let odometer = randomOdometer()
-            
+
             // Different cost ranges based on type
             let cost: Double = {
                 switch expenseType {
@@ -432,10 +429,10 @@ class UserSettingsViewModel: ObservableObject {
                 currency: currency,
                 carId: carId
             )
-            
+
             _ = expensesRepository?.insertSession(expense)
         }
-        
+
         // Generate planned maintenance records
         logger.info("Adding \(countOfPlannedMaintenanceRecords) planned maintenance records...")
         let maintenanceNames = [
@@ -450,17 +447,17 @@ class UserSettingsViewModel: ObservableObject {
             "Wiper blade replacement",
             "12V battery replacement"
         ]
-        
+
         for i in 0..<countOfPlannedMaintenanceRecords {
             let name = maintenanceNames.randomElement() ?? "Scheduled maintenance"
-            
+
             // Randomly choose between date-based or odometer-based reminder
             let useDateReminder = Bool.random()
             let useOdometerReminder = Bool.random()
 
             let whenDate: Date? = useDateReminder ? Date().addingTimeInterval(TimeInterval.random(in: 86400...7776000)) : nil // 1 day to 90 days
             let odometerValue: Int? = useOdometerReminder ? currentMileage + Int.random(in: 5000...20000) : nil
-            
+
             let notes = [
                 "Important maintenance",
                 "Scheduled service",
@@ -468,7 +465,7 @@ class UserSettingsViewModel: ObservableObject {
                 "Regular checkup",
                 "Safety check"
             ].randomElement() ?? "Maintenance note"
-            
+
             let createdAt = randomDate()
 
             let maintenance = PlannedMaintenance(
@@ -480,7 +477,7 @@ class UserSettingsViewModel: ObservableObject {
                 carId: carId,
                 createdAt: createdAt
             )
-            
+
             _ = db.plannedMaintenanceRepository?.insertRecord(maintenance)
         }
 
@@ -561,7 +558,7 @@ class UserSettingsViewModel: ObservableObject {
         logger.info("Successfully added random test data: \(countOfChargingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records, \(countOfIdeas) ideas")
     }
 
-    var allCars : [CarDto] {
+    var allCars: [CarDto] {
         return _allCars
     }
 

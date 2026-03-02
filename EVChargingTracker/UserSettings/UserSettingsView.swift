@@ -18,7 +18,7 @@ struct UserSettingsView: SwiftUICore.View {
         developerMode: DeveloperModeManager.shared)
 
     @State private var showEditCurrencyModal: Bool = false
-    @State private var editingCar: CarDto? = nil
+    @State private var editingCar: CarDto?
     @State private var isNotificationsEnabled: Bool = false
 
     @State private var showingAppAboutModal = false
@@ -44,13 +44,13 @@ struct UserSettingsView: SwiftUICore.View {
         NavigationView {
 
             Form {
-                
-                if (showAppUpdateButton) {
+
+                if showAppUpdateButton {
                     HStack {
                         Text(L("App update available"))
                             .fontWeight(.semibold)
                             .font(.system(size: 16, weight: .bold))
-                        
+
                         Spacer()
 
                         Button(action: {
@@ -117,7 +117,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 .font(.system(size: 16, weight: .bold))
 
                             Spacer()
-                            
+
                             Toggle("", isOn: $isNotificationsEnabled)
                                 .disabled(true)
                                 .labelsHidden()
@@ -155,7 +155,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                             Spacer()
 
-                            if (!viewModel.hasAnyExpense()) {
+                            if !viewModel.hasAnyExpense() {
                                 Button(action: {
                                     analytics.trackEvent("currency_edit_button_clicked", properties: [
                                             "screen": "user_settings_screen",
@@ -463,7 +463,7 @@ struct UserSettingsView: SwiftUICore.View {
                         Text(environment.getDeveloperName())
                     }
 
-                    if (viewModel.isDevelopmentMode()) {
+                    if viewModel.isDevelopmentMode() {
                         HStack {
                             Label(L("Build"), systemImage: "star.circle")
                             Spacer()
@@ -471,7 +471,7 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                     }
 
-                    if (viewModel.isSpecialDeveloperModeEnabled()) {
+                    if viewModel.isSpecialDeveloperModeEnabled() {
                         Button(action: {
                             developerMode.disableDeveloperMode()
                         }) {
@@ -486,7 +486,6 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                         .buttonStyle(.plain)
 
-                        
                     }
                 }
 
@@ -559,7 +558,7 @@ struct UserSettingsView: SwiftUICore.View {
                     }
                 }
 
-                if (viewModel.isSpecialDeveloperModeEnabled()) {
+                if viewModel.isSpecialDeveloperModeEnabled() {
 
                     Section(header: Text(L("Developer section"))) {
 
@@ -616,7 +615,7 @@ struct UserSettingsView: SwiftUICore.View {
                             Text("Delete car expenses")
                         }
                         .buttonStyle(.plain)
-                        
+
                         Button(action: {
                             confirmationModalDialogData = ConfirmationData(
                                 title: "Delete all data?",
@@ -885,7 +884,7 @@ struct UserSettingsView: SwiftUICore.View {
             defaultValueForSelectedForTracking: carToEdit == nil,
             hasOtherCars: hasOtherCars,
             onSave: { updated in
-                
+
                 if updated.name.trimmingCharacters(in: .whitespaces).isEmpty {
                     // TODO mgorbatyuk: show alert
                     return
@@ -895,8 +894,8 @@ struct UserSettingsView: SwiftUICore.View {
                     // TODO mgorbatyuk: show alert
                     return
                 }
-                
-                if (editingCar != nil) {
+
+                if editingCar != nil {
                     guard let carToUpdate = viewModel.getCarById(carToEdit!.id!) else {
                         // TODO mgorbatyuk: alert that car was not found
                         return
@@ -949,10 +948,10 @@ struct UserSettingsView: SwiftUICore.View {
         )
     }
 
-    private func refreshData() -> Void {
+    private func refreshData() {
         viewModel.refetchCars()
 
-        notificationsManager.getAuthorizationStatus() { status in
+        notificationsManager.getAuthorizationStatus { status in
            DispatchQueue.main.async {
                self.isNotificationsEnabled = status == .authorized
            }

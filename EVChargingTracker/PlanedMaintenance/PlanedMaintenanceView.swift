@@ -11,7 +11,7 @@ import SwiftUI
 struct PlanedMaintenanceView: SwiftUICore.View {
 
     let embedded: Bool
-    let onPlannedMaintenaceRecordsUpdated: () -> Void
+    let onPlannedMaintenanceRecordsUpdated: () -> Void
 
     @SwiftUI.Binding var triggerAdd: Bool
 
@@ -21,23 +21,23 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
     @State private var showingAddMaintenanceRecord = false
     @State private var showingDeleteConfirmation: Bool = false
-    @State private var recordToDelete: PlannedMaintenanceItem? = nil
-    @State private var recordToEdit: PlannedMaintenanceItem? = nil
-    @State private var recordToMarkAsDone: PlannedMaintenanceItem? = nil
-    @State private var recordToShowDetails: PlannedMaintenanceItem? = nil
-    @State private var recordToDuplicate: PlannedMaintenanceItem? = nil
+    @State private var recordToDelete: PlannedMaintenanceItem?
+    @State private var recordToEdit: PlannedMaintenanceItem?
+    @State private var recordToMarkAsDone: PlannedMaintenanceItem?
+    @State private var recordToShowDetails: PlannedMaintenanceItem?
+    @State private var recordToDuplicate: PlannedMaintenanceItem?
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
     init(
         embedded: Bool = false,
         triggerAdd: SwiftUI.Binding<Bool> = .constant(false),
-        onPlannedMaintenaceRecordsUpdated: @escaping () -> Void
+        onPlannedMaintenanceRecordsUpdated: @escaping () -> Void
     ) {
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
         self.embedded = embedded
         self._triggerAdd = triggerAdd
-        self.onPlannedMaintenaceRecordsUpdated = onPlannedMaintenaceRecordsUpdated
+        self.onPlannedMaintenanceRecordsUpdated = onPlannedMaintenanceRecordsUpdated
     }
 
     var body: some SwiftUICore.View {
@@ -96,7 +96,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             viewModel.addNewMaintenanceRecord(newRecord: newRecord)
 
                             loadData()
-                            onPlannedMaintenaceRecordsUpdated()
+                            onPlannedMaintenanceRecordsUpdated()
                         }
                     )
                 }
@@ -115,7 +115,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             viewModel.updateMaintenanceRecord(updatedRecord)
 
                             loadData()
-                            onPlannedMaintenaceRecordsUpdated()
+                            onPlannedMaintenanceRecordsUpdated()
                         }
                     )
                 }
@@ -137,7 +137,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             viewModel.markMaintenanceAsDone(record, expenseResult: expenseResult)
 
                             loadData()
-                            onPlannedMaintenaceRecordsUpdated()
+                            onPlannedMaintenanceRecordsUpdated()
                         }
                     )
                 }
@@ -157,7 +157,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         onDelete: { rec in
                             viewModel.deleteMaintenanceRecord(rec)
                             loadData()
-                            onPlannedMaintenaceRecordsUpdated()
+                            onPlannedMaintenanceRecordsUpdated()
                         },
                         onDuplicate: { rec in
                             recordToDuplicate = rec
@@ -179,7 +179,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                             viewModel.addNewMaintenanceRecord(newRecord: newRecord)
 
                             loadData()
-                            onPlannedMaintenaceRecordsUpdated()
+                            onPlannedMaintenanceRecordsUpdated()
                         }
                     )
                 }
@@ -450,7 +450,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                     viewModel.deleteMaintenanceRecord(e)
 
                     loadData()
-                    onPlannedMaintenaceRecordsUpdated()
+                    onPlannedMaintenanceRecordsUpdated()
                 }
                 recordToDelete = nil
             },
@@ -462,7 +462,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 }
 
 struct EmptyStateView: SwiftUICore.View {
-    
+
     let selectedCar: Car?
 
     var body: some SwiftUICore.View {
@@ -479,7 +479,7 @@ struct EmptyStateView: SwiftUICore.View {
                .font(.subheadline)
                .foregroundColor(.gray.opacity(0.9))
 
-            if (selectedCar == nil) {
+            if selectedCar == nil {
                 Text(L("Please add car first to track maintenance records"))
                     .font(.subheadline)
                     .foregroundColor(.gray.opacity(0.9))

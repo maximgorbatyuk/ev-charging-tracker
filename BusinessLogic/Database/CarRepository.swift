@@ -22,7 +22,7 @@ protocol CarRepositoryProtocol {
     func delete(id: Int64) -> Bool
 }
 
-class CarRepository : CarRepositoryProtocol {
+class CarRepository: CarRepositoryProtocol {
     private let table: Table
     private let expensesTable: Table
 
@@ -41,7 +41,7 @@ class CarRepository : CarRepositoryProtocol {
     private let userSettingsRepository: UserSettingsRepository
     private var db: Connection
     private let logger: Logger
-    
+
     init(
         db: Connection,
         tableName: String,
@@ -89,7 +89,7 @@ class CarRepository : CarRepositoryProtocol {
         }
     }
 
-    func truncateTable() -> Void {
+    func truncateTable() {
         do {
             try db.run(table.delete())
             logger.info("Table truncated successfully")

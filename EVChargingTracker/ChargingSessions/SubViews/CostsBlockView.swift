@@ -41,7 +41,7 @@ struct CostsBlockView: SwiftUICore.View {
                 Spacer()
 
                 if let hint = hint {
-                    
+
                     Button(action: {
                         analytics.trackEvent("hint_button_clicked", properties: [
                                 "title": title
@@ -54,11 +54,11 @@ struct CostsBlockView: SwiftUICore.View {
                             .help(hint)
                     }
                     .popover(isPresented: $showingHelp) {
-                        
+
                         VStack(alignment: .leading, spacing: 10) {
                             Text(L("Hint"))
                                 .font(.headline)
-                            
+
                             Text(hint)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
@@ -73,8 +73,8 @@ struct CostsBlockView: SwiftUICore.View {
                 Text(getMoneyFormattedText())
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(colorScheme == .dark ? .white : .black)
-                
-                if (perKilometer) {
+
+                if perKilometer {
                     Text(L("per km"))
                         .font(.system(size: 14, weight: .regular))
                         .foregroundColor(colorScheme == .dark ? .white : .black)
