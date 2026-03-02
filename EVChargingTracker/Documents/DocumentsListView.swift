@@ -22,8 +22,7 @@ struct DocumentsListView: SwiftUI.View {
     @State private var documentToDelete: CarDocument?
     @State private var showingDeleteConfirmation = false
     @State private var documentToPreview: CarDocument?
-    @State private var documentToRename: CarDocument?
-    @State private var renameText: String = ""
+    @State private var documentToEdit: CarDocument?
 
     var body: some SwiftUI.View {
         Group {
@@ -76,16 +75,9 @@ struct DocumentsListView: SwiftUI.View {
         .sheet(item: $documentToPreview) { document in
             DocumentPreviewView(document: document)
         }
-        .alert(L("Rename document"), isPresented: .constant(documentToRename != nil)) {
-            TextField(L("New title"), text: $renameText)
-            Button(L("Save")) {
-                if let doc = documentToRename {
-                    viewModel.renameDocument(doc, newTitle: renameText)
-                }
-                documentToRename = nil
-            }
-            Button(L("Cancel"), role: .cancel) {
-                documentToRename = nil
+        .sheet(item: $documentToEdit) { document in
+            DocumentEditView(document: document) { newTitle in
+                viewModel.renameDocument(document, newTitle: newTitle)
             }
         }
         .alert(isPresented: $showingDeleteConfirmation) {
@@ -116,6 +108,10 @@ struct DocumentsListView: SwiftUI.View {
 
     private var documentsList: some SwiftUI.View {
         List {
+            interactionHintRow
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+
             ForEach(viewModel.documents) { document in
                 Button {
                     documentToPreview = document
@@ -135,8 +131,7 @@ struct DocumentsListView: SwiftUI.View {
                     }
 
                     Button {
-                        renameText = document.customTitle ?? ""
-                        documentToRename = document
+                        documentToEdit = document
                     } label: {
                         Label(L("Rename"), systemImage: "pencil")
                     }
@@ -150,8 +145,7 @@ struct DocumentsListView: SwiftUI.View {
                     }
 
                     Button {
-                        renameText = document.customTitle ?? ""
-                        documentToRename = document
+                        documentToEdit = document
                     } label: {
                         Label(L("Rename"), systemImage: "pencil")
                     }
@@ -172,6 +166,19 @@ struct DocumentsListView: SwiftUI.View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+    }
+
+    private var interactionHintRow: some SwiftUI.View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "info.circle")
+                .foregroundColor(.secondary)
+
+            Text(L("documents.list.interaction_hint"))
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.leading)
+        }
+        .padding(.vertical, 4)
     }
 
     private func handleFileImport(_ result: Swift.Result<[URL], Error>) {

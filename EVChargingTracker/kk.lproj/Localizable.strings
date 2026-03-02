@@ -429,9 +429,11 @@
 "Preview" = "Алдын ала қарау";
 "File not found" = "Файл табылмады";
 "Unable to load image" = "Суретті жүктеу мүмкін емес";
+"document.file_path" = "Файл жолы";
+"document.file_size" = "Файл өлшемі";
+"documents.list.interaction_hint" = "Құжатты көру үшін оны түртіңіз. Өңдеу немесе жою үшін солға сырғытыңыз.";
 
 // Import preview - data types
 "documents" = "құжат";
 "ideas" = "идея";
 "import.documents_metadata_only" = "Ескертпе: Құжат файлдары сақтық көшірмеге кірмейді. Тек құжат метадеректері қалпына келтіріледі.";
-

@@ -34,6 +34,7 @@ class ShareFormViewModel: ObservableObject {
     @Published var ideaTitle: String = ""
     @Published var ideaUrl: String = ""
     @Published var ideaDescription: String = ""
+    @Published var documentTitle: String = ""
     @Published var isSaving: Bool = false
     @Published var errorMessage: String?
 
@@ -115,6 +116,7 @@ class ShareFormViewModel: ObservableObject {
         case .file:
             let name = input.fileName ?? "file"
             notes = name
+            documentTitle = input.suggestedTitle ?? ""
             selectedEntityType = .document
         }
     }
@@ -220,6 +222,7 @@ class ShareFormViewModel: ObservableObject {
         }
 
         let fileType = DocumentService.shared.detectFileType(fileName: fileName)
+        let trimmedDocumentTitle = documentTitle.trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard let savedURL = DocumentService.shared.saveFile(data: fileData, fileName: fileName, carId: carId) else {
             logger.error("Failed to save document file from Share Extension")
@@ -230,7 +233,7 @@ class ShareFormViewModel: ObservableObject {
 
         let document = CarDocument(
             carId: carId,
-            customTitle: input.suggestedTitle,
+            customTitle: trimmedDocumentTitle.isEmpty ? nil : trimmedDocumentTitle,
             fileName: savedURL.lastPathComponent,
             filePath: savedURL.path,
             fileType: fileType,

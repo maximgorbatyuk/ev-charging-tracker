@@ -254,6 +254,8 @@
 				TargetAttributes = {
 					87756BD62E963D240055273C = {
 						CreatedOnToolsVersion = 16.4;
+						DevelopmentTeam = EKKL63HDHJ;
+						ProvisioningStyle = Automatic;
 					};
 					87756BE32E963D240055273C = {
 						CreatedOnToolsVersion = 16.4;
@@ -261,6 +263,8 @@
 					};
 					C1ADE0050000000000000005 = {
 						CreatedOnToolsVersion = 16.4;
+						DevelopmentTeam = EKKL63HDHJ;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};

@@ -63,30 +63,59 @@ struct ImagePreview: SwiftUI.View {
 
     let url: URL
 
-    @State private var scale: CGFloat = 1.0
+    private let minZoomScale: CGFloat = 1.0
+    private let maxZoomScale: CGFloat = 5.0
+
+    @State private var currentZoomScale: CGFloat = 1.0
+    @State private var baseZoomScale: CGFloat = 1.0
 
     var body: some SwiftUI.View {
-        if let image = UIImage(contentsOfFile: url.path) {
-            ScrollView([.horizontal, .vertical]) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .scaleEffect(scale)
-                    .gesture(
-                        MagnifyGesture()
-                            .onChanged { value in
-                                scale = min(value.magnification, 5.0)
-                            }
-                            .onEnded { _ in
-                                withAnimation {
-                                    scale = max(1.0, min(scale, 5.0))
+        GeometryReader { geometry in
+            if let image = UIImage(contentsOfFile: url.path) {
+                ScrollView([.horizontal, .vertical]) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: geometry.size.width * currentZoomScale,
+                            height: geometry.size.height * currentZoomScale
+                        )
+                        .frame(
+                            minWidth: geometry.size.width,
+                            minHeight: geometry.size.height
+                        )
+                }
+                .scrollIndicators(.hidden)
+                .contentShape(Rectangle())
+                .gesture(
+                    MagnifyGesture()
+                        .onChanged { value in
+                            let nextScale = baseZoomScale * value.magnification
+                            currentZoomScale = max(minZoomScale, min(nextScale, maxZoomScale))
+                        }
+                        .onEnded { _ in
+                            baseZoomScale = currentZoomScale
+                        }
+                )
+                .simultaneousGesture(
+                    TapGesture(count: 2)
+                        .onEnded {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                if currentZoomScale > minZoomScale {
+                                    currentZoomScale = minZoomScale
+                                } else {
+                                    currentZoomScale = 2.0
                                 }
+
+                                baseZoomScale = currentZoomScale
                             }
-                    )
+                        }
+                )
+            } else {
+                Text(L("Unable to load image"))
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-        } else {
-            Text(L("Unable to load image"))
-                .foregroundColor(.secondary)
         }
     }
 }

@@ -17,6 +17,8 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
 
     let onPlannedMaintenanceRecordsUpdated: () -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
+
     @State private var path: [CarFlowRoute] = []
     @State private var showCreateChooser = false
     @State private var triggerAddMaintenance = false
@@ -54,10 +56,9 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
 
             floatingAddButton
         }
-        .sheet(isPresented: $showCreateChooser) {
+        .sheet(isPresented: $showCreateChooser, onDismiss: handleCreateChooserDismiss) {
             CarQuickAddSheet { option in
                 pendingAddAction = option.route
-                path.append(option.route)
             }
         }
     }
@@ -75,6 +76,12 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
         }
     }
 
+    private func handleCreateChooserDismiss() {
+        guard let route = pendingAddAction else { return }
+
+        path.append(route)
+    }
+
     private var floatingAddButton: some SwiftUI.View {
         Button(action: {
             handleFabTap()
@@ -86,18 +93,16 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
                 .frame(width: 56, height: 56)
                 .background(
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.cyan, Color.blue.opacity(0.8)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .shadow(color: .blue.opacity(0.4), radius: 8, x: 0, y: 4)
+                        .fill(floatingButtonColor)
+                        .shadow(color: floatingButtonColor.opacity(0.4), radius: 8, x: 0, y: 4)
                 )
         }
         .padding(.trailing, 20)
         .padding(.bottom, 20)
+    }
+
+    private var floatingButtonColor: Color {
+        AppTheme.tabMenuTintColor(for: colorScheme)
     }
 
     private func handleFabTap() {
