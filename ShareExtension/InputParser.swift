@@ -13,6 +13,9 @@ class InputParser {
 
     private let logger = Logger(subsystem: "ShareExtension", category: "InputParser")
 
+    /// Share Extensions have ~120MB memory limit. Cap file reads well below that.
+    private static let maxFileSizeBytes = 50 * 1024 * 1024 // 50 MB
+
     /// Parses NSExtensionItem attachments into a SharedInput.
     /// Priority: URL → plain text → image → file.
     func parse(inputItems: [NSExtensionItem]) async -> SharedInput? {
@@ -116,8 +119,14 @@ class InputParser {
             let item = try await provider.loadItem(forTypeIdentifier: typeIdentifier)
 
             if let url = item as? URL {
+                let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+                let fileSize = attributes[.size] as? Int ?? 0
+                guard fileSize <= Self.maxFileSizeBytes else {
+                    logger.warning("File too large: \(fileSize) bytes, limit: \(Self.maxFileSizeBytes)")
+                    return nil
+                }
                 let data = try Data(contentsOf: url)
-                let name = url.lastPathComponent
+                let name = Self.sanitizeFileName(url.lastPathComponent)
                 logger.debug("Extracted file: \(name) (\(data.count) bytes)")
                 return SharedInput(
                     kind: .file,
@@ -130,6 +139,10 @@ class InputParser {
             }
 
             if let data = item as? Data {
+                guard data.count <= Self.maxFileSizeBytes else {
+                    logger.warning("Raw data too large: \(data.count) bytes, limit: \(Self.maxFileSizeBytes)")
+                    return nil
+                }
                 let ext = UTType(typeIdentifier)?.preferredFilenameExtension ?? "bin"
                 let name = "shared_\(Int(Date().timeIntervalSince1970)).\(ext)"
                 logger.debug("Extracted raw data (\(data.count) bytes)")
@@ -146,5 +159,12 @@ class InputParser {
             logger.warning("Failed to extract file data: \(error.localizedDescription)")
         }
         return nil
+    }
+
+    private static func sanitizeFileName(_ name: String) -> String {
+        let cleaned = (name as NSString).lastPathComponent
+        let filtered = cleaned.unicodeScalars.filter { !CharacterSet.controlCharacters.contains($0) }
+        let result = String(String.UnicodeScalarView(filtered))
+        return result.isEmpty ? "shared_file" : result
     }
 }

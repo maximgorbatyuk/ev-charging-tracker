@@ -14,6 +14,7 @@ class CarDetailsViewModel: ObservableObject {
     @Published var allCars: [Car] = []
     @Published var maintenancePreview: [PlannedMaintenanceItem] = []
     @Published var pendingMaintenanceCount: Int = 0
+    @Published var totalMaintenanceCount: Int = 0
     @Published var documentsPreview: [CarDocument] = []
     @Published var ideasPreview: [Idea] = []
 
@@ -45,6 +46,7 @@ class CarDetailsViewModel: ObservableObject {
         guard let car = selectedCar, let carId = car.id else {
             maintenancePreview = []
             pendingMaintenanceCount = 0
+            totalMaintenanceCount = 0
             return
         }
 
@@ -54,6 +56,13 @@ class CarDetailsViewModel: ObservableObject {
         pendingMaintenanceCount = maintenanceRepo?.getPendingMaintenanceRecords(
             carId: carId,
             currentOdometer: currentMileage,
+            currentDate: now
+        ) ?? 0
+
+        totalMaintenanceCount = maintenanceRepo?.getFilteredRecordsCount(
+            carId: carId,
+            filter: .all,
+            currentMileage: currentMileage,
             currentDate: now
         ) ?? 0
 
@@ -93,18 +102,9 @@ class CarDetailsViewModel: ObservableObject {
 
     func selectCar(_ car: Car) {
         guard let carId = car.id, carId != selectedCar?.id else { return }
-        _ = carRepo?.markAllCarsAsNoTracking(carIdToExclude: carId)
-        _ = carRepo?.markCarAsSelectedForTracking(carId)
-        loadData()
-    }
-
-    var totalMaintenanceCount: Int {
-        guard let car = selectedCar, let carId = car.id else { return 0 }
-        return maintenanceRepo?.getFilteredRecordsCount(
-            carId: carId,
-            filter: .all,
-            currentMileage: car.currentMileage,
-            currentDate: Date()
-        ) ?? 0
+        let success = carRepo?.selectCarForTracking(carId) ?? false
+        if success {
+            loadData()
+        }
     }
 }

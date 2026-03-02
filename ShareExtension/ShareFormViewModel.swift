@@ -172,6 +172,7 @@ class ShareFormViewModel: ObservableObject {
         }
 
         logger.info("Expense created from Share Extension with id: \(insertedId)")
+        isSaving = false
         onComplete?()
     }
 
@@ -195,6 +196,7 @@ class ShareFormViewModel: ObservableObject {
         }
 
         logger.info("Idea created from Share Extension with id: \(insertedId)")
+        isSaving = false
         onComplete?()
     }
 
@@ -234,6 +236,7 @@ class ShareFormViewModel: ObservableObject {
         }
 
         logger.info("Document created from Share Extension with id: \(insertedId)")
+        isSaving = false
         onComplete?()
     }
 }

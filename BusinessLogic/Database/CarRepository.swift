@@ -16,6 +16,7 @@ protocol CarRepositoryProtocol {
     func updateMilleage(_ car: Car) -> Bool
     func markAllCarsAsNoTracking(carIdToExclude: Int64) -> Bool
     func markCarAsSelectedForTracking(_ id: Int64) -> Bool
+    func selectCarForTracking(_ id: Int64) -> Bool
 }
 
 class CarRepository : CarRepositoryProtocol {
@@ -228,6 +229,22 @@ class CarRepository : CarRepositoryProtocol {
             return updated > 0
         } catch {
             logger.error("Update failed: \(error)")
+            return false
+        }
+    }
+
+    func selectCarForTracking(_ id: Int64) -> Bool {
+        do {
+            try db.transaction {
+                let othersToUpdate = table.filter(idColumn != id)
+                try db.run(othersToUpdate.update(selectedForTrackingColumn <- false))
+
+                let carToUpdate = table.filter(idColumn == id)
+                try db.run(carToUpdate.update(selectedForTrackingColumn <- true))
+            }
+            return true
+        } catch {
+            logger.error("Failed to select car for tracking in transaction: \(error)")
             return false
         }
     }

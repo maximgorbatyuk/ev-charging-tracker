@@ -73,7 +73,8 @@ struct IdeaDetailView: SwiftUI.View {
             Divider()
 
             // URL
-            if let urlString = idea.url, !urlString.isEmpty, let url = URL(string: urlString) {
+            if let urlString = idea.url, !urlString.isEmpty, let url = URL(string: urlString),
+               let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("URL"))
                         .font(.caption)

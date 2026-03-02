@@ -88,9 +88,13 @@ struct AddIdeaView: SwiftUI.View {
         let trimmedUrl = url.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedDescription = descriptionText.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        if !trimmedUrl.isEmpty, URL(string: trimmedUrl) == nil {
-            alertMessage = L("idea.url.invalid")
-            return
+        if !trimmedUrl.isEmpty {
+            guard let parsed = URL(string: trimmedUrl),
+                  let scheme = parsed.scheme?.lowercased(),
+                  ["http", "https"].contains(scheme) else {
+                alertMessage = L("idea.url.invalid")
+                return
+            }
         }
 
         if isEditMode, let idea = existingIdea {

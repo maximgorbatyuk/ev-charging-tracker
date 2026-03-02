@@ -53,4 +53,8 @@ class MockCarRepository: CarRepositoryProtocol {
     func markCarAsSelectedForTracking(_ id: Int64) -> Bool {
         return true
     }
+
+    func selectCarForTracking(_ id: Int64) -> Bool {
+        return true
+    }
 }
