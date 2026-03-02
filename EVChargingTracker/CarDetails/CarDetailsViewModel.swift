@@ -91,6 +91,13 @@ class CarDetailsViewModel: ObservableObject {
         allCars.count > 1
     }
 
+    func selectCar(_ car: Car) {
+        guard let carId = car.id, carId != selectedCar?.id else { return }
+        _ = carRepo?.markAllCarsAsNoTracking(carIdToExclude: carId)
+        _ = carRepo?.markCarAsSelectedForTracking(carId)
+        loadData()
+    }
+
     var totalMaintenanceCount: Int {
         guard let car = selectedCar, let carId = car.id else { return 0 }
         return maintenanceRepo?.getFilteredRecordsCount(

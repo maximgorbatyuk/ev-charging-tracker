@@ -30,8 +30,30 @@ struct CarDetailsRootView: SwiftUI.View {
             .padding(.horizontal)
             .padding(.top, 8)
         }
-        .navigationTitle(L("Car details"))
+        .navigationTitle(viewModel.selectedCar?.name ?? L("Car details"))
         .navigationBarTitleDisplayMode(.automatic)
+        .toolbar {
+            if viewModel.hasMultipleCars {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        ForEach(viewModel.allCars, id: \.id) { car in
+                            Button {
+                                viewModel.selectCar(car)
+                                onPlannedMaintenaceRecordsUpdated()
+                            } label: {
+                                if car.id == viewModel.selectedCar?.id {
+                                    Label(car.name, systemImage: "checkmark")
+                                } else {
+                                    Text(car.name)
+                                }
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "car.2.fill")
+                    }
+                }
+            }
+        }
         .onAppear {
             analytics.trackScreen("car_details_screen")
             viewModel.loadData()

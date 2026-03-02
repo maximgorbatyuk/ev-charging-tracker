@@ -14,6 +14,8 @@ protocol CarRepositoryProtocol {
     func getAllCars() -> [Car]
     func insert(_ car: Car) -> Int64?
     func updateMilleage(_ car: Car) -> Bool
+    func markAllCarsAsNoTracking(carIdToExclude: Int64) -> Bool
+    func markCarAsSelectedForTracking(_ id: Int64) -> Bool
 }
 
 class CarRepository : CarRepositoryProtocol {
