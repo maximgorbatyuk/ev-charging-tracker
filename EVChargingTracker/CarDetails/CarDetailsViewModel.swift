@@ -30,7 +30,6 @@ class CarDetailsViewModel: ObservableObject {
         self.maintenanceRepo = db.getPlannedMaintenanceRepository()
         self.documentsRepo = db.getDocumentsRepository()
         self.ideasRepo = db.getIdeasRepository()
-        loadData()
     }
 
     func loadData() {

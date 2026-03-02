@@ -14,6 +14,8 @@ struct DocumentStorageBrowserView: SwiftUI.View {
     @State private var folders: [StorageItem] = []
     @State private var rootFiles: [StorageItem] = []
     @State private var isLoading = true
+    @State private var showDeleteConfirmation = false
+    @State private var fileToDelete: StorageItem?
 
     private let service = DocumentStorageService.shared
 
@@ -45,7 +47,8 @@ struct DocumentStorageBrowserView: SwiftUI.View {
                                     FileRow(item: file)
                                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                             Button(role: .destructive) {
-                                                deleteFile(file)
+                                                fileToDelete = file
+                                                showDeleteConfirmation = true
                                             } label: {
                                                 Label("Delete", systemImage: "trash")
                                             }
@@ -74,6 +77,18 @@ struct DocumentStorageBrowserView: SwiftUI.View {
                     Button("Done") { dismiss() }
                 }
             }
+            .alert("Delete file?", isPresented: $showDeleteConfirmation) {
+                Button("Cancel", role: .cancel) {}
+                Button("Delete", role: .destructive) {
+                    if let file = fileToDelete {
+                        if service.deleteItem(at: file.url) {
+                            loadData()
+                        }
+                    }
+                }
+            } message: {
+                Text("This will permanently delete the file from storage.")
+            }
             .onAppear {
                 loadData()
             }
@@ -82,15 +97,17 @@ struct DocumentStorageBrowserView: SwiftUI.View {
 
     private func loadData() {
         isLoading = true
-        storageStats = service.getStorageStats()
-        let items = service.getContents(of: service.rootDirectory)
-        folders = items.filter { $0.isDirectory }
-        rootFiles = items.filter { !$0.isDirectory }
-        isLoading = false
-    }
-
-    private func deleteFile(_ file: StorageItem) {
-        _ = service.deleteItem(at: file.url)
-        loadData()
+        Task {
+            let stats = service.getStorageStats()
+            let items = service.getContents(of: service.rootDirectory)
+            let dirs = items.filter { $0.isDirectory }
+            let files = items.filter { !$0.isDirectory }
+            await MainActor.run {
+                storageStats = stats
+                folders = dirs
+                rootFiles = files
+                isLoading = false
+            }
+        }
     }
 }

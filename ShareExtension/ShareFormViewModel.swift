@@ -64,7 +64,7 @@ class ShareFormViewModel: ObservableObject {
         case .idea:
             return !ideaTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         case .document:
-            return sharedInput?.fileData != nil
+            return sharedInput?.tempFileURL != nil
         }
     }
 
@@ -202,8 +202,18 @@ class ShareFormViewModel: ObservableObject {
 
     private func saveDocument(carId: Int64) {
         guard let input = sharedInput,
-              let fileData = input.fileData,
+              let tempFileURL = input.tempFileURL,
               let fileName = input.fileName else {
+            errorMessage = L("share.error.save_failed")
+            isSaving = false
+            return
+        }
+
+        let fileData: Data
+        do {
+            fileData = try Data(contentsOf: tempFileURL)
+        } catch {
+            logger.error("Failed to read temp file: \(error.localizedDescription)")
             errorMessage = L("share.error.save_failed")
             isSaving = false
             return

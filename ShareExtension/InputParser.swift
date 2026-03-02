@@ -125,15 +125,16 @@ class InputParser {
                     logger.warning("File too large: \(fileSize) bytes, limit: \(Self.maxFileSizeBytes)")
                     return nil
                 }
-                let data = try Data(contentsOf: url)
                 let name = Self.sanitizeFileName(url.lastPathComponent)
-                logger.debug("Extracted file: \(name) (\(data.count) bytes)")
+                let tempURL = Self.copyToTempFile(from: url, name: name)
+                logger.debug("Extracted file: \(name) (\(fileSize) bytes)")
                 return SharedInput(
                     kind: .file,
                     url: nil,
                     text: nil,
                     suggestedTitle: suggestedTitle,
-                    fileData: data,
+                    tempFileURL: tempURL ?? url,
+                    fileSize: Int64(fileSize),
                     fileName: name
                 )
             }
@@ -145,13 +146,15 @@ class InputParser {
                 }
                 let ext = UTType(typeIdentifier)?.preferredFilenameExtension ?? "bin"
                 let name = "shared_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                let tempURL = Self.writeTempFile(data: data, name: name)
                 logger.debug("Extracted raw data (\(data.count) bytes)")
                 return SharedInput(
                     kind: .file,
                     url: nil,
                     text: nil,
                     suggestedTitle: suggestedTitle,
-                    fileData: data,
+                    tempFileURL: tempURL,
+                    fileSize: Int64(data.count),
                     fileName: name
                 )
             }
@@ -159,6 +162,29 @@ class InputParser {
             logger.warning("Failed to extract file data: \(error.localizedDescription)")
         }
         return nil
+    }
+
+    private static func copyToTempFile(from sourceURL: URL, name: String) -> URL? {
+        let tempDir = FileManager.default.temporaryDirectory
+        let destURL = tempDir.appendingPathComponent(name)
+        try? FileManager.default.removeItem(at: destURL)
+        do {
+            try FileManager.default.copyItem(at: sourceURL, to: destURL)
+            return destURL
+        } catch {
+            return nil
+        }
+    }
+
+    private static func writeTempFile(data: Data, name: String) -> URL? {
+        let tempDir = FileManager.default.temporaryDirectory
+        let destURL = tempDir.appendingPathComponent(name)
+        do {
+            try data.write(to: destURL)
+            return destURL
+        } catch {
+            return nil
+        }
     }
 
     private static func sanitizeFileName(_ name: String) -> String {

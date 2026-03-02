@@ -18,6 +18,7 @@ struct SharedInput {
     var url: URL?
     var text: String?
     var suggestedTitle: String?
-    var fileData: Data?
+    var tempFileURL: URL?
+    var fileSize: Int64?
     var fileName: String?
 }

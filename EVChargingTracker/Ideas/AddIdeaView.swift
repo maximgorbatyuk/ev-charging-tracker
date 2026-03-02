@@ -19,6 +19,7 @@ struct AddIdeaView: SwiftUI.View {
     @State private var url: String = ""
     @State private var descriptionText: String = ""
     @State private var alertMessage: String?
+    @State private var showingAlert = false
 
     init(
         existingIdea: Idea? = nil,
@@ -63,8 +64,8 @@ struct AddIdeaView: SwiftUI.View {
                     Button(L("Save")) { save() }
                 }
             }
-            .alert(L("Error"), isPresented: .constant(alertMessage != nil)) {
-                Button(L("OK")) { alertMessage = nil }
+            .alert(L("Error"), isPresented: $showingAlert) {
+                Button(L("OK")) {}
             } message: {
                 Text(alertMessage ?? "")
             }
@@ -82,6 +83,7 @@ struct AddIdeaView: SwiftUI.View {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedTitle.isEmpty else {
             alertMessage = L("idea.title.required")
+            showingAlert = true
             return
         }
 
@@ -93,6 +95,7 @@ struct AddIdeaView: SwiftUI.View {
                   let scheme = parsed.scheme?.lowercased(),
                   ["http", "https"].contains(scheme) else {
                 alertMessage = L("idea.url.invalid")
+                showingAlert = true
                 return
             }
         }

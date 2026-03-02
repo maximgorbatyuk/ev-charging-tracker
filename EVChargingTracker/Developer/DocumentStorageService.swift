@@ -97,6 +97,13 @@ final class DocumentStorageService {
     }
 
     func deleteItem(at url: URL) -> Bool {
+        let root = rootDirectory.standardizedFileURL.path
+        let target = url.standardizedFileURL.path
+        guard target.hasPrefix(root) else {
+            logger.error("Attempted to delete item outside root directory: \(target)")
+            return false
+        }
+
         do {
             try fileManager.removeItem(at: url)
             logger.info("Deleted item at: \(url.path)")

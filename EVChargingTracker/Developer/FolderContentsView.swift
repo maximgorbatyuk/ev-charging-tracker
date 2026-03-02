@@ -85,9 +85,14 @@ struct FolderContentsView: SwiftUI.View {
 
     private func loadData() {
         isLoading = true
-        let items = service.getContents(of: folder.url)
-        files = items.filter { !$0.isDirectory }
-        isLoading = false
+        Task {
+            let items = service.getContents(of: folder.url)
+            let filtered = items.filter { !$0.isDirectory }
+            await MainActor.run {
+                files = filtered
+                isLoading = false
+            }
+        }
     }
 
     private func loadCarName() {
@@ -97,7 +102,8 @@ struct FolderContentsView: SwiftUI.View {
     }
 
     private func deleteFile(_ file: StorageItem) {
-        _ = service.deleteItem(at: file.url)
-        files.removeAll { $0.id == file.id }
+        if service.deleteItem(at: file.url) {
+            files.removeAll { $0.id == file.id }
+        }
     }
 }

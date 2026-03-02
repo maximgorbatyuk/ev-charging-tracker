@@ -15,7 +15,7 @@ struct IdeaDetailView: SwiftUI.View {
 
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject private var analytics = AnalyticsService.shared
+    private let analytics = AnalyticsService.shared
 
     @State private var showingDeleteConfirmation = false
 
@@ -117,7 +117,7 @@ struct IdeaDetailView: SwiftUI.View {
             }
 
             // Updated at
-            if idea.updatedAt != idea.createdAt {
+            if abs(idea.updatedAt.timeIntervalSince(idea.createdAt)) > 1.0 {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Updated"))
                         .font(.caption)

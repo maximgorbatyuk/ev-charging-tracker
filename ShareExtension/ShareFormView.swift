@@ -152,13 +152,14 @@ struct ShareFormView: SwiftUI.View {
             if let input = viewModel.sharedInput, let fileName = input.fileName {
                 Section(header: Text(L("share.section.document_info"))) {
                     HStack {
-                        Image(systemName: CarDocument.iconName(for: (fileName as NSString).pathExtension))
-                            .foregroundColor(CarDocument.iconColor(for: (fileName as NSString).pathExtension))
+                        let ext = (fileName as NSString).pathExtension
+                        Image(systemName: CarDocument.iconName(for: ext))
+                            .foregroundColor(CarDocument.iconColor(for: ext))
                         VStack(alignment: .leading, spacing: 2) {
                             Text(fileName)
                                 .font(.subheadline)
-                            if let data = input.fileData {
-                                Text(ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file))
+                            if let fileSize = input.fileSize {
+                                Text(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }

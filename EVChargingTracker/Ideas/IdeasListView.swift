@@ -10,7 +10,7 @@ import SwiftUI
 struct IdeasListView: SwiftUI.View {
 
     @StateObject private var viewModel = IdeasViewModel()
-    @ObservedObject private var analytics = AnalyticsService.shared
+    private let analytics = AnalyticsService.shared
 
     @SwiftUI.Binding var triggerAdd: Bool
 
@@ -57,8 +57,18 @@ struct IdeasListView: SwiftUI.View {
                 }
             )
         }
-        .alert(isPresented: $showingDeleteConfirmation) {
-            deleteConfirmationAlert()
+        .alert(L("Delete idea?"), isPresented: $showingDeleteConfirmation) {
+            Button(L("Cancel"), role: .cancel) {
+                ideaToDelete = nil
+            }
+            Button(L("Delete"), role: .destructive) {
+                if let idea = ideaToDelete {
+                    viewModel.deleteIdea(idea)
+                }
+                ideaToDelete = nil
+            }
+        } message: {
+            Text(L("Delete selected idea? This action cannot be undone."))
         }
         .sheet(item: $ideaToShowDetails) { idea in
             IdeaDetailView(
@@ -131,57 +141,4 @@ struct IdeasListView: SwiftUI.View {
         .scrollContentBackground(.hidden)
     }
 
-    private func deleteConfirmationAlert() -> Alert {
-        Alert(
-            title: Text(L("Delete idea?")),
-            message: Text(L("Delete selected idea? This action cannot be undone.")),
-            primaryButton: .destructive(Text(L("Delete"))) {
-                if let idea = ideaToDelete {
-                    viewModel.deleteIdea(idea)
-                }
-                ideaToDelete = nil
-            },
-            secondaryButton: .cancel {
-                ideaToDelete = nil
-            }
-        )
-    }
-}
-
-struct IdeaRowView: SwiftUI.View {
-
-    let idea: Idea
-
-    @Environment(\.colorScheme) var colorScheme
-
-    var body: some SwiftUI.View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(idea.title)
-                .font(.headline)
-                .foregroundColor(colorScheme == .dark ? .white : .primary)
-
-            if let host = idea.hostName {
-                Label(host, systemImage: "link")
-                    .font(.subheadline)
-                    .foregroundColor(.blue)
-            }
-
-            if let description = idea.descriptionText, !description.isEmpty {
-                Text(description)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .lineLimit(2)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                )
-        )
-    }
 }
