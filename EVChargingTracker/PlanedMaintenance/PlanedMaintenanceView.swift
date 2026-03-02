@@ -19,6 +19,8 @@ struct PlanedMaintenanceView: SwiftUICore.View {
         notifications: NotificationManager.shared,
         db: DatabaseManager.shared)
 
+    @Environment(\.colorScheme) private var colorScheme
+
     @State private var showingAddMaintenanceRecord = false
     @State private var showingDeleteConfirmation: Bool = false
     @State private var recordToDelete: PlannedMaintenanceItem?
@@ -197,20 +199,18 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                 .frame(width: 56, height: 56)
                 .background(
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.cyan, Color.blue.opacity(0.8)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .shadow(color: .blue.opacity(0.4), radius: 8, x: 0, y: 4)
+                        .fill(floatingButtonColor)
+                        .shadow(color: floatingButtonColor.opacity(0.4), radius: 8, x: 0, y: 4)
                 )
         }
         .disabled(viewModel.selectedCarForExpenses == nil)
         .opacity(viewModel.selectedCarForExpenses == nil ? 0.5 : 1.0)
         .padding(.trailing, 20)
         .padding(.bottom, 20)
+    }
+
+    private var floatingButtonColor: Color {
+        AppTheme.tabMenuTintColor(for: colorScheme)
     }
 
     private var filterSection: some SwiftUICore.View {

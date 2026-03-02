@@ -60,7 +60,7 @@ struct MainTabView: SwiftUI.View {
                     .tint(nil)
                     .badge(showAppVersionBadge ? "New!" : nil)
             }
-            .tint(getTabViewColor())
+            .tint(AppTheme.tabMenuTintColor(for: colorScheme))
             .id(loc.currentLanguage.rawValue)
             .onAppear {
                 self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
@@ -73,11 +73,6 @@ struct MainTabView: SwiftUI.View {
         }
     }
 
-    private func getTabViewColor() -> Color {
-        colorScheme == .dark
-            ? Color.orange
-            : Color(red: 0.85, green: 0.45, blue: 0.0)
-    }
 }
 
 #Preview {
