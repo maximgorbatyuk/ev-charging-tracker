@@ -363,6 +363,12 @@
 "share.no_cars.message" = "Önce EVChargingTracker'da bir araç ekleyin, ardından tekrar paylaşmayı deneyin.";
 "share.error.no_car_selected" = "Lütfen bir araç seçin.";
 "share.error.save_failed" = "Kaydedilemedi. Lütfen tekrar deneyin.";
+"share.section.entity_type" = "Farklı kaydet";
+"share.entity_picker" = "Tür";
+"share.entity.expense" = "Harcama";
+"share.entity.idea" = "Fikir";
+"share.entity.document" = "Belge";
+"share.section.document_info" = "Belge";
 "share.migration_required.title" = "Kurulum Gerekli";
 "share.migration_required.message" = "Kurulumu tamamlamak için EVChargingTracker'ı bir kez açın, ardından tekrar deneyin.";
 "share.migration_required.dismiss" = "Tamam";
@@ -392,6 +398,8 @@
 "Add your first idea" = "İlk fikrinizi ekleyin";
 "Delete idea?" = "Fikri sil?";
 "Delete selected idea? This action cannot be undone." = "Seçili fikri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"Idea Details" = "Fikir Detayları";
+"Updated" = "Güncellendi";
 "Error" = "Hata";
 "OK" = "Tamam";
 

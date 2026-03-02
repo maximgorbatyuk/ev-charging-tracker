@@ -370,6 +370,12 @@
 "share.no_cars.message" = "Алдымен EVChargingTracker-де көлік қосыңыз, содан кейін қайта бөлісіп көріңіз.";
 "share.error.no_car_selected" = "Көлікті таңдаңыз.";
 "share.error.save_failed" = "Сақтау мүмкін болмады. Қайта көріңіз.";
+"share.section.entity_type" = "Басқаша сақтау";
+"share.entity_picker" = "Түрі";
+"share.entity.expense" = "Шығын";
+"share.entity.idea" = "Идея";
+"share.entity.document" = "Құжат";
+"share.section.document_info" = "Құжат";
 "share.migration_required.title" = "Баптау қажет";
 "share.migration_required.message" = "Баптауды аяқтау үшін EVChargingTracker-ді бір рет ашыңыз, содан кейін қайта көріңіз.";
 "share.migration_required.dismiss" = "Жарайды";
@@ -399,6 +405,8 @@
 "Add your first idea" = "Бірінші идеяңызды қосыңыз";
 "Delete idea?" = "Идеяны жою?";
 "Delete selected idea? This action cannot be undone." = "Таңдалған идеяны жою керек пе? Бұл әрекетті кері қайтару мүмкін емес.";
+"Idea Details" = "Идея мәліметтері";
+"Updated" = "Жаңартылды";
 "Error" = "Қате";
 "OK" = "ОК";
 

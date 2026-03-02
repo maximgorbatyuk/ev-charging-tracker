@@ -10,6 +10,7 @@ import Foundation
 enum SharedInputKind {
     case link
     case text
+    case file
 }
 
 struct SharedInput {
@@ -17,4 +18,6 @@ struct SharedInput {
     var url: URL?
     var text: String?
     var suggestedTitle: String?
+    var fileData: Data?
+    var fileName: String?
 }

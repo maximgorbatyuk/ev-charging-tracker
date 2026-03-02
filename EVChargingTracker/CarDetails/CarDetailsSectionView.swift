@@ -10,24 +10,45 @@ import SwiftUI
 struct CarDetailsSectionView<Content: SwiftUI.View>: SwiftUI.View {
 
     let title: String
+    let iconName: String
+    let iconColor: Color
+    var itemCount: Int = 0
     var badgeCount: Int = 0
     let onSeeAll: () -> Void
     @ViewBuilder let content: () -> Content
 
     var body: some SwiftUI.View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(spacing: 0) {
+            // Header
             HStack {
-                Text(title)
-                    .font(.headline)
+                HStack(spacing: 8) {
+                    Image(systemName: iconName)
+                        .font(.headline)
+                        .foregroundColor(iconColor)
 
-                if badgeCount > 0 {
-                    Text("\(badgeCount)")
-                        .font(.caption2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Capsule().fill(Color.red))
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    if badgeCount > 0 {
+                        Text("\(badgeCount)")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 2)
+                            .background(Color.red)
+                            .clipShape(Capsule())
+                    } else if itemCount > 0 {
+                        Text("\(itemCount)")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 2)
+                            .background(iconColor)
+                            .clipShape(Capsule())
+                    }
                 }
 
                 Spacer()
@@ -39,20 +60,17 @@ struct CarDetailsSectionView<Content: SwiftUI.View>: SwiftUI.View {
                         Image(systemName: "chevron.right")
                             .font(.caption)
                     }
-                    .foregroundColor(.blue)
+                    .foregroundColor(.orange)
                 }
             }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+
+            Divider()
 
             content()
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.08))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                )
-        )
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
     }
 }

@@ -364,6 +364,12 @@
 "share.no_cars.message" = "Füge zuerst ein Auto in EVChargingTracker hinzu und versuche es dann erneut.";
 "share.error.no_car_selected" = "Bitte wähle ein Auto aus.";
 "share.error.save_failed" = "Speichern fehlgeschlagen. Bitte versuche es erneut.";
+"share.section.entity_type" = "Speichern als";
+"share.entity_picker" = "Typ";
+"share.entity.expense" = "Ausgabe";
+"share.entity.idea" = "Idee";
+"share.entity.document" = "Dokument";
+"share.section.document_info" = "Dokument";
 "share.migration_required.title" = "Einrichtung erforderlich";
 "share.migration_required.message" = "Öffne EVChargingTracker einmal, um die Einrichtung abzuschließen, und versuche es dann erneut.";
 "share.migration_required.dismiss" = "OK";
@@ -393,6 +399,8 @@
 "Add your first idea" = "Erste Idee hinzufügen";
 "Delete idea?" = "Idee löschen?";
 "Delete selected idea? This action cannot be undone." = "Ausgewählte Idee löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Idea Details" = "Ideendetails";
+"Updated" = "Aktualisiert";
 "Error" = "Fehler";
 "OK" = "OK";
 

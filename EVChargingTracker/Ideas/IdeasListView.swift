@@ -17,6 +17,7 @@ struct IdeasListView: SwiftUI.View {
     @State private var showingAddIdea = false
     @State private var ideaToEdit: Idea?
     @State private var ideaToDelete: Idea?
+    @State private var ideaToShowDetails: Idea?
     @State private var showingDeleteConfirmation = false
 
     var body: some SwiftUI.View {
@@ -59,6 +60,17 @@ struct IdeasListView: SwiftUI.View {
         .alert(isPresented: $showingDeleteConfirmation) {
             deleteConfirmationAlert()
         }
+        .sheet(item: $ideaToShowDetails) { idea in
+            IdeaDetailView(
+                idea: idea,
+                onEdit: { editIdea in
+                    ideaToEdit = editIdea
+                },
+                onDelete: { deleteIdea in
+                    viewModel.deleteIdea(deleteIdea)
+                }
+            )
+        }
     }
 
     private var emptyState: some SwiftUI.View {
@@ -86,6 +98,10 @@ struct IdeasListView: SwiftUI.View {
         List {
             ForEach(viewModel.ideas) { idea in
                 IdeaRowView(idea: idea)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        ideaToShowDetails = idea
+                    }
                     .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)

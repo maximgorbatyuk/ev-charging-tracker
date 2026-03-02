@@ -14,7 +14,7 @@ class InputParser {
     private let logger = Logger(subsystem: "ShareExtension", category: "InputParser")
 
     /// Parses NSExtensionItem attachments into a SharedInput.
-    /// Priority: URL → plain text.
+    /// Priority: URL → plain text → image → file.
     func parse(inputItems: [NSExtensionItem]) async -> SharedInput? {
         var suggestedTitle: String?
 
@@ -38,6 +38,20 @@ class InputParser {
                 // Then plain text
                 if provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
                     if let input = await extractText(from: provider, suggestedTitle: suggestedTitle) {
+                        return input
+                    }
+                }
+
+                // Then image
+                if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+                    if let input = await extractFileData(from: provider, typeIdentifier: UTType.image.identifier, suggestedTitle: suggestedTitle) {
+                        return input
+                    }
+                }
+
+                // Then general file (PDF, etc.)
+                if provider.hasItemConformingToTypeIdentifier(UTType.data.identifier) {
+                    if let input = await extractFileData(from: provider, typeIdentifier: UTType.data.identifier, suggestedTitle: suggestedTitle) {
                         return input
                     }
                 }
@@ -93,6 +107,43 @@ class InputParser {
             }
         } catch {
             logger.warning("Failed to extract text: \(error.localizedDescription)")
+        }
+        return nil
+    }
+
+    private func extractFileData(from provider: NSItemProvider, typeIdentifier: String, suggestedTitle: String?) async -> SharedInput? {
+        do {
+            let item = try await provider.loadItem(forTypeIdentifier: typeIdentifier)
+
+            if let url = item as? URL {
+                let data = try Data(contentsOf: url)
+                let name = url.lastPathComponent
+                logger.debug("Extracted file: \(name) (\(data.count) bytes)")
+                return SharedInput(
+                    kind: .file,
+                    url: nil,
+                    text: nil,
+                    suggestedTitle: suggestedTitle,
+                    fileData: data,
+                    fileName: name
+                )
+            }
+
+            if let data = item as? Data {
+                let ext = UTType(typeIdentifier)?.preferredFilenameExtension ?? "bin"
+                let name = "shared_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                logger.debug("Extracted raw data (\(data.count) bytes)")
+                return SharedInput(
+                    kind: .file,
+                    url: nil,
+                    text: nil,
+                    suggestedTitle: suggestedTitle,
+                    fileData: data,
+                    fileName: name
+                )
+            }
+        } catch {
+            logger.warning("Failed to extract file data: \(error.localizedDescription)")
         }
         return nil
     }

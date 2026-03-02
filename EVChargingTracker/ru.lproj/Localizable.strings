@@ -363,6 +363,12 @@
 "share.no_cars.message" = "Сначала добавьте автомобиль в EVChargingTracker, затем попробуйте снова.";
 "share.error.no_car_selected" = "Пожалуйста, выберите автомобиль.";
 "share.error.save_failed" = "Не удалось сохранить. Попробуйте ещё раз.";
+"share.section.entity_type" = "Сохранить как";
+"share.entity_picker" = "Тип";
+"share.entity.expense" = "Расход";
+"share.entity.idea" = "Идея";
+"share.entity.document" = "Документ";
+"share.section.document_info" = "Документ";
 "share.migration_required.title" = "Требуется настройка";
 "share.migration_required.message" = "Откройте EVChargingTracker один раз для завершения настройки, затем попробуйте снова.";
 "share.migration_required.dismiss" = "OK";
@@ -392,6 +398,8 @@
 "Add your first idea" = "Добавьте первую идею";
 "Delete idea?" = "Удалить идею?";
 "Delete selected idea? This action cannot be undone." = "Удалить выбранную идею? Это действие нельзя отменить.";
+"Idea Details" = "Детали идеи";
+"Updated" = "Обновлено";
 "Error" = "Ошибка";
 "OK" = "ОК";
 
