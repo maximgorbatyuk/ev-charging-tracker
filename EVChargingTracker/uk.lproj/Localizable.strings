@@ -183,6 +183,10 @@
 "onboarding.monitor_costs__subtitle" = "Дізнайтесь, скільки ви витрачаєте на електромобіль, включаючи електроенергію та інші витрати";
 "onboarding.plan_maintenance" = "Плануйте обслуговування";
 "onboarding.plan_maintenance__subtitle" = "Плануйте та отримуйте нагадування про технічне обслуговування вашого EV";
+"onboarding.save_documents" = "Зберігайте документи";
+"onboarding.save_documents__subtitle" = "Страховка, реєстрація та інші важливі документи вашого авто завжди під рукою";
+"onboarding.collect_ideas" = "Збирайте ідеї";
+"onboarding.collect_ideas__subtitle" = "Зберігайте корисні посилання, нотатки та знахідки про ваш автомобіль в одному місці";
 "onboarding.view_stats" = "Переглядайте статистику";
 "onboarding.view_stats__subtitle" = "Дізнайтесь, скільки коштує 1 кілометр на вашому EV та скільки CO₂ ви зберегли, керуючи електромобілем";
 

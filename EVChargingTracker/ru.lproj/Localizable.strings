@@ -185,6 +185,10 @@
 "onboarding.monitor_costs__subtitle" = "Записывайте ваши расходы на зарядку и другие траты на автомобиль";
 "onboarding.plan_maintenance" = "Планируйте сервис";
 "onboarding.plan_maintenance__subtitle" = "Ведите план техобслуживания, и вы будете вовремя уведомлены.";
+"onboarding.save_documents" = "Храните документы";
+"onboarding.save_documents__subtitle" = "Страховка, регистрация и другие важные документы вашего авто всегда под рукой";
+"onboarding.collect_ideas" = "Собирайте идеи";
+"onboarding.collect_ideas__subtitle" = "Сохраняйте полезные ссылки, заметки и находки про ваш автомобиль в одном месте";
 "onboarding.view_stats" = "Статистика трат";
 "onboarding.view_stats__subtitle" = "У вас будет статистика, сколько вы тратите на ваш электрокар, сколько стоит 1 километр на нем и сколько CO₂ вы сохранили";
 

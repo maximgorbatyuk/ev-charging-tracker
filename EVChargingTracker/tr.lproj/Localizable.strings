@@ -185,6 +185,10 @@
 "onboarding.monitor_costs__subtitle" = "Elektrikli aracınıza elektrik ve diğer masraflar dahil ne kadar harcadığınızı görün";
 "onboarding.plan_maintenance" = "Bakım planlayın";
 "onboarding.plan_maintenance__subtitle" = "Elektrikli aracınızın bakım görevlerini planlayın ve hatırlatıcılar alın";
+"onboarding.save_documents" = "Belgeleri saklayın";
+"onboarding.save_documents__subtitle" = "Sigorta, ruhsat ve diğer önemli araç belgeleriniz her zaman elinizin altında";
+"onboarding.collect_ideas" = "Fikirleri toplayın";
+"onboarding.collect_ideas__subtitle" = "Aracınızla ilgili faydalı bağlantıları, notları ve araştırmaları tek bir yerde saklayın";
 "onboarding.view_stats" = "İstatistikleri görüntüle";
 "onboarding.view_stats__subtitle" = "Elektrikli aracınızın kilometre başına ne kadara mal olduğunu ve elektrikli araç kullanarak tasarruf ettiğiniz CO₂ miktarını görün";
 

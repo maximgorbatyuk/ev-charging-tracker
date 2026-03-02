@@ -186,6 +186,10 @@
 "onboarding.monitor_costs__subtitle" = "Sehen Sie, wie viel Sie für Ihr Elektrofahrzeug ausgeben, einschließlich Strom und anderer Ausgaben";
 "onboarding.plan_maintenance" = "Wartung planen";
 "onboarding.plan_maintenance__subtitle" = "Planen Sie Wartungsaufgaben für Ihr Elektrofahrzeug und erhalten Sie Erinnerungen";
+"onboarding.save_documents" = "Dokumente speichern";
+"onboarding.save_documents__subtitle" = "Versicherung, Zulassung und andere wichtige Fahrzeugdokumente immer griffbereit";
+"onboarding.collect_ideas" = "Ideen sammeln";
+"onboarding.collect_ideas__subtitle" = "Speichern Sie nützliche Links, Notizen und Recherchen zu Ihrem Auto an einem Ort";
 "onboarding.view_stats" = "Statistiken anzeigen";
 "onboarding.view_stats__subtitle" = "Erfahren Sie, wie viel Ihr Elektrofahrzeug pro Kilometer kostet und wie viel CO₂ Sie durch das Fahren eines Elektrofahrzeugs eingespart haben";
 

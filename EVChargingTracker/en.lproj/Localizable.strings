@@ -183,6 +183,10 @@
 "onboarding.monitor_costs__subtitle" = "See how much you spend on your EV car including power and other expenses";
 "onboarding.plan_maintenance" = "Plan maintenance";
 "onboarding.plan_maintenance__subtitle" = "Schedule and get reminders for your EV maintenance tasks";
+"onboarding.save_documents" = "Save documents";
+"onboarding.save_documents__subtitle" = "Keep your car's insurance, registration, and other important documents always at hand";
+"onboarding.collect_ideas" = "Collect ideas";
+"onboarding.collect_ideas__subtitle" = "Save useful links, notes, and research about your car in one place";
 "onboarding.view_stats" = "View Stats";
 "onboarding.view_stats__subtitle" = "Get insights into how much your EV costs per 1 kilometer and how much CO₂ you have saved by driving an EV";
 
