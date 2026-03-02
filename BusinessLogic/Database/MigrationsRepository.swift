@@ -14,17 +14,17 @@ class MigrationsRepository {
 
     private let id = Expression<Int64>("id")
     private let date = Expression<Date>("date")
-    
+
     private var db: Connection
     private let logger: Logger
-    
+
     init(db: Connection, tableName: String, logger: Logger? = nil) {
         self.db = db
         self.table = Table(tableName)
         self.logger = logger ?? Logger(subsystem: tableName, category: "Database")
     }
 
-    func createTableIfNotExists() -> Void {
+    func createTableIfNotExists() {
         let command = table.create(ifNotExists: true) { t in
             t.column(id, primaryKey: .autoincrement)
             t.column(date)

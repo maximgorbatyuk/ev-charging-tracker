@@ -27,7 +27,7 @@ struct AddExpenseView: SwiftUICore.View {
     @State private var date = Date()
     @State private var energyCharged = ""
     @State private var chargerType: ChargerType = .home7kW
-    @State private var expenseType: ExpenseType? = nil
+    @State private var expenseType: ExpenseType?
     @State private var odometer = ""
     @State private var pricePerKWh = ""
     @State private var cost = ""
@@ -35,19 +35,19 @@ struct AddExpenseView: SwiftUICore.View {
     @State private var showingAlert = false
     @State private var carName = ""
     @State private var batteryCapacity = ""
-    @State private var carId: Int64? = nil
+    @State private var carId: Int64?
 
-    @State private var alertMessage: String? = nil
-    @State private var selectedCardForExpense: Car? = nil
-    
+    @State private var alertMessage: String?
+    @State private var selectedCardForExpense: Car?
+
     // Store price and charger type from the stored expense
     @State private var storedPricePerKWh: String = ""
-    @State private var storedChargerType: ChargerType? = nil
+    @State private var storedChargerType: ChargerType?
 
     @FocusState private var isCountOfKWtFocused: Bool
     @FocusState private var isPricePerKWhFocused: Bool
     @FocusState private var isCostFocused: Bool
-    
+
     private var isEditMode: Bool {
         existingExpense != nil
     }
@@ -134,7 +134,7 @@ struct AddExpenseView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         NavigationStack {
             Form {
-                if (alertMessage != nil) {
+                if alertMessage != nil {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.orange)
@@ -151,7 +151,7 @@ struct AddExpenseView: SwiftUICore.View {
 
                 Section(header: Text(L("Expense details"))) {
 
-                    if (selectedCardForExpense != nil && allCars.count > 1) {
+                    if selectedCardForExpense != nil && allCars.count > 1 {
 
                         Picker(L("Car"), selection: $carId) {
                             ForEach(allCars, id: \.self.id) { optionCar in
@@ -175,7 +175,7 @@ struct AddExpenseView: SwiftUICore.View {
 
                     DatePicker(L("Date"), selection: $date, displayedComponents: .date)
 
-                    if (defaultExpenseType == .charging) {
+                    if defaultExpenseType == .charging {
                         HStack {
                             Text(L("Energy (kWh)"))
                             Spacer()
@@ -183,8 +183,8 @@ struct AddExpenseView: SwiftUICore.View {
                                 .focused($isCountOfKWtFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .onChange(of: energyCharged, { oldValue, newValue in
-                                    if (!isCountOfKWtFocused) {
+                                .onChange(of: energyCharged, { _, _ in
+                                    if !isCountOfKWtFocused {
                                         return
                                     }
 
@@ -199,9 +199,9 @@ struct AddExpenseView: SwiftUICore.View {
                                 .focused($isPricePerKWhFocused)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .onChange(of: pricePerKWh, { oldValue, newValue in
+                                .onChange(of: pricePerKWh, { _, _ in
 
-                                    if (!isPricePerKWhFocused) {
+                                    if !isPricePerKWhFocused {
                                         return
                                     }
 
@@ -218,7 +218,6 @@ struct AddExpenseView: SwiftUICore.View {
                             handleChargerTypeChange(from: oldChargerType, to: newChargerType)
                         }
 
-                        
                     } else {
                         Picker(L("Expense Type"), selection: $expenseType) {
                             ForEach(ExpenseType.allCases.filter({ $0 != .charging }), id: \.self) { type in
@@ -228,7 +227,7 @@ struct AddExpenseView: SwiftUICore.View {
                         .foregroundColor(isEditMode ? .gray : .primary)
                         .disabled(isEditMode)
                     }
-                    
+
                     VStack {
                         HStack {
                             Text(L("Odometer (km)"))
@@ -244,15 +243,15 @@ struct AddExpenseView: SwiftUICore.View {
                             .padding(.top, 2)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    
+
                     HStack {
                         Text(String(format: L("Cost (%@)"), defaultCurrency.rawValue))
                         Spacer()
                         TextField(L("12.50"), text: $cost)
                             .focused($isCostFocused)
-                            .onChange(of: cost, { oldValue, newValue in
+                            .onChange(of: cost, { _, _ in
 
-                                if (!isCostFocused) {
+                                if !isCostFocused {
                                     return
                                 }
 
@@ -266,16 +265,14 @@ struct AddExpenseView: SwiftUICore.View {
                             .multilineTextAlignment(.trailing)
                     }
 
-                    
-
-                    if (selectedCardForExpense == nil) {
+                    if selectedCardForExpense == nil {
                         HStack {
                             Text(L("Car name"))
                             Spacer()
                             TextField(L("Name of the car"), text: $carName)
                                 .multilineTextAlignment(.trailing)
                         }
-                        
+
                         HStack {
                             Spacer()
 
@@ -286,7 +283,7 @@ struct AddExpenseView: SwiftUICore.View {
                                 .multilineTextAlignment(.trailing)
                         }
                     }
-                    
+
                 }
 
                 Section(header: Text(L("Optional"))) {
@@ -345,7 +342,7 @@ struct AddExpenseView: SwiftUICore.View {
                     }
                 }
             }
-            .onAppear() {
+            .onAppear {
 
                 analytics.trackScreen(
                     isEditMode ? "edit_expense_screen" : "add_expense_screen", properties: [
@@ -401,7 +398,7 @@ struct AddExpenseView: SwiftUICore.View {
         if let storedType = storedChargerType, newType == storedType, !storedPricePerKWh.isEmpty {
             // Restore the price from the stored expense
             pricePerKWh = storedPricePerKWh
-            
+
             // Recalculate cost based on restored price
             adjustCostsBasedOnInputs()
         } else {
@@ -429,7 +426,7 @@ struct AddExpenseView: SwiftUICore.View {
         }
 
         var energy = 0.0
-        if (expenseTypeUnwrapped == .charging) {
+        if expenseTypeUnwrapped == .charging {
             guard let energyParsed = Double(energyCharged) else {
                 alertMessage = L("Please type a valid value for Energy.")
                 return
@@ -440,7 +437,7 @@ struct AddExpenseView: SwiftUICore.View {
 
         var currentMileageValue: Int? = Int(odometer)
         if currentMileageValue == nil {
-            if (selectedCardForExpense == nil) {
+            if selectedCardForExpense == nil {
                 alertMessage = L("Please type a valid value for Odometer.")
                 return
             }
@@ -464,9 +461,9 @@ struct AddExpenseView: SwiftUICore.View {
             carId: selectedCardForExpense?.id ?? existingExpense?.carId
         )
 
-        var initialExpenseForNewCar: Expense? = nil
+        var initialExpenseForNewCar: Expense?
 
-        if (selectedCardForExpense == nil && existingExpense == nil) {
+        if selectedCardForExpense == nil && existingExpense == nil {
             initialExpenseForNewCar = Expense(
                 date: date,
                 energyCharged: 0.0,
@@ -482,7 +479,7 @@ struct AddExpenseView: SwiftUICore.View {
         }
 
         var carNameValue = selectedCardForExpense?.name
-        if (carNameValue == nil) {
+        if carNameValue == nil {
             carNameValue = carName.isEmpty ? nil : carName
         }
 

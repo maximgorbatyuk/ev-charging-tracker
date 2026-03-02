@@ -16,7 +16,7 @@ final class Migration_20251114_CreateDelayedNotificationTable {
     init(db: Connection) {
         self.db = db
     }
-    
+
     func execute() {
         let repository = DelayedNotificationsRepository(db: db, tableName: DatabaseManager.DelayedNotificationsTableName)
         let logger = Logger()

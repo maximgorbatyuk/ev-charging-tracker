@@ -20,7 +20,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
     // Average fuel density in kg per gas liter
     let fuelKgPerL = 2.31
-    
+
     private let environment: EnvironmentService
     private let db: DatabaseManager
     private let expensesRepository: ExpensesRepository?
@@ -71,7 +71,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             oneKmPriceIncludingAllExpenses: calculateOneKilometerCosts(false),
             oneKmPriceBasedOnlyOnCharging: calculateOneKilometerCosts(true),
             lastUpdated: Date())
-        
+
         if let car = self._selectedCarForExpenses {
             expenseChartData = ExpensesChartData(
                 expenses: expenses,
@@ -87,23 +87,22 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             )
         }
     }
-    
+
     func getMonthCountForCharts() -> Int {
         return 6
     }
 
     // TODO mgorbatyuk: avoid code duplication with saveNewExpense
-    func saveChargingSession(_ chargingSessionResult: AddExpenseViewResult) -> Void {
+    func saveChargingSession(_ chargingSessionResult: AddExpenseViewResult) {
 
-        var carId: Int64? = nil
+        var carId: Int64?
         let allCars = self.getAllCars()
         let selectedCar = self.selectedCarForExpenses
         var selectedCarForExpense = selectedCar
 
         if let resultCarId = chargingSessionResult.carId,
            let currentCar = selectedCar,
-           resultCarId != currentCar.id
-        {
+           resultCarId != currentCar.id {
             carId = resultCarId
             selectedCarForExpense = allCars.first(where: { $0.id == carId })
         }
@@ -162,7 +161,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
         self.insertExpense(chargingSessionResult.expense)
     }
 
-    func insertExpense(_ session: Expense) -> Void {
+    func insertExpense(_ session: Expense) {
         if let id = expensesRepository?.insertSession(session) {
             let newSession = session
             newSession.id = id
@@ -191,7 +190,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     func calculateOneKilometerCosts(_ onlyCharging: Bool) -> Double {
-        if (expenses.count < 1) {
+        if expenses.count < 1 {
             return 0
         }
 
@@ -210,7 +209,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             totalDistance = (lastRecord?.odometer ?? 0) - (initialRecord?.odometer ?? 0)
         }
 
-        if (totalDistance <= 0) {
+        if totalDistance <= 0 {
             return 0
         }
 
@@ -235,7 +234,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
         return self.db.userSettingsRepository?.fetchCurrency() ?? .kzt
     }
-    
+
     func getChargingSessionsCount() -> Int {
         expenses.filter({ $0.isInitialRecord == false && $0.expenseType == .charging }).count
     }
@@ -247,7 +246,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     func getAvgConsumptionKWhPer100() -> Double {
         let totalEnergy = self.getTotalEnergy()
         let totalDistance = self.getTotalCarDistance()
-        if (totalDistance == 0) {
+        if totalDistance == 0 {
             return 0.0
         }
 
@@ -255,7 +254,7 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     var selectedCarForExpenses: Car? {
-        if (_selectedCarForExpenses == nil) {
+        if _selectedCarForExpenses == nil {
             _selectedCarForExpenses = self.reloadSelectedCarForExpenses()
         }
 
@@ -272,19 +271,19 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     }
 
     func getCo2Saved() -> Double {
-        let co2PerKm = environment.getCo2EuropePollutionPerOneKilometer();
+        let co2PerKm = environment.getCo2EuropePollutionPerOneKilometer()
         let totalDistance = self.getTotalCarDistance()
         return co2PerKm * totalDistance
     }
 
     func getAverageEnergyConsumed() -> Double {
         guard !expenses.isEmpty else { return 0 }
-        
+
         let sessionsToCount = expenses
             .filter({ $0.isInitialRecord == false && $0.expenseType == .charging })
             .count
-        
-        if (sessionsToCount == 0) {
+
+        if sessionsToCount == 0 {
             return 0
         }
 

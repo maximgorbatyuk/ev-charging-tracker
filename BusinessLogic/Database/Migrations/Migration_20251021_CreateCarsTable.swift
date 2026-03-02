@@ -10,7 +10,7 @@ import Foundation
 import os
 
 class Migration_20251021_CreateCarsTable {
-    
+
     private let migrationName = "20251021_CreateCarsTable"
     private let db: Connection
     init(db: Connection) {
@@ -38,8 +38,8 @@ class Migration_20251021_CreateCarsTable {
             logger.debug("car_id column added to expenses table successfully")
 
             let allExpenses = expensesRepository.fetchAllSessions(nil)
-            if (allExpenses.count > 0) {
-                
+            if allExpenses.count > 0 {
+
                 let now = Date()
                 let lastExpense = allExpenses[0]
                 let firstExpense = allExpenses.filter({ $0.isInitialRecord == true })[0]

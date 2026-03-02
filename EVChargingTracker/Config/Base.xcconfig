@@ -11,3 +11,5 @@ APP_STORE_ID = 6754165643
 DEVELOPER_NAME = Maxim Gorbatyuk
 BUILD_ENVIRONMENT = release
 CO2_EUROPE_POLLUTION_PER_ONE_KILOMETER = 0.17
+APP_GROUP_IDENTIFIER = group.dev.mgorbatyuk.evchargetracker
+SHARE_EXTENSION_BUNDLE_ID = mgorbatyuk.dev.EVChargeTracker.ShareExtension

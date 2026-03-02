@@ -117,7 +117,7 @@ class ExpensesChartViewModel: ObservableObject {
                         ])
                 },
                 customColor: ExpensesChartViewModel.colorForExpenseType(.other),
-                isSelected: false),
+                isSelected: false)
         ]
     }
 
@@ -147,7 +147,7 @@ class ExpensesChartViewModel: ObservableObject {
             expense.cost! > 0
         }
 
-        if (filter == nil) {
+        if filter == nil {
             return expensesToShow
         }
 
@@ -158,7 +158,7 @@ class ExpensesChartViewModel: ObservableObject {
         return expensesToShow
     }
 
-    func recreateExpensesToShow(_ filter: ExpenseType?) -> Void {
+    func recreateExpensesToShow(_ filter: ExpenseType?) {
 
         self.expensesToShow = ExpensesChartViewModel.createExpensesToShow(
             filter: filter,
@@ -228,7 +228,7 @@ struct MonthlyExpenseData: Identifiable {
         var result: [MonthlyExpenseData] = []
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM"
-        
+
         for monthDate in months {
             guard
                 let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate)),
@@ -239,7 +239,7 @@ struct MonthlyExpenseData: Identifiable {
             let monthExpenses = expensesToShow.filter { expense in
                 expense.date >= monthStart && expense.date < nextMonthStart
             }
-            
+
             // Group by expense type for this month
             let groupedByType = Dictionary(grouping: monthExpenses) { $0.expenseType }
 
@@ -268,5 +268,5 @@ struct MonthlyExpenseData: Identifiable {
 
         return result.sorted { $0.date < $1.date }
     }
-        
+
 }

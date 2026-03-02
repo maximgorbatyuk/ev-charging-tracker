@@ -142,6 +142,8 @@
 "Car mileage" = "Car mileage";
 "Initial (km)" = "Initial (km)";
 "Current (km)" = "Current (km)";
+"Total mileage" = "Total mileage";
+"No car selected" = "No car selected";
 "Remain at odometer" = "Remain at odometer";
 "Maintenance reminder" = "Maintenance reminder";
 "Some maintenance tasks due" = "Some maintenance tasks due";
@@ -181,6 +183,10 @@
 "onboarding.monitor_costs__subtitle" = "See how much you spend on your EV car including power and other expenses";
 "onboarding.plan_maintenance" = "Plan maintenance";
 "onboarding.plan_maintenance__subtitle" = "Schedule and get reminders for your EV maintenance tasks";
+"onboarding.save_documents" = "Save documents";
+"onboarding.save_documents__subtitle" = "Keep your car's insurance, registration, and other important documents always at hand";
+"onboarding.collect_ideas" = "Collect ideas";
+"onboarding.collect_ideas__subtitle" = "Save useful links, notes, and research about your car in one place";
 "onboarding.view_stats" = "View Stats";
 "onboarding.view_stats__subtitle" = "Get insights into how much your EV costs per 1 kilometer and how much CO₂ you have saved by driving an EV";
 
@@ -345,4 +351,78 @@
 "Due Soon" = "Due Soon";
 "Overdue" = "Overdue";
 "Scheduled" = "Scheduled";
+
+/* Share Extension */
+"share.title" = "Save to EV Tracker";
+"share.cancel" = "Cancel";
+"share.save" = "Save";
+"share.section.content" = "Shared Content";
+"share.section.car" = "Car";
+"share.car_picker" = "Car";
+"share.car_picker.placeholder" = "Select a car";
+"share.section.type" = "Expense Type";
+"share.type_picker" = "Type";
+"share.section.notes" = "Notes";
+"share.no_cars.title" = "No Cars";
+"share.no_cars.message" = "Add a car in EVChargingTracker first, then try sharing again.";
+"share.error.no_car_selected" = "Please select a car.";
+"share.error.save_failed" = "Could not save. Please try again.";
+"share.section.entity_type" = "Save As";
+"share.entity_picker" = "Type";
+"share.entity.expense" = "Expense";
+"share.entity.idea" = "Idea";
+"share.entity.document" = "Document";
+"share.section.document_info" = "Document";
+"share.migration_required.title" = "Setup Required";
+"share.migration_required.message" = "Open EVChargingTracker once to finish setup, then try sharing again.";
+"share.migration_required.dismiss" = "OK";
+
+/* Car details - create chooser */
+"Create new" = "Create new";
+"New maintenance record" = "New maintenance record";
+"New document" = "New document";
+"New idea" = "New idea";
+"Documents" = "Documents";
+"Ideas" = "Ideas";
+
+/* Car details - root screen */
+"Car details" = "Car details";
+"See all" = "See all";
+"No documents yet" = "No documents yet";
+"No ideas yet" = "No ideas yet";
+
+/* Ideas */
+"URL" = "URL";
+"Description" = "Description";
+"Edit idea" = "Edit idea";
+"idea.title.placeholder" = "Enter idea title";
+"idea.url.placeholder" = "https://example.com (optional)";
+"idea.title.required" = "Title is required";
+"idea.url.invalid" = "Please enter a valid URL";
+"Add your first idea" = "Add your first idea";
+"Delete idea?" = "Delete idea?";
+"Delete selected idea? This action cannot be undone." = "Delete selected idea? This action cannot be undone.";
+"Idea Details" = "Idea Details";
+"Updated" = "Updated";
+"Error" = "Error";
+"OK" = "OK";
+
+/* Documents */
+"Import from" = "Import from";
+"Files" = "Files";
+"Photos" = "Photos";
+"Add your first document" = "Add your first document";
+"Delete document?" = "Delete document?";
+"Delete selected document? This action cannot be undone." = "Delete selected document? This action cannot be undone.";
+"Rename document" = "Rename document";
+"New title" = "New title";
+"Rename" = "Rename";
+"Preview" = "Preview";
+"File not found" = "File not found";
+"Unable to load image" = "Unable to load image";
+
+// Import preview - data types
+"documents" = "documents";
+"ideas" = "ideas";
+"import.documents_metadata_only" = "Note: Document files are not included in the backup. Only document metadata will be restored.";
 

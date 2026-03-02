@@ -16,6 +16,8 @@
 	<string>$(DEVELOPER_NAME)</string>
 	<key>GithubRepoUrl</key>
 	<string>$(GITHUB_REPO_URL)</string>
+	<key>AppGroupIdentifier</key>
+	<string>$(APP_GROUP_IDENTIFIER)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.evchargingtracker.daily-backup</string>

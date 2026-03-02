@@ -51,14 +51,14 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
 
     private var db: Connection
     private let logger: Logger
-    
+
     init(db: Connection, tableName: String, logger: Logger? = nil) {
         self.db = db
         self.chargingSessionsTable = Table(tableName)
         self.logger = logger ?? Logger(subsystem: tableName, category: "Database")
     }
 
-    func createTable() -> Void {
+    func createTable() {
         let command = chargingSessionsTable.create(ifNotExists: true) { t in
             t.column(id, primaryKey: .autoincrement)
             t.column(date)
@@ -89,7 +89,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         }
     }
 
-    func truncateTable() -> Void {
+    func truncateTable() {
         do {
             try db.run(chargingSessionsTable.delete())
             logger.info("Table truncated successfully")
@@ -99,7 +99,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
     }
 
     func insertSession(_ session: Expense) -> Int64? {
-        
+
         do {
             let insert = chargingSessionsTable.insert(
                 date <- session.date,
@@ -113,7 +113,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
                 expenseType <- session.expenseType.rawValue,
                 carIdColumn <- session.carId
             )
-            
+
             let rowId = try db.run(insert)
             return rowId
         } catch {
@@ -133,7 +133,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             return 0
         }
     }
-    
+
     func fetchAllSessions(_ carId: Int64? = nil) -> [Expense] {
 
         var sessionsList: [Expense] = []
@@ -165,7 +165,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         } catch {
             logger.error("Fetch failed: \(error)")
         }
-        
+
         return sessionsList
     }
 
@@ -174,7 +174,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         var sessionsList: [Expense] = []
 
         var query: QueryType
-        if (!expenseTypeFilters.isEmpty) {
+        if !expenseTypeFilters.isEmpty {
             let stringValues = expenseTypeFilters.map { $0.rawValue }
             query = chargingSessionsTable
                 .filter(carIdColumn == carId)
@@ -209,12 +209,12 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         } catch {
             logger.error("Fetch failed: \(error)")
         }
-        
+
         return sessionsList
     }
 
     // MARK: - Paginated Fetching
-    
+
     /// Fetches expenses for a car with pagination support
     /// - Parameters:
     ///   - carId: The ID of the car to fetch expenses for
@@ -235,12 +235,12 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             logger.error("Invalid page number: \(page). Page must be greater than 0.")
             return []
         }
-        
+
         guard pageSize > 0 else {
             logger.error("Invalid page size: \(pageSize). Page size must be greater than 0.")
             return []
         }
-        
+
         // Calculate offset
         let offset = (page - 1) * pageSize
 
@@ -252,7 +252,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             offset: offset,
             sortBy: sortBy
         )
-        
+
         // Fetch and map results using helper
         var sessionsList: [Expense] = []
         do {
@@ -263,12 +263,12 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         } catch {
             logger.error("Fetch paginated failed: \(error)")
         }
-        
+
         return sessionsList
     }
-    
+
     // MARK: - Private Helpers
-    
+
     /// Builds a paginated query for fetching expenses
     /// - Parameters:
     ///   - carId: The ID of the car to filter by
@@ -303,7 +303,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         // Apply pagination
         return query.limit(limit, offset: offset)
     }
-    
+
     /// Maps a database row to an Expense object
     /// - Parameter row: The database row to map
     /// - Returns: An Expense object populated with data from the row
@@ -311,7 +311,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         let chargerTypeEnum = ChargerType(rawValue: row[chargerType]) ?? .other
         let currencyEnum = Currency(rawValue: row[currency]) ?? .usd
         let expenseTypeEnum = ExpenseType(rawValue: row[expenseType]) ?? .other
-        
+
         return Expense(
             id: row[id],
             date: row[date],
@@ -326,7 +326,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             carId: row[carIdColumn]
         )
     }
-    
+
     /// Gets the total count of expenses for a car with optional filters
     /// - Parameters:
     ///   - carId: The ID of the car
@@ -334,7 +334,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
     /// - Returns: Total count of matching expenses
     func getExpensesCount(carId: Int64?, expenseTypeFilters: [ExpenseType] = []) -> Int {
         do {
-            if (!expenseTypeFilters.isEmpty) {
+            if !expenseTypeFilters.isEmpty {
                 let stringValues = expenseTypeFilters.map { $0.rawValue }
                 let query = chargingSessionsTable
                     .filter(carIdColumn == carId)
@@ -349,7 +349,6 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             return 0
         }
     }
-
 
     func getTotalCost(carId: Int64?, expenseTypeFilters: [ExpenseType] = []) -> Double {
         do {
@@ -377,7 +376,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         }
 
         let sessionToUpdate = chargingSessionsTable.filter(id == sessionId)
-        
+
         do {
             try db.run(sessionToUpdate.update(
                 date <- session.date,
@@ -400,7 +399,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
 
     func deleteSession(id sessionId: Int64) -> Bool {
         let sessionToDelete = chargingSessionsTable.filter(id == sessionId)
-        
+
         do {
             try db.run(sessionToDelete.delete())
             return true
@@ -419,7 +418,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             return 0
         }
     }
-    
+
     func getTotalCost() -> Double {
         do {
             let query = chargingSessionsTable.filter(cost != nil)
@@ -430,7 +429,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             return 0
         }
     }
-    
+
     func getSessionCount() -> Int {
         do {
             return try db.scalar(chargingSessionsTable.count)
@@ -440,7 +439,7 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
         }
     }
 
-    func deleteRecordsForCar(_ carId: Int64) -> Void {
+    func deleteRecordsForCar(_ carId: Int64) {
         let recordsToDelete = chargingSessionsTable.filter(carIdColumn == carId)
         do {
             try db.run(recordsToDelete.delete())

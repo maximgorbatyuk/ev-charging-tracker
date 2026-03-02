@@ -16,14 +16,14 @@ protocol NotificationManagerProtocol {
 
 class NotificationManager: ObservableObject, NotificationManagerProtocol {
     static let shared = NotificationManager()
-    
+
     private let logger: Logger
-    
+
     init(logger: Logger? = nil) {
         self.logger = logger ?? Logger(subsystem: "NotificationManager", category: "Notifications")
     }
 
-    func getAuthorizationStatus(completion: @escaping (UNAuthorizationStatus) -> Void) -> Void {
+    func getAuthorizationStatus(completion: @escaping (UNAuthorizationStatus) -> Void) {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             completion(settings.authorizationStatus)
         }
@@ -51,7 +51,7 @@ class NotificationManager: ObservableObject, NotificationManagerProtocol {
 
     func checkAndRequestPermission(
         completion: @escaping () -> Void,
-        onDeniedNotificationPermission: @escaping () -> Void) -> Void {
+        onDeniedNotificationPermission: @escaping () -> Void) {
 
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             switch settings.authorizationStatus {
@@ -106,7 +106,7 @@ class NotificationManager: ObservableObject, NotificationManagerProtocol {
     }
 
     func scheduleNotification(title: String, body: String, on date: Date) -> String {
-        
+
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
 
@@ -116,7 +116,7 @@ class NotificationManager: ObservableObject, NotificationManagerProtocol {
             trigger: trigger)
     }
 
-    func getPendingNotificationRequests() -> Void {
+    func getPendingNotificationRequests() {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             self.logger.info("Pending notifications: \(requests.count)")
             for request in requests {

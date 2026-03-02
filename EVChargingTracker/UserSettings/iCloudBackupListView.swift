@@ -130,7 +130,7 @@ struct iCloudBackupListView: SwiftUI.View {
                     Text(L("This will replace all current data with the backup from \(formatDate(backup.createdAt)). This cannot be undone."))
                 }
             }
-            .alert(L("Backup Error"), isPresented: .constant(viewModel.backupError != nil)) {
+            .alert(L("Backup Error"), isPresented: isBackupErrorPresented) {
                 Button(L("OK")) {
                     viewModel.backupError = nil
                 }
@@ -160,6 +160,19 @@ struct iCloudBackupListView: SwiftUI.View {
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: date)
+    }
+
+    private var isBackupErrorPresented: SwiftUI.Binding<Bool> {
+        SwiftUI.Binding(
+            get: {
+                viewModel.backupError != nil
+            },
+            set: { isPresented in
+                if !isPresented {
+                    viewModel.backupError = nil
+                }
+            }
+        )
     }
 }
 

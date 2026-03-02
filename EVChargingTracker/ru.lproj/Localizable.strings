@@ -145,6 +145,8 @@
 "Car mileage" = "Пробег автомобиля";
 "Initial (km)" = "Начальный (км)";
 "Current (km)" = "Текущий (км)";
+"Total mileage" = "Общий пробег";
+"No car selected" = "Автомобиль не выбран";
 "Remain at odometer" = "Осталось км";
 "Maintenance reminder" = "Напоминание о сервисе";
 "You have %d maintenance task(s) due based on your car's current mileage." = "У вас есть %d задача(и) по сервису, которые необходимо выполнить";
@@ -183,6 +185,10 @@
 "onboarding.monitor_costs__subtitle" = "Записывайте ваши расходы на зарядку и другие траты на автомобиль";
 "onboarding.plan_maintenance" = "Планируйте сервис";
 "onboarding.plan_maintenance__subtitle" = "Ведите план техобслуживания, и вы будете вовремя уведомлены.";
+"onboarding.save_documents" = "Храните документы";
+"onboarding.save_documents__subtitle" = "Страховка, регистрация и другие важные документы вашего авто всегда под рукой";
+"onboarding.collect_ideas" = "Собирайте идеи";
+"onboarding.collect_ideas__subtitle" = "Сохраняйте полезные ссылки, заметки и находки про ваш автомобиль в одном месте";
 "onboarding.view_stats" = "Статистика трат";
 "onboarding.view_stats__subtitle" = "У вас будет статистика, сколько вы тратите на ваш электрокар, сколько стоит 1 километр на нем и сколько CO₂ вы сохранили";
 
@@ -347,4 +353,78 @@
 "Due Soon" = "Скоро";
 "Overdue" = "Просрочено";
 "Scheduled" = "Запланировано";
+
+/* Share Extension */
+"share.title" = "Сохранить в EV Tracker";
+"share.cancel" = "Отмена";
+"share.save" = "Сохранить";
+"share.section.content" = "Общий контент";
+"share.section.car" = "Автомобиль";
+"share.car_picker" = "Автомобиль";
+"share.car_picker.placeholder" = "Выберите автомобиль";
+"share.section.type" = "Тип расхода";
+"share.type_picker" = "Тип";
+"share.section.notes" = "Заметки";
+"share.no_cars.title" = "Нет автомобилей";
+"share.no_cars.message" = "Сначала добавьте автомобиль в EVChargingTracker, затем попробуйте снова.";
+"share.error.no_car_selected" = "Пожалуйста, выберите автомобиль.";
+"share.error.save_failed" = "Не удалось сохранить. Попробуйте ещё раз.";
+"share.section.entity_type" = "Сохранить как";
+"share.entity_picker" = "Тип";
+"share.entity.expense" = "Расход";
+"share.entity.idea" = "Идея";
+"share.entity.document" = "Документ";
+"share.section.document_info" = "Документ";
+"share.migration_required.title" = "Требуется настройка";
+"share.migration_required.message" = "Откройте EVChargingTracker один раз для завершения настройки, затем попробуйте снова.";
+"share.migration_required.dismiss" = "OK";
+
+/* Car details - create chooser */
+"Create new" = "Создать";
+"New maintenance record" = "Новая запись обслуживания";
+"New document" = "Новый документ";
+"New idea" = "Новая идея";
+"Documents" = "Документы";
+"Ideas" = "Идеи";
+
+/* Car details - root screen */
+"Car details" = "Детали авто";
+"See all" = "Показать все";
+"No documents yet" = "Пока нет документов";
+"No ideas yet" = "Пока нет идей";
+
+/* Ideas */
+"URL" = "URL";
+"Description" = "Описание";
+"Edit idea" = "Редактировать идею";
+"idea.title.placeholder" = "Введите название идеи";
+"idea.url.placeholder" = "https://example.com (необязательно)";
+"idea.title.required" = "Название обязательно";
+"idea.url.invalid" = "Пожалуйста, введите корректный URL";
+"Add your first idea" = "Добавьте первую идею";
+"Delete idea?" = "Удалить идею?";
+"Delete selected idea? This action cannot be undone." = "Удалить выбранную идею? Это действие нельзя отменить.";
+"Idea Details" = "Детали идеи";
+"Updated" = "Обновлено";
+"Error" = "Ошибка";
+"OK" = "ОК";
+
+/* Documents */
+"Import from" = "Импорт из";
+"Files" = "Файлы";
+"Photos" = "Фото";
+"Add your first document" = "Добавьте первый документ";
+"Delete document?" = "Удалить документ?";
+"Delete selected document? This action cannot be undone." = "Удалить выбранный документ? Это действие нельзя отменить.";
+"Rename document" = "Переименовать документ";
+"New title" = "Новое название";
+"Rename" = "Переименовать";
+"Preview" = "Просмотр";
+"File not found" = "Файл не найден";
+"Unable to load image" = "Не удалось загрузить изображение";
+
+// Import preview - data types
+"documents" = "документов";
+"ideas" = "идей";
+"import.documents_metadata_only" = "Примечание: файлы документов не включены в резервную копию. Будут восстановлены только метаданные документов.";
 

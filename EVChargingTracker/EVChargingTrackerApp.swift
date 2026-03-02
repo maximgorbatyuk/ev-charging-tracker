@@ -20,6 +20,11 @@ struct EVChargingTrackerApp: App {
     @State private var isAppReady = false
     private var analytics = AnalyticsService.shared
 
+    init() {
+        // Warm up DatabaseManager early so migration runs before any DB-backed UI state
+        _ = DatabaseManager.shared
+    }
+
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -79,7 +84,7 @@ struct EVChargingTrackerApp: App {
 final class ForegroundNotificationDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
   static let shared = ForegroundNotificationDelegate()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         // Set the delegate
         UNUserNotificationCenter.current().delegate = self
 

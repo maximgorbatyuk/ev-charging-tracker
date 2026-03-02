@@ -109,14 +109,14 @@ class UserSettingsRepository: UserSettingsRepositoryProtocol {
     func upsertLanguage(_ languageValue: String) -> Bool {
         return upsertValue(key: "language", value: languageValue)
     }
-    
+
     /// Fetches the user_id from the database. If no user_id exists, generates a new UUID and stores it.
     /// - Returns: The user_id string (either existing or newly generated)
     func fetchOrGenerateUserId() -> String {
         if let existingUserId = fetchValue(for: "user_id") {
             return existingUserId
         }
-        
+
         // Generate new UUID if no user_id exists
         let newUserId = UUID().uuidString
         _ = upsertValue(key: "user_id", value: newUserId)
@@ -125,7 +125,7 @@ class UserSettingsRepository: UserSettingsRepositoryProtocol {
         #endif
         return newUserId
     }
-    
+
     /// Fetches the user_id from the database without generating a new one
     /// - Returns: The user_id string or nil if it doesn't exist
     func fetchUserId() -> String? {
@@ -140,8 +140,7 @@ class UserSettingsRepository: UserSettingsRepositoryProtocol {
     /// - Returns: The sorting option, defaults to `.creationDate` if not set
     func fetchExpensesSortingOption() -> ExpensesSortingOption {
         if let value = fetchValue(for: Self.expensesSortingKey),
-           let option = ExpensesSortingOption(rawValue: value)
-        {
+           let option = ExpensesSortingOption(rawValue: value) {
             return option
         }
 

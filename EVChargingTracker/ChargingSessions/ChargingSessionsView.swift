@@ -14,7 +14,7 @@ struct ChargingSessionsView: SwiftUICore.View {
             NavigationView {
                 ScrollView {
                     VStack(spacing: 16) {
-                        if (viewModel.statData != nil) {
+                        if viewModel.statData != nil {
                             StatsBlockView(
                                 co2Saved: viewModel.statData!.co2Saved,
                                 averageEnergy: viewModel.statData!.avgConsumptionKWhPer100,
@@ -132,7 +132,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                 .refreshable {
                     viewModel.loadSessions()
                 }
-                
+
             }
         }
     }

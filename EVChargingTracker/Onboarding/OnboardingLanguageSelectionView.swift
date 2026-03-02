@@ -10,7 +10,7 @@ import SwiftUI
 struct OnboardingLanguageSelectionView: SwiftUICore.View {
 
     let onCurrentLanguageSelected: (_ selectedLanguage: AppLanguage) -> Void
-    
+
     @ObservedObject var localizationManager: LocalizationManager = .shared
     @ObservedObject var analytics: AnalyticsService = .shared
 
@@ -69,7 +69,7 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
                 }
             }
             .padding(.horizontal)
-            
+
             Spacer()
         }
         .padding()
@@ -89,7 +89,7 @@ struct LanguageButton: SwiftUICore.View {
                     .foregroundColor(isSelected ? .white : .primary)
 
                 Spacer()
-                
+
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.white)

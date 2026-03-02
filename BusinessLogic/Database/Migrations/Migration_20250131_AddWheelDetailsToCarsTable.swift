@@ -13,7 +13,7 @@ class Migration_20250131_AddWheelDetailsToCarsTable {
 
     private let migrationName = "20250131_AddWheelDetailsToCarsTable"
     private let db: Connection
-    
+
     init(db: Connection) {
         self.db = db
     }

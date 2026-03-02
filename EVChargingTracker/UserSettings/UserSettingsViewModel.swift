@@ -100,11 +100,11 @@ class UserSettingsViewModel: ObservableObject {
         self.lastAutomaticBackupDate = backgroundTaskManager.lastAutomaticBackupDate
     }
 
-    func handleVersionTap() -> Void {
+    func handleVersionTap() {
         self.developerMode.handleVersionTap()
     }
 
-    func openAppStoreForUpdate() -> Void {
+    func openAppStoreForUpdate() {
         let urlAddress = environment.getAppStoreAppLink()
         if let url = URL(string: urlAddress) {
             self.openWebURL(url)
@@ -123,7 +123,7 @@ class UserSettingsViewModel: ObservableObject {
         return defaultCurrency
     }
 
-    func saveDefaultCurrency(_ currency: Currency) -> Void {
+    func saveDefaultCurrency(_ currency: Currency) {
         self.defaultCurrency = currency
 
         // persist to DB (upsert)
@@ -134,14 +134,13 @@ class UserSettingsViewModel: ObservableObject {
     }
 
     // New: save selected language
-    func saveLanguage(_ language: AppLanguage) -> Void {
+    func saveLanguage(_ language: AppLanguage) {
         self.selectedLanguage = language
 
         // Update runtime localization manager so UI can react immediately
         do {
             try LocalizationManager.shared.setLanguage(language)
-        }
-        catch {
+        } catch {
             logger.error("Failed to set language to \(language.rawValue): \(error.localizedDescription)")
         }
 
@@ -183,7 +182,7 @@ class UserSettingsViewModel: ObservableObject {
     func getCarById(_ id: Int64) -> Car? {
         return db.carRepository?.getCarById(id)
     }
-    
+
     func insertCar(_ car: Car) -> Int64? {
         guard let newCarId = db.carRepository?.insert(car) else {
             return nil
@@ -203,8 +202,7 @@ class UserSettingsViewModel: ObservableObject {
         let carExpensesUpdateSyccess = db.expensesRepository?.updateCarExpensesCurrency(car) ?? false
 
         if car.selectedForTracking,
-           let carId = car.id
-        {
+           let carId = car.id {
             _ = db.carRepository?.markAllCarsAsNoTracking(carIdToExclude: carId)
         }
 
@@ -215,14 +213,16 @@ class UserSettingsViewModel: ObservableObject {
         return carUpdateSuccess && carExpensesUpdateSyccess
     }
 
-    func deleteCar(_ carId: Int64, selectedForTracking: Bool) -> Void {
+    func deleteCar(_ carId: Int64, selectedForTracking: Bool) {
         db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
+        db.documentsRepository?.deleteRecordsForCar(carId)
+        db.ideasRepository?.deleteRecordsForCar(carId)
+        DocumentService.shared.deleteCarDocuments(carId: carId)
         _ = db.carRepository?.delete(id: carId)
 
         if selectedForTracking {
             if let latestCar = db.carRepository?.getLatestAddedCar(),
-               let latestCarId = latestCar.id
-            {
+               let latestCarId = latestCar.id {
                 _ = db.carRepository?.markCarAsSelectedForTracking(latestCarId)
             }
         }
@@ -256,8 +256,25 @@ class UserSettingsViewModel: ObservableObject {
                 developerMode.isDeveloperModeEnabled
     }
 
-    func deleteAllData() -> Void {
-        if (!isDevelopmentMode()) {
+    func resetMigrationFlag() {
+        guard isDevelopmentMode() else {
+            logger.info("Attempt to reset migration flag in non-development mode. Operation aborted.")
+            return
+        }
+        DatabaseMigrationHelper.resetMigrationFlag()
+        logger.info("Migration flag reset via developer tools")
+    }
+
+    func getMigrationStatus() -> String {
+        let migrated = DatabaseMigrationHelper.isMigrationCompleted()
+        let legacyExists = AppGroupContainer.legacyDatabaseExists
+        let sharedConfigured = AppGroupContainer.isConfigured
+
+        return "Migrated: \(migrated ? "Yes" : "No") | Legacy DB: \(legacyExists ? "Exists" : "None") | App Group: \(sharedConfigured ? "OK" : "N/A")"
+    }
+
+    func deleteAllData() {
+        if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
             return
         }
@@ -266,7 +283,7 @@ class UserSettingsViewModel: ObservableObject {
         refetchCars()
     }
 
-    func deleteAllExpenses() -> Void {
+    func deleteAllExpenses() {
         if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all expenses in non-development mode. Operation aborted.")
             return
@@ -281,7 +298,7 @@ class UserSettingsViewModel: ObservableObject {
         logger.info("Deleted all expenses for car: \(selectedCar.name)")
     }
 
-    func deleteAllExpensesForCar() -> Void {
+    func deleteAllExpensesForCar() {
         if !isDevelopmentMode() {
             self.logger.info("Attempt to delete all data in non-development mode. Operation aborted.")
             return
@@ -294,26 +311,27 @@ class UserSettingsViewModel: ObservableObject {
         db.deleteAllExpenses(selectedCar)
     }
 
-    func addRandomExpenses() -> Void {
+    func addRandomExpenses() {
         let selectedCar = db.carRepository?.getSelectedForExpensesCar()
-        if (selectedCar == nil) {
+        if selectedCar == nil {
             return
         }
 
         let countOfExpenseRecords = 80 // maintenance, carwash, repair
         let countOfChargingSessions = 150
         let countOfPlannedMaintenanceRecords = 20
+        let countOfIdeas = 10
         let oldestDate = Calendar.current.date(byAdding: .month, value: -8, to: Date())!
 
         guard let carId = selectedCar!.id else {
             logger.error("Selected car has no ID")
             return
         }
-        
+
         let currency = selectedCar!.expenseCurrency
         let initialMileage = selectedCar!.initialMileage
         let currentMileage = selectedCar!.currentMileage
-        
+
         let currencyValueMultiplier = switch currency {
             case .kzt:
                 100.0
@@ -342,7 +360,7 @@ class UserSettingsViewModel: ObservableObject {
             let chargerType = chargerTypes.randomElement() ?? .home7kW
             let odometer = randomOdometer()
             let cost = Double.random(in: 5...50) * currencyValueMultiplier // Cost range
-            
+
             let expense = Expense(
                 date: date,
                 energyCharged: energyCharged,
@@ -355,10 +373,10 @@ class UserSettingsViewModel: ObservableObject {
                 currency: currency,
                 carId: carId
             )
-            
+
             _ = expensesRepository?.insertSession(expense)
         }
-        
+
         // Generate other expenses (maintenance, carwash, repair, other)
         logger.info("Adding \(countOfExpenseRecords) other expenses...")
         let otherExpenseTypes: [ExpenseType] = [.maintenance, .carwash, .repair, .other]
@@ -367,7 +385,7 @@ class UserSettingsViewModel: ObservableObject {
             let date = randomDate()
             let expenseType = otherExpenseTypes.randomElement() ?? .other
             let odometer = randomOdometer()
-            
+
             // Different cost ranges based on type
             let cost: Double = {
                 switch expenseType {
@@ -411,10 +429,10 @@ class UserSettingsViewModel: ObservableObject {
                 currency: currency,
                 carId: carId
             )
-            
+
             _ = expensesRepository?.insertSession(expense)
         }
-        
+
         // Generate planned maintenance records
         logger.info("Adding \(countOfPlannedMaintenanceRecords) planned maintenance records...")
         let maintenanceNames = [
@@ -429,17 +447,17 @@ class UserSettingsViewModel: ObservableObject {
             "Wiper blade replacement",
             "12V battery replacement"
         ]
-        
+
         for i in 0..<countOfPlannedMaintenanceRecords {
             let name = maintenanceNames.randomElement() ?? "Scheduled maintenance"
-            
+
             // Randomly choose between date-based or odometer-based reminder
             let useDateReminder = Bool.random()
             let useOdometerReminder = Bool.random()
 
             let whenDate: Date? = useDateReminder ? Date().addingTimeInterval(TimeInterval.random(in: 86400...7776000)) : nil // 1 day to 90 days
             let odometerValue: Int? = useOdometerReminder ? currentMileage + Int.random(in: 5000...20000) : nil
-            
+
             let notes = [
                 "Important maintenance",
                 "Scheduled service",
@@ -447,7 +465,7 @@ class UserSettingsViewModel: ObservableObject {
                 "Regular checkup",
                 "Safety check"
             ].randomElement() ?? "Maintenance note"
-            
+
             let createdAt = randomDate()
 
             let maintenance = PlannedMaintenance(
@@ -459,14 +477,88 @@ class UserSettingsViewModel: ObservableObject {
                 carId: carId,
                 createdAt: createdAt
             )
-            
+
             _ = db.plannedMaintenanceRepository?.insertRecord(maintenance)
         }
-        
-        logger.info("Successfully added random test data: \(countOfChargingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records")
+
+        // Generate ideas
+        logger.info("Adding \(countOfIdeas) ideas...")
+        let ideaTitles = [
+            "Upgrade to all-season tires",
+            "Install dashcam",
+            "Ceramic coating",
+            "Tint rear windows",
+            "Add roof rack",
+            "Custom floor mats",
+            "Upgrade sound system",
+            "Paint protection film",
+            "Add wireless charger mount",
+            "Get charging cable organizer",
+            "Install mud flaps",
+            "Upgrade headlights to LED",
+            "Add trunk organizer",
+            "Try new charging network",
+            "Compare insurance plans"
+        ]
+
+        let ideaUrls: [String?] = [
+            "https://www.tirerack.com",
+            "https://www.amazon.com/dashcams",
+            nil,
+            nil,
+            "https://www.thule.com",
+            nil,
+            "https://www.crutchfield.com",
+            "https://www.xpel.com",
+            nil,
+            "https://www.tesla.com/shop",
+            nil,
+            nil,
+            nil,
+            "https://www.plugshare.com",
+            nil
+        ]
+
+        let ideaDescriptions: [String?] = [
+            "Check Michelin CrossClimate 2 vs Continental",
+            nil,
+            "Look into ceramic coating options for paint protection",
+            nil,
+            nil,
+            "WeatherTech or Tesla OEM?",
+            nil,
+            "Compare XPEL Ultimate Plus vs 3M Pro Series",
+            "MagSafe compatible preferred",
+            nil,
+            nil,
+            nil,
+            "Collapsible organizer for groceries",
+            "Try Electrify America vs ChargePoint pricing",
+            nil
+        ]
+
+        for i in 0..<countOfIdeas {
+            let title = ideaTitles[i % ideaTitles.count]
+            let url = ideaUrls[i % ideaUrls.count]
+            let description = ideaDescriptions[i % ideaDescriptions.count]
+            let createdAt = randomDate()
+
+            let idea = Idea(
+                carId: carId,
+                title: title,
+                url: url,
+                descriptionText: description,
+                createdAt: createdAt,
+                updatedAt: createdAt
+            )
+
+            _ = db.ideasRepository?.insertRecord(idea)
+        }
+
+        logger.info("Successfully added random test data: \(countOfChargingSessions) charging sessions, \(countOfExpenseRecords) expenses, \(countOfPlannedMaintenanceRecords) planned maintenance records, \(countOfIdeas) ideas")
     }
 
-    var allCars : [CarDto] {
+    var allCars: [CarDto] {
         return _allCars
     }
 
@@ -518,6 +610,8 @@ class UserSettingsViewModel: ObservableObject {
                 expensesCount: exportData.expenses.count,
                 maintenanceCount: exportData.plannedMaintenance.count,
                 notificationsCount: exportData.delayedNotifications.count,
+                documentsCount: exportData.documents?.count ?? 0,
+                ideasCount: exportData.ideas?.count ?? 0,
                 dateRange: calculateDateRange(from: exportData.expenses)
             )
 
@@ -728,5 +822,7 @@ struct ImportPreviewData {
     let expensesCount: Int
     let maintenanceCount: Int
     let notificationsCount: Int
+    let documentsCount: Int
+    let ideasCount: Int
     let dateRange: String
 }

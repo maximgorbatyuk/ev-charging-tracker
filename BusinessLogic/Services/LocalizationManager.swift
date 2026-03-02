@@ -6,6 +6,23 @@ final class LocalizationManager: ObservableObject {
 
     @Published var currentLanguage: AppLanguage
 
+    /// Bundle containing `.lproj` localization resources.
+    /// In the main app this is `Bundle.main`.
+    /// In an app extension (.appex) this resolves to the containing app bundle.
+    private static let localizationBundle: Bundle = {
+        let main = Bundle.main
+        if main.bundleURL.pathExtension == "appex" {
+            // .../EVChargingTracker.app/PlugIns/ShareExtension.appex → go up twice
+            let appURL = main.bundleURL
+                .deletingLastPathComponent()
+                .deletingLastPathComponent()
+            if let appBundle = Bundle(url: appURL) {
+                return appBundle
+            }
+        }
+        return main
+    }()
+
     private init() {
         // Read saved language from DB if available, otherwise default to en
         if let repo = DatabaseManager.shared.userSettingsRepository {
@@ -34,14 +51,16 @@ final class LocalizationManager: ObservableObject {
     }
 
     func localizedString(forKey key: String, language: AppLanguage) -> String {
-        // Try to load language bundle from main bundle's lproj folders
-        if let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj"),
+        let base = Self.localizationBundle
+
+        // Try to load language bundle from lproj folders
+        if let path = base.path(forResource: language.rawValue, ofType: "lproj"),
            let bundle = Bundle(path: path) {
             return bundle.localizedString(forKey: key, value: key, table: nil)
         }
 
-        // fallback to main bundle / key itself
-        return Bundle.main.localizedString(forKey: key, value: key, table: nil)
+        // fallback to base bundle / key itself
+        return base.localizedString(forKey: key, value: key, table: nil)
     }
 }
 

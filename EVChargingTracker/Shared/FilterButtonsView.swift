@@ -12,7 +12,7 @@ class FilterButtonItem: ObservableObject {
     let id: UUID = UUID()
     let title: String
 
-    @Published var customColor: Color? = nil
+    @Published var customColor: Color?
     @Published var isSelected = false
     private let innerAction: () -> Void
 
@@ -57,7 +57,7 @@ struct FilterButtonsView: SwiftUICore.View {
 
     @State var viewModel: FilterButtonsViewModel
     @Environment(\.colorScheme) var colorScheme
-    
+
     init(filterButtons: [FilterButtonItem]) {
         viewModel = FilterButtonsViewModel(filterButtons)
     }
@@ -77,7 +77,7 @@ struct FilterButtonsView: SwiftUICore.View {
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .animation(.easeInOut, value: button.isSelected)
                 .background {
-                    if (button.customColor == nil) {
+                    if button.customColor == nil {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .fill(button.isSelected ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
                             .overlay(

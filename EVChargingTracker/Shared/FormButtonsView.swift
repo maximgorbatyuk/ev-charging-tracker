@@ -10,12 +10,12 @@ import SwiftUI
 struct FormButtonsView: SwiftUICore.View {
     let onCancel: () -> Void
     let onSave: () -> Void
-    
+
     @Environment(\.colorScheme) var colorScheme
 
     var body: some SwiftUICore.View {
         HStack(spacing: 16) {
-            
+
             Button(L("Cancel"), action: onCancel)
                 .buttonStyle(OutlinedButtonStyle(
                     backgroundColor: colorScheme == .dark ? .gray.opacity(0.05) : .white,

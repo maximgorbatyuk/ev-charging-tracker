@@ -14,16 +14,20 @@ protocol DatabaseManagerProtocol {
     func getCarRepository() -> CarRepositoryProtocol?
     func getExpensesRepository() -> ExpensesRepositoryProtocol?
     func getUserSettingsRepository() -> UserSettingsRepositoryProtocol?
+    func getDocumentsRepository() -> DocumentsRepositoryProtocol?
+    func getIdeasRepository() -> IdeasRepositoryProtocol?
 }
 
-class DatabaseManager : DatabaseManagerProtocol {
-    
+class DatabaseManager: DatabaseManagerProtocol {
+
     static let ExpensesTableName = "charging_sessions"
     static let MigrationsTableName = "migrations"
     static let UserSettingsTableName = "user_settings"
     static let CarsTableName = "cars"
     static let PlannedMaintenanceTableName = "planned_maintenance"
     static let DelayedNotificationsTableName = "delayed_notifications"
+    static let DocumentsTableName = "documents"
+    static let IdeasTableName = "ideas"
 
     static let shared = DatabaseManager()
 
@@ -33,22 +37,24 @@ class DatabaseManager : DatabaseManagerProtocol {
     var carRepository: CarRepository?
     var plannedMaintenanceRepository: PlannedMaintenanceRepository?
     var delayedNotificationsRepository: DelayedNotificationsRepository?
+    var documentsRepository: DocumentsRepository?
+    var ideasRepository: IdeasRepository?
 
     private var db: Connection?
     private let logger: Logger
-    private let latestVersion = 6
+    private let latestVersion = 7
     private(set) var isInitialized: Bool = false
-    
+
     private init() {
-       
+
         self.logger = Logger(subsystem: "com.evchargingtracker.database", category: "DatabaseManager")
 
+        // Migrate database from Documents to App Group container (one-time, safe)
+        DatabaseMigrationHelper.migrateToAppGroupIfNeeded()
+
         do {
-            let path = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory, .userDomainMask, true
-            ).first!
-            
-            let dbPath = "\(path)/tesla_charging.sqlite3"
+            let dbURL = AppGroupContainer.databaseURL
+            let dbPath = dbURL.path
             logger.debug("Database path: \(dbPath)")
 
             self.db = try Connection(dbPath)
@@ -61,6 +67,8 @@ class DatabaseManager : DatabaseManagerProtocol {
             self.userSettingsRepository = UserSettingsRepository(db: dbConnection, tableName: DatabaseManager.UserSettingsTableName)
             self.plannedMaintenanceRepository = PlannedMaintenanceRepository(db: dbConnection, tableName: DatabaseManager.PlannedMaintenanceTableName)
             self.delayedNotificationsRepository = DelayedNotificationsRepository(db: dbConnection, tableName: DatabaseManager.DelayedNotificationsTableName)
+            self.documentsRepository = DocumentsRepository(db: dbConnection, tableName: DatabaseManager.DocumentsTableName)
+            self.ideasRepository = IdeasRepository(db: dbConnection, tableName: DatabaseManager.IdeasTableName)
 
             self.carRepository = CarRepository(
                 db: dbConnection,
@@ -79,7 +87,7 @@ class DatabaseManager : DatabaseManagerProtocol {
     }
 
     func getDatabaseSchemaVersion() -> Int {
-        return latestVersion;
+        return latestVersion
     }
 
     func getPlannedMaintenanceRepository() -> PlannedMaintenanceRepositoryProtocol? {
@@ -102,6 +110,14 @@ class DatabaseManager : DatabaseManagerProtocol {
         return userSettingsRepository
     }
 
+    func getDocumentsRepository() -> DocumentsRepositoryProtocol? {
+        return documentsRepository
+    }
+
+    func getIdeasRepository() -> IdeasRepositoryProtocol? {
+        return ideasRepository
+    }
+
     func migrateIfNeeded() {
         guard let db = db,
               let migrationRepository = migrationRepository,
@@ -115,7 +131,7 @@ class DatabaseManager : DatabaseManagerProtocol {
         migrationRepository.createTableIfNotExists()
         let currentVersion = migrationRepository.getLatestMigrationVersion()
 
-        if (currentVersion == latestVersion) {
+        if currentVersion == latestVersion {
             return
         }
 
@@ -145,6 +161,10 @@ class DatabaseManager : DatabaseManagerProtocol {
                 let migration6 = Migration_20250131_AddWheelDetailsToCarsTable(db: db)
                 migration6.execute()
 
+            case 7:
+                let migration7 = Migration_20260301_CreateDocumentsAndIdeasTables(db: db)
+                migration7.execute()
+
             default:
                 break
             }
@@ -153,7 +173,7 @@ class DatabaseManager : DatabaseManagerProtocol {
         }
     }
 
-    func deleteAllData() -> Void {
+    func deleteAllData() {
         guard let expensesRepository = expensesRepository,
               let plannedMaintenanceRepository = plannedMaintenanceRepository,
               let delayedNotificationsRepository = delayedNotificationsRepository,
@@ -166,10 +186,12 @@ class DatabaseManager : DatabaseManagerProtocol {
         expensesRepository.truncateTable()
         plannedMaintenanceRepository.truncateTable()
         delayedNotificationsRepository.truncateTable()
+        documentsRepository?.truncateTable()
+        ideasRepository?.truncateTable()
         carRepository.truncateTable()
     }
 
-    func deleteAllExpenses(_ selectedCar: Car) -> Void {
+    func deleteAllExpenses(_ selectedCar: Car) {
         guard let carId = selectedCar.id else {
             logger.error("Cannot delete expenses: car ID is nil")
             return

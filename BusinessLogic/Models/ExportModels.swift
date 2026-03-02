@@ -16,6 +16,8 @@ struct ExportData: Codable {
     let plannedMaintenance: [ExportPlannedMaintenance]
     let delayedNotifications: [ExportDelayedNotification]
     let userSettings: ExportUserSettings
+    let documents: [ExportDocument]?
+    let ideas: [ExportIdea]?
 }
 
 // MARK: - Metadata
@@ -200,6 +202,80 @@ struct ExportDelayedNotification: Codable {
         )
         notification.id = id
         return notification
+    }
+}
+
+// MARK: - Export Document
+
+struct ExportDocument: Codable {
+    let id: Int64?
+    let carId: Int64
+    let customTitle: String?
+    let fileName: String
+    let fileType: String
+    let fileSize: Int64
+    let createdAt: Date
+    let updatedAt: Date
+
+    init(from document: CarDocument) {
+        self.id = document.id
+        self.carId = document.carId
+        self.customTitle = document.customTitle
+        self.fileName = document.fileName
+        self.fileType = document.fileType
+        self.fileSize = document.fileSize
+        self.createdAt = document.createdAt
+        self.updatedAt = document.updatedAt
+    }
+
+    func toCarDocument() -> CarDocument {
+        let doc = CarDocument(
+            carId: carId,
+            customTitle: customTitle,
+            fileName: fileName,
+            filePath: nil,
+            fileType: fileType,
+            fileSize: fileSize,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        )
+        doc.id = id
+        return doc
+    }
+}
+
+// MARK: - Export Idea
+
+struct ExportIdea: Codable {
+    let id: Int64?
+    let carId: Int64
+    let title: String
+    let url: String?
+    let descriptionText: String?
+    let createdAt: Date
+    let updatedAt: Date
+
+    init(from idea: Idea) {
+        self.id = idea.id
+        self.carId = idea.carId
+        self.title = idea.title
+        self.url = idea.url
+        self.descriptionText = idea.descriptionText
+        self.createdAt = idea.createdAt
+        self.updatedAt = idea.updatedAt
+    }
+
+    func toIdea() -> Idea {
+        let idea = Idea(
+            carId: carId,
+            title: title,
+            url: url,
+            descriptionText: descriptionText,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        )
+        idea.id = id
+        return idea
     }
 }
 

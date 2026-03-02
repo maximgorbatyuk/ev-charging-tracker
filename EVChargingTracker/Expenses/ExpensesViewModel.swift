@@ -20,7 +20,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
     var totalCost: Double = 0.0
     var hasAnyExpense = false
-    
+
     let pageSize: Int = 10
 
     let analyticsScreenName = "all_expenses_screen"
@@ -77,7 +77,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             ])
     }
 
-    func setSortingOption(_ option: ExpensesSortingOption) -> Void {
+    func setSortingOption(_ option: ExpensesSortingOption) {
         guard option != selectedSortingOption else {
             return
         }
@@ -96,8 +96,8 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 "sorting_option": option.rawValue
             ])
     }
-    
-    private func loadSessionsForCurrentPage() -> Void {
+
+    private func loadSessionsForCurrentPage() {
         let car = self.reloadSelectedCarForExpenses()
         if let car = car, let carId = car.id {
             hasAnyExpense = (db.expensesRepository?.expensesCount(carId) ?? 0) > 0
@@ -135,12 +135,12 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
             totalPages = 0
         }
     }
-    
-    func goToNextPage() -> Void {
+
+    func goToNextPage() {
         if currentPage < totalPages {
             currentPage += 1
             loadSessionsForCurrentPage()
-            
+
             analytics.trackEvent(
                 "expenses_page_next",
                 properties: [
@@ -149,12 +149,12 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
                 ])
         }
     }
-    
-    func goToPreviousPage() -> Void {
+
+    func goToPreviousPage() {
         if currentPage > 1 {
             currentPage -= 1
             loadSessionsForCurrentPage()
-            
+
             analytics.trackEvent(
                 "expenses_page_previous",
                 properties: [
@@ -168,7 +168,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         return db.carRepository?.getAllCars() ?? []
     }
 
-    func updateExistingExpense(_ expenseEditResult: AddExpenseViewResult, expenseToEdit: Expense) -> Void {
+    func updateExistingExpense(_ expenseEditResult: AddExpenseViewResult, expenseToEdit: Expense) {
         expenseToEdit.cost = expenseEditResult.expense.cost
         expenseToEdit.date = expenseEditResult.expense.date
         expenseToEdit.notes = expenseEditResult.expense.notes
@@ -195,9 +195,9 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     // TODO mgorbatyuk: avoid code duplication with saveChargingSession
-    func saveNewExpense(_ newExpenseResult: AddExpenseViewResult) -> Void {
+    func saveNewExpense(_ newExpenseResult: AddExpenseViewResult) {
 
-        var carId: Int64? = nil
+        var carId: Int64?
         let allCars = self.getAllCars()
 
         var selectedCar = self.selectedCarForExpenses
@@ -205,8 +205,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
 
         if let resultCarId = newExpenseResult.carId,
            let currentCar = selectedCar,
-           resultCarId != currentCar.id
-        {
+           resultCarId != currentCar.id {
             carId = resultCarId
             selectedCarForExpense = allCars.first(where: { $0.id == carId })
         }
@@ -267,8 +266,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
         loadSessionsForCurrentPage()
 
         if newExpenseResult.expense.expenseType == .maintenance ||
-           newExpenseResult.expense.expenseType == .repair
-        {
+           newExpenseResult.expense.expenseType == .repair {
             selectedCar = self.reloadSelectedCarForExpenses()
             let countOfMaintenanceRecordsToNotify = plannedMaintenanceRepository?.getRecordsCountForOdometerValue(carCurrentMileage: selectedCar?.currentMileage ?? 0) ?? 0
 
@@ -345,7 +343,7 @@ class ExpensesViewModel: ObservableObject, IExpenseView {
     }
 
     var selectedCarForExpenses: Car? {
-        if (_selectedCarForExpenses == nil) {
+        if _selectedCarForExpenses == nil {
             _selectedCarForExpenses = self.reloadSelectedCarForExpenses()
         }
 

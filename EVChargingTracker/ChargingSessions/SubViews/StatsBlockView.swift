@@ -30,7 +30,7 @@ struct StatsBlockView: SwiftUICore.View {
                 color: .blue,
                 minHeight: 90
             )
-            
+
             StatCard(
                 title: L("Charges"),
                 value: "\(chargingSessionsCount)",
@@ -45,7 +45,7 @@ struct StatsBlockView: SwiftUICore.View {
 struct StatCard: SwiftUICore.View {
 
     @Environment(\.colorScheme) var colorScheme
-    
+
     let title: String
     let value: String
     let icon: String
@@ -61,7 +61,7 @@ struct StatCard: SwiftUICore.View {
                 Image(systemName: icon)
                     .foregroundColor(color)
             }
-            
+
             Text(value)
                 .font(.system(size: 16, weight: .bold))
                 .foregroundColor(colorScheme == .dark ? .white : .primary)

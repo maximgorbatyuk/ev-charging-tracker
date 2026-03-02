@@ -40,14 +40,14 @@ struct MainTabView: SwiftUI.View {
                     .tint(nil)
                     .tag(1)
 
-                PlanedMaintenanceView(
-                    onPlannedMaintenaceRecordsUpdated: {
+                CarDetailsView(
+                    onPlannedMaintenanceRecordsUpdated: {
                         self.pendingMaintenanceRecords = viewModel.getPendingMaintenanceRecords()
                     }
                 )
                     .tag(2)
                     .tabItem {
-                        Label(L("Maintenance"), systemImage: "hammer.fill")
+                        Label(L("Car"), systemImage: "car.fill")
                     }
                     .tint(nil)
                     .badge(pendingMaintenanceRecords)
@@ -72,20 +72,11 @@ struct MainTabView: SwiftUI.View {
             }
         }
     }
-    
+
     private func getTabViewColor() -> Color {
-        switch selectedTab {
-            case 0:
-                return Color.orange
-            case 1:
-                return Color.green
-            case 2:
-                return Color.cyan
-            case 3:
-                return Color.blue
-            default:
-            return Color.primary
-        }
+        colorScheme == .dark
+            ? Color.orange
+            : Color(red: 0.85, green: 0.45, blue: 0.0)
     }
 }
 

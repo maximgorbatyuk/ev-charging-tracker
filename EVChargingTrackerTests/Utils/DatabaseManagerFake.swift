@@ -48,4 +48,12 @@ class DatabaseManagerFake: DatabaseManagerProtocol {
     func getUserSettingsRepository() -> UserSettingsRepositoryProtocol? {
         return userSettingsRepository
     }
+
+    func getDocumentsRepository() -> DocumentsRepositoryProtocol? {
+        return nil
+    }
+
+    func getIdeasRepository() -> IdeasRepositoryProtocol? {
+        return nil
+    }
 }

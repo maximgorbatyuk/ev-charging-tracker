@@ -1,4 +1,3 @@
-
 //
 //  PlanedMaintenanceViewModel.swift
 //  EVChargingTracker
@@ -107,8 +106,8 @@ class PlanedMaintenanceViewModel: ObservableObject {
         self.totalPages = pages
         self.maintenanceRecords = records
     }
-    
-    func addNewMaintenanceRecord(newRecord: PlannedMaintenance) -> Void {
+
+    func addNewMaintenanceRecord(newRecord: PlannedMaintenance) {
         let recordId = maintenanceRepository?.insertRecord(newRecord)
 
         if let when = newRecord.when {
@@ -127,7 +126,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
             )
         }
     }
-    
+
     func deleteMaintenanceRecord(_ recordToDelete: PlannedMaintenanceItem) {
         _ = maintenanceRepository?.deleteRecord(id: recordToDelete.id)
 
@@ -152,8 +151,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
 
         /// Cancel existing notification if any
         if let existingNotification = delayedNotificationsRepo?.getRecordByMaintenanceId(recordId),
-           let existingNotificationId = existingNotification.id
-        {
+           let existingNotificationId = existingNotification.id {
             notificationsService.cancelNotification(existingNotification.notificationId)
             _ = delayedNotificationsRepo?.deleteRecord(id: existingNotificationId)
         }
@@ -187,8 +185,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
     func saveExpense(_ expenseResult: AddExpenseViewResult) {
         /// Handle new car creation if needed
         if let carName = expenseResult.carName,
-           expenseResult.carId == nil
-        {
+           expenseResult.carId == nil {
             let newCar = Car(
                 name: carName,
                 selectedForTracking: true,
@@ -243,7 +240,7 @@ class PlanedMaintenanceViewModel: ObservableObject {
     }
 
     var selectedCarForExpenses: Car? {
-        if (_selectedCarForExpenses == nil) {
+        if _selectedCarForExpenses == nil {
             _selectedCarForExpenses = reloadSelectedCarForExpenses()
         }
 
@@ -329,27 +326,27 @@ struct PlannedMaintenanceItem: Identifiable, Comparable {
     }
 
     static func < (first: PlannedMaintenanceItem, second: PlannedMaintenanceItem) -> Bool {
-          if (first.mileageDifference != nil && second.mileageDifference != nil) {
+          if first.mileageDifference != nil && second.mileageDifference != nil {
                 return first.mileageDifference! > second.mileageDifference!
           }
 
-          if (first.when != nil && second.when != nil) {
+          if first.when != nil && second.when != nil {
               return first.when! < second.when!
           }
-          
-          if (first.mileageDifference != nil) {
+
+          if first.mileageDifference != nil {
               return true
           }
-          
-          if (second.mileageDifference != nil) {
+
+          if second.mileageDifference != nil {
               return false
           }
-          
-          if (first.when != nil) {
+
+          if first.when != nil {
               return true
           }
-          
-          if (second.when != nil) {
+
+          if second.when != nil {
               return false
           }
 
