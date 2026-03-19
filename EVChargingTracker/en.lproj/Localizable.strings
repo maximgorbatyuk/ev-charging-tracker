@@ -411,6 +411,12 @@
 "Import from" = "Import from";
 "Files" = "Files";
 "Photos" = "Photos";
+"Take Photo" = "Take Photo";
+"document.source.title" = "Add Document";
+"document.source.files.description" = "Import PDF, JPEG, PNG, or HEIC files";
+"document.source.photos.description" = "Choose from your photo library";
+"document.source.camera.description" = "Take a photo with your camera";
+"document.source.supported_formats" = "Supported formats: PDF, JPEG, PNG, HEIC";
 "Add your first document" = "Add your first document";
 "Delete document?" = "Delete document?";
 "Delete selected document? This action cannot be undone." = "Delete selected document? This action cannot be undone.";

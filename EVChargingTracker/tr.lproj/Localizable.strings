@@ -413,6 +413,12 @@
 "Import from" = "Şuradan içe aktar";
 "Files" = "Dosyalar";
 "Photos" = "Fotoğraflar";
+"Take Photo" = "Fotoğraf çek";
+"document.source.title" = "Belge Ekle";
+"document.source.files.description" = "PDF, JPEG, PNG veya HEIC dosyalarını içe aktar";
+"document.source.photos.description" = "Fotoğraf kitaplığından seç";
+"document.source.camera.description" = "Kamerayla fotoğraf çek";
+"document.source.supported_formats" = "Desteklenen formatlar: PDF, JPEG, PNG, HEIC";
 "Add your first document" = "İlk belgenizi ekleyin";
 "Delete document?" = "Belgeyi sil?";
 "Delete selected document? This action cannot be undone." = "Seçili belgeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";

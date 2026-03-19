@@ -1,5 +1,43 @@
 # Release notes
 
+## 2026.2.2
+
+### English
+
+```
+We added the ability to take photos directly from the camera when adding documents to your car — no need to save to the photo library first. We also improved the document preview with better pinch-to-zoom and double-tap support, unified the app's color theme across all screens, and improved overall stability.
+```
+
+### Русский (RU)
+
+```
+Мы добавили возможность делать фото прямо с камеры при добавлении документов автомобиля — больше не нужно сначала сохранять в фотобиблиотеку. Также мы улучшили предпросмотр документов с поддержкой масштабирования и двойного нажатия, привели цветовую тему приложения к единому стилю на всех экранах и поработали над стабильностью.
+```
+
+### Қазақша (KK)
+
+```
+Автокөлік құжаттарын қосу кезінде камерадан тікелей фото түсіру мүмкіндігін қостық — енді алдымен фото кітапханаға сақтаудың қажеті жоқ. Сонымен қатар құжаттарды алдын ала қарауды масштабтау мен қос түрту қолдауымен жақсарттық, қолданбаның түс тақырыбын барлық экрандарда біріздендірдік және тұрақтылықты жақсарттық.
+```
+
+### Türkçe (TR)
+
+```
+Araç belgelerini eklerken doğrudan kamerayla fotoğraf çekme özelliğini ekledik — artık önce fotoğraf kitaplığına kaydetmenize gerek yok. Ayrıca belge önizlemesini yakınlaştırma ve çift dokunma desteğiyle iyileştirdik, uygulamanın renk temasını tüm ekranlarda birleştirdik ve genel kararlılığı artırdık.
+```
+
+### Українська (UK)
+
+```
+Ми додали можливість робити фото прямо з камери при додаванні документів автомобіля — більше не потрібно спочатку зберігати у фотобібліотеку. Також ми покращили перегляд документів із підтримкою масштабування та подвійного натискання, привели кольорову тему застосунку до єдиного стилю на всіх екранах та попрацювали над стабільністю.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben die Möglichkeit hinzugefügt, beim Hinzufügen von Fahrzeugdokumenten direkt ein Foto mit der Kamera aufzunehmen — kein Umweg mehr über die Fotobibliothek. Außerdem haben wir die Dokumentenvorschau mit Pinch-to-Zoom und Doppeltipp-Unterstützung verbessert, das Farbdesign der App auf allen Bildschirmen vereinheitlicht und die allgemeine Stabilität verbessert.
+```
+
 ## 2026.2.6
 
 ### English

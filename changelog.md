@@ -1,5 +1,42 @@
 # Changelog
 
+## 2026.2.2 (2026-03-19)
+
+- **Camera Document Capture**
+  - Take photos directly from the camera when adding documents
+  - Custom source picker sheet with styled rows (Files, Photos, Take Photo) replacing the plain action sheet
+  - Camera row hidden automatically on devices without a camera (Simulator-safe)
+  - Captured photos compressed to JPEG (80% quality) with UUID-based filenames
+  - Post-capture flow automatically opens the edit view for renaming before the user continues
+  - `CameraView` extracted to `Shared/` as a reusable `UIViewControllerRepresentable` component
+  - `DocumentSource` enum in its own file for clean architecture
+  - SwiftUI-managed camera dismissal (no manual `picker.dismiss` conflicts)
+  - Insert failure guard prevents opening the edit view for documents that failed to save
+
+- **Document Preview Improvements**
+  - Improved image zoom with pinch gesture tracking (base + current scale)
+  - Double-tap to toggle between 1x and 2x zoom
+  - Proper `GeometryReader`-based layout for zoomed images with scroll support
+  - Hidden scroll indicators for cleaner preview UI
+
+- **UI Consistency**
+  - Unified floating action button color across all tabs via `AppTheme.tabMenuTintColor`
+  - Replaced per-view gradient definitions with centralized theme method
+  - Floating button color adapts to light/dark mode (orange tones)
+
+- **Car Details Quick Add**
+  - Fixed sheet-to-navigation chaining: quick add sheet now fully dismisses before navigating to the selected route (prevents nested presentation conflicts)
+
+- **Camera Permission**
+  - Added `NSCameraUsageDescription` to `Info.plist`
+  - Localized camera permission string via `InfoPlist.strings` in all 6 languages
+
+- **Localization**
+  - Added translations for camera capture feature (source picker titles, descriptions, supported formats footer) in all 6 languages (EN, DE, RU, TR, KK, UK)
+
+- **Analytics**
+  - Document import events now include `source` property (`"camera"` or `"photo_library"`) to distinguish import methods
+
 ## 2026.2.6 (2026-03-02)
 
 - **Car Details Tab**

@@ -17,12 +17,15 @@ struct DocumentsListView: SwiftUI.View {
 
     @State private var showingImportPicker = false
     @State private var showingPhotoPicker = false
-    @State private var showingSourceChooser = false
+    @State private var showingCamera = false
+    @State private var showingSourcePicker = false
+    @State private var selectedSource: DocumentSource?
     @State private var selectedPhotoItems: [PhotosPickerItem] = []
     @State private var documentToDelete: CarDocument?
     @State private var showingDeleteConfirmation = false
     @State private var documentToPreview: CarDocument?
     @State private var documentToEdit: CarDocument?
+    @State private var capturedDocument: CarDocument?
 
     var body: some SwiftUI.View {
         Group {
@@ -43,18 +46,17 @@ struct DocumentsListView: SwiftUI.View {
         }
         .onChange(of: triggerAdd) { _, newValue in
             if newValue {
-                showingSourceChooser = true
+                showingSourcePicker = true
                 triggerAdd = false
             }
         }
-        .confirmationDialog(L("Import from"), isPresented: $showingSourceChooser, titleVisibility: .visible) {
-            Button(L("Files")) {
-                showingImportPicker = true
+        .sheet(isPresented: $showingSourcePicker, onDismiss: {
+            handleSourceSelection()
+        }) {
+            DocumentSourcePickerView { source in
+                selectedSource = source
+                showingSourcePicker = false
             }
-            Button(L("Photos")) {
-                showingPhotoPicker = true
-            }
-            Button(L("Cancel"), role: .cancel) {}
         }
         .fileImporter(
             isPresented: $showingImportPicker,
@@ -71,6 +73,17 @@ struct DocumentsListView: SwiftUI.View {
         )
         .onChange(of: selectedPhotoItems) { _, items in
             handlePhotoSelection(items)
+        }
+        .fullScreenCover(isPresented: $showingCamera, onDismiss: {
+            if let doc = capturedDocument {
+                capturedDocument = nil
+                documentToEdit = doc
+            }
+        }) {
+            CameraView { image in
+                showingCamera = false
+                handleCapturedImage(image)
+            }
         }
         .sheet(item: $documentToPreview) { document in
             DocumentPreviewView(document: document)
@@ -181,6 +194,19 @@ struct DocumentsListView: SwiftUI.View {
         .padding(.vertical, 4)
     }
 
+    private func handleSourceSelection() {
+        guard let source = selectedSource else { return }
+        selectedSource = nil
+        switch source {
+        case .files:
+            showingImportPicker = true
+        case .photos:
+            showingPhotoPicker = true
+        case .camera:
+            showingCamera = true
+        }
+    }
+
     private func handleFileImport(_ result: Swift.Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -195,11 +221,20 @@ struct DocumentsListView: SwiftUI.View {
         guard let item = items.first else { return }
         Task {
             if let data = try? await item.loadTransferable(type: Data.self) {
-                let fileName = "photo_\(Int(Date().timeIntervalSince1970)).jpg"
-                viewModel.importImageData(data, fileName: fileName, customTitle: nil)
+                let fileName = "photo_\(UUID().uuidString).jpg"
+                viewModel.importImageData(data, fileName: fileName, customTitle: nil, source: "photo_library")
             }
         }
         selectedPhotoItems = []
+    }
+
+    private func handleCapturedImage(_ image: UIImage?) {
+        guard let image = image,
+              let data = image.jpegData(compressionQuality: 0.8) else {
+            return
+        }
+        let fileName = "capture_\(UUID().uuidString).jpg"
+        capturedDocument = viewModel.importImageData(data, fileName: fileName, customTitle: nil, source: "camera")
     }
 
     private func deleteConfirmationAlert() -> Alert {
