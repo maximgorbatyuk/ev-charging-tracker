@@ -420,6 +420,12 @@
 "Import from" = "Импорт";
 "Files" = "Файлдар";
 "Photos" = "Фото";
+"Take Photo" = "Фото түсіру";
+"document.source.title" = "Құжат қосу";
+"document.source.files.description" = "PDF, JPEG, PNG немесе HEIC файлдарын импорттау";
+"document.source.photos.description" = "Фото кітапханадан таңдау";
+"document.source.camera.description" = "Камерамен фото түсіру";
+"document.source.supported_formats" = "Қолдау көрсетілетін форматтар: PDF, JPEG, PNG, HEIC";
 "Add your first document" = "Бірінші құжатыңызды қосыңыз";
 "Delete document?" = "Құжатты жою?";
 "Delete selected document? This action cannot be undone." = "Таңдалған құжатты жою керек пе? Бұл әрекетті кері қайтару мүмкін емес.";

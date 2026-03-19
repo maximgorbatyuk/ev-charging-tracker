@@ -409,6 +409,12 @@
 "Import from" = "Імпорт з";
 "Files" = "Файли";
 "Photos" = "Фото";
+"Take Photo" = "Зробити фото";
+"document.source.title" = "Додати документ";
+"document.source.files.description" = "Імпорт файлів PDF, JPEG, PNG або HEIC";
+"document.source.photos.description" = "Вибрати з медіатеки";
+"document.source.camera.description" = "Зробити фото камерою";
+"document.source.supported_formats" = "Підтримувані формати: PDF, JPEG, PNG, HEIC";
 "Add your first document" = "Додайте перший документ";
 "Delete document?" = "Видалити документ?";
 "Delete selected document? This action cannot be undone." = "Видалити вибраний документ? Цю дію не можна скасувати.";

@@ -414,6 +414,12 @@
 "Import from" = "Importieren aus";
 "Files" = "Dateien";
 "Photos" = "Fotos";
+"Take Photo" = "Foto aufnehmen";
+"document.source.title" = "Dokument hinzufügen";
+"document.source.files.description" = "PDF-, JPEG-, PNG- oder HEIC-Dateien importieren";
+"document.source.photos.description" = "Aus der Fotobibliothek auswählen";
+"document.source.camera.description" = "Ein Foto mit der Kamera aufnehmen";
+"document.source.supported_formats" = "Unterstützte Formate: PDF, JPEG, PNG, HEIC";
 "Add your first document" = "Erstes Dokument hinzufügen";
 "Delete document?" = "Dokument löschen?";
 "Delete selected document? This action cannot be undone." = "Ausgewähltes Dokument löschen? Diese Aktion kann nicht rückgängig gemacht werden.";

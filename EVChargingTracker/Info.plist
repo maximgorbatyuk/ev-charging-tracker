@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is needed to take photos of your car documents</string>
 	<key>AppStoreId</key>
 	<string>$(APP_STORE_ID)</string>
 	<key>Co2EuropePollutionPerOneKilometer</key>

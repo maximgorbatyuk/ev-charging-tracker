@@ -75,13 +75,14 @@ class DocumentsViewModel: ObservableObject {
         loadData()
     }
 
-    func importImageData(_ data: Data, fileName: String, customTitle: String?) {
-        guard let car = selectedCar, let carId = car.id else { return }
+    @discardableResult
+    func importImageData(_ data: Data, fileName: String, customTitle: String?, source: String = "photo_library") -> CarDocument? {
+        guard let car = selectedCar, let carId = car.id else { return nil }
 
         let fileType = documentService.detectFileType(fileName: fileName)
 
         guard let savedURL = documentService.saveFile(data: data, fileName: fileName, carId: carId) else {
-            return
+            return nil
         }
 
         let size = documentService.fileSize(at: savedURL.path)
@@ -94,12 +95,17 @@ class DocumentsViewModel: ObservableObject {
             fileSize: size
         )
 
-        _ = documentsRepo?.insertRecord(doc)
+        guard let rowId = documentsRepo?.insertRecord(doc) else {
+            return nil
+        }
+        doc.id = rowId
         analytics.trackEvent("document_added", properties: [
             "screen": "documents_list",
-            "file_type": fileType
+            "file_type": fileType,
+            "source": source
         ])
         loadData()
+        return doc
     }
 
     func deleteDocument(_ document: CarDocument) {
