@@ -1,0 +1,436 @@
+/* Simplified Chinese localization */
+"Car" = "车辆";
+"Name" = "名称";
+"Battery capacity (kWh)" = "电池容量 (kWh)";
+"e.g. 75" = "例如 75";
+"Current mileage (km)" = "当前里程 (km)";
+"Minimum: %d" = "最小值: %d";
+"Current: %d" = "当前: %d";
+"Danger zone" = "危险区域";
+"Selected for tracking" = "已选择用于追踪";
+"Edit car" = "编辑车辆";
+"Cancel" = "取消";
+"Confirm" = "确认";
+"Save" = "保存";
+"Close" = "关闭";
+"CO₂ saved (kg)" = "减少的CO₂ (kg)";
+"kWh / 100km" = "kWh / 100km";
+"Charges" = "充电记录";
+
+"Initial mileage" = "初始里程";
+"Current mileage" = "当前里程";
+"Battery" = "电池";
+"Tracking" = "追踪中";
+"Not tracking" = "未追踪";
+
+"Base settings" = "基本设置";
+"Currency" = "货币";
+"It is recommended to set the default currency before adding any expenses." = "建议在添加任何费用之前设置默认货币。";
+"Cars" = "车辆";
+"User settings" = "用户设置";
+"Notifications enabled" = "通知已启用";
+"Open settings" = "打开设置";
+"In case you want to change this setting, please open app settings" = "如需更改此设置，请打开应用设置";
+"About app" = "关于应用";
+"Tracking settings" = "追踪设置";
+"App version" = "应用版本";
+"Developer" = "开发者";
+"What is the app about?" = "这个应用是做什么的？";
+"Rate the app" = "给应用评分";
+"Contact developer via Telegram" = "通过 Telegram 联系开发者";
+
+"Expense details" = "费用详情";
+"Car" = "车辆";
+"Date" = "日期";
+"Energy (kWh)" = "电量 (kWh)";
+"Charger Type" = "充电器类型";
+"Expense Type" = "费用类型";
+"Odometer (km)" = "里程表 (km)";
+"Cost (%@)" = "费用 (%@)";
+"Car name" = "车辆名称";
+"Name of the car" = "车辆名称";
+"Battery capacity (kWh)" = "电池容量 (kWh)";
+"Optional" = "可选";
+"Notes (optional)" = "备注（可选）";
+"Add expense" = "添加费用";
+"Price per kWh" = "每千瓦时价格";
+
+"Please select an expense type." = "请选择费用类型。";
+"Please type a valid value for Energy." = "请输入有效的电量值。";
+"Please type a valid value for Odometer." = "请输入有效的里程表值。";
+
+"Hint" = "提示";
+"per km" = "每公里";
+
+"One kilometer price (charging only)" = "每公里价格（仅充电）";
+"How much one kilometer costs you including only charging expenses" = "仅计算充电费用的每公里花费";
+"One kilometer price (total)" = "每公里价格（总计）";
+"How much one kilometer costs you including all logged expenses" = "包含所有记录费用的每公里花费";
+"Total charging costs" = "充电总费用";
+"Add Charging Session" = "添加充电记录";
+"Car stats" = "车辆统计";
+
+"Add Expense" = "添加费用";
+"Total costs" = "总费用";
+"All car expenses" = "所有车辆费用";
+"No expenses yet" = "暂无费用记录";
+"No expenses of this type yet" = "暂无此类型费用";
+"Add your first expense to start tracking" = "添加您的第一笔费用以开始追踪";
+
+"Delete expense" = "删除费用";
+"Delete expense on %@ with amount %@? This action cannot be undone." = "删除 %@ 的费用，金额 %@？此操作无法撤销。";
+"Delete expense on %@? This action cannot be undone." = "删除 %@ 的费用？此操作无法撤销。";
+"Delete selected expense? This action cannot be undone." = "删除选中的费用？此操作无法撤销。";
+"Delete" = "删除";
+"Edit" = "编辑";
+
+"Energy" = "电量";
+"Expense type" = "费用类型";
+"Odometer" = "里程表";
+"Cost" = "费用";
+"%.1f kWh" = "%.1f kWh";
+
+"How much one kilometer costs you" = "每公里花费";
+
+/* ExpenseType human-friendly */
+"charging" = "充电";
+"maintenance" = "保养";
+"repair" = "维修";
+"carwash" = "洗车";
+"other" = "其他";
+
+/* ChargerType human-friendly */
+"Home (3kW)" = "家用 (3kW)";
+"Home (7kW)" = "家用 (7kW)";
+"Home (11kW)" = "家用 (11kW)";
+"Destination (22kW)" = "目的地 (22kW)";
+"Supercharger V2 (150kW)" = "超级充电站 V2 (150kW)";
+"Supercharger V3 (250kW)" = "超级充电站 V3 (250kW)";
+"Supercharger V4 (350kW)" = "超级充电站 V4 (350kW)";
+"Public Fast (50kW)" = "公共快充 (50kW)";
+"Public Rapid (100kW)" = "公共快速 (100kW)";
+"Other" = "其他";
+
+/* Menu */
+"Stats" = "统计";
+"Expenses" = "费用";
+"Settings" = "设置";
+"About" = "关于";
+"Maintenance" = "保养";
+
+"Planned maintenance" = "计划保养";
+"Add maintenance" = "添加保养";
+"Maintenance" = "保养";
+"No maintenance records yet" = "暂无未来保养记录";
+"Add your first maintenance record" = "添加您的第一条未来保养记录";
+"Delete maintenance record?" = "删除保养记录？";
+"Delete selected maintenance record? This action cannot be undone." = "删除选中的保养记录？此操作无法撤销。";
+"Please add car first to track maintenance records" = "请先添加车辆以追踪保养记录";
+"When" = "时间";
+
+"Plan a maintenance" = "计划保养";
+"Maintenance details" = "保养详情";
+"Odometer value cannot be less than current car mileage." = "里程表值不能小于当前车辆里程。";
+"What should be done?" = "需要做什么？";
+"Remind by date (optional)" = "按日期提醒（可选）";
+"Remind by odometer (optional)" = "按里程提醒（可选）";
+"Additional information that will be helpful" = "有用的补充信息";
+
+"Basic info" = "基本信息";
+"Name" = "名称";
+"Rides" = "行驶";
+"Car mileage" = "车辆里程";
+"Initial (km)" = "初始 (km)";
+"Current (km)" = "当前 (km)";
+"Total mileage" = "总里程";
+"No car selected" = "未选择车辆";
+"Remain at odometer" = "里程表剩余";
+"Maintenance reminder" = "保养提醒";
+"Some maintenance tasks due" = "部分保养任务到期";
+"You have %d maintenance task(s) due based on your car's current mileage." = "根据当前里程，您有 %d 项保养任务到期。";
+
+"Select currency" = "选择货币";
+"Select default currency" = "选择默认货币";
+"Add new car" = "添加新车辆";
+"Delete car" = "删除车辆";
+"Delete selected car? This action cannot be undone." = "删除选中的车辆？此操作无法撤销。";
+"If you change it, then other active car will be unselected automatically." = "如果更改此项，其他正在追踪的车辆将自动取消选择。";
+
+"Filter.All" = "全部";
+"Filter.Charges" = "充电";
+"Filter.Repair/maintenance" = "保养";
+"Filter.Repair" = "维修";
+"Filter.Maintenance" = "保养";
+"Filter.Carwash" = "洗车";
+"Filter.Other" = "其他";
+
+/* Sorting */
+"Sort by" = "排序方式";
+"Sort.CreationDate" = "日期";
+"Sort.Odometer" = "里程表";
+
+/* Onboarding pages */
+"Welcome to" = "欢迎使用";
+"Select your language" = "选择您的语言";
+"Continue" = "继续";
+"Next" = "下一步";
+"Skip" = "跳过";
+"Get started" = "开始使用";
+"Start onboarding again" = "重新开始引导";
+"onboarding.track_your_chargings" = "追踪您的充电";
+"onboarding.track_your_chargings__subtitle" = "在一个地方记录您所有的电动车充电记录";
+"onboarding.monitor_costs" = "监控费用";
+"onboarding.monitor_costs__subtitle" = "了解您的电动车在充电和其他费用上的花费";
+"onboarding.plan_maintenance" = "计划保养";
+"onboarding.plan_maintenance__subtitle" = "安排并获取电动车保养任务的提醒";
+"onboarding.save_documents" = "保存文件";
+"onboarding.save_documents__subtitle" = "随时查阅您的保险、登记证等重要车辆文件";
+"onboarding.collect_ideas" = "收集想法";
+"onboarding.collect_ideas__subtitle" = "将有用的链接、笔记和关于您爱车的研究保存在一处";
+"onboarding.view_stats" = "查看统计";
+"onboarding.view_stats__subtitle" = "了解您的电动车每公里花费以及驾驶电动车减少了多少CO₂排放";
+
+"App update available" = "有可用的应用更新";
+"If you leave it empty, the current mileage of the selected car will be used." = "如果留空，将使用所选车辆的当前里程。";
+"Please type service title." = "请输入服务标题。";
+
+"Expenses chart" = "费用图表";
+"Average charging trend" = "平均充电趋势";
+"%.1f kWh/month average" = "月均 %.1f kWh";
+"No expense data available for the selected filter." = "所选筛选条件下暂无费用数据。";
+
+"maintenance" = "保养";
+"repair" = "维修";
+"carwash" = "洗车";
+"other" = "其他";
+"Total records: %d, total pages: %d" = "总记录: %d，总页数: %d";
+"Previous" = "上一页";
+
+/* Export & Import */
+"Export & Import" = "导出与导入";
+"Export Data..." = "导出数据...";
+"Import Data..." = "导入数据...";
+"Preparing export..." = "正在准备导出...";
+"Importing data..." = "正在导入数据...";
+"Export your data to back it up or transfer to another device." = "导出数据以进行备份或转移到其他设备。";
+"Import will replace all existing data." = "导入将替换所有现有数据。";
+"Export Error" = "导出错误";
+"Import Error" = "导入错误";
+"Confirm Import" = "确认导入";
+"Import and Replace All Data" = "导入并替换所有数据";
+"Source" = "来源";
+"Export Date" = "导出日期";
+"Schema Version" = "架构版本";
+"Data Summary" = "数据摘要";
+"cars" = "车辆";
+"expenses" = "费用";
+"maintenance records" = "保养记录";
+"notifications" = "通知";
+"Date Range" = "日期范围";
+"Warning: Importing will DELETE ALL existing data. This cannot be undone." = "警告：导入将删除所有现有数据，此操作无法撤销。";
+"export.preview.no_expenses" = "暂无费用";
+
+/* Export/Import Errors */
+"export.error.invalid_json" = "文件格式无效，请选择有效的备份文件。";
+"export.error.missing_metadata" = "备份文件缺少元数据。";
+"export.error.missing_fields" = "备份文件缺少必填字段。";
+"export.error.incompatible_schema %d %d" = "此备份来自不兼容的版本（当前: %d，文件: %d）。";
+"export.error.newer_schema %d %d" = "此备份由较新版本的应用创建（当前: %d，文件: %d）。导入可能失败或导致数据丢失。";
+"export.error.invalid_date" = "备份文件中包含无效日期。";
+"export.error.invalid_numeric %@" = "字段的数值无效: %@";
+"export.error.invalid_currency %@" = "货币代码无效: %@";
+"export.error.invalid_enum %@ %@" = "无效的 %@ 值: %@";
+"export.error.invalid_reference %@ %lld" = "无效的引用: ID 为 %2$lld 的 %1$@ 未找到。";
+"export.error.corrupted" = "备份文件已损坏，无法恢复。";
+
+/* iCloud Backup */
+"iCloud Backup" = "iCloud 备份";
+"iCloud Not Available" = "iCloud 不可用";
+"Please sign in to iCloud in Settings to enable backups." = "请在设置中登录 iCloud 以启用备份。";
+"Backup Now" = "立即备份";
+"Creating backup..." = "正在创建备份...";
+"Last backup" = "上次备份";
+"View Backup History" = "查看备份历史";
+"Automatic backups to iCloud keep your data safe." = "自动 iCloud 备份保护您的数据安全。";
+"Maximum 5 backups kept, older than 30 days auto-deleted." = "最多保留5个备份，超过30天的自动删除。";
+"iCloud Backups" = "iCloud 备份";
+"Loading backups..." = "正在加载备份...";
+"No backups found" = "未找到备份";
+"Create your first backup to get started" = "创建您的第一个备份以开始使用";
+"Delete Backup?" = "删除备份？";
+"Are you sure you want to delete the backup from %@?" = "确定要删除 %@ 的备份吗？";
+"Delete All Backups?" = "删除所有备份？";
+"Are you sure you want to delete all backups? This cannot be undone." = "确定要删除所有备份吗？此操作无法撤销。";
+"Delete All" = "全部删除";
+"Delete All Backups" = "删除所有备份";
+"Restore from Backup?" = "从备份恢复？";
+"This will replace all current data with the backup from %@. This cannot be undone." = "这将用 %@ 的备份替换所有当前数据，此操作无法撤销。";
+"Restore" = "恢复";
+"Backup Error" = "备份错误";
+
+/* Backup Errors */
+"backup.error.icloud_not_available" = "iCloud 不可用，请在设置中登录 iCloud。";
+"backup.error.network_unavailable" = "无网络连接，请检查您的网络。";
+"backup.error.icloud_storage_full" = "iCloud 存储空间已满，请释放空间或升级方案。";
+"backup.error.dev_backup_restore_on_prod_app" = "开发版备份无法在正式版上恢复，请使用正式版备份。";
+
+/* Network Warning */
+"No Internet Connection" = "无网络连接";
+"Connect to the internet to create or restore backups." = "请连接互联网以创建或恢复备份。";
+
+/* Automatic Backup */
+"Automatic Backup" = "自动备份";
+"Last: " = "上次: ";
+
+/* Swipe hint */
+"For editing or deleting record, please swipe left" = "向左滑动可编辑或删除记录";
+
+"For deleting record, please swipe left" = "向左滑动可删除记录";
+
+/* Appearance Mode */
+"Appearance" = "外观";
+"System" = "跟随系统";
+"Light" = "浅色";
+"Dark" = "深色";
+
+/* Launch Screen */
+"EV Charge Tracker" = "EV Charge Tracker";
+
+/* Wheel Details */
+"Wheel details" = "轮毂详情";
+"Front wheel size" = "前轮尺寸";
+"Rear wheel size" = "后轮尺寸";
+"Front = Rear" = "前轮 = 后轮";
+"e.g. 225/45R18, 20x9.5" = "例如 225/45R18, 20x9.5";
+"Wheel Size Info" = "轮毂尺寸信息";
+"Wheel Size Formats" = "轮毂尺寸格式";
+"Metric format:" = "公制格式:";
+"Example: 225/45R18" = "示例: 225/45R18";
+"• 225 - Tire width in mm" = "• 225 - 轮胎宽度 (mm)";
+"• 45 - Aspect ratio (height/width %)" = "• 45 - 扁平比（高度/宽度 %）";
+"• R - Radial construction" = "• R - 子午线结构";
+"• 18 - Rim diameter in inches" = "• 18 - 轮辋直径（英寸）";
+"Imperial format:" = "英制格式:";
+"Example: 20x9.5" = "示例: 20x9.5";
+"• 20 - Rim diameter in inches" = "• 20 - 轮辋直径（英寸）";
+"• 9.5 - Wheel width in inches" = "• 9.5 - 轮毂宽度（英寸）";
+"Done" = "完成";
+
+/* Expense Filters */
+"expense.filter.all" = "全部";
+"expense.filter.charging" = "充电";
+"expense.filter.maintenance" = "保养";
+"expense.filter.repair" = "维修";
+"expense.filter.carwash" = "洗车";
+"expense.filter.other" = "其他";
+
+/* Maintenance Filters */
+"maintenance.filter.all" = "全部";
+"maintenance.filter.overdue" = "已过期";
+"maintenance.filter.due_soon" = "即将到期";
+"maintenance.filter.scheduled" = "已计划";
+"maintenance.filter.by_mileage" = "按里程";
+"maintenance.filter.by_date" = "按日期";
+
+/* Filter Empty State */
+"No records match the selected filter" = "没有符合所选筛选条件的记录";
+
+/* EVF-2: Swipe actions */
+"Swipe right to mark as done, left to edit or delete" = "右滑标记完成，左滑编辑或删除";
+"Edit maintenance" = "编辑保养";
+
+/* EVF-4: Maintenance Details */
+"Maintenance Details" = "保养详情";
+"Title" = "标题";
+"Scheduled Date" = "计划日期";
+"Target Odometer" = "目标里程";
+"Remaining Distance" = "剩余距离";
+"Created" = "创建时间";
+"Mark as Done" = "标记为已完成";
+"Duplicate" = "复制";
+"Due Soon" = "即将到期";
+"Overdue" = "已过期";
+"Scheduled" = "已计划";
+
+/* Share Extension */
+"share.title" = "保存到 EV Tracker";
+"share.cancel" = "取消";
+"share.save" = "保存";
+"share.section.content" = "分享内容";
+"share.section.car" = "车辆";
+"share.car_picker" = "车辆";
+"share.car_picker.placeholder" = "选择一辆车";
+"share.section.type" = "费用类型";
+"share.type_picker" = "类型";
+"share.section.notes" = "备注";
+"share.no_cars.title" = "没有车辆";
+"share.no_cars.message" = "请先在 EVChargingTracker 中添加车辆，然后再尝试分享。";
+"share.error.no_car_selected" = "请选择一辆车。";
+"share.error.save_failed" = "保存失败，请重试。";
+"share.section.entity_type" = "保存为";
+"share.entity_picker" = "类型";
+"share.entity.expense" = "费用";
+"share.entity.idea" = "想法";
+"share.entity.document" = "文件";
+"share.section.document_info" = "文件";
+"share.migration_required.title" = "需要初始设置";
+"share.migration_required.message" = "请先打开 EVChargingTracker 完成设置，然后再尝试分享。";
+"share.migration_required.dismiss" = "好的";
+
+/* Car details - create chooser */
+"Create new" = "新建";
+"New maintenance record" = "新建保养记录";
+"New document" = "新建文件";
+"New idea" = "新建想法";
+"Documents" = "文件";
+"Ideas" = "想法";
+
+/* Car details - root screen */
+"Car details" = "车辆详情";
+"See all" = "查看全部";
+"No documents yet" = "暂无文件";
+"No ideas yet" = "暂无想法";
+
+/* Ideas */
+"URL" = "网址";
+"Description" = "描述";
+"Edit idea" = "编辑想法";
+"idea.title.placeholder" = "输入想法标题";
+"idea.url.placeholder" = "https://example.com（可选）";
+"idea.title.required" = "标题为必填项";
+"idea.url.invalid" = "请输入有效的网址";
+"Add your first idea" = "添加您的第一个想法";
+"Delete idea?" = "删除想法？";
+"Delete selected idea? This action cannot be undone." = "删除选中的想法？此操作无法撤销。";
+"Idea Details" = "想法详情";
+"Updated" = "更新时间";
+"Error" = "错误";
+"OK" = "好的";
+
+/* Documents */
+"Import from" = "导入来源";
+"Files" = "文件";
+"Photos" = "照片";
+"Take Photo" = "拍照";
+"document.source.title" = "添加文件";
+"document.source.files.description" = "导入 PDF、JPEG、PNG 或 HEIC 文件";
+"document.source.photos.description" = "从照片图库中选择";
+"document.source.camera.description" = "使用相机拍照";
+"document.source.supported_formats" = "支持的格式: PDF、JPEG、PNG、HEIC";
+"Add your first document" = "添加您的第一份文件";
+"Delete document?" = "删除文件？";
+"Delete selected document? This action cannot be undone." = "删除选中的文件？此操作无法撤销。";
+"Rename document" = "重命名文件";
+"New title" = "新标题";
+"Rename" = "重命名";
+"Preview" = "预览";
+"File not found" = "文件未找到";
+"Unable to load image" = "无法加载图片";
+"document.file_path" = "文件路径";
+"document.file_size" = "文件大小";
+"documents.list.interaction_hint" = "点击文件可预览，向左滑动可编辑或删除。";
+
+// Import preview - data types
+"documents" = "文件";
+"ideas" = "想法";
+"import.documents_metadata_only" = "注意：备份中不包含文件本身，仅恢复文件元数据。";

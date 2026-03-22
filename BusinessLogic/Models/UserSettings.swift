@@ -18,6 +18,7 @@ enum AppLanguage: String, CaseIterable, Codable {
     case kk = "kk"
     case tr = "tr"
     case uk = "uk"
+    case zhHans = "zh-Hans"
 
     var displayName: String {
         switch self {
@@ -27,6 +28,7 @@ enum AppLanguage: String, CaseIterable, Codable {
             case .kk: return "🇰🇿 Қазақша"
             case .tr: return "🇹🇷 Türkçe"
             case .uk: return "🇺🇦 Українська"
+            case .zhHans: return "🇨🇳 简体中文"
         }
     }
 }
