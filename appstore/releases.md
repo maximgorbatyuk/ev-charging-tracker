@@ -1,5 +1,49 @@
 # Release notes
 
+## 2026.2.3
+
+### English
+
+```
+We added Simplified Chinese as the seventh supported language, so now you can use the app entirely in Chinese. We also added the Chinese Yuan (CNY) to the currency picker and improved the onboarding language selector so it scrolls comfortably on all screen sizes.
+```
+
+### Русский (RU)
+
+```
+Мы добавили упрощённый китайский в качестве седьмого поддерживаемого языка — теперь приложением можно пользоваться полностью на китайском. Также мы добавили китайский юань (CNY) в выбор валют и улучшили экран выбора языка при первом запуске, чтобы он корректно прокручивался на любых размерах экранов.
+```
+
+### Қазақша (KK)
+
+```
+Жеңілдетілген қытай тілін жетінші қолдау көрсетілетін тіл ретінде қостық — енді қолданбаны толығымен қытай тілінде пайдалануға болады. Сонымен қатар валюта тізіміне қытай юанін (CNY) қосып, алғашқы іске қосу кезіндегі тіл таңдау экранын барлық экран өлшемдерінде ыңғайлы айналдырылатын етіп жақсарттық.
+```
+
+### Türkçe (TR)
+
+```
+Yedinci desteklenen dil olarak Basitleştirilmiş Çince'yi ekledik — artık uygulamayı tamamen Çince olarak kullanabilirsiniz. Ayrıca para birimi seçicisine Çin Yuanı'nı (CNY) ekledik ve ilk açılış dil seçim ekranını tüm ekran boyutlarında rahatça kaydırılabilecek şekilde iyileştirdik.
+```
+
+### Українська (UK)
+
+```
+Ми додали спрощену китайську як сьому підтримувану мову — тепер застосунком можна користуватися повністю китайською. Також ми додали китайський юань (CNY) до вибору валют та покращили екран вибору мови при першому запуску, щоб він коректно прокручувався на будь-яких розмірах екранів.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben vereinfachtes Chinesisch als siebte unterstützte Sprache hinzugefügt — die App kann jetzt vollständig auf Chinesisch genutzt werden. Außerdem haben wir den Chinesischen Yuan (CNY) zur Währungsauswahl hinzugefügt und den Sprachauswahl-Bildschirm beim ersten Start verbessert, sodass er auf allen Bildschirmgrößen bequem scrollbar ist.
+```
+
+### 简体中文 (ZH-Hans)
+
+```
+我们新增了简体中文作为第七种支持语言，现在您可以完全使用中文操作应用。同时我们在货币选择器中添加了人民币（CNY），并改进了首次启动时的语言选择界面，使其在所有屏幕尺寸上都能顺畅滚动。
+```
+
 ## 2026.2.2
 
 ### English
