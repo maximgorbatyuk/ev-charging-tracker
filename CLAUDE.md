@@ -210,8 +210,8 @@ class Idea: Identifiable, Codable {
 
 - `ChargerType`: home3kW, home7kW, home11kW, destination22kW, publicFast50kW, publicRapid100kW, superchargerV2/V3/V4, other
 - `ExpenseType`: charging, maintenance, repair, carwash, other
-- `Currency`: usd, kzt, eur, byn, uah, rub, trl, aed, sar, gbp, jpy, inr
-- `AppLanguage`: en, de, ru, kk, tr, uk
+- `Currency`: usd, kzt, eur, byn, uah, rub, trl, aed, sar, gbp, jpy, inr, cny
+- `AppLanguage`: en, de, ru, kk, tr, uk, zh-Hans
 
 ## Services
 
@@ -234,7 +234,7 @@ All in `BusinessLogic/Services/`:
 
 ## Localization
 
-Languages: English (en), German (de), Russian (ru), Turkish (tr), Kazakh (kk), Ukrainian (uk)
+Languages: English (en), German (de), Russian (ru), Turkish (tr), Kazakh (kk), Ukrainian (uk), Simplified Chinese (zh-Hans)
 
 Localization files: `EVChargingTracker/{lang}.lproj/Localizable.strings`
 
