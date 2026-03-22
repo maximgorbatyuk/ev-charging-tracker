@@ -18,6 +18,7 @@ enum Currency: String, CaseIterable, Codable {
     case gbp = "£"
     case jpy = "¥"
     case inr = "₹"
+    case cny = "CN¥"
 
     var shortName: String {
         switch self {
@@ -33,6 +34,7 @@ enum Currency: String, CaseIterable, Codable {
             case .byn: return "🇧🇾 BYN"
             case .uah: return "🇺🇦 UAH"
             case .inr: return "🇮🇳 INR"
+            case .cny: return "🇨🇳 CNY"
 
             @unknown default:
                 return "Unknown Currency"
@@ -53,6 +55,7 @@ enum Currency: String, CaseIterable, Codable {
             case .byn: return "🇧🇾 Belarusian Ruble"
             case .uah: return "🇺🇦 Ukrainian Hryvnia"
             case .inr: return "🇮🇳 Indian Rupee"
+            case .cny: return "🇨🇳 Chinese Yuan"
 
             @unknown default:
                 return "Unknown Currency"
