@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026.2.3 (2026-03-22)
+
+- **Simplified Chinese Localization**
+  - Added Simplified Chinese (`zh-Hans`) as the 7th supported language
+  - Translated all 364 localization keys including app UI, share extension, and system permission strings
+  - Chinese appears in onboarding language selector and settings language picker
+  - Language switches at runtime and persists after relaunch
+  - Added `NSCameraUsageDescription` localization for camera permission prompt
+  - Fixed swapped format specifier order in `export.error.invalid_reference` key (used positional `%1$@` / `%2$lld` for correct argument mapping)
+
+- **Chinese Yuan Currency**
+  - Added CNY (`CN¥`) to the currency picker
+  - Disambiguated from JPY (`¥`) using the standard `CN¥` symbol
+
+- **App Store Metadata**
+  - Added Simplified Chinese App Store description, promotional text, and keyword tags to `appstore_page.md`
+
+- **Onboarding Language Selector**
+  - Wrapped language list in a `ScrollView` so it scrolls on smaller screens instead of overlapping the bottom button
+  - Removed redundant spacers that caused layout overflow with 7 languages
+
+- **Localization Tests**
+  - Added `AppLanguageTests` with 6 test cases: raw value resolution, display name, `CaseIterable` membership, uniqueness, repository persistence round-trip, and `Codable` round-trip
+
+- **Xcode Project**
+  - Registered `zh-Hans` in `knownRegions` in `project.pbxproj`
+
 ## 2026.2.2 (2026-03-19)
 
 - **Camera Document Capture**

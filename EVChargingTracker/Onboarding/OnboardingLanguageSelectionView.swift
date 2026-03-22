@@ -18,14 +18,13 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
 
     var body: some SwiftUICore.View {
         VStack(spacing: 20) {
-            Spacer()
-
             Image("BackgroundImage")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 100, height: 100) // Adjust size as needed
+                .frame(width: 100, height: 100)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .shadow(radius: 10)
+                .padding(.top, 16)
 
             VStack(spacing: 6) {
                 Text(L("Welcome to"))
@@ -44,33 +43,33 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
                 .padding(.top, 5)
 
             // Language options
-            VStack(spacing: 10) {
-                ForEach(AppLanguage.allCases, id: \.self) { language in
-                    LanguageButton(
-                        language: language,
-                        isSelected: selectedLanguage == language
-                    ) {
-                        withAnimation(.spring()) {
-                            selectedLanguage = language
-                            do {
-                                try localizationManager.setLanguage(language)
-                            } catch {
-                                GlobalLogger.shared.error("Failed to set language to \(language.rawValue): \(error)")
+            ScrollView {
+                VStack(spacing: 10) {
+                    ForEach(AppLanguage.allCases, id: \.self) { language in
+                        LanguageButton(
+                            language: language,
+                            isSelected: selectedLanguage == language
+                        ) {
+                            withAnimation(.spring()) {
+                                selectedLanguage = language
+                                do {
+                                    try localizationManager.setLanguage(language)
+                                } catch {
+                                    GlobalLogger.shared.error("Failed to set language to \(language.rawValue): \(error)")
+                                }
+
+                                onCurrentLanguageSelected(language)
+
+                                analytics.trackEvent("language_selected", properties: [
+                                    "language": language.rawValue,
+                                    "screen": "onboarding_language_selection"
+                                ])
                             }
-
-                            onCurrentLanguageSelected(language)
-
-                            analytics.trackEvent("language_selected", properties: [
-                                "language": language.rawValue,
-                                "screen": "onboarding_language_selection"
-                            ])
                         }
                     }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
-
-            Spacer()
         }
         .padding()
     } // end of body

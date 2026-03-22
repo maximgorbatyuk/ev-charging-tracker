@@ -362,11 +362,11 @@ body {
 
 .footer {
   margin-top: 32px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
+  padding: 32px 28px;
+  border: 2px solid var(--stroke);
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: var(--shadow);
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.85rem;
 }
@@ -374,6 +374,77 @@ body {
 .footer a {
   color: inherit;
   text-decoration: underline;
+}
+
+.footer a:hover {
+  color: var(--call-to-action-dark);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 32px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  border: 2px solid var(--stroke);
+}
+
+.footer-slogan {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.footer-copy {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.footer-links h4 {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.footer-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links ul li a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s ease;
+}
+
+.footer-links ul li a:hover {
+  color: var(--call-to-action-dark);
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 @keyframes pop {
