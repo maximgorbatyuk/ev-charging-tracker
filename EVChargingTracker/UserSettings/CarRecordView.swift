@@ -21,7 +21,7 @@ struct CarRecordView: SwiftUICore.View {
         return VStack(alignment: .leading, spacing: 5) {
             HStack {
                 Text(car.name)
-                    .font(.headline)
+                    .appFont(.headline)
                     .foregroundColor(.gray)
                 Spacer()
 
@@ -33,33 +33,33 @@ struct CarRecordView: SwiftUICore.View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Current mileage"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.gray)
 
                     Text("\(car.currentMileage.formatted()) km")
-                        .font(.subheadline)
+                        .appFont(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(textColor)
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Rides"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.gray)
 
                     Text("\((car.currentMileage - car.initialMileage).formatted()) km")
-                        .font(.subheadline)
+                        .appFont(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(textColor)
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Currency"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.gray)
 
                     Text(car.expenseCurrency.shortName)
-                        .font(.subheadline)
+                        .appFont(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(textColor)
                 }
@@ -67,7 +67,7 @@ struct CarRecordView: SwiftUICore.View {
 
             Text(car.selectedForTracking ? L("Tracking") : L("Not tracking"))
                 .fontWeight(.semibold)
-                .font(.system(size: 16, weight: .regular))
+                .appFont(.custom(size: 16), weight: .regular)
                 .foregroundColor(car.selectedForTracking ? .green : .red)
         }
     }

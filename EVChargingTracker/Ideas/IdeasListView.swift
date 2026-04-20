@@ -91,11 +91,11 @@ struct IdeasListView: SwiftUI.View {
                     .foregroundColor(.gray.opacity(0.5))
 
                 Text(L("No ideas yet"))
-                    .font(.title3)
+                    .appFont(.title3)
                     .foregroundColor(.gray)
 
                 Text(L("Add your first idea"))
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(.gray.opacity(0.9))
             }
             .padding(.top, 60)

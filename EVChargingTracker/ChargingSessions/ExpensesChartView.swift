@@ -37,7 +37,7 @@ struct ExpensesChartView: SwiftUICore.View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("Expenses chart"))
-                    .font(.headline)
+                    .appFont(.headline)
                     .foregroundColor(colorScheme == .dark ? .white : .primary)
             }
 
@@ -82,7 +82,7 @@ struct ExpensesChartView: SwiftUICore.View {
 
                         Text(L("No expense data available for the selected filter."))
                             .foregroundColor(.gray)
-                            .font(.system(size: 14, weight: .semibold))
+                            .appFont(.custom(size: 14), weight: .semibold)
                             .multilineTextAlignment(.center)
                             .padding(.top, 20)
                             .padding(.horizontal)

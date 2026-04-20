@@ -18,12 +18,12 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
             // Header
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("Energy per month"))
-                    .font(.headline)
+                    .appFont(.headline)
                     .fontWeight(.bold)
 
                 if viewModel.hasData {
                     Text(String(format: L("%.1f kWh/month average"), viewModel.overallAverage))
-                        .font(.subheadline)
+                        .appFont(.subheadline)
                         .foregroundColor(.secondary)
                 }
             }
@@ -80,7 +80,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                         AxisValueLabel {
                             if let doubleValue = value.as(Double.self) {
                                 Text(String(format: "%.1f", doubleValue))
-                                    .font(.caption)
+                                    .appFont(.caption)
                             }
                         }
                     }
@@ -90,7 +90,7 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
                         AxisValueLabel {
                             if let stringValue = value.as(String.self) {
                                 Text(stringValue)
-                                    .font(.caption)
+                                    .appFont(.caption)
                             }
                         }
                     }

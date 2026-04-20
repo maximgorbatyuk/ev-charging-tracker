@@ -104,7 +104,7 @@ struct CarQuickAddOptionButton: SwiftUI.View {
                 }
 
                 Text(option.displayName)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.center)

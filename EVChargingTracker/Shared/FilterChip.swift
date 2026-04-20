@@ -16,7 +16,7 @@ struct FilterChip: SwiftUICore.View {
   var body: some SwiftUICore.View {
     Button(action: action) {
       Text(title)
-        .font(.subheadline)
+        .appFont(.subheadline)
         .fontWeight(isSelected ? .semibold : .regular)
         .padding(.horizontal, 16)
         .padding(.vertical, 8)

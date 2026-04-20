@@ -29,7 +29,7 @@ struct FolderContentsView: SwiftUI.View {
                         Image(systemName: "car.fill")
                             .foregroundColor(.blue)
                         Text("Car: \(name)")
-                            .font(.subheadline)
+                            .appFont(.subheadline)
                     }
                 }
             }

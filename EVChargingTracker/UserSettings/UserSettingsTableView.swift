@@ -42,7 +42,7 @@ struct UserSettingsTableView: SwiftUICore.View {
         .foregroundColor(.gray.opacity(0.5))
 
       Text("No settings found")
-        .font(.title3)
+        .appFont(.title3)
         .foregroundColor(.gray)
     }
   }
@@ -54,7 +54,7 @@ struct UserSettingsTableView: SwiftUICore.View {
           VStack(alignment: .leading, spacing: 4) {
             HStack {
               Text("ID: \(entry.id)")
-                .font(.caption)
+                .appFont(.caption)
                 .foregroundColor(.secondary)
 
               Spacer()
@@ -62,14 +62,14 @@ struct UserSettingsTableView: SwiftUICore.View {
 
             HStack(alignment: .top) {
               Text(entry.key)
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
 
               Spacer()
 
               Text(entry.value)
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.blue)
                 .multilineTextAlignment(.trailing)
             }

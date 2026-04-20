@@ -62,7 +62,7 @@ struct EditCarView: SwiftUICore.View {
 
                         Text(alertMessage!)
                             .fontWeight(.semibold)
-                            .font(.system(size: 16, weight: .bold))
+                            .appFont(.custom(size: 16), weight: .bold)
                     }
                     .padding(8)
                     .listRowBackground(Color.yellow.opacity(0.2))
@@ -122,7 +122,7 @@ struct EditCarView: SwiftUICore.View {
                             .disabled(!hasOtherCars)
 
                         Text(L("If you change it, then other active car will be unselected automatically."))
-                            .font(.footnote)
+                            .appFont(.footnote)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -280,16 +280,16 @@ struct WheelInfoSheetView: SwiftUICore.View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(L("Wheel Size Formats"))
-                        .font(.title2)
+                        .appFont(.title2)
                         .fontWeight(.bold)
                         .padding(.bottom, 8)
 
                     Text(L("Metric format:"))
-                        .font(.headline)
+                        .appFont(.headline)
                         .padding(.top, 8)
 
                     Text(L("Example: 225/45R18"))
-                        .font(.subheadline)
+                        .appFont(.subheadline)
                         .padding(.leading, 12)
 
                     VStack(alignment: .leading, spacing: 4) {
@@ -298,23 +298,23 @@ struct WheelInfoSheetView: SwiftUICore.View {
                         Text(L("• R - Radial construction"))
                         Text(L("• 18 - Rim diameter in inches"))
                     }
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 16)
 
                     Text(L("Imperial format:"))
-                        .font(.headline)
+                        .appFont(.headline)
                         .padding(.top, 16)
 
                     Text(L("Example: 20x9.5"))
-                        .font(.subheadline)
+                        .appFont(.subheadline)
                         .padding(.leading, 12)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(L("• 20 - Rim diameter in inches"))
                         Text(L("• 9.5 - Wheel width in inches"))
                     }
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 16)
                 }

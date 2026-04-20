@@ -83,7 +83,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
 
                         Text(alertMessage!)
                             .fontWeight(.semibold)
-                            .font(.system(size: 16, weight: .bold))
+                            .appFont(.custom(size: 16), weight: .bold)
                     }
                     .padding(8)
                     .listRowBackground(Color.yellow.opacity(0.2))

@@ -21,14 +21,14 @@ struct OnboardingPageView: SwiftUICore.View {
                 .symbolEffect(.bounce, options: .repeating)
 
             Text(page.title)
-                .font(.largeTitle)
+                .appFont(.largeTitle)
                 .bold()
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
             // Description
             Text(page.description)
-                .font(.body)
+                .appFont(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)

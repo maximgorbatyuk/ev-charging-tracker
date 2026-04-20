@@ -28,17 +28,17 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
 
             VStack(spacing: 6) {
                 Text(L("Welcome to"))
-                    .font(.title2)
+                    .appFont(.title2)
                     .foregroundColor(.secondary)
 
                 Text("EV Charge Tracker")
-                    .font(.largeTitle)
+                    .appFont(.largeTitle)
                     .bold()
                     .multilineTextAlignment(.center)
             }
 
             Text(L("Select your language"))
-                .font(.headline)
+                .appFont(.headline)
                 .foregroundColor(.secondary)
                 .padding(.top, 5)
 
@@ -84,7 +84,7 @@ struct LanguageButton: SwiftUICore.View {
         Button(action: action) {
             HStack {
                 Text(language.displayName)
-                    .font(.headline)
+                    .appFont(.headline)
                     .foregroundColor(isSelected ? .white : .primary)
 
                 Spacer()
@@ -92,7 +92,7 @@ struct LanguageButton: SwiftUICore.View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.white)
-                        .font(.title3)
+                        .appFont(.title3)
                 }
             }
             .padding()

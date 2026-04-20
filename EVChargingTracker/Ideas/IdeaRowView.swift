@@ -16,18 +16,18 @@ struct IdeaRowView: SwiftUI.View {
     var body: some SwiftUI.View {
         VStack(alignment: .leading, spacing: 6) {
             Text(idea.title)
-                .font(.headline)
+                .appFont(.headline)
                 .foregroundColor(colorScheme == .dark ? .white : .primary)
 
             if let host = idea.hostName {
                 Label(host, systemImage: "link")
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(.blue)
             }
 
             if let description = idea.descriptionText, !description.isEmpty {
                 Text(description)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
             }

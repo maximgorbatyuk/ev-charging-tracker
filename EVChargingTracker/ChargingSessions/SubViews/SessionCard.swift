@@ -19,17 +19,17 @@ struct SessionCard: SwiftUICore.View {
                 if session.expenseType == .charging {
                     Image(systemName: "bolt.fill")
                         .foregroundColor(.yellow)
-                        .font(.headline)
+                        .appFont(.headline)
 
                     Text(String(format: L("%.1f kWh"), session.energyCharged))
-                        .font(.headline)
+                        .appFont(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(colorScheme == .dark ? .white : .primary)
                 } else {
                     expenseTypeIcon
 
                     Text(L(session.expenseType.rawValue))
-                        .font(.headline)
+                        .appFont(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(colorScheme == .dark ? .white : .primary)
                 }
@@ -38,7 +38,7 @@ struct SessionCard: SwiftUICore.View {
 
                 if let cost = session.cost {
                     Text(String(format: "%@%.2f", session.currency.rawValue, cost))
-                        .font(.headline)
+                        .appFont(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.green)
                 }
@@ -49,14 +49,14 @@ struct SessionCard: SwiftUICore.View {
                     session.date.formatted(as: "yyyy-MM-dd"),
                     systemImage: "calendar"
                 )
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.secondary)
 
                 Label(
                     "\(session.odometer.formatted()) km",
                     systemImage: "speedometer"
                 )
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.secondary)
 
                 Spacer()
@@ -64,7 +64,7 @@ struct SessionCard: SwiftUICore.View {
 
             if !session.notes.isEmpty {
                 Text(session.notes)
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.gray)
                     .lineLimit(2)
             }
@@ -87,17 +87,17 @@ struct SessionCard: SwiftUICore.View {
         case .maintenance, .repair:
             Image(systemName: "wrench.fill")
                 .foregroundColor(.blue)
-                .font(.headline)
+                .appFont(.headline)
 
         case .carwash:
             Image(systemName: "drop.fill")
                 .foregroundColor(.cyan)
-                .font(.headline)
+                .appFont(.headline)
 
         default:
             Image(systemName: "creditcard.fill")
                 .foregroundColor(.green)
-                .font(.headline)
+                .appFont(.headline)
         }
     }
 }

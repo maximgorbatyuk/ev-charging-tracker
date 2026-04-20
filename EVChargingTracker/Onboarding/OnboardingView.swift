@@ -136,7 +136,7 @@ struct OnboardingView: SwiftUI.View {
                             onOnboardingCompleted()
                         }) {
                             Text(L("Get started"))
-                                .font(.headline)
+                                .appFont(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
@@ -152,7 +152,7 @@ struct OnboardingView: SwiftUI.View {
                             }
                         }) {
                             Text(L("Next"))
-                                .font(.headline)
+                                .appFont(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()

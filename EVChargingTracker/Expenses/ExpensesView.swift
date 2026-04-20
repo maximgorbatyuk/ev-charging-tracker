@@ -83,7 +83,7 @@ struct ExpensesView: SwiftUICore.View {
             showingAddSession = true
         }) {
             Image(systemName: "plus")
-                .font(.title2)
+                .appFont(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)
@@ -108,11 +108,11 @@ struct ExpensesView: SwiftUICore.View {
                 .foregroundColor(.gray.opacity(0.5))
 
             Text(L("No expenses yet"))
-                .font(.title3)
+                .appFont(.title3)
                 .foregroundColor(.gray)
 
             Text(L("Add your first expense to start tracking"))
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.gray.opacity(0.9))
         }
         .padding(.top, 60)
@@ -125,7 +125,7 @@ struct ExpensesView: SwiftUICore.View {
                .foregroundColor(.gray.opacity(0.5))
 
            Text(L("No expenses of this type yet"))
-               .font(.title3)
+               .appFont(.title3)
                .foregroundColor(.gray)
        }
        .padding(.top, 60)
@@ -150,7 +150,7 @@ struct ExpensesView: SwiftUICore.View {
     private var sortingSelectorView: some SwiftUICore.View {
         HStack {
             Text(L("Sort by"))
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.secondary)
 
             Picker(L("Sort by"), selection: sortingOptionBinding) {
@@ -213,7 +213,7 @@ struct ExpensesView: SwiftUICore.View {
                 } else {
                     // Hint text row
                     Text(L("For editing or deleting record, please swipe left"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .fontWeight(.regular)
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -292,7 +292,7 @@ struct ExpensesView: SwiftUICore.View {
                         Image(systemName: "chevron.left")
                         Text(L("Previous"))
                     }
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(viewModel.currentPage > 1 ? .blue : .gray)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -306,7 +306,7 @@ struct ExpensesView: SwiftUICore.View {
 
                 // Current page indicator
                 Text("\(viewModel.currentPage)")
-                    .font(.headline)
+                    .appFont(.headline)
                     .foregroundColor(.primary)
                     .frame(minWidth: 40)
                     .padding(.horizontal, 16)
@@ -324,7 +324,7 @@ struct ExpensesView: SwiftUICore.View {
                         Text(L("Next"))
                         Image(systemName: "chevron.right")
                     }
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(viewModel.currentPage < viewModel.totalPages ? .blue : .gray)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -339,7 +339,7 @@ struct ExpensesView: SwiftUICore.View {
 
             // Information text
             Text(String(format: L("Total records: %d, total pages: %d"), viewModel.totalRecords, viewModel.totalPages))
-                .font(.caption)
+                .appFont(.caption)
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity)

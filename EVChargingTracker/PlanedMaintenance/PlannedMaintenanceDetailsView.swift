@@ -64,10 +64,10 @@ struct PlannedMaintenanceDetailsView: SwiftUICore.View {
       /// Title
       VStack(alignment: .leading, spacing: 4) {
         Text(L("Title"))
-          .font(.caption)
+          .appFont(.caption)
           .foregroundColor(.gray)
         Text(record.name)
-          .font(.title2)
+          .appFont(.title2)
           .fontWeight(.semibold)
       }
 
@@ -104,10 +104,10 @@ struct PlannedMaintenanceDetailsView: SwiftUICore.View {
       if !record.notes.isEmpty {
         VStack(alignment: .leading, spacing: 4) {
           Text(L("Notes"))
-            .font(.caption)
+            .appFont(.caption)
             .foregroundColor(.gray)
           Text(record.notes)
-            .font(.body)
+            .appFont(.body)
         }
         Divider()
       }
@@ -115,10 +115,10 @@ struct PlannedMaintenanceDetailsView: SwiftUICore.View {
       /// Created at
       VStack(alignment: .leading, spacing: 4) {
         Text(L("Created"))
-          .font(.caption)
+          .appFont(.caption)
           .foregroundColor(.gray)
         Text(record.createdAt.formatted(as: "yyyy-MM-dd"))
-          .font(.subheadline)
+          .appFont(.subheadline)
           .foregroundColor(.secondary)
       }
     }
@@ -191,9 +191,9 @@ struct PlannedMaintenanceDetailsView: SwiftUICore.View {
     Button(action: action) {
       VStack(spacing: 6) {
         Image(systemName: icon)
-          .font(.title2)
+          .appFont(.title2)
         Text(title)
-          .font(.caption)
+          .appFont(.caption)
       }
       .frame(maxWidth: .infinity)
       .foregroundColor(color)
@@ -205,10 +205,10 @@ struct PlannedMaintenanceDetailsView: SwiftUICore.View {
     HStack {
       VStack(alignment: .leading, spacing: 4) {
         Text(title)
-          .font(.caption)
+          .appFont(.caption)
           .foregroundColor(.gray)
         Text(value)
-          .font(.body)
+          .appFont(.body)
           .fontWeight(status == .overdue ? .semibold : .regular)
           .foregroundColor(colorForStatus(status))
       }
@@ -246,7 +246,7 @@ struct PlannedMaintenanceDetailsView: SwiftUICore.View {
 
   private func statusBadge(for status: RecordStatus) -> some SwiftUICore.View {
     Text(status.displayName)
-      .font(.caption)
+      .appFont(.caption)
       .fontWeight(.medium)
       .padding(.horizontal, 8)
       .padding(.vertical, 4)

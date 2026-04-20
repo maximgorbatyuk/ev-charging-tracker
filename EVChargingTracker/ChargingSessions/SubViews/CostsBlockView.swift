@@ -36,7 +36,7 @@ struct CostsBlockView: SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(title)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                 Spacer()
 
@@ -57,7 +57,7 @@ struct CostsBlockView: SwiftUICore.View {
 
                         VStack(alignment: .leading, spacing: 10) {
                             Text(L("Hint"))
-                                .font(.headline)
+                                .appFont(.headline)
 
                             Text(hint)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -71,12 +71,12 @@ struct CostsBlockView: SwiftUICore.View {
 
             HStack(alignment: .lastTextBaseline) {
                 Text(getMoneyFormattedText())
-                    .font(.system(size: 28, weight: .bold))
+                    .appFont(.custom(size: 28), weight: .bold)
                     .foregroundColor(colorScheme == .dark ? .white : .black)
 
                 if perKilometer {
                     Text(L("per km"))
-                        .font(.system(size: 14, weight: .regular))
+                        .appFont(.custom(size: 14), weight: .regular)
                         .foregroundColor(colorScheme == .dark ? .white : .black)
                 }
             }

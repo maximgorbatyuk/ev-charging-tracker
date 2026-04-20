@@ -56,14 +56,14 @@ struct StatCard: SwiftUICore.View {
         VStack(alignment: .leading, spacing: 3) {
             HStack {
                 Text(title)
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.gray)
                 Image(systemName: icon)
                     .foregroundColor(color)
             }
 
             Text(value)
-                .font(.system(size: 16, weight: .bold))
+                .appFont(.custom(size: 16), weight: .bold)
                 .foregroundColor(colorScheme == .dark ? .white : .primary)
         }
         .frame(maxWidth: .infinity, minHeight: minHeight)

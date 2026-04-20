@@ -17,7 +17,7 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
             Text(record.name)
-                .font(.headline)
+                .appFont(.headline)
                 .foregroundColor(colorScheme == .dark ? .white : .primary)
 
             if record.when != nil || record.odometer != nil {
@@ -49,7 +49,7 @@ struct PlannedOnView: SwiftUICore.View {
                     when.formatted(as: "yyyy-MM-dd"),
                     systemImage: "calendar"
                 )
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .fontWeight(now > when ? .semibold : .regular)
                 .foregroundColor(now > when ? .red : .secondary)
             }
@@ -59,7 +59,7 @@ struct PlannedOnView: SwiftUICore.View {
                     "\(odometer.formatted()) km",
                     systemImage: "speedometer"
                 )
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.secondary)
             }
         }

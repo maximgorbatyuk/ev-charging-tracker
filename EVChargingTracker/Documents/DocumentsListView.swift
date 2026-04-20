@@ -106,11 +106,11 @@ struct DocumentsListView: SwiftUI.View {
                     .foregroundColor(.gray.opacity(0.5))
 
                 Text(L("No documents yet"))
-                    .font(.title3)
+                    .appFont(.title3)
                     .foregroundColor(.gray)
 
                 Text(L("Add your first document"))
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(.gray.opacity(0.9))
             }
             .padding(.top, 60)
@@ -187,7 +187,7 @@ struct DocumentsListView: SwiftUI.View {
                 .foregroundColor(.secondary)
 
             Text(L("documents.list.interaction_hint"))
-                .font(.footnote)
+                .appFont(.footnote)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.leading)
         }
@@ -263,19 +263,19 @@ struct DocumentRowView: SwiftUI.View {
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
             Image(systemName: CarDocument.iconName(for: document.fileType))
-                .font(.title2)
+                .appFont(.title2)
                 .foregroundColor(CarDocument.iconColor(for: document.fileType))
                 .frame(width: 36)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(document.displayTitle)
-                    .font(.headline)
+                    .appFont(.headline)
                     .foregroundColor(colorScheme == .dark ? .white : .primary)
                     .lineLimit(1)
 
                 HStack(spacing: 8) {
                     Text(document.fileExtension)
-                        .font(.caption)
+                        .appFont(.caption)
                         .fontWeight(.medium)
                         .foregroundColor(.white)
                         .padding(.horizontal, 6)
@@ -285,7 +285,7 @@ struct DocumentRowView: SwiftUI.View {
                         )
 
                     Text(document.formattedFileSize)
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.secondary)
                 }
             }

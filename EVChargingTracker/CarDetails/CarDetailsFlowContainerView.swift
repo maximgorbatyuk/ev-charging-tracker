@@ -87,7 +87,7 @@ struct CarDetailsFlowContainerView: SwiftUI.View {
             handleFabTap()
         }) {
             Image(systemName: "plus")
-                .font(.title2)
+                .appFont(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)

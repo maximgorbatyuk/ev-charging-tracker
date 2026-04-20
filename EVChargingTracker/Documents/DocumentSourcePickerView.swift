@@ -74,7 +74,7 @@ struct DocumentSourcePickerView: SwiftUI.View {
                     Text(title)
                         .foregroundColor(.primary)
                     Text(description)
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.secondary)
                 }
             } icon: {

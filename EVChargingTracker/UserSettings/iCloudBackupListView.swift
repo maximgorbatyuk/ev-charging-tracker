@@ -30,11 +30,11 @@ struct iCloudBackupListView: SwiftUI.View {
                             .foregroundColor(.secondary)
 
                         Text(L("No backups found"))
-                            .font(.title2)
+                            .appFont(.title2)
                             .foregroundColor(.secondary)
 
                         Text(L("Create your first backup to get started"))
-                            .font(.body)
+                            .appFont(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
@@ -186,11 +186,11 @@ struct BackupRow: SwiftUI.View {
                     .foregroundColor(.blue)
 
                 Text(formatDate(backup.createdAt))
-                    .font(.headline)
+                    .appFont(.headline)
 
                 if backup.isDevBackup {
                     Text("dev")
-                        .font(.caption2)
+                        .appFont(.caption2)
                         .fontWeight(.bold)
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
@@ -202,12 +202,12 @@ struct BackupRow: SwiftUI.View {
                 Spacer()
 
                 Text(backup.formattedFileSize)
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.secondary)
             }
 
             Text(backup.deviceName)
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 12) {
@@ -218,10 +218,10 @@ struct BackupRow: SwiftUI.View {
                 Spacer()
 
                 Text("v\(backup.appVersion)")
-                    .font(.caption2)
+                    .appFont(.caption2)
                     .foregroundColor(.secondary)
             }
-            .font(.caption)
+            .appFont(.caption)
             .foregroundColor(.secondary)
         }
         .padding(.vertical, 4)

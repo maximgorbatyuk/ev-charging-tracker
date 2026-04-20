@@ -76,11 +76,11 @@ struct CarDetailsRootView: SwiftUI.View {
             HStack {
                 HStack(spacing: 8) {
                     Image(systemName: "car.fill")
-                        .font(.headline)
+                        .appFont(.headline)
                         .foregroundColor(.green)
 
                     Text(L("Car mileage"))
-                        .font(.headline)
+                        .appFont(.headline)
                         .foregroundColor(.primary)
                 }
 
@@ -89,9 +89,9 @@ struct CarDetailsRootView: SwiftUI.View {
                 Button(action: { showEditCarSheet = true }) {
                     HStack(spacing: 4) {
                         Text(L("Edit"))
-                            .font(.subheadline)
+                            .appFont(.subheadline)
                         Image(systemName: "chevron.right")
-                            .font(.caption)
+                            .appFont(.caption)
                     }
                     .foregroundColor(.orange)
                 }
