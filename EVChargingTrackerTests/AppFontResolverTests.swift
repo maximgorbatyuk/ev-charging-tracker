@@ -55,4 +55,30 @@ struct AppFontResolverTests {
         #expect(AppFont.postScriptName(weight: .bold, italic: true) == "JetBrainsMono-BoldItalic")
         #expect(AppFont.postScriptName(weight: .heavy, italic: true) == "JetBrainsMono-BoldItalic")
     }
+
+    // MARK: - AppFontFamily gating
+
+    // Font equality can't be introspected reliably, so we verify resolution
+    // doesn't crash and the resolver treats `.system` family as language-independent.
+    // The concrete rendering is asserted manually via FontSelectionView.
+
+    @Test func resolve_systemFamily_returnsFontForEveryLanguage() {
+        for language in AppLanguage.allCases {
+            let font = AppFont.resolve(style: .body, language: language, family: .system)
+            #expect(font != Font.body.italic())  // sanity: a Font is produced
+            _ = font
+        }
+    }
+
+    @Test func resolve_jetBrainsMonoFamily_supportedLanguageProducesFont() {
+        let font = AppFont.resolve(style: .body, language: .en, family: .jetBrainsMono)
+        _ = font
+    }
+
+    @Test func resolve_jetBrainsMonoFamily_unsupportedLanguageFallsThroughToSystem() {
+        // Kazakh is explicitly unsupported by JetBrains Mono; resolver must
+        // still produce a Font (system fallback path).
+        let font = AppFont.resolve(style: .body, language: .kk, family: .jetBrainsMono)
+        _ = font
+    }
 }

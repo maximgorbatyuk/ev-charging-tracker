@@ -2,9 +2,10 @@
 //  AppFontAppearance.swift
 //  EVChargingTracker
 //
-//  Applies JetBrains Mono (or system fallback) to UIKit-backed chrome by
-//  copying the existing appearance and mutating only the title attributes,
-//  preserving whatever background/blur SwiftUI or the system set.
+//  Applies JetBrains Mono (or system fallback) to UIKit-backed chrome.
+//  Ensures every appearance slot (standard, scrollEdge, compact) has our
+//  font — iOS caches scroll-edge state from the proxy at first render, so
+//  nil scrollEdge/compact slots would silently drop the font.
 //
 
 import UIKit
@@ -15,22 +16,33 @@ import Combine
 final class AppFontAppearance {
     static let shared = AppFontAppearance()
 
-    private var cancellable: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
 
     private init() {}
 
     func start() {
-        apply(language: LocalizationManager.shared.currentLanguage)
-        cancellable = LocalizationManager.shared.$currentLanguage
-            .sink { [weak self] language in
-                self?.apply(language: language)
-            }
+        applyCurrent()
+
+        LocalizationManager.shared.$currentLanguage
+            .sink { [weak self] _ in self?.applyCurrent() }
+            .store(in: &cancellables)
+
+        AppFontFamilyManager.shared.$currentFamily
+            .sink { [weak self] _ in self?.applyCurrent() }
+            .store(in: &cancellables)
     }
 
-    private func apply(language: AppLanguage) {
-        let navFont = AppFont.resolveUIFont(style: .headline, language: language, weight: .semibold)
-        let largeTitleFont = AppFont.resolveUIFont(style: .largeTitle, language: language, weight: .bold)
-        let tabFont = AppFont.resolveUIFont(style: .caption2, language: language, weight: .medium)
+    private func applyCurrent() {
+        apply(
+            language: LocalizationManager.shared.currentLanguage,
+            family: AppFontFamilyManager.shared.currentFamily
+        )
+    }
+
+    private func apply(language: AppLanguage, family: AppFontFamily) {
+        let navFont = AppFont.resolveUIFont(style: .headline, language: language, family: family, weight: .semibold)
+        let largeTitleFont = AppFont.resolveUIFont(style: .largeTitle, language: language, family: family, weight: .bold)
+        let tabFont = AppFont.resolveUIFont(style: .caption2, language: language, family: family, weight: .medium)
 
         applyNavBar(titleFont: navFont, largeTitleFont: largeTitleFont)
         applyTabBar(titleFont: tabFont)
@@ -40,35 +52,46 @@ final class AppFontAppearance {
         let proxy = UINavigationBar.appearance()
 
         let standard = proxy.standardAppearance
-        var standardTitle = standard.titleTextAttributes
-        standardTitle[.font] = titleFont
-        standard.titleTextAttributes = standardTitle
-        var standardLarge = standard.largeTitleTextAttributes
-        standardLarge[.font] = largeTitleFont
-        standard.largeTitleTextAttributes = standardLarge
+        injectTitle(titleFont, largeTitle: largeTitleFont, into: standard)
+        proxy.standardAppearance = standard
 
-        if let scrollEdge = proxy.scrollEdgeAppearance {
-            var title = scrollEdge.titleTextAttributes
-            title[.font] = titleFont
-            scrollEdge.titleTextAttributes = title
-            var large = scrollEdge.largeTitleTextAttributes
-            large[.font] = largeTitleFont
-            scrollEdge.largeTitleTextAttributes = large
-        }
+        let scrollEdge = proxy.scrollEdgeAppearance ?? {
+            let a = UINavigationBarAppearance()
+            a.configureWithTransparentBackground()
+            return a
+        }()
+        injectTitle(titleFont, largeTitle: largeTitleFont, into: scrollEdge)
+        proxy.scrollEdgeAppearance = scrollEdge
 
-        if let compact = proxy.compactAppearance {
-            var title = compact.titleTextAttributes
-            title[.font] = titleFont
-            compact.titleTextAttributes = title
-        }
+        let compact = proxy.compactAppearance ?? UINavigationBarAppearance()
+        injectTitle(titleFont, largeTitle: largeTitleFont, into: compact)
+        proxy.compactAppearance = compact
+    }
+
+    private func injectTitle(
+        _ titleFont: UIFont,
+        largeTitle: UIFont,
+        into appearance: UINavigationBarAppearance
+    ) {
+        var title = appearance.titleTextAttributes
+        title[.font] = titleFont
+        appearance.titleTextAttributes = title
+
+        var large = appearance.largeTitleTextAttributes
+        large[.font] = largeTitle
+        appearance.largeTitleTextAttributes = large
     }
 
     private func applyTabBar(titleFont: UIFont) {
         let proxy = UITabBar.appearance()
-        updateTabTitle(font: titleFont, in: proxy.standardAppearance)
-        if let scrollEdge = proxy.scrollEdgeAppearance {
-            updateTabTitle(font: titleFont, in: scrollEdge)
-        }
+
+        let standard = proxy.standardAppearance
+        updateTabTitle(font: titleFont, in: standard)
+        proxy.standardAppearance = standard
+
+        let scrollEdge = proxy.scrollEdgeAppearance ?? UITabBarAppearance()
+        updateTabTitle(font: titleFont, in: scrollEdge)
+        proxy.scrollEdgeAppearance = scrollEdge
     }
 
     private func updateTabTitle(font: UIFont, in appearance: UITabBarAppearance) {

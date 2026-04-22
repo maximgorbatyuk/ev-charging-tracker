@@ -296,6 +296,12 @@
 "Light" = "Hell";
 "Dark" = "Dunkel";
 
+/* Font family */
+"Font" = "Schriftart";
+"font.family.system" = "System";
+"font.family.jetbrains_mono" = "JetBrains Mono";
+"Selected" = "Ausgewählt";
+
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
 

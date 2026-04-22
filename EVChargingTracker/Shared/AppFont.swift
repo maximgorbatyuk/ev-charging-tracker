@@ -26,6 +26,8 @@ enum AppFontStyle {
 }
 
 enum AppFont {
+    /// Does JetBrains Mono cover this language's script? Kazakh Cyrillic
+    /// extensions and CJK are excluded. `.system` family ignores this.
     static func supports(_ language: AppLanguage) -> Bool {
         switch language {
         case .kk, .zhHans:
@@ -35,16 +37,26 @@ enum AppFont {
         }
     }
 
+    /// Whether the custom (JetBrains Mono) path should be taken. False when
+    /// the user picked `.system`, or when the language isn't covered.
+    private static func shouldUseCustom(
+        family: AppFontFamily,
+        language: AppLanguage
+    ) -> Bool {
+        family == .jetBrainsMono && supports(language)
+    }
+
     static func resolve(
         style: AppFontStyle,
         language: AppLanguage,
+        family: AppFontFamily = AppFontFamilyManager.shared.currentFamily,
         weight: Font.Weight? = nil,
         italic: Bool = false
     ) -> Font {
         let (size, textStyle, defaultWeight) = metrics(for: style)
         let effectiveWeight = weight ?? defaultWeight
 
-        guard supports(language) else {
+        guard shouldUseCustom(family: family, language: language) else {
             let base = systemFont(style: style, weight: effectiveWeight)
             return italic ? base.italic() : base
         }
@@ -56,13 +68,14 @@ enum AppFont {
     static func resolveUIFont(
         style: AppFontStyle,
         language: AppLanguage,
+        family: AppFontFamily = AppFontFamilyManager.shared.currentFamily,
         weight: Font.Weight = .regular,
         italic: Bool = false
     ) -> UIFont {
         let (size, textStyle, _) = metrics(for: style)
         let scaler = UIFontMetrics(forTextStyle: uiKitTextStyle(from: textStyle))
 
-        if supports(language),
+        if shouldUseCustom(family: family, language: language),
            let custom = UIFont(
                name: postScriptName(weight: weight, italic: italic),
                size: size
@@ -163,6 +176,7 @@ enum AppFont {
 
 private struct AppFontModifier: ViewModifier {
     @ObservedObject private var localization = LocalizationManager.shared
+    @ObservedObject private var fontFamily = AppFontFamilyManager.shared
     let style: AppFontStyle
     let weight: Font.Weight?
     let italic: Bool
@@ -172,6 +186,7 @@ private struct AppFontModifier: ViewModifier {
             AppFont.resolve(
                 style: style,
                 language: localization.currentLanguage,
+                family: fontFamily.currentFamily,
                 weight: weight,
                 italic: italic
             )

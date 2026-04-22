@@ -295,6 +295,12 @@
 "Light" = "Светлая";
 "Dark" = "Тёмная";
 
+/* Font family */
+"Font" = "Шрифт";
+"font.family.system" = "Системный";
+"font.family.jetbrains_mono" = "JetBrains Mono";
+"Selected" = "Выбрано";
+
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
 

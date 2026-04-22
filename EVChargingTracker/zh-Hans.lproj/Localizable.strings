@@ -293,6 +293,12 @@
 "Light" = "浅色";
 "Dark" = "深色";
 
+/* Font family */
+"Font" = "字体";
+"font.family.system" = "系统";
+"font.family.jetbrains_mono" = "JetBrains Mono";
+"Selected" = "已选";
+
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
 

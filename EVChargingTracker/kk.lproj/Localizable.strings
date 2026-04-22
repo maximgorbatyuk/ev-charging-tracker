@@ -302,6 +302,12 @@
 "Light" = "Ашық";
 "Dark" = "Қараңғы";
 
+/* Font family */
+"Font" = "Қаріп";
+"font.family.system" = "Жүйелік";
+"font.family.jetbrains_mono" = "JetBrains Mono";
+"Selected" = "Таңдалды";
+
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
 

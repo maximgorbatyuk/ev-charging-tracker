@@ -32,12 +32,14 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showLaunchScreen = false
     @State private var showDocumentStorageBrowser = false
     @State private var showFontPreview = false
+    @State private var showFontSelection = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var environment = EnvironmentService.shared
     @ObservedObject private var developerMode = DeveloperModeManager.shared
     @ObservedObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject private var fontFamilyManager = AppFontFamilyManager.shared
 
     @Environment(\.requestReview) var requestReview
 
@@ -110,6 +112,30 @@ struct UserSettingsView: SwiftUICore.View {
                             viewModel.saveAppearanceMode(newMode)
                         }
                     }
+
+                    Button(action: {
+                        analytics.trackEvent("font_picker_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "font_picker"
+                        ])
+
+                        showFontSelection = true
+                    }) {
+                        HStack {
+                            Text(L("Font"))
+                                .foregroundColor(.primary)
+
+                            Spacer()
+
+                            Text(fontFamilyManager.currentFamily.displayName)
+                                .foregroundColor(.secondary)
+
+                            Image(systemName: "chevron.right")
+                                .appFont(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
 
                     VStack {
                         HStack {
@@ -788,6 +814,9 @@ struct UserSettingsView: SwiftUICore.View {
             }
             .sheet(isPresented: $showFontPreview) {
                 FontPreviewView()
+            }
+            .sheet(isPresented: $showFontSelection) {
+                FontSelectionView()
             }
             .fileImporter(
                 isPresented: $showImportFilePicker,

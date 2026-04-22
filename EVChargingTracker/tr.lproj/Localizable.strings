@@ -295,6 +295,12 @@
 "Light" = "Açık";
 "Dark" = "Koyu";
 
+/* Font family */
+"Font" = "Yazı tipi";
+"font.family.system" = "Sistem";
+"font.family.jetbrains_mono" = "JetBrains Mono";
+"Selected" = "Seçildi";
+
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
 

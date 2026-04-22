@@ -12,6 +12,7 @@ class MockUserSettingsRepository: UserSettingsRepositoryProtocol {
     var currency: Currency = .usd
     var language: AppLanguage = .en
     var expensesSortingOption: ExpensesSortingOption = .creationDate
+    var fontFamily: AppFontFamily = .jetBrainsMono
     var userId: String? = "test-user-id"
 
     // Call tracking
@@ -74,6 +75,15 @@ class MockUserSettingsRepository: UserSettingsRepositoryProtocol {
 
     func upsertExpensesSortingOption(_ option: ExpensesSortingOption) -> Bool {
         expensesSortingOption = option
+        return true
+    }
+
+    func fetchFontFamily() -> AppFontFamily {
+        return fontFamily
+    }
+
+    func upsertFontFamily(_ family: AppFontFamily) -> Bool {
+        fontFamily = family
         return true
     }
 

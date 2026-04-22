@@ -13,6 +13,8 @@ protocol UserSettingsRepositoryProtocol {
     func fetchUserId() -> String?
     func fetchExpensesSortingOption() -> ExpensesSortingOption
     func upsertExpensesSortingOption(_ option: ExpensesSortingOption) -> Bool
+    func fetchFontFamily() -> AppFontFamily
+    func upsertFontFamily(_ family: AppFontFamily) -> Bool
     func fetchAllSettings() -> [UserSettingEntry]
 }
 
@@ -153,6 +155,26 @@ class UserSettingsRepository: UserSettingsRepositoryProtocol {
     @discardableResult
     func upsertExpensesSortingOption(_ option: ExpensesSortingOption) -> Bool {
         return upsertValue(key: Self.expensesSortingKey, value: option.rawValue)
+    }
+
+    // MARK: - Font Family
+
+    /// Fetches the selected font family from the database
+    /// - Returns: The stored family, or `.jetBrainsMono` if unset (preserves current default)
+    func fetchFontFamily() -> AppFontFamily {
+        if let value = fetchValue(for: UserSettingKey.fontFamily.rawValue),
+           let family = AppFontFamily(rawValue: value) {
+            return family
+        }
+        return .jetBrainsMono
+    }
+
+    /// Saves the selected font family to the database
+    /// - Parameter family: The font family to save
+    /// - Returns: `true` if the operation succeeded
+    @discardableResult
+    func upsertFontFamily(_ family: AppFontFamily) -> Bool {
+        return upsertValue(key: UserSettingKey.fontFamily.rawValue, value: family.rawValue)
     }
 
     // MARK: - Debug / Developer Mode
