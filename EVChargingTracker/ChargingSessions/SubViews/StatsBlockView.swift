@@ -14,29 +14,20 @@ struct StatsBlockView: SwiftUICore.View {
     let chargingSessionsCount: Int
 
     var body: some SwiftUICore.View {
-        HStack(spacing: 12) {
+        HStack(alignment: .top, spacing: 10) {
             StatCard(
                 title: L("CO₂ saved (kg)"),
-                value: String(format: "%.1f", co2Saved),
-                icon: "globe",
-                color: .green,
-                minHeight: 90
+                value: String(format: "%.1f", co2Saved)
             )
 
             StatCard(
                 title: L("kWh / 100km"),
-                value: String(format: "%.1f ", averageEnergy),
-                icon: "chart.line.uptrend.xyaxis",
-                color: .blue,
-                minHeight: 90
+                value: String(format: "%.1f", averageEnergy)
             )
 
             StatCard(
                 title: L("Charges"),
-                value: "\(chargingSessionsCount)",
-                icon: "gauge.high",
-                color: .cyan,
-                minHeight: 90
+                value: "\(chargingSessionsCount)"
             )
         }
     }
@@ -44,36 +35,27 @@ struct StatsBlockView: SwiftUICore.View {
 
 struct StatCard: SwiftUICore.View {
 
-    @Environment(\.colorScheme) var colorScheme
-
     let title: String
     let value: String
-    let icon: String
-    let color: Color
-    let minHeight: CGFloat
 
     var body: some SwiftUICore.View {
-        VStack(alignment: .leading, spacing: 3) {
-            HStack {
+        AppCard(pad: 14) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .appFont(.caption)
-                    .foregroundColor(.gray)
-                Image(systemName: icon)
-                    .foregroundColor(color)
-            }
+                    .textCase(.uppercase)
+                    .appFont(.caption2, weight: .semibold)
+                    .tracking(0.3)
+                    .foregroundColor(AppColors.inkSoft)
+                    .lineLimit(2, reservesSpace: true)
+                    .minimumScaleFactor(0.8)
 
-            Text(value)
-                .appFont(.custom(size: 16), weight: .bold)
-                .foregroundColor(colorScheme == .dark ? .white : .primary)
+                Text(value)
+                    .font(AppFont.mono(size: 22, weight: .bold, relativeTo: .title2))
+                    .tracking(-0.8)
+                    .foregroundColor(AppColors.ink)
+                    .minimumScaleFactor(0.6)
+                    .lineLimit(1)
+            }
         }
-        .frame(maxWidth: .infinity, minHeight: minHeight)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.2))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                )
-        )
     }
 }

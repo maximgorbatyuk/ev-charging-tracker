@@ -442,3 +442,5 @@
 "documents" = "belge";
 "ideas" = "fikir";
 "import.documents_metadata_only" = "Not: Belge dosyaları yedeklemeye dahil değildir. Yalnızca belge meta verileri geri yüklenecektir.";
+
+"Energy per month" = "Aylık enerji";

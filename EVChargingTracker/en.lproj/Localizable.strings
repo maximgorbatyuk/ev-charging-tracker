@@ -440,3 +440,5 @@
 "documents" = "documents";
 "ideas" = "ideas";
 "import.documents_metadata_only" = "Note: Document files are not included in the backup. Only document metadata will be restored.";
+
+"Energy per month" = "Energy per month";

@@ -14,94 +14,82 @@ struct ChargingConsumptionLineChart: SwiftUI.View {
     }
 
     var body: some SwiftUI.View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header
-            VStack(alignment: .leading, spacing: 4) {
-                Text(L("Energy per month"))
-                    .appFont(.headline)
-                    .fontWeight(.bold)
-
+        AppCard(pad: 0) {
+            VStack(alignment: .leading, spacing: 0) {
                 if viewModel.hasData {
                     Text(String(format: L("%.1f kWh/month average"), viewModel.overallAverage))
-                        .appFont(.subheadline)
-                        .foregroundColor(.secondary)
+                        .appFont(.footnote)
+                        .foregroundColor(AppColors.inkSoft)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 14)
                 }
-            }
-            .padding(.horizontal)
 
-            if viewModel.isLoading {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 200)
-            } else {
-                Chart {
-                    ForEach(viewModel.monthlyData) { data in
-                        LineMark(
-                            x: .value("Month", data.monthName),
-                            y: .value("Charging", data.totalEnergy)
-                        )
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [Color.orange, Color.red.opacity(0.8)],
-                                startPoint: .leading,
-                                endPoint: .trailing
+                if viewModel.isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 200)
+                } else {
+                    Chart {
+                        ForEach(viewModel.monthlyData) { data in
+                            LineMark(
+                                x: .value("Month", data.monthName),
+                                y: .value("Charging", data.totalEnergy)
                             )
-                        )
-                        .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
-                        .interpolationMethod(.catmullRom)
+                            .foregroundStyle(AppColors.orange)
+                            .lineStyle(StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
+                            .interpolationMethod(.catmullRom)
 
-                        AreaMark(
-                            x: .value("Month", data.monthName),
-                            y: .value("Charging", data.totalEnergy)
-                        )
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [
-                                    Color.orange.opacity(0.3),
-                                    Color.red.opacity(0.1)
-                                ],
-                                startPoint: .top,
-                                endPoint: .bottom
+                            AreaMark(
+                                x: .value("Month", data.monthName),
+                                y: .value("Charging", data.totalEnergy)
                             )
-                        )
-                        .interpolationMethod(.catmullRom)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [
+                                        AppColors.orange.opacity(0.28),
+                                        AppColors.orange.opacity(0)
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                            .interpolationMethod(.catmullRom)
 
-                        PointMark(
-                            x: .value("Month", data.monthName),
-                            y: .value("Charging", data.totalEnergy)
-                        )
-                        .foregroundStyle(Color.orange)
-                        .symbolSize(60)
+                            PointMark(
+                                x: .value("Month", data.monthName),
+                                y: .value("Charging", data.totalEnergy)
+                            )
+                            .foregroundStyle(AppColors.orange)
+                            .symbolSize(20)
+                        }
                     }
-                }
-                .chartYAxis {
-                    AxisMarks(position: .leading) { value in
-                        AxisGridLine()
-                        AxisValueLabel {
-                            if let doubleValue = value.as(Double.self) {
-                                Text(String(format: "%.1f", doubleValue))
-                                    .appFont(.caption)
+                    .chartYAxis {
+                        AxisMarks(position: .leading) { value in
+                            AxisValueLabel {
+                                if let doubleValue = value.as(Double.self) {
+                                    Text(String(format: "%.1f", doubleValue))
+                                        .appFont(.caption)
+                                        .foregroundColor(AppColors.inkSoft)
+                                }
                             }
                         }
                     }
-                }
-                .chartXAxis {
-                    AxisMarks { value in
-                        AxisValueLabel {
-                            if let stringValue = value.as(String.self) {
-                                Text(stringValue)
-                                    .appFont(.caption)
+                    .chartXAxis {
+                        AxisMarks { value in
+                            AxisValueLabel {
+                                if let stringValue = value.as(String.self) {
+                                    Text(stringValue)
+                                        .appFont(.caption)
+                                        .foregroundColor(AppColors.inkSoft)
+                                }
                             }
                         }
                     }
+                    .chartYAxisLabel("kWh", position: .leading)
+                    .frame(height: 220)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 14)
                 }
-                .chartYAxisLabel("kWh", position: .leading)
-                .frame(height: 220)
-                .padding()
-                .background(
-                    ShadowBackgroundView()
-                )
-                .padding(.horizontal)
             }
         }
         .onAppear {

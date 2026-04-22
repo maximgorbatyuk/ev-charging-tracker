@@ -440,3 +440,5 @@
 "documents" = "文件";
 "ideas" = "想法";
 "import.documents_metadata_only" = "注意：备份中不包含文件本身，仅恢复文件元数据。";
+
+"Energy per month" = "月度能耗";

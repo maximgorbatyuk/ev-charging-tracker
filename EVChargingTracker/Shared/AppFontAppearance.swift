@@ -23,12 +23,27 @@ final class AppFontAppearance {
     func start() {
         applyCurrent()
 
+        // `@Published` emits on `willSet`, so the wrappedValue we'd re-read
+        // from the source inside the sink is still the OLD value. Use the
+        // value the publisher hands us instead — that's the new one being
+        // assigned. Without this, UIKit appearance lags one tap behind
+        // SwiftUI re-renders, producing the body/title font swap.
         LocalizationManager.shared.$currentLanguage
-            .sink { [weak self] _ in self?.applyCurrent() }
+            .sink { [weak self] newLanguage in
+                self?.apply(
+                    language: newLanguage,
+                    family: AppFontFamilyManager.shared.currentFamily
+                )
+            }
             .store(in: &cancellables)
 
         AppFontFamilyManager.shared.$currentFamily
-            .sink { [weak self] _ in self?.applyCurrent() }
+            .sink { [weak self] newFamily in
+                self?.apply(
+                    language: LocalizationManager.shared.currentLanguage,
+                    family: newFamily
+                )
+            }
             .store(in: &cancellables)
     }
 
@@ -46,6 +61,56 @@ final class AppFontAppearance {
 
         applyNavBar(titleFont: navFont, largeTitleFont: largeTitleFont)
         applyTabBar(titleFont: tabFont)
+        refreshLiveBars()
+    }
+
+    /// `UI{NavigationBar,TabBar}.appearance()` only affects bars created
+    /// AFTER the proxy is mutated — currently-visible bars keep their cached
+    /// appearance until they're re-instantiated. Walk live windows and copy
+    /// the proxy values onto the visible bars so font changes show up
+    /// immediately, not only after navigation.
+    private func refreshLiveBars() {
+        let navProxy = UINavigationBar.appearance()
+        let standardNav = navProxy.standardAppearance
+        let scrollEdgeNav = navProxy.scrollEdgeAppearance
+        let compactNav = navProxy.compactAppearance
+
+        let tabProxy = UITabBar.appearance()
+        let standardTab = tabProxy.standardAppearance
+        let scrollEdgeTab = tabProxy.scrollEdgeAppearance
+
+        for scene in UIApplication.shared.connectedScenes {
+            guard
+                let windowScene = scene as? UIWindowScene,
+                windowScene.activationState != .unattached
+            else { continue }
+            for window in windowScene.windows {
+                guard let root = window.rootViewController else { continue }
+                walk(root) { vc in
+                    if let nav = vc as? UINavigationController {
+                        nav.navigationBar.standardAppearance = standardNav
+                        nav.navigationBar.scrollEdgeAppearance = scrollEdgeNav
+                        nav.navigationBar.compactAppearance = compactNav
+                        nav.navigationBar.setNeedsLayout()
+                    }
+                    if let tab = vc as? UITabBarController {
+                        tab.tabBar.standardAppearance = standardTab
+                        tab.tabBar.scrollEdgeAppearance = scrollEdgeTab
+                        tab.tabBar.setNeedsLayout()
+                    }
+                }
+            }
+        }
+    }
+
+    private func walk(_ vc: UIViewController, visit: (UIViewController) -> Void) {
+        visit(vc)
+        for child in vc.children {
+            walk(child, visit: visit)
+        }
+        if let presented = vc.presentedViewController {
+            walk(presented, visit: visit)
+        }
     }
 
     private func applyNavBar(titleFont: UIFont, largeTitleFont: UIFont) {

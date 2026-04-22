@@ -131,6 +131,11 @@ enum AppFont {
         }
     }
 
+    /// The project bundles 5 JetBrains Mono weights (Regular / Medium / Bold
+    /// / Italic / BoldItalic). SemiBold (600) is not bundled, so `.semibold`
+    /// rounds down to Medium here. If SemiBold is ever added to
+    /// `EVChargingTracker/Fonts/`, update this switch and `Info.plist`
+    /// `UIAppFonts` together.
     static func postScriptName(weight: Font.Weight, italic: Bool) -> String {
         let isBold = weight == .bold || weight == .heavy || weight == .black
         let isMedium = weight == .medium || weight == .semibold
@@ -140,6 +145,30 @@ enum AppFont {
         case (false, true): return italicName
         case (false, false): return isMedium ? mediumName : regularName
         }
+    }
+
+    /// Always returns JetBrains Mono regardless of the user's selected
+    /// `AppFontFamily`. Use for numeric values (kWh, $, %, mi/km, durations,
+    /// dates) per `docs/guidelines/design.md` §4.1 — numerics are not user-
+    /// selectable.
+    ///
+    /// `relativeTo` anchors Dynamic Type scaling: pick the `TextStyle` whose
+    /// default size is closest to the passed `size` so the mono numeric
+    /// scales in sync with surrounding labels (e.g. a 22pt KPI value pairs
+    /// with `.title2`, a 28pt hero pairs with `.title`).
+    static func mono(
+        size: CGFloat,
+        weight: Font.Weight = .regular,
+        relativeTo textStyle: Font.TextStyle = .body
+    ) -> Font {
+        let name = postScriptName(weight: weight, italic: false)
+        #if DEBUG
+        assert(
+            UIFont(name: name, size: size) != nil,
+            "Missing JetBrains Mono asset for weight \(weight): expected PostScript name '\(name)'. Check EVChargingTracker/Fonts/ and Info.plist UIAppFonts."
+        )
+        #endif
+        return Font.custom(name, size: size, relativeTo: textStyle)
     }
 
     private static func uiKitWeight(from weight: Font.Weight) -> UIFont.Weight {
