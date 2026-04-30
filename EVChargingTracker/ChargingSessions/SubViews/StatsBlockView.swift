@@ -50,7 +50,8 @@ struct StatCard: SwiftUICore.View {
                     .minimumScaleFactor(0.8)
 
                 Text(value)
-                    .font(AppFont.mono(size: 22, weight: .bold, relativeTo: .title2))
+                    .appFont(.title2, weight: .bold)
+                    .monospacedDigit()
                     .tracking(-0.8)
                     .foregroundColor(AppColors.ink)
                     .minimumScaleFactor(0.6)

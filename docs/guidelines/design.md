@@ -20,7 +20,7 @@ When this guideline conflicts with what you see in the prototype, the prototype 
 - **Apple-native grammar.** iOS grouped backgrounds, sheet grab handles, large-title nav, stock `TabView`, haptic-ready buttons. Nothing that reads as "web" or "Material".
 - **Green = energy.** Brand greens own all "energy / eco / healthy / reward" signals: positive deltas, savings, efficiency chips, CO₂ impact, primary confirmatory CTAs.
 - **Orange = action/cost accent.** Cost emphases, scheduled/due chips, primary FAB on cost-related tabs. Orange is reserved — if everything is orange, nothing is.
-- **Monospace for numbers.** JetBrains Mono on every numeric value (kWh, $, %, mi/km, duration, dates) — independent of the user's display-face choice. Titles and labels use the user's selected display face: **JetBrains Mono is the app default**; iOS system and (once bundled) Space Grotesk are alternatives — see §4.1.
+- **Tabular numerics.** Every numeric value (kWh, $, %, mi/km, duration, dates) renders in the user's selected display face with `.monospacedDigit()` applied — so digit columns line up cleanly across families (System swaps to SF Pro's tabular figures; JetBrains Mono is already monospaced; Space Grotesk uses its tabular-figures feature). The point is column alignment, not literal monospace; the family follows the user's choice. **JetBrains Mono is the app default**; iOS system and (once bundled) Space Grotesk are alternatives — see §4.1.
 - **Dark mode is a mirror, not a re-skin.** Canvas goes true black, surfaces climb to `#1C1C1E`/`#2C2C2E`. Drop shadows are replaced by inset 1px white-alpha hairlines. Brand greens stay the same values; their _soft_ variants switch to `rgba(brand, 0.16)`.
 - **Charts are flat and quiet.** Thin strokes, gradient fills that fade to zero. Stacked-bar series use brand + system pops — no axis grids inside the chart, legends live below.
 
@@ -149,12 +149,12 @@ private extension UIColor {
 
 ### 4.1 Faces
 
-The display face (titles, greetings, large numbers, nav titles) is **user-selectable** via the existing `FontSelectionView` (Settings → Base settings → Font). Numeric values always render in JetBrains Mono regardless of the choice.
+The display face (titles, greetings, large numbers, nav titles) is **user-selectable** via the existing `FontSelectionView` (Settings → Base settings → Font). Numeric values use the same selected family with `.monospacedDigit()` applied for tabular alignment.
 
 | Role | Face | Status in codebase |
 |---|---|---|
 | Display / titles / hero copy | **User-selected** — defaults to JetBrains Mono. Options: JetBrains Mono · iOS system · Space Grotesk (pending bundling). | Picker ships today with 2 options (`AppFontFamily.jetBrainsMono` default, `.system`); Space Grotesk is the third option pending bundling. |
-| Data / numeric values (kWh, $, %, mi/km, durations, dates) | **JetBrains Mono** (fixed — not user-selectable) | Shipping. Apply unconditionally; ignore the user's display-face choice for numeric content. |
+| Data / numeric values (kWh, $, %, mi/km, durations, dates) | **User-selected display face** + `.monospacedDigit()` SwiftUI modifier for tabular figures | Shipping. Apply via `.appFont(...).monospacedDigit()` at every numeric Text; do not hard-code a specific font. |
 | UI labels, captions, body text next to numbers | Inherits the user's selected display face | Already wired via `AppFontModifier`. |
 
 **Selectable display faces — character & role:**
@@ -169,7 +169,7 @@ The display face (titles, greetings, large numbers, nav titles) is **user-select
 - Bundle Space Grotesk TTFs in `EVChargingTracker/Fonts/` (main app target only, **not** ShareExtension).
 - Register in `Info.plist` `UIAppFonts` array.
 - Extend `AppFontFamily` from 2 cases to 3: add `case spaceGrotesk = "space_grotesk"`. Update `displayName` (e.g. `L("font.family.space_grotesk")`), localized strings in all 7 `.lproj` files, and the `MockUserSettingsRepository` default if needed.
-- Update `AppFont.resolve` / `resolveUIFont` so the new family resolves to Space Grotesk for title-role styles and falls through to JetBrains Mono / system for body and numeric paths (numerics stay JetBrains Mono regardless).
+- Update `AppFont.resolve` / `resolveUIFont` so the new family resolves to Space Grotesk across all role styles (display, body, and numeric). Numerics use the same family — `.monospacedDigit()` on the call site supplies tabular alignment.
 - `FontSelectionView` already iterates `AppFontFamily.allCases` and renders each row in its own family — no view changes required beyond the enum extension.
 - Verify Space Grotesk glyph coverage for `.kk` (Kazakh extended Cyrillic) and `.zhHans` (Simplified Chinese) in `supports(_:)`. If a script is uncovered, fall back to system for that language while keeping Space Grotesk for covered locales.
 
@@ -181,18 +181,18 @@ The display face (titles, greetings, large numbers, nav titles) is **user-select
 
 Values lifted from the prototype. All weights / sizes are in points. **Face column key:**
 - **Display** → the user's selected `AppFontFamily` (Space Grotesk / JetBrains Mono / system).
-- **Mono** → JetBrains Mono, fixed regardless of selection.
+- **Numeric** → the user's selected `AppFontFamily` + `.monospacedDigit()` for tabular figures. Same family as Display; the modifier guarantees column alignment regardless of which face is active.
 - **UI** → the user's selected `AppFontFamily`, same as Display but at smaller sizes.
 
 | Role | Size | Weight | Letter-spacing | Face | Example |
 |---|---|---|---|---|---|
 | Hero title (screen large-title) | 34 | 800 | -1 | Display | "Stats" nav large-title |
 | Greeting | 28 | 800 | -0.8 | Display | "Good morning, …" |
-| Big numeric (hero stat) | 38 | 700 | -1.4 | Mono | "$47.32" total spend |
-| Card stat | 22–32 | 700 | -0.5 to -1 | Mono | KPI card values |
+| Big numeric (hero stat) | 38 | 700 | -1.4 | Numeric | "$47.32" total spend |
+| Card stat | 22–32 | 700 | -0.5 to -1 | Numeric | KPI card values |
 | Nav title (compact bar) | 17 | 600 | -0.3 | Display | "New expense" |
 | List row title | 15 | 500 | -0.2 | UI | Session label |
-| List row right-value | 15 | 700 | 0 | Mono | "$3.56" |
+| List row right-value | 15 | 700 | 0 | Numeric | "$3.56" |
 | Chip / button body | 13 | 600 | -0.1 to -0.2 | UI | "See all", chip text |
 | Label (eyebrow over value) | 11 | 600 | 0.3, UPPERCASE | UI | "TOTAL SPEND" |
 | Caption | 11–13 | 500–600 | 0.2 | UI | Row sub-label, legend text |
@@ -206,7 +206,7 @@ Values lifted from the prototype. All weights / sizes are in points. **Face colu
 **Mapping to existing `AppFont`:**
 - `largeTitle` (34, `.largeTitle`) → Hero. Resolves to selected family at the heaviest available weight.
 - `title` (28) → Greeting.
-- `title2` (22) / `title3` (20) → KPI mono values when no bigger hero is present (these stay JetBrains Mono — they are numerics).
+- `title2` (22) / `title3` (20) → KPI numeric values when no bigger hero is present. Apply `.monospacedDigit()` at the call site for tabular alignment; the family follows the user's selection.
 - `headline` (17, semibold) → compact nav title / section-pinned header (matches).
 - `subheadline` (15) → row title (matches at weight 500).
 - `caption` / `caption2` (11–13) → eyebrow labels, tab labels, legend captions.

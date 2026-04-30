@@ -71,7 +71,8 @@ struct CostsBlockView: SwiftUICore.View {
                 HStack(alignment: .lastTextBaseline, spacing: 6) {
                     HStack(alignment: .lastTextBaseline, spacing: 2) {
                         Text(getFormattedDigits())
-                            .font(AppFont.mono(size: 28, weight: .bold, relativeTo: .title))
+                            .appFont(.title, weight: .bold)
+                            .monospacedDigit()
                             .tracking(-1.0)
                             .foregroundColor(AppColors.ink)
                         Text(currency.rawValue)
