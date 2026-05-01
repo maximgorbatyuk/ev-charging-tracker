@@ -8,6 +8,7 @@
 // Define keys used to store user settings in the DB
 enum UserSettingKey: String {
     case currency = "currency"
+    case fontFamily = "font_family"
 }
 
 // New: supported app languages
@@ -52,3 +53,19 @@ enum AppearanceMode: String, CaseIterable, Codable {
         }
     }
 }
+
+/// User-selectable font family. `.system` always uses the iOS system font;
+/// `.jetBrainsMono` uses bundled JetBrains Mono (falls back to system for
+/// unsupported scripts — see `AppFont.supports(_:)`).
+enum AppFontFamily: String, CaseIterable, Codable {
+    case system = "system"
+    case jetBrainsMono = "jetbrains_mono"
+
+    var displayName: String {
+        switch self {
+        case .system: return L("font.family.system")
+        case .jetBrainsMono: return L("font.family.jetbrains_mono")
+        }
+    }
+}
+

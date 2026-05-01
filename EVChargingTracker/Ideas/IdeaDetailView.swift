@@ -63,10 +63,10 @@ struct IdeaDetailView: SwiftUI.View {
             // Title
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("Title"))
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.gray)
                 Text(idea.title)
-                    .font(.title2)
+                    .appFont(.title2)
                     .fontWeight(.semibold)
             }
 
@@ -77,15 +77,15 @@ struct IdeaDetailView: SwiftUI.View {
                let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("URL"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.gray)
 
                     Link(destination: url) {
                         HStack(spacing: 6) {
                             Image(systemName: "link")
-                                .font(.subheadline)
+                                .appFont(.subheadline)
                             Text(idea.hostName ?? urlString)
-                                .font(.body)
+                                .appFont(.body)
                                 .lineLimit(1)
                         }
                         .foregroundColor(.blue)
@@ -98,10 +98,10 @@ struct IdeaDetailView: SwiftUI.View {
             if let description = idea.descriptionText, !description.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Description"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.gray)
                     Text(description)
-                        .font(.body)
+                        .appFont(.body)
                 }
                 Divider()
             }
@@ -109,10 +109,10 @@ struct IdeaDetailView: SwiftUI.View {
             // Created at
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("Created"))
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.gray)
                 Text(idea.createdAt.formatted(as: "yyyy-MM-dd HH:mm"))
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(.secondary)
             }
 
@@ -120,10 +120,10 @@ struct IdeaDetailView: SwiftUI.View {
             if abs(idea.updatedAt.timeIntervalSince(idea.createdAt)) > 1.0 {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Updated"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.gray)
                     Text(idea.updatedAt.formatted(as: "yyyy-MM-dd HH:mm"))
-                        .font(.subheadline)
+                        .appFont(.subheadline)
                         .foregroundColor(.secondary)
                 }
             }
@@ -175,9 +175,9 @@ struct IdeaDetailView: SwiftUI.View {
         Button(action: action) {
             VStack(spacing: 6) {
                 Image(systemName: icon)
-                    .font(.title2)
+                    .appFont(.title2)
                 Text(title)
-                    .font(.caption)
+                    .appFont(.caption)
             }
             .frame(maxWidth: .infinity)
             .foregroundColor(color)

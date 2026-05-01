@@ -13,15 +13,16 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
     @Environment(\.colorScheme) var colorScheme
 
     let record: PlannedMaintenanceItem
+    let measurementSystem: MeasurementSystem
 
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 8) {
             Text(record.name)
-                .font(.headline)
+                .appFont(.headline)
                 .foregroundColor(colorScheme == .dark ? .white : .primary)
 
             if record.when != nil || record.odometer != nil {
-                PlannedOnView(record: record)
+                PlannedOnView(record: record, measurementSystem: measurementSystem)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -39,6 +40,7 @@ struct PlannedMaintenanceItemView: SwiftUICore.View {
 
 struct PlannedOnView: SwiftUICore.View {
     let record: PlannedMaintenanceItem
+    let measurementSystem: MeasurementSystem
 
     @State private var now = Date()
 
@@ -49,17 +51,17 @@ struct PlannedOnView: SwiftUICore.View {
                     when.formatted(as: "yyyy-MM-dd"),
                     systemImage: "calendar"
                 )
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .fontWeight(now > when ? .semibold : .regular)
                 .foregroundColor(now > when ? .red : .secondary)
             }
 
             if let odometer = record.odometer {
                 Label(
-                    "\(odometer.formatted()) km",
+                    "\(odometer.formatted()) \(measurementSystem.distanceUnitLabel)",
                     systemImage: "speedometer"
                 )
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.secondary)
             }
         }

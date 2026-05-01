@@ -4,91 +4,97 @@ struct ChargingSessionsView: SwiftUICore.View {
     @StateObject private var viewModel = ChargingViewModel()
     @State private var showingAddSession = false
     @ObservedObject private var analytics = AnalyticsService.shared
-    @Environment(\.colorScheme) var colorScheme
 
     var body: some SwiftUICore.View {
         ZStack {
-            Color.blue
+            AppColors.bg
                 .ignoresSafeArea()
 
             NavigationView {
                 ScrollView {
                     VStack(spacing: 16) {
-                        if viewModel.statData != nil {
+                        if let statData = viewModel.statData {
+                            let unit = viewModel.selectedCarForExpenses?.measurementSystem ?? .metric
                             StatsBlockView(
-                                co2Saved: viewModel.statData!.co2Saved,
-                                averageEnergy: viewModel.statData!.avgConsumptionKWhPer100,
-                                chargingSessionsCount: viewModel.statData!.totalChargingSessionsCount
+                                co2Saved: statData.co2Saved,
+                                averageEnergy: statData.avgConsumptionKWhPer100,
+                                chargingSessionsCount: statData.totalChargingSessionsCount,
+                                measurementSystem: unit
                             )
                             .padding(.horizontal)
 
-                            if viewModel.totalCost > 0 {
+                            if viewModel.totalCost > 0,
+                               let car = viewModel.selectedCarForExpenses {
 
                                 CostsBlockView(
-                                    title: L("One kilometer price (charging only)"),
-                                    hint: L("How much one kilometer costs you including only charging expenses"),
-                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
-                                    costsValue: viewModel.statData!.oneKmPriceBasedOnlyOnCharging,
-                                    perKilometer: true
+                                    title: car.measurementSystem == .imperial
+                                        ? L("One mile price (charging only)")
+                                        : L("One kilometer price (charging only)"),
+                                    hint: car.measurementSystem == .imperial
+                                        ? L("How much one mile costs you including only charging expenses")
+                                        : L("How much one kilometer costs you including only charging expenses"),
+                                    currency: car.expenseCurrency,
+                                    costsValue: statData.oneKmPriceBasedOnlyOnCharging,
+                                    perKilometer: true,
+                                    measurementSystem: car.measurementSystem
                                 )
+                                .padding(.horizontal)
 
                                 CostsBlockView(
-                                    title: L("One kilometer price (total)"),
-                                    hint: L("How much one kilometer costs you including all logged expenses"),
-                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
-                                    costsValue: viewModel.statData!.oneKmPriceIncludingAllExpenses,
-                                    perKilometer: true
+                                    title: car.measurementSystem == .imperial
+                                        ? L("One mile price (total)")
+                                        : L("One kilometer price (total)"),
+                                    hint: car.measurementSystem == .imperial
+                                        ? L("How much one mile costs you including all logged expenses")
+                                        : L("How much one kilometer costs you including all logged expenses"),
+                                    currency: car.expenseCurrency,
+                                    costsValue: statData.oneKmPriceIncludingAllExpenses,
+                                    perKilometer: true,
+                                    measurementSystem: car.measurementSystem
                                 )
+                                .padding(.horizontal)
 
                                 CostsBlockView(
                                     title: L("Total charging costs"),
                                     hint: nil,
-                                    currency: viewModel.selectedCarForExpenses!.expenseCurrency,
-                                    costsValue: viewModel.statData!.totalChargingCost,
+                                    currency: car.expenseCurrency,
+                                    costsValue: statData.totalChargingCost,
                                     perKilometer: false
                                 )
+                                .padding(.horizontal)
                             }
+
+                            AppButton(
+                                L("Add Charging Session"),
+                                kind: .accent,
+                                size: .lg,
+                                icon: "plus",
+                                fullWidth: true,
+                                action: { showingAddSession = true }
+                            )
+                            .padding(.horizontal)
 
                             if viewModel.expenses.isEmpty {
                                 NoExpensesView()
                                     .padding(.top, 60)
                             }
 
-                            Button(action: {
-                                showingAddSession = true
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text(L("Add Charging Session"))
-                                        .fontWeight(.semibold)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(
-                                    LinearGradient(
-                                        colors: [Color.orange, Color.red.opacity(0.8)],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                    .background(.black)
-                                )
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
-                            }
-                            .padding(.horizontal)
-
                             // Consumption Trend Chart
-                            if viewModel.consumptionLineChartData != nil {
-                                ChargingConsumptionLineChart(
-                                    data: viewModel.consumptionLineChartData!)
-                                .padding(.top, 20)
+                            if let consumptionData = viewModel.consumptionLineChartData {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    AppSectionHeader(L("Energy per month"))
+                                    ChargingConsumptionLineChart(data: consumptionData)
+                                        .padding(.horizontal)
+                                }
                             }
 
-                            if viewModel.expenseChartData != nil {
-                                ExpensesChartView(data: viewModel.expenseChartData!)
-                                    .id(viewModel.expenseChartData!.id)
-                                    .padding(.horizontal)
-                                    .padding(.top, 20)
+                            if let expenseData = viewModel.expenseChartData {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    AppSectionHeader(L("Expenses chart"))
+                                    ExpensesChartView(data: expenseData)
+                                        .id(expenseData.id)
+                                        .padding(.horizontal)
+                                }
                             }
 
                         } else {
@@ -99,6 +105,8 @@ struct ChargingSessionsView: SwiftUICore.View {
                     } // end of VStack
                     .padding(.vertical)
                 } // end of ScrollView
+                .scrollContentBackground(.hidden)
+                .background(AppColors.bg)
                 .navigationTitle(L("Car stats"))
                 .navigationBarTitleDisplayMode(.automatic)
                 .sheet(isPresented: $showingAddSession) {

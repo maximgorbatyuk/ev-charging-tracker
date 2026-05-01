@@ -68,11 +68,11 @@ struct DocumentEditView: SwiftUI.View {
     private func metadataRow(title: String, value: String) -> some SwiftUI.View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.caption)
+                .appFont(.caption)
                 .foregroundStyle(.secondary)
 
             Text(value)
-                .font(.body)
+                .appFont(.body)
                 .textSelection(.enabled)
         }
         .padding(.vertical, 2)

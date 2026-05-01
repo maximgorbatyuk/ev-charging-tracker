@@ -13,6 +13,16 @@ enum ExpenseType: String, CaseIterable, Codable {
     case repair = "repair"
     case carwash = "carwash"
     case other = "other"
+
+    var localizedName: String {
+        switch self {
+        case .charging: return L("Filter.Charges")
+        case .maintenance: return L("Filter.Maintenance")
+        case .repair: return L("Filter.Repair")
+        case .carwash: return L("Filter.Carwash")
+        case .other: return L("Filter.Other")
+        }
+    }
 }
 
 enum ExpensesSortingOption: String, CaseIterable, Codable {

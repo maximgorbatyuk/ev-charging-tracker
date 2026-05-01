@@ -14,13 +14,13 @@ struct CostsBlockView: SwiftUICore.View {
     let currency: Currency
     let costsValue: Double
     let perKilometer: Bool
+    var measurementSystem: MeasurementSystem = .metric
 
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject private var analytics = AnalyticsService.shared
 
     @State private var showingHelp = false
 
-    func getMoneyFormattedText() -> String {
+    func getFormattedDigits() -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 2
@@ -28,70 +28,67 @@ struct CostsBlockView: SwiftUICore.View {
         formatter.groupingSeparator = " "
 
         let number = NSNumber(value: costsValue)
-        let formattedNumber = formatter.string(from: number)!
-        return "\(formattedNumber)\(currency.rawValue)"
+        return formatter.string(from: number) ?? "—"
     }
 
     var body: some SwiftUICore.View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(title)
-                    .font(.subheadline)
-                    .foregroundColor(colorScheme == .dark ? .white : .black)
-                Spacer()
+        AppCard {
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text(title)
+                        .textCase(.uppercase)
+                        .appFont(.caption2, weight: .semibold)
+                        .tracking(0.3)
+                        .foregroundColor(AppColors.inkSoft)
+                    Spacer()
 
-                if let hint = hint {
-
-                    Button(action: {
-                        analytics.trackEvent("hint_button_clicked", properties: [
-                                "title": title
-                            ])
-
-                        showingHelp.toggle()
-                    }) {
-                        Image(systemName: "info.circle")
-                            .foregroundColor(.gray)
-                            .help(hint)
-                    }
-                    .popover(isPresented: $showingHelp) {
-
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(L("Hint"))
-                                .font(.headline)
-
-                            Text(hint)
-                                .fixedSize(horizontal: false, vertical: true)
+                    if let hint = hint {
+                        Button(action: {
+                            analytics.trackEvent(
+                                "hint_button_clicked",
+                                properties: ["title": title]
+                            )
+                            showingHelp.toggle()
+                        }) {
+                            Image(systemName: "info.circle")
+                                .foregroundColor(AppColors.inkSoft)
+                                .help(hint)
                         }
-                        .padding()
-                        .presentationCompactAdaptation(.popover)
-                        .frame(width: 250)
+                        .popover(isPresented: $showingHelp) {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text(L("Hint"))
+                                    .appFont(.headline)
+
+                                Text(hint)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .padding()
+                            .presentationCompactAdaptation(.popover)
+                            .frame(width: 250)
+                        }
                     }
                 }
-            }
 
-            HStack(alignment: .lastTextBaseline) {
-                Text(getMoneyFormattedText())
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                HStack(alignment: .lastTextBaseline, spacing: 6) {
+                    HStack(alignment: .lastTextBaseline, spacing: 2) {
+                        Text(getFormattedDigits())
+                            .appFont(.title, weight: .bold)
+                            .monospacedDigit()
+                            .tracking(-1.0)
+                            .foregroundColor(AppColors.ink)
+                        Text(currency.rawValue)
+                            .appFont(.title2, weight: .bold)
+                            .foregroundColor(AppColors.ink)
+                    }
 
-                if perKilometer {
-                    Text(L("per km"))
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                    if perKilometer {
+                        Text(measurementSystem == .imperial ? L("per mi") : L("per km"))
+                            .appFont(.footnote, weight: .medium)
+                            .foregroundColor(AppColors.inkSoft)
+                    }
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray.opacity(0.05))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                )
-        )
-        .padding(.horizontal)
     }
 
 }
@@ -104,4 +101,5 @@ struct CostsBlockView: SwiftUICore.View {
         costsValue: 45,
         perKilometer: true
     )
+    .padding()
 }

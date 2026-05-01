@@ -76,11 +76,11 @@ struct CarDetailsRootView: SwiftUI.View {
             HStack {
                 HStack(spacing: 8) {
                     Image(systemName: "car.fill")
-                        .font(.headline)
+                        .appFont(.headline)
                         .foregroundColor(.green)
 
                     Text(L("Car mileage"))
-                        .font(.headline)
+                        .appFont(.headline)
                         .foregroundColor(.primary)
                 }
 
@@ -89,9 +89,9 @@ struct CarDetailsRootView: SwiftUI.View {
                 Button(action: { showEditCarSheet = true }) {
                     HStack(spacing: 4) {
                         Text(L("Edit"))
-                            .font(.subheadline)
+                            .appFont(.subheadline)
                         Image(systemName: "chevron.right")
-                            .font(.caption)
+                            .appFont(.caption)
                     }
                     .foregroundColor(.orange)
                 }
@@ -133,7 +133,8 @@ struct CarDetailsRootView: SwiftUI.View {
                         initialMileage: car.initialMileage,
                         expenseCurrency: car.expenseCurrency,
                         frontWheelSize: car.frontWheelSize,
-                        rearWheelSize: car.rearWheelSize
+                        rearWheelSize: car.rearWheelSize,
+                        measurementSystem: car.measurementSystem
                     ),
                     defaultCurrency: car.expenseCurrency,
                     defaultValueForSelectedForTracking: car.selectedForTracking,
@@ -148,7 +149,8 @@ struct CarDetailsRootView: SwiftUI.View {
                             expenseCurrency: updated.expenseCurrency,
                             selectedForTracking: updated.selectedForTracking,
                             frontWheelSize: updated.frontWheelSize,
-                            rearWheelSize: updated.rearWheelSize
+                            rearWheelSize: updated.rearWheelSize,
+                            measurementSystem: updated.measurementSystem
                         )
                         _ = viewModel.updateCar(carToUpdate)
                         showEditCarSheet = false
@@ -189,8 +191,9 @@ struct CarDetailsRootView: SwiftUI.View {
                 .contentShape(Rectangle())
                 .onTapGesture { onNavigate(.maintenance) }
             } else {
+                let unit = viewModel.selectedCar?.measurementSystem ?? .metric
                 ForEach(viewModel.maintenancePreview) { record in
-                    MaintenancePreviewRow(record: record)
+                    MaintenancePreviewRow(record: record, measurementSystem: unit)
                         .contentShape(Rectangle())
                         .onTapGesture { onNavigate(.maintenance) }
                     if record.id != viewModel.maintenancePreview.last?.id {

@@ -23,6 +23,7 @@ struct EVChargingTrackerApp: App {
     init() {
         // Warm up DatabaseManager early so migration runs before any DB-backed UI state
         _ = DatabaseManager.shared
+        AppFontAppearance.shared.start()
     }
 
     var body: some Scene {
@@ -66,6 +67,7 @@ struct EVChargingTrackerApp: App {
                         .transition(.opacity)
                 }
             }
+            .appFont(.body)
             .animation(.easeInOut(duration: 0.3), value: isAppReady)
             .preferredColorScheme(appearanceManager.colorScheme)
             .onAppear {

@@ -64,7 +64,7 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
-                customColor: ExpensesChartViewModel.colorForExpenseType(.charging),
+                customColor: ExpenseType.charging.color,
                 isSelected: false),
 
             FilterButtonItem(
@@ -77,7 +77,7 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
-                customColor: ExpensesChartViewModel.colorForExpenseType(.repair),
+                customColor: ExpenseType.repair.color,
                 isSelected: false),
 
             FilterButtonItem(
@@ -90,7 +90,7 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
-                customColor: ExpensesChartViewModel.colorForExpenseType(.maintenance),
+                customColor: ExpenseType.maintenance.color,
                 isSelected: false),
 
             FilterButtonItem(
@@ -103,7 +103,7 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
-                customColor: ExpensesChartViewModel.colorForExpenseType(.carwash),
+                customColor: ExpenseType.carwash.color,
                 isSelected: false),
 
             FilterButtonItem(
@@ -116,25 +116,9 @@ class ExpensesChartViewModel: ObservableObject {
                             "screen": ExpensesChartViewModel.ScreenName
                         ])
                 },
-                customColor: ExpensesChartViewModel.colorForExpenseType(.other),
+                customColor: ExpenseType.other.color,
                 isSelected: false)
         ]
-    }
-
-    public static func colorForExpenseType(_ type: ExpenseType) -> Color {
-        let opacity = 0.9
-        switch type {
-        case .charging:
-            return .yellow.opacity(opacity)
-        case .maintenance:
-            return .green.opacity(opacity)
-        case .repair:
-            return .orange.opacity(opacity)
-        case .carwash:
-            return .blue.opacity(opacity)
-        case .other:
-            return .purple.opacity(opacity)
-        }
     }
 
     private static func createExpensesToShow(
@@ -187,20 +171,6 @@ class ExpensesChartViewModel: ObservableObject {
         }
     }
 
-    func localizedExpenseType(_ type: ExpenseType) -> String {
-        switch type {
-        case .charging:
-            return L("Filter.Charges")
-        case .repair:
-            return L("Filter.Repair")
-        case .maintenance:
-            return L("Filter.Maintenance")
-        case .carwash:
-            return L("Filter.Carwash")
-        case .other:
-            return L("Other")
-        }
-    }
 }
 
 struct MonthlyExpenseData: Identifiable {

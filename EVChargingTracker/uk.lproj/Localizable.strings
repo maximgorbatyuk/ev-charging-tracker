@@ -291,6 +291,12 @@
 "Light" = "Світла";
 "Dark" = "Темна";
 
+/* Font family */
+"Font" = "Шрифт";
+"font.family.system" = "Системний";
+"font.family.jetbrains_mono" = "JetBrains Mono";
+"Selected" = "Вибрано";
+
 /* Launch Screen */
 "EV Charge Tracker" = "EV Charge Tracker";
 
@@ -432,3 +438,24 @@
 "documents" = "документів";
 "ideas" = "ідей";
 "import.documents_metadata_only" = "Примітка: файли документів не включені в резервну копію. Будуть відновлені лише метадані документів.";
+
+"Energy per month" = "Енергія за місяць";
+
+/* Measurement system */
+"Measurement system" = "Система мір";
+"Metric (km, kg)" = "Метрична (км, кг)";
+"Imperial (mi, lb)" = "Імперська (миля, фунт)";
+"km" = "км";
+"mi" = "миля";
+"kg" = "кг";
+"lb" = "фунт";
+"CO₂ saved (%@)" = "Збережено CO₂ (%@)";
+"kWh / 100mi" = "кВт·год / 100миль";
+"per mi" = "за милю";
+"Odometer (%@)" = "Одометр (%@)";
+"Initial (%@)" = "Початковий (%@)";
+"Current (%@)" = "Поточний (%@)";
+"One mile price (charging only)" = "Вартість однієї милі (лише зарядка)";
+"How much one mile costs you including only charging expenses" = "Скільки коштує одна миля, враховуючи лише витрати на зарядку";
+"One mile price (total)" = "Вартість однієї милі (загалом)";
+"How much one mile costs you including all logged expenses" = "Скільки коштує одна миля, враховуючи всі записані витрати";

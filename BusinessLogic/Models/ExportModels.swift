@@ -53,6 +53,9 @@ struct ExportCar: Codable {
     let createdAt: Date
     let frontWheelSize: String?
     let rearWheelSize: String?
+    /// Optional for back-compat: backups created before schema v8 omit
+    /// this field, and `toCar()` defaults them to `.metric`.
+    let measurementSystem: String?
 
     init(from car: Car) {
         self.id = car.id
@@ -66,9 +69,14 @@ struct ExportCar: Codable {
         self.createdAt = car.createdAt
         self.frontWheelSize = car.frontWheelSize
         self.rearWheelSize = car.rearWheelSize
+        self.measurementSystem = car.measurementSystem.rawValue
     }
 
     func toCar() -> Car {
+        let parsedMeasurement = measurementSystem
+            .flatMap { MeasurementSystem(rawValue: $0) }
+            ?? .metric
+
         let car = Car(
             name: name,
             selectedForTracking: selectedForTracking,
@@ -79,7 +87,8 @@ struct ExportCar: Codable {
             milleageSyncedAt: milleageSyncedAt,
             createdAt: createdAt,
             frontWheelSize: frontWheelSize,
-            rearWheelSize: rearWheelSize
+            rearWheelSize: rearWheelSize,
+            measurementSystem: parsedMeasurement
         )
         car.id = id
         return car

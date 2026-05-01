@@ -10,17 +10,18 @@ import SwiftUI
 struct MaintenancePreviewRow: SwiftUI.View {
 
     let record: PlannedMaintenanceItem
+    let measurementSystem: MeasurementSystem
 
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
             Image(systemName: "wrench.and.screwdriver.fill")
-                .font(.title3)
+                .appFont(.title3)
                 .foregroundColor(.blue)
                 .frame(width: 32, height: 32)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(record.name)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .fontWeight(.medium)
                     .lineLimit(1)
 
@@ -30,16 +31,16 @@ struct MaintenancePreviewRow: SwiftUI.View {
                             when.formatted(as: "yyyy-MM-dd"),
                             systemImage: "calendar"
                         )
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(Date() > when ? .red : .secondary)
                     }
 
                     if let odometer = record.odometer {
                         Label(
-                            "\(odometer.formatted()) km",
+                            "\(odometer.formatted()) \(measurementSystem.distanceUnitLabel)",
                             systemImage: "speedometer"
                         )
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.secondary)
                     }
                 }
@@ -59,18 +60,18 @@ struct DocumentPreviewRow: SwiftUI.View {
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
             Image(systemName: CarDocument.iconName(for: document.fileType))
-                .font(.title3)
+                .appFont(.title3)
                 .foregroundColor(CarDocument.iconColor(for: document.fileType))
                 .frame(width: 32, height: 32)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(document.displayTitle)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .fontWeight(.medium)
                     .lineLimit(1)
 
                 Text(document.formattedFileSize)
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.secondary)
             }
 
@@ -88,28 +89,28 @@ struct IdeaPreviewRow: SwiftUI.View {
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
             Image(systemName: "lightbulb.fill")
-                .font(.title3)
+                .appFont(.title3)
                 .foregroundColor(.yellow)
                 .frame(width: 32, height: 32)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(idea.title)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .fontWeight(.medium)
                     .lineLimit(1)
 
                 if let host = idea.hostName {
                     HStack(spacing: 4) {
                         Image(systemName: "link")
-                            .font(.caption2)
+                            .appFont(.caption2)
                         Text(host)
                             .lineLimit(1)
                     }
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.blue)
                 } else if let desc = idea.descriptionText, !desc.isEmpty {
                     Text(desc)
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
@@ -130,8 +131,8 @@ struct CarInfoContent: SwiftUI.View {
         VStack(spacing: 0) {
             CarInfoRow(
                 icon: "road.lanes",
-                label: L("Current (km)"),
-                value: "\(car.currentMileage.formatted()) km"
+                label: String(format: L("Current (%@)"), car.measurementSystem.distanceUnitLabel),
+                value: "\(car.currentMileage.formatted()) \(car.measurementSystem.distanceUnitLabel)"
             )
 
             Divider().padding(.leading, 56)
@@ -139,7 +140,7 @@ struct CarInfoContent: SwiftUI.View {
             CarInfoRow(
                 icon: "gauge.with.dots.needle.bottom.50percent",
                 label: L("Total mileage"),
-                value: "\(car.getTotalMileage().formatted()) km"
+                value: "\(car.getTotalMileage().formatted()) \(car.measurementSystem.distanceUnitLabel)"
             )
 
             if let front = car.frontWheelSize, !front.isEmpty {
@@ -174,18 +175,18 @@ private struct CarInfoRow: SwiftUI.View {
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.title3)
+                .appFont(.title3)
                 .foregroundColor(.green)
                 .frame(width: 32, height: 32)
 
             Text(label)
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .foregroundColor(.secondary)
 
             Spacer()
 
             Text(value)
-                .font(.subheadline)
+                .appFont(.subheadline)
                 .fontWeight(.medium)
         }
         .padding(.horizontal)
@@ -203,10 +204,10 @@ struct EmptySectionView: SwiftUI.View {
             Spacer()
             VStack(spacing: 8) {
                 Image(systemName: icon)
-                    .font(.title2)
+                    .appFont(.title2)
                     .foregroundColor(.gray.opacity(0.5))
                 Text(message)
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.secondary)
             }
             .padding(.vertical, 20)

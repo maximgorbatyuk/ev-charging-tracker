@@ -142,7 +142,7 @@ struct AddExpenseView: SwiftUICore.View {
 
                         Text(alertMessage!)
                             .fontWeight(.semibold)
-                            .font(.system(size: 16, weight: .bold))
+                            .appFont(.custom(size: 16), weight: .bold)
                     }
                     .padding(8)
                     .listRowBackground(Color.yellow.opacity(0.2))
@@ -230,7 +230,8 @@ struct AddExpenseView: SwiftUICore.View {
 
                     VStack {
                         HStack {
-                            Text(L("Odometer (km)"))
+                            let unit = selectedCardForExpense?.measurementSystem.distanceUnitLabel ?? L("km")
+                            Text(String(format: L("Odometer (%@)"), unit))
                             Spacer()
                             TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
                                 .keyboardType(.numberPad)
@@ -238,7 +239,7 @@ struct AddExpenseView: SwiftUICore.View {
                         }
 
                         Text(L("If you leave it empty, the current mileage of the selected car will be used."))
-                            .font(.footnote)
+                            .appFont(.footnote)
                             .foregroundColor(.gray)
                             .padding(.top, 2)
                             .frame(maxWidth: .infinity, alignment: .leading)

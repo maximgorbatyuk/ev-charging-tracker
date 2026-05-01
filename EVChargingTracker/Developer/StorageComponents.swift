@@ -15,15 +15,15 @@ struct StorageStatsSection: SwiftUI.View {
         Section {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Storage Usage")
-                    .font(.headline)
+                    .appFont(.headline)
 
                 Text(stats.formattedTotalSize)
-                    .font(.title2)
+                    .appFont(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.blue)
 
                 Text("\(stats.fileCount) files in \(stats.folderCount) folders")
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.secondary)
             }
             .padding(.vertical, 8)
@@ -38,17 +38,17 @@ struct FolderRow: SwiftUI.View {
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
             Image(systemName: "folder.fill")
-                .font(.title2)
+                .appFont(.title2)
                 .foregroundColor(.blue)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.name)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .lineLimit(1)
 
                 if let count = item.fileCount {
                     Text("\(count) files \u{2022} \(item.formattedSize)")
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.secondary)
                 }
             }
@@ -64,16 +64,16 @@ struct FileRow: SwiftUI.View {
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
             Image(systemName: item.icon)
-                .font(.title2)
+                .appFont(.title2)
                 .foregroundColor(item.iconColor)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.name)
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .lineLimit(1)
 
                 Text("\(item.fileType) \u{2022} \(item.formattedSize) \u{2022} \(formatDate(item.modificationDate))")
-                    .font(.caption)
+                    .appFont(.caption)
                     .foregroundColor(.secondary)
             }
         }

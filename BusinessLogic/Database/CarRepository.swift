@@ -37,6 +37,7 @@ class CarRepository: CarRepositoryProtocol {
     private let createdAtColumn = Expression<Date>("created_at")
     private let frontWheelSizeColumn = Expression<String?>("front_wheel_size")
     private let rearWheelSizeColumn = Expression<String?>("rear_wheel_size")
+    private let measurementSystemColumn = Expression<String>("measurement_system")
 
     private let userSettingsRepository: UserSettingsRepository
     private var db: Connection
@@ -69,6 +70,7 @@ class CarRepository: CarRepositoryProtocol {
             t.column(createdAtColumn)
             t.column(frontWheelSizeColumn)
             t.column(rearWheelSizeColumn)
+            t.column(measurementSystemColumn, defaultValue: MeasurementSystem.metric.rawValue)
         }
     }
 
@@ -112,7 +114,8 @@ class CarRepository: CarRepositoryProtocol {
                 milleageSyncedAtColumn <- car.milleageSyncedAt,
                 createdAtColumn <- currentDate,
                 frontWheelSizeColumn <- car.frontWheelSize,
-                rearWheelSizeColumn <- car.rearWheelSize
+                rearWheelSizeColumn <- car.rearWheelSize,
+                measurementSystemColumn <- car.measurementSystem.rawValue
             )
 
             let rowId = try db.run(insert)
@@ -173,7 +176,8 @@ class CarRepository: CarRepositoryProtocol {
                 milleageSyncedAtColumn <- car.milleageSyncedAt,
                 selectedForTrackingColumn <- car.selectedForTracking,
                 frontWheelSizeColumn <- car.frontWheelSize,
-                rearWheelSizeColumn <- car.rearWheelSize
+                rearWheelSizeColumn <- car.rearWheelSize,
+                measurementSystemColumn <- car.measurementSystem.rawValue
             )
             let updated = try db.run(update)
             return updated > 0
@@ -305,6 +309,16 @@ class CarRepository: CarRepositoryProtocol {
         let currency = Currency(rawValue: row[expenseCurrencyColumn])
             ?? userSettingsRepository.fetchCurrency()
 
+        let measurementSystem: MeasurementSystem = {
+            // Older rows (pre-migration default) and unrecognized values
+            // both fall back to .metric so existing data displays unchanged.
+            if let raw = try? row.get(measurementSystemColumn),
+               let parsed = MeasurementSystem(rawValue: raw) {
+                return parsed
+            }
+            return .metric
+        }()
+
         return Car(
             id: row[idColumn],
             name: row[nameColumn],
@@ -316,7 +330,8 @@ class CarRepository: CarRepositoryProtocol {
             milleageSyncedAt: row[milleageSyncedAtColumn],
             createdAt: row[createdAtColumn],
             frontWheelSize: row[frontWheelSizeColumn],
-            rearWheelSize: row[rearWheelSizeColumn]
+            rearWheelSize: row[rearWheelSizeColumn],
+            measurementSystem: measurementSystem
         )
     }
 

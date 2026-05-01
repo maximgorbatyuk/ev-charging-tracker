@@ -23,16 +23,16 @@ struct CarDetailsSectionView<Content: SwiftUI.View>: SwiftUI.View {
             HStack {
                 HStack(spacing: 8) {
                     Image(systemName: iconName)
-                        .font(.headline)
+                        .appFont(.headline)
                         .foregroundColor(iconColor)
 
                     Text(title)
-                        .font(.headline)
+                        .appFont(.headline)
                         .foregroundColor(.primary)
 
                     if badgeCount > 0 {
                         Text("\(badgeCount)")
-                            .font(.caption)
+                            .appFont(.caption)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                             .padding(.horizontal, 8)
@@ -41,7 +41,7 @@ struct CarDetailsSectionView<Content: SwiftUI.View>: SwiftUI.View {
                             .clipShape(Capsule())
                     } else if itemCount > 0 {
                         Text("\(itemCount)")
-                            .font(.caption)
+                            .appFont(.caption)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                             .padding(.horizontal, 8)
@@ -56,9 +56,9 @@ struct CarDetailsSectionView<Content: SwiftUI.View>: SwiftUI.View {
                 Button(action: onSeeAll) {
                     HStack(spacing: 4) {
                         Text(L("See all"))
-                            .font(.subheadline)
+                            .appFont(.subheadline)
                         Image(systemName: "chevron.right")
-                            .font(.caption)
+                            .appFont(.caption)
                     }
                     .foregroundColor(.orange)
                 }

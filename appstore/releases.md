@@ -1,5 +1,49 @@
 # Release notes
 
+## 2026.2.4
+
+### English
+
+```
+You can now switch each car between metric (km, kg) and imperial (mi, lb), so the whole app shows distance and CO₂ in the units you prefer. We also refreshed the Stats and Expenses screens, added a font picker in Settings so you can choose between the new JetBrains Mono and the System font, and improved overall stability.
+```
+
+### Русский (RU)
+
+```
+Теперь для каждого автомобиля можно выбрать метрическую (км, кг) или имперскую (мили, фунты) систему — приложение покажет пробег и CO₂ в удобных вам единицах. Также мы освежили экраны статистики и расходов, добавили выбор шрифта в настройках (новый JetBrains Mono или системный) и поработали над стабильностью.
+```
+
+### Қазақша (KK)
+
+```
+Енді әр көлік үшін метрлік (км, кг) немесе империялық (миля, фунт) жүйені таңдауға болады — қолданба жүрісті мен CO₂-ны өзіңізге ыңғайлы өлшем бірлігінде көрсетеді. Сонымен қатар статистика мен шығындар экрандарын жаңарттық, баптауларға қаріп таңдау мүмкіндігін қостық (жаңа JetBrains Mono немесе жүйелік) және тұрақтылықты жақсарттық.
+```
+
+### Türkçe (TR)
+
+```
+Artık her aracı metrik (km, kg) veya İngiliz birim (mi, lb) sistemine ayarlayabilirsiniz — uygulama mesafeyi ve CO₂'yi tercih ettiğiniz birimlerde gösterir. Ayrıca İstatistik ve Giderler ekranlarını yeniledik, ayarlara bir yazı tipi seçici ekledik (yeni JetBrains Mono ya da Sistem yazı tipi) ve genel kararlılığı iyileştirdik.
+```
+
+### Українська (UK)
+
+```
+Тепер для кожного автомобіля можна вибрати метричну (км, кг) або імперську (милі, фунти) систему — застосунок показуватиме пробіг і CO₂ у звичних вам одиницях. Також ми освіжили екрани статистики й витрат, додали вибір шрифту в налаштуваннях (новий JetBrains Mono чи системний) та попрацювали над стабільністю.
+```
+
+### Deutsch (DE)
+
+```
+Sie können jetzt für jedes Fahrzeug zwischen metrisch (km, kg) und imperial (mi, lb) wechseln — die App zeigt Strecke und CO₂ dann in den von Ihnen bevorzugten Einheiten an. Außerdem haben wir die Statistik- und Ausgaben-Bildschirme aufgefrischt, einen Schriftart-Wähler in den Einstellungen ergänzt (neue JetBrains Mono oder System-Schrift) und die allgemeine Stabilität verbessert.
+```
+
+### 简体中文 (ZH-Hans)
+
+```
+现在您可以为每辆车单独选择公制 (km, kg) 或英制 (mi, lb) 单位 — 应用会以您偏好的单位显示里程和 CO₂。我们还刷新了统计和费用界面，在设置中加入了字体切换选项（新的 JetBrains Mono 或系统字体），并改进了应用的稳定性。
+```
+
 ## 2026.2.3
 
 ### English

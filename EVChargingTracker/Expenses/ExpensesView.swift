@@ -15,14 +15,15 @@ struct ExpensesView: SwiftUICore.View {
     @State private var expenseToDelete: Expense?
     @State private var expenseToEdit: Expense?
 
-    @Environment(\.colorScheme) var colorScheme
-
     private let analytics = AnalyticsService.shared
 
     var body: some SwiftUICore.View {
         ZStack(alignment: .bottomTrailing) {
-            NavigationView {
-                expensesMainContent
+            NavigationStack {
+                ZStack {
+                    AppColors.bg.ignoresSafeArea()
+                    expensesMainContent
+                }
                 .navigationTitle(L("All car expenses"))
                 .navigationBarTitleDisplayMode(.automatic)
                 .sheet(isPresented: $showingAddSession) {
@@ -65,6 +66,10 @@ struct ExpensesView: SwiftUICore.View {
                 }
                 .onAppear {
                     analytics.trackScreen(viewModel.analyticsScreenName)
+                    // Re-fetch the selected car so changes made in Settings
+                    // (e.g. measurement system toggle) take effect when the
+                    // user returns to this tab.
+                    viewModel.loadSessions()
                 }
                 .refreshable {
                     viewModel.loadSessions()
@@ -83,14 +88,14 @@ struct ExpensesView: SwiftUICore.View {
             showingAddSession = true
         }) {
             Image(systemName: "plus")
-                .font(.title2)
+                .appFont(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)
                 .background(
                     Circle()
                         .fill(floatingButtonColor)
-                        .shadow(color: floatingButtonColor.opacity(0.4), radius: 8, x: 0, y: 4)
+                        .shadow(color: floatingButtonColor.opacity(0.45), radius: 8, x: 0, y: 4)
                 )
         }
         .padding(.trailing, 20)
@@ -98,22 +103,23 @@ struct ExpensesView: SwiftUICore.View {
     }
 
     private var floatingButtonColor: Color {
-        AppTheme.tabMenuTintColor(for: colorScheme)
+        // design.md §6.9 — cost-related tabs use the orange FAB.
+        AppColors.orange
     }
 
      private var emptyStateView: some SwiftUICore.View {
         VStack(spacing: 16) {
             Image(systemName: "dollarsign.circle.fill")
                 .font(.system(size: 64))
-                .foregroundColor(.gray.opacity(0.5))
+                .foregroundColor(AppColors.inkFaint)
 
             Text(L("No expenses yet"))
-                .font(.title3)
-                .foregroundColor(.gray)
+                .appFont(.title3)
+                .foregroundColor(AppColors.inkSoft)
 
             Text(L("Add your first expense to start tracking"))
-                .font(.subheadline)
-                .foregroundColor(.gray.opacity(0.9))
+                .appFont(.subheadline)
+                .foregroundColor(AppColors.inkSoft)
         }
         .padding(.top, 60)
     }
@@ -122,11 +128,11 @@ struct ExpensesView: SwiftUICore.View {
        VStack(spacing: 16) {
            Image(systemName: "dollarsign.circle.fill")
                .font(.system(size: 64))
-               .foregroundColor(.gray.opacity(0.5))
+               .foregroundColor(AppColors.inkFaint)
 
            Text(L("No expenses of this type yet"))
-               .font(.title3)
-               .foregroundColor(.gray)
+               .appFont(.title3)
+               .foregroundColor(AppColors.inkSoft)
        }
        .padding(.top, 60)
    }
@@ -150,8 +156,8 @@ struct ExpensesView: SwiftUICore.View {
     private var sortingSelectorView: some SwiftUICore.View {
         HStack {
             Text(L("Sort by"))
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                .appFont(.subheadline)
+                .foregroundColor(AppColors.inkSoft)
 
             Picker(L("Sort by"), selection: sortingOptionBinding) {
                 ForEach(ExpensesSortingOption.allCases, id: \.self) { option in
@@ -213,17 +219,18 @@ struct ExpensesView: SwiftUICore.View {
                 } else {
                     // Hint text row
                     Text(L("For editing or deleting record, please swipe left"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .fontWeight(.regular)
-                        .foregroundColor(.gray)
+                        .foregroundColor(AppColors.inkSoft)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
 
                     // Expense records
+                    let unit = viewModel.selectedCarForExpenses?.measurementSystem ?? .metric
                     ForEach(viewModel.expenses) { session in
-                        SessionCard(session: session)
+                        SessionCard(session: session, measurementSystem: unit)
                             .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
@@ -282,9 +289,7 @@ struct ExpensesView: SwiftUICore.View {
 
     private var paginationControlsView: some SwiftUICore.View {
         VStack(spacing: 12) {
-            // Navigation buttons
-            HStack(spacing: 16) {
-                // Previous button
+            HStack(spacing: 12) {
                 Button(action: {
                     viewModel.goToPreviousPage()
                 }) {
@@ -292,31 +297,30 @@ struct ExpensesView: SwiftUICore.View {
                         Image(systemName: "chevron.left")
                         Text(L("Previous"))
                     }
-                    .font(.subheadline)
-                    .foregroundColor(viewModel.currentPage > 1 ? .blue : .gray)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.gray.opacity(0.1))
+                    .appFont(.subheadline, weight: .medium)
+                    .foregroundColor(
+                        viewModel.currentPage > 1 ? AppColors.ink : AppColors.inkFaint
                     )
+                    .padding(.horizontal, 14)
+                    .frame(minHeight: 44)
+                    .background(
+                        Capsule(style: .continuous).fill(AppColors.surfaceAlt)
+                    )
+                    .contentShape(Capsule())
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.plain)
                 .disabled(viewModel.currentPage <= 1)
 
-                // Current page indicator
                 Text("\(viewModel.currentPage)")
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                    .frame(minWidth: 40)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
+                    .appFont(.headline, weight: .semibold)
+                    .monospacedDigit()
+                    .foregroundColor(AppColors.blue)
+                    .frame(minWidth: 44, minHeight: 44)
+                    .padding(.horizontal, 8)
                     .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.blue.opacity(0.1))
+                        Capsule(style: .continuous).fill(AppColors.blueSoft)
                     )
 
-                // Next button
                 Button(action: {
                     viewModel.goToNextPage()
                 }) {
@@ -324,23 +328,27 @@ struct ExpensesView: SwiftUICore.View {
                         Text(L("Next"))
                         Image(systemName: "chevron.right")
                     }
-                    .font(.subheadline)
-                    .foregroundColor(viewModel.currentPage < viewModel.totalPages ? .blue : .gray)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.gray.opacity(0.1))
+                    .appFont(.subheadline, weight: .medium)
+                    .foregroundColor(
+                        viewModel.currentPage < viewModel.totalPages
+                            ? AppColors.ink
+                            : AppColors.inkFaint
                     )
+                    .padding(.horizontal, 14)
+                    .frame(minHeight: 44)
+                    .background(
+                        Capsule(style: .continuous).fill(AppColors.surfaceAlt)
+                    )
+                    .contentShape(Capsule())
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.plain)
                 .disabled(viewModel.currentPage >= viewModel.totalPages)
             }
 
-            // Information text
             Text(String(format: L("Total records: %d, total pages: %d"), viewModel.totalRecords, viewModel.totalPages))
-                .font(.caption)
-                .foregroundColor(.secondary)
+                .appFont(.caption)
+                .monospacedDigit()
+                .foregroundColor(AppColors.inkSoft)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal)

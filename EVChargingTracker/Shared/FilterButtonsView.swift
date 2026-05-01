@@ -73,7 +73,7 @@ struct FilterButtonsView: SwiftUICore.View {
                 }
                 .frame(maxWidth: .infinity, minHeight: buttonHeight, maxHeight: buttonHeight)
                 .padding(.horizontal, 2)
-                .font(.system(size: 12, weight: .medium))
+                .appFont(.custom(size: 12), weight: .medium)
                 .foregroundColor(colorScheme == .dark ? .white : .black)
                 .animation(.easeInOut, value: button.isSelected)
                 .background {

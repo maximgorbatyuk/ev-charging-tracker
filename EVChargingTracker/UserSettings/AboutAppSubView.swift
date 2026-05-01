@@ -49,18 +49,18 @@ struct AboutAppSubView: SwiftUICore.View {
                         Divider()
                         Text(String(format: L("Version: %@"), environment.getAppVisibleVersion()))
                             .fontWeight(.semibold)
-                            .font(.system(size: 12, weight: .bold))
+                            .appFont(.custom(size: 12), weight: .bold)
                             .foregroundColor(.gray)
 
                         Text(String(format: L("Developer: © %@"), environment.getDeveloperName()))
                             .fontWeight(.semibold)
-                            .font(.system(size: 12, weight: .bold))
+                            .appFont(.custom(size: 12), weight: .bold)
                             .foregroundColor(.gray)
 
                         if environment.getBuildEnvironment() == "dev" {
                             Text(L("Build: development"))
                                 .fontWeight(.semibold)
-                                .font(.system(size: 12, weight: .bold))
+                                .appFont(.custom(size: 12), weight: .bold)
                                 .foregroundColor(.gray)
                         }
                     }

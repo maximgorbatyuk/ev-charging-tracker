@@ -83,7 +83,7 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
 
                         Text(alertMessage!)
                             .fontWeight(.semibold)
-                            .font(.system(size: 16, weight: .bold))
+                            .appFont(.custom(size: 16), weight: .bold)
                     }
                     .padding(8)
                     .listRowBackground(Color.yellow.opacity(0.2))
@@ -112,7 +112,11 @@ struct AddMaintenanceRecordView: SwiftUICore.View {
 
                     VStack {
                         Toggle(L("Remind by odometer (optional)"), isOn: $remindByOdometer)
-                        TextField(selectedCar?.currentMileage.formatted() ?? "0", text: $odometer)
+                        let unit = selectedCar?.measurementSystem.distanceUnitLabel ?? L("km")
+                        TextField(
+                            "\(selectedCar?.currentMileage.formatted() ?? "0") \(unit)",
+                            text: $odometer
+                        )
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.leading)
                             .disabled(!remindByOdometer)

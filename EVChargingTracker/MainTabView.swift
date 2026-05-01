@@ -69,6 +69,17 @@ struct MainTabView: SwiftUI.View {
                     let appVersionCheckResult = await viewModel.checkAppVersion()
                     showAppVersionBadge = appVersionCheckResult ?? false
                 }
+
+                // First-launch trigger for nav-bar font appearance: the
+                // UIAppearance proxy doesn't reliably propagate
+                // scrollEdgeAppearance to bars created by NavigationView,
+                // so force-write onto the bars now that this view (and
+                // therefore the underlying UINavigationControllers) has
+                // mounted. Defer one runloop tick to let SwiftUI finish
+                // attaching the bars.
+                DispatchQueue.main.async {
+                    AppFontAppearance.shared.refreshLiveBars()
+                }
             }
         }
     }

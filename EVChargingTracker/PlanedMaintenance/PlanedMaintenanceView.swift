@@ -193,7 +193,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
             showingAddMaintenanceRecord = true
         }) {
             Image(systemName: "plus")
-                .font(.title2)
+                .appFont(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)
@@ -241,7 +241,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         Image(systemName: "chevron.left")
                         Text(L("Previous"))
                     }
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(viewModel.currentPage > 1 ? .blue : .gray)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -255,7 +255,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
                 // Current page indicator
                 Text("\(viewModel.currentPage)")
-                    .font(.headline)
+                    .appFont(.headline)
                     .foregroundColor(.primary)
                     .frame(minWidth: 40)
                     .padding(.horizontal, 16)
@@ -273,7 +273,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         Text(L("Next"))
                         Image(systemName: "chevron.right")
                     }
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(viewModel.currentPage < viewModel.totalPages ? .blue : .gray)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -288,7 +288,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
 
             // Information text
             Text(String(format: L("Total records: %d, total pages: %d"), viewModel.totalRecords, viewModel.totalPages))
-                .font(.caption)
+                .appFont(.caption)
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity)
@@ -303,7 +303,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                 .foregroundColor(.gray.opacity(0.5))
 
             Text(L("No records match the selected filter"))
-                .font(.title3)
+                .appFont(.title3)
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.center)
         }
@@ -334,7 +334,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                 } else {
                     // Hint text row
                     Text(L("Swipe right to mark as done, left to edit or delete"))
-                        .font(.caption)
+                        .appFont(.caption)
                         .fontWeight(.regular)
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -343,6 +343,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         .listRowBackground(Color.clear)
 
                     // Maintenance records
+                    let unit = viewModel.selectedCarForExpenses?.measurementSystem ?? .metric
                     ForEach(viewModel.maintenanceRecords) { record in
                         Button {
                             analytics.trackEvent(
@@ -353,7 +354,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                                 ])
                             recordToShowDetails = record
                         } label: {
-                            PlannedMaintenanceItemView(record: record)
+                            PlannedMaintenanceItemView(record: record, measurementSystem: unit)
                         }
                         .buttonStyle(.plain)
                         .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
@@ -472,16 +473,16 @@ struct EmptyStateView: SwiftUICore.View {
                .foregroundColor(.gray.opacity(0.5))
 
            Text(L("No maintenance records yet"))
-               .font(.title3)
+               .appFont(.title3)
                .foregroundColor(.gray)
 
            Text(L("Add your first maintenance record"))
-               .font(.subheadline)
+               .appFont(.subheadline)
                .foregroundColor(.gray.opacity(0.9))
 
             if selectedCar == nil {
                 Text(L("Please add car first to track maintenance records"))
-                    .font(.subheadline)
+                    .appFont(.subheadline)
                     .foregroundColor(.gray.opacity(0.9))
             }
        }

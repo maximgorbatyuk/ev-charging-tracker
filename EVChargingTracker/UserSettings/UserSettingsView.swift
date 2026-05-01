@@ -31,12 +31,15 @@ struct UserSettingsView: SwiftUICore.View {
     @State private var showUserSettingsTable = false
     @State private var showLaunchScreen = false
     @State private var showDocumentStorageBrowser = false
+    @State private var showFontPreview = false
+    @State private var showFontSelection = false
 
     @ObservedObject private var analytics = AnalyticsService.shared
     @ObservedObject private var notificationsManager = NotificationManager.shared
     @ObservedObject private var environment = EnvironmentService.shared
     @ObservedObject private var developerMode = DeveloperModeManager.shared
     @ObservedObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject private var fontFamilyManager = AppFontFamilyManager.shared
 
     @Environment(\.requestReview) var requestReview
 
@@ -49,7 +52,7 @@ struct UserSettingsView: SwiftUICore.View {
                     HStack {
                         Text(L("App update available"))
                             .fontWeight(.semibold)
-                            .font(.system(size: 16, weight: .bold))
+                            .appFont(.custom(size: 16), weight: .bold)
 
                         Spacer()
 
@@ -110,11 +113,35 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                     }
 
+                    Button(action: {
+                        analytics.trackEvent("font_picker_button_clicked", properties: [
+                            "screen": "user_settings_screen",
+                            "button_name": "font_picker"
+                        ])
+
+                        showFontSelection = true
+                    }) {
+                        HStack {
+                            Text(L("Font"))
+                                .foregroundColor(.primary)
+
+                            Spacer()
+
+                            Text(fontFamilyManager.currentFamily.displayName)
+                                .foregroundColor(.secondary)
+
+                            Image(systemName: "chevron.right")
+                                .appFont(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+
                     VStack {
                         HStack {
                             Text(L("Notifications enabled"))
                                 .fontWeight(.semibold)
-                                .font(.system(size: 16, weight: .bold))
+                                .appFont(.custom(size: 16), weight: .bold)
 
                             Spacer()
 
@@ -144,14 +171,14 @@ struct UserSettingsView: SwiftUICore.View {
                                 )
                             }
                         }
-                        .font(.caption)
+                        .appFont(.caption)
                     }
 
                     VStack {
                         HStack {
                             Text(L("Currency"))
                                 .fontWeight(.semibold)
-                                .font(.system(size: 16, weight: .bold))
+                                .appFont(.custom(size: 16), weight: .bold)
 
                             Spacer()
 
@@ -166,12 +193,12 @@ struct UserSettingsView: SwiftUICore.View {
                                 }) {
                                     Text(viewModel.defaultCurrency.shortName)
                                         .fontWeight(.semibold)
-                                        .font(.system(size: 16, weight: .bold))
+                                        .appFont(.custom(size: 16), weight: .bold)
                                 }
                             } else {
                                 Text(viewModel.defaultCurrency.shortName)
                                     .fontWeight(.semibold)
-                                    .font(.system(size: 16, weight: .bold))
+                                    .appFont(.custom(size: 16), weight: .bold)
                                     .foregroundColor(.gray)
                             }
                         }
@@ -180,7 +207,7 @@ struct UserSettingsView: SwiftUICore.View {
                             Text(L("It is recommended to set the default currency before adding any expenses."))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .font(.caption)
+                        .appFont(.caption)
                         .foregroundColor(.secondary)
                     }
                 }
@@ -227,16 +254,16 @@ struct UserSettingsView: SwiftUICore.View {
                         HStack(alignment: .top, spacing: 12) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundColor(.orange)
-                                .font(.title3)
+                                .appFont(.title3)
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(L("iCloud Not Available"))
-                                    .font(.subheadline)
+                                    .appFont(.subheadline)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.orange)
 
                                 Text(L("Please sign in to iCloud in Settings to enable backups."))
-                                    .font(.caption)
+                                    .appFont(.caption)
                                     .foregroundColor(.secondary)
                             }
                         }
@@ -276,16 +303,16 @@ struct UserSettingsView: SwiftUICore.View {
                         HStack(alignment: .top, spacing: 12) {
                             Image(systemName: "wifi.slash")
                                 .foregroundColor(.orange)
-                                .font(.title3)
+                                .appFont(.title3)
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(L("No Internet Connection"))
-                                    .font(.subheadline)
+                                    .appFont(.subheadline)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.orange)
 
                                 Text(L("Connect to the internet to create or restore backups."))
-                                    .font(.caption)
+                                    .appFont(.caption)
                                     .foregroundColor(.secondary)
                             }
                         }
@@ -301,7 +328,7 @@ struct UserSettingsView: SwiftUICore.View {
                             Text(formatBackupDate(lastBackup))
                                 .foregroundColor(.secondary)
                         }
-                        .font(.caption)
+                        .appFont(.caption)
                     }
 
                     // View backups button
@@ -324,7 +351,7 @@ struct UserSettingsView: SwiftUICore.View {
                             Spacer()
 
                             Image(systemName: "chevron.right")
-                                .font(.caption)
+                                .appFont(.caption)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -347,7 +374,7 @@ struct UserSettingsView: SwiftUICore.View {
 
                                 if let lastAutoBackup = viewModel.lastAutomaticBackupDate {
                                     Text(L("Last: \(formatBackupDate(lastAutoBackup))"))
-                                        .font(.caption)
+                                        .appFont(.caption)
                                         .foregroundColor(.secondary)
                                 }
                             }
@@ -359,10 +386,10 @@ struct UserSettingsView: SwiftUICore.View {
                     if iCloudAvailable {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(L("Automatic backups to iCloud keep your data safe."))
-                                .font(.caption)
+                                .appFont(.caption)
                                 .foregroundColor(.secondary)
                             Text(L("Maximum 5 backups kept, older than 30 days auto-deleted."))
-                                .font(.caption)
+                                .appFont(.caption)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -550,10 +577,10 @@ struct UserSettingsView: SwiftUICore.View {
                     // Info text
                     VStack(alignment: .leading, spacing: 4) {
                         Text(L("Export your data to back it up or transfer to another device."))
-                            .font(.caption)
+                            .appFont(.caption)
                             .foregroundColor(.secondary)
                         Text(L("Import will replace all existing data."))
-                            .font(.caption)
+                            .appFont(.caption)
                             .foregroundColor(.red)
                     }
                 }
@@ -658,6 +685,20 @@ struct UserSettingsView: SwiftUICore.View {
                         .buttonStyle(.plain)
 
                         Button(action: {
+                            showFontPreview = true
+                        }) {
+                            HStack {
+                                Image(systemName: "textformat")
+                                    .foregroundColor(.indigo)
+
+                                Text("Font preview")
+                                    .padding(.leading, 4)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .buttonStyle(.plain)
+
+                        Button(action: {
                             showDocumentStorageBrowser = true
                         }) {
                             HStack {
@@ -680,7 +721,7 @@ struct UserSettingsView: SwiftUICore.View {
                                 Text("Migration Status")
                                     .foregroundColor(.primary)
                                 Text(viewModel.getMigrationStatus())
-                                    .font(.caption)
+                                    .appFont(.caption)
                                     .foregroundColor(.secondary)
                             }
                             .padding(.leading, 4)
@@ -770,6 +811,12 @@ struct UserSettingsView: SwiftUICore.View {
             }
             .sheet(isPresented: $showDocumentStorageBrowser) {
                 DocumentStorageBrowserView()
+            }
+            .sheet(isPresented: $showFontPreview) {
+                FontPreviewView()
+            }
+            .sheet(isPresented: $showFontSelection) {
+                FontSelectionView()
             }
             .fileImporter(
                 isPresented: $showImportFilePicker,
@@ -909,7 +956,8 @@ struct UserSettingsView: SwiftUICore.View {
                         expenseCurrency: updated.expenseCurrency,
                         selectedForTracking: updated.selectedForTracking,
                         frontWheelSize: updated.frontWheelSize,
-                        rearWheelSize: updated.rearWheelSize)
+                        rearWheelSize: updated.rearWheelSize,
+                        measurementSystem: updated.measurementSystem)
 
                     _ = viewModel.updateCar(car: carToUpdate)
 
@@ -925,7 +973,8 @@ struct UserSettingsView: SwiftUICore.View {
                         milleageSyncedAt: Date(),
                         createdAt: Date(),
                         frontWheelSize: updated.frontWheelSize,
-                        rearWheelSize: updated.rearWheelSize
+                        rearWheelSize: updated.rearWheelSize,
+                        measurementSystem: updated.measurementSystem
                     )
 
                     _ = viewModel.insertCar(newCar)

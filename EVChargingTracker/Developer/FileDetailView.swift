@@ -31,7 +31,7 @@ struct FileDetailView: SwiftUI.View {
                             .font(.system(size: 48))
                             .foregroundColor(file.iconColor)
                         Text(file.name)
-                            .font(.headline)
+                            .appFont(.headline)
                             .multilineTextAlignment(.center)
                     }
                     Spacer()

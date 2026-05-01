@@ -11,19 +11,10 @@ import Charts
 struct ExpensesChartView: SwiftUICore.View {
     let data: ExpensesChartData
 
-    let expenses: [Expense]
-    let currency: Currency
-    let monthsCount: Int
-
     @StateObject var viewModel: ExpensesChartViewModel
-
-    @Environment(\.colorScheme) var colorScheme
 
     init(data: ExpensesChartData) {
         self.data = data
-        self.expenses = data.expenses
-        self.currency = data.currency
-        self.monthsCount = data.monthsCount
 
         _viewModel = StateObject(wrappedValue: ExpensesChartViewModel(
             expenses: data.expenses,
@@ -34,14 +25,7 @@ struct ExpensesChartView: SwiftUICore.View {
 
     var body: some SwiftUICore.View {
         VStack(alignment: .leading, spacing: 12) {
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(L("Expenses chart"))
-                    .font(.headline)
-                    .foregroundColor(colorScheme == .dark ? .white : .primary)
-            }
-
-            VStack(alignment: .leading, spacing: 12) {
+            AppCard(pad: 0) {
                 if viewModel.hasChartItemsToShow {
                     Chart {
                         ForEach(viewModel.monthlyExpenseData) { item in
@@ -50,25 +34,26 @@ struct ExpensesChartView: SwiftUICore.View {
                                 y: .value(L("Cost"), item.amount),
                                 stacking: .standard
                             )
-                            .foregroundStyle(colorForExpenseType(item.expenseType))
+                            .foregroundStyle(item.expenseType.color)
+                            .cornerRadius(4)
                         }
                     }
                     .frame(height: 280)
                     .chartYAxis {
                         AxisMarks(position: .leading) { _ in
-                            AxisGridLine()
-                                .foregroundStyle((colorScheme == .dark ? Color.white : Color.primary).opacity(0.2))
                             AxisValueLabel()
-                                .foregroundStyle(colorScheme == .dark ? .white : .primary)
+                                .foregroundStyle(AppColors.inkSoft)
                         }
                     }
                     .chartXAxis {
                         AxisMarks { _ in
                             AxisValueLabel()
-                                .foregroundStyle(colorScheme == .dark ? .white : .primary)
+                                .foregroundStyle(AppColors.inkSoft)
                         }
                     }
-                    .chartLegend(.hidden) // Hide the automatic legend
+                    .chartLegend(.hidden)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 14)
                 } else {
                     VStack {
                         Spacer()
@@ -77,12 +62,12 @@ struct ExpensesChartView: SwiftUICore.View {
                             .resizable()
                             .scaledToFit()
                             .frame(height: 120)
-                            .foregroundColor(.gray.opacity(0.2))
+                            .foregroundColor(AppColors.inkGhost)
                             .padding(.horizontal)
 
                         Text(L("No expense data available for the selected filter."))
-                            .foregroundColor(.gray)
-                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(AppColors.inkSoft)
+                            .appFont(.custom(size: 14), weight: .semibold)
                             .multilineTextAlignment(.center)
                             .padding(.top, 20)
                             .padding(.horizontal)
@@ -92,31 +77,39 @@ struct ExpensesChartView: SwiftUICore.View {
                     .frame(height: 280)
                     .frame(maxWidth: .infinity, maxHeight: 280)
                 }
-
-                FilterButtonsView(
-                    filterButtons: viewModel.filterButtons)
-                .padding(.top, 8)
             }
-            .padding()
-            .background(
-                ShadowBackgroundView()
-            )
+
+            FilterButtonsView(filterButtons: viewModel.filterButtons)
+
+            if !viewModel.allExpenseTypes.isEmpty {
+                legend
+            }
         }
     }
 
-    private func colorForExpenseType(_ type: ExpenseType) -> Color {
-        let opacity: Double = colorScheme == .dark ? 0.7 : 0.9
-        switch type {
-        case .charging:
-            return .yellow.opacity(opacity)
-        case .maintenance:
-            return .green.opacity(opacity)
-        case .repair:
-            return .orange.opacity(opacity)
-        case .carwash:
-            return .blue.opacity(opacity)
-        case .other:
-            return .purple.opacity(opacity)
+    @ViewBuilder
+    private var legend: some SwiftUICore.View {
+        LazyVGrid(
+            columns: [
+                GridItem(.flexible(), alignment: .leading),
+                GridItem(.flexible(), alignment: .leading),
+                GridItem(.flexible(), alignment: .leading)
+            ],
+            alignment: .leading,
+            spacing: 6
+        ) {
+            ForEach(viewModel.allExpenseTypes, id: \.self) { type in
+                HStack(spacing: 6) {
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(type.color)
+                        .frame(width: 10, height: 10)
+                    Text(type.localizedName)
+                        .appFont(.caption2)
+                        .foregroundColor(AppColors.inkSoft)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+            }
         }
     }
 }
