@@ -183,6 +183,7 @@ private struct AppFontModifier: ViewModifier {
     @ObservedObject private var localization = LocalizationManager.shared
     @ObservedObject private var fontFamily = AppFontFamilyManager.shared
     let style: AppFontStyle
+    let familyOverride: AppFontFamily?
     let weight: Font.Weight?
     let italic: Bool
 
@@ -191,7 +192,7 @@ private struct AppFontModifier: ViewModifier {
             AppFont.resolve(
                 style: style,
                 language: localization.currentLanguage,
-                family: fontFamily.currentFamily,
+                family: familyOverride ?? fontFamily.currentFamily,
                 weight: weight,
                 italic: italic
             )
@@ -202,9 +203,15 @@ private struct AppFontModifier: ViewModifier {
 extension SwiftUI.View {
     func appFont(
         _ style: AppFontStyle,
+        family: AppFontFamily? = nil,
         weight: Font.Weight? = nil,
         italic: Bool = false
     ) -> some SwiftUI.View {
-        modifier(AppFontModifier(style: style, weight: weight, italic: italic))
+        modifier(AppFontModifier(
+            style: style,
+            familyOverride: family,
+            weight: weight,
+            italic: italic
+        ))
     }
 }

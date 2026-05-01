@@ -504,6 +504,10 @@ final class BackupService: ObservableObject {
         let documentsCount = exportData.documents?.count ?? 0
         let ideasCount = exportData.ideas?.count ?? 0
         self.logger.info("Successfully imported all data: \(exportData.cars.count) cars, \(exportData.expenses.count) expenses, \(exportData.plannedMaintenance.count) maintenance records, \(exportData.delayedNotifications.count) notifications, \(documentsCount) documents, \(ideasCount) ideas")
+
+        // Refresh the font-family UserDefaults mirror so the next launch
+        // screen renders in the restored choice on the first frame.
+        AppFontFamilyManager.shared.reloadFromStorage()
     }
 
     // MARK: - Helper Methods
