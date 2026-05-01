@@ -9,7 +9,7 @@
 
 import SwiftUI
 
-struct AppCard<Content: SwiftUI.View>: SwiftUI.View {
+struct AppCard<Content: SwiftUICore.View>: SwiftUICore.View {
     @Environment(\.colorScheme) private var colorScheme
 
     private let pad: CGFloat
@@ -29,7 +29,7 @@ struct AppCard<Content: SwiftUI.View>: SwiftUI.View {
         self.content = content
     }
 
-    var body: some SwiftUI.View {
+    var body: some SwiftUICore.View {
         content()
             .padding(pad)
             .frame(maxWidth: fillsWidth ? .infinity : nil, alignment: .leading)
