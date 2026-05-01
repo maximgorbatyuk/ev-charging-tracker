@@ -956,7 +956,8 @@ struct UserSettingsView: SwiftUICore.View {
                         expenseCurrency: updated.expenseCurrency,
                         selectedForTracking: updated.selectedForTracking,
                         frontWheelSize: updated.frontWheelSize,
-                        rearWheelSize: updated.rearWheelSize)
+                        rearWheelSize: updated.rearWheelSize,
+                        measurementSystem: updated.measurementSystem)
 
                     _ = viewModel.updateCar(car: carToUpdate)
 
@@ -972,7 +973,8 @@ struct UserSettingsView: SwiftUICore.View {
                         milleageSyncedAt: Date(),
                         createdAt: Date(),
                         frontWheelSize: updated.frontWheelSize,
-                        rearWheelSize: updated.rearWheelSize
+                        rearWheelSize: updated.rearWheelSize,
+                        measurementSystem: updated.measurementSystem
                     )
 
                     _ = viewModel.insertCar(newCar)

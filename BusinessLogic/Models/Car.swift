@@ -13,12 +13,15 @@ class Car: Codable, Identifiable {
     var selectedForTracking: Bool
     var batteryCapacity: Double? // in kWh
     var expenseCurrency: Currency
-    var currentMileage: Int // in km
-    var initialMileage: Int // in km
+    var currentMileage: Int // raw integer; unit depends on `measurementSystem`
+    var initialMileage: Int // raw integer; unit depends on `measurementSystem`
     var milleageSyncedAt: Date
     var createdAt: Date
     var frontWheelSize: String?
     var rearWheelSize: String?
+    /// Per-car distance/weight unit. Switching systems does NOT change
+    /// stored mileage values (see MeasurementSystem.swift).
+    var measurementSystem: MeasurementSystem
 
     init(
         id: Int64? = nil,
@@ -31,7 +34,8 @@ class Car: Codable, Identifiable {
         milleageSyncedAt: Date,
         createdAt: Date,
         frontWheelSize: String? = nil,
-        rearWheelSize: String? = nil) {
+        rearWheelSize: String? = nil,
+        measurementSystem: MeasurementSystem = .metric) {
 
         self.id = id
         self.name = name
@@ -45,6 +49,7 @@ class Car: Codable, Identifiable {
         self.createdAt = createdAt
         self.frontWheelSize = frontWheelSize
         self.rearWheelSize = rearWheelSize
+        self.measurementSystem = measurementSystem
     }
 
     func updateMileage(newMileage: Int) {
@@ -68,7 +73,8 @@ class Car: Codable, Identifiable {
         expenseCurrency: Currency,
         selectedForTracking: Bool,
         frontWheelSize: String?,
-        rearWheelSize: String?) {
+        rearWheelSize: String?,
+        measurementSystem: MeasurementSystem) {
         if !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.name = name
         }
@@ -90,5 +96,6 @@ class Car: Codable, Identifiable {
         self.selectedForTracking = selectedForTracking
         self.frontWheelSize = frontWheelSize
         self.rearWheelSize = rearWheelSize
+        self.measurementSystem = measurementSystem
     }
 }

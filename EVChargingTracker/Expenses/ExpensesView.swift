@@ -224,8 +224,9 @@ struct ExpensesView: SwiftUICore.View {
                         .listRowBackground(Color.clear)
 
                     // Expense records
+                    let unit = viewModel.selectedCarForExpenses?.measurementSystem ?? .metric
                     ForEach(viewModel.expenses) { session in
-                        SessionCard(session: session)
+                        SessionCard(session: session, measurementSystem: unit)
                             .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)

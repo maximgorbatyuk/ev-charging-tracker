@@ -31,12 +31,14 @@ struct CarRecordView: SwiftUICore.View {
 
             HStack(spacing: 20) {
 
+                let unit = car.measurementSystem.distanceUnitLabel
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L("Current mileage"))
                         .appFont(.caption)
                         .foregroundColor(.gray)
 
-                    Text("\(car.currentMileage.formatted()) km")
+                    Text("\(car.currentMileage.formatted()) \(unit)")
                         .appFont(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(textColor)
@@ -47,7 +49,7 @@ struct CarRecordView: SwiftUICore.View {
                         .appFont(.caption)
                         .foregroundColor(.gray)
 
-                    Text("\((car.currentMileage - car.initialMileage).formatted()) km")
+                    Text("\((car.currentMileage - car.initialMileage).formatted()) \(unit)")
                         .appFont(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(textColor)

@@ -444,3 +444,22 @@
 "import.documents_metadata_only" = "Not: Belge dosyaları yedeklemeye dahil değildir. Yalnızca belge meta verileri geri yüklenecektir.";
 
 "Energy per month" = "Aylık enerji";
+
+/* Measurement system */
+"Measurement system" = "Ölçü sistemi";
+"Metric (km, kg)" = "Metrik (km, kg)";
+"Imperial (mi, lb)" = "İngiliz (mi, lb)";
+"km" = "km";
+"mi" = "mi";
+"kg" = "kg";
+"lb" = "lb";
+"CO₂ saved (%@)" = "CO₂ tasarrufu (%@)";
+"kWh / 100mi" = "kWh / 100mi";
+"per mi" = "mi'de";
+"Odometer (%@)" = "Kilometre Sayacı (%@)";
+"Initial (%@)" = "İlk (%@)";
+"Current (%@)" = "Mevcut (%@)";
+"One mile price (charging only)" = "Mil başı maliyet (sadece şarj)";
+"How much one mile costs you including only charging expenses" = "Sadece şarj masrafları dahil olan bir milin maliyeti ne kadardır?";
+"One mile price (total)" = "Mil başı maliyet (toplam)";
+"How much one mile costs you including all logged expenses" = "Tüm kayıtlı masraflar dahil olan bir milin maliyeti ne kadardır?";

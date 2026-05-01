@@ -343,6 +343,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                         .listRowBackground(Color.clear)
 
                     // Maintenance records
+                    let unit = viewModel.selectedCarForExpenses?.measurementSystem ?? .metric
                     ForEach(viewModel.maintenanceRecords) { record in
                         Button {
                             analytics.trackEvent(
@@ -353,7 +354,7 @@ struct PlanedMaintenanceView: SwiftUICore.View {
                                 ])
                             recordToShowDetails = record
                         } label: {
-                            PlannedMaintenanceItemView(record: record)
+                            PlannedMaintenanceItemView(record: record, measurementSystem: unit)
                         }
                         .buttonStyle(.plain)
                         .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))

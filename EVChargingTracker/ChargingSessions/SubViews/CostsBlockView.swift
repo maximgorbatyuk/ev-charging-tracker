@@ -14,6 +14,7 @@ struct CostsBlockView: SwiftUICore.View {
     let currency: Currency
     let costsValue: Double
     let perKilometer: Bool
+    var measurementSystem: MeasurementSystem = .metric
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
@@ -81,7 +82,7 @@ struct CostsBlockView: SwiftUICore.View {
                     }
 
                     if perKilometer {
-                        Text(L("per km"))
+                        Text(measurementSystem == .imperial ? L("per mi") : L("per km"))
                             .appFont(.footnote, weight: .medium)
                             .foregroundColor(AppColors.inkSoft)
                     }

@@ -85,16 +85,17 @@ struct PlannedMaintenanceDetailsView: SwiftUICore.View {
 
       /// Target odometer
       if let odometer = record.odometer {
+        let unit = selectedCar.measurementSystem.distanceUnitLabel
         detailRow(
           title: L("Target Odometer"),
-          value: "\(odometer.formatted()) km",
+          value: "\(odometer.formatted()) \(unit)",
           status: nil
         )
 
         let remaining = odometer - selectedCar.currentMileage
         detailRow(
           title: L("Remaining Distance"),
-          value: "\(remaining.formatted()) km",
+          value: "\(remaining.formatted()) \(unit)",
           status: remaining > 0 ? .normal : .overdue
         )
         Divider()

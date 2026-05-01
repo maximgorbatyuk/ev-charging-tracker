@@ -442,3 +442,22 @@
 "import.documents_metadata_only" = "注意：备份中不包含文件本身，仅恢复文件元数据。";
 
 "Energy per month" = "月度能耗";
+
+/* Measurement system */
+"Measurement system" = "测量系统";
+"Metric (km, kg)" = "公制 (km, kg)";
+"Imperial (mi, lb)" = "英制 (mi, lb)";
+"km" = "km";
+"mi" = "mi";
+"kg" = "kg";
+"lb" = "lb";
+"CO₂ saved (%@)" = "节省的CO₂ (%@)";
+"kWh / 100mi" = "kWh / 100mi";
+"per mi" = "每英里";
+"Odometer (%@)" = "里程表 (%@)";
+"Initial (%@)" = "初始 (%@)";
+"Current (%@)" = "当前 (%@)";
+"One mile price (charging only)" = "每英里价格（仅充电）";
+"How much one mile costs you including only charging expenses" = "仅计算充电费用的每英里花费";
+"One mile price (total)" = "每英里价格（总计）";
+"How much one mile costs you including all logged expenses" = "包含所有记录费用的每英里花费";

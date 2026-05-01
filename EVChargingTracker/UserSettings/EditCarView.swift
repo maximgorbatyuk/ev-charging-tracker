@@ -18,6 +18,7 @@ struct EditCarView: SwiftUICore.View {
     @State private var frontWheelSize: String
     @State private var rearWheelSize: String
     @State private var sameWheelSizeForFrontAndRear: Bool
+    @State private var measurementSystem: MeasurementSystem
 
     @State private var showDeleteConfirmation = false
     @State private var alertMessage: String?
@@ -49,6 +50,7 @@ struct EditCarView: SwiftUICore.View {
         _frontWheelSize = State(initialValue: frontWheel)
         _rearWheelSize = State(initialValue: rearWheel)
         _sameWheelSizeForFrontAndRear = State(initialValue: frontWheel.isEmpty && rearWheel.isEmpty || frontWheel == rearWheel)
+        _measurementSystem = State(initialValue: car?.measurementSystem ?? .metric)
     }
 
     var body: some SwiftUICore.View {
@@ -94,12 +96,18 @@ struct EditCarView: SwiftUICore.View {
                                 .tag(type)
                         }
                     }
+
+                    Picker(L("Measurement system"), selection: $measurementSystem) {
+                        Text(L("Metric (km, kg)")).tag(MeasurementSystem.metric)
+                        Text(L("Imperial (mi, lb)")).tag(MeasurementSystem.imperial)
+                    }
+                    .pickerStyle(.segmented)
                 }
 
                 Section(header: Text(L("Car mileage"))) {
 
                     HStack {
-                        Text(L("Initial (km)"))
+                        Text(String(format: L("Initial (%@)"), measurementSystem.distanceUnitLabel))
                             .foregroundColor(.secondary)
                         Spacer()
                         TextField("", text: $initialMileageText)
@@ -108,7 +116,7 @@ struct EditCarView: SwiftUICore.View {
                     }
 
                     HStack {
-                        Text(L("Current (km)"))
+                        Text(String(format: L("Current (%@)"), measurementSystem.distanceUnitLabel))
                             .foregroundColor(.secondary)
                         Spacer()
                         TextField("", text: $mileageText)
@@ -247,7 +255,8 @@ struct EditCarView: SwiftUICore.View {
                             initialMileage: initialMileageToSave,
                             expenseCurrency: expenseCurrency,
                             frontWheelSize: frontWheelToSave,
-                            rearWheelSize: rearWheelToSave
+                            rearWheelSize: rearWheelToSave,
+                            measurementSystem: measurementSystem
                         )
                         onSave(updated)
                     }
@@ -344,7 +353,8 @@ struct WheelInfoSheetView: SwiftUICore.View {
             initialMileage: 0,
             expenseCurrency: .usd,
             frontWheelSize: "225/45R18",
-            rearWheelSize: "225/45R18"),
+            rearWheelSize: "225/45R18",
+            measurementSystem: .metric),
         defaultCurrency: .usd,
         defaultValueForSelectedForTracking: true,
         hasOtherCars: true,

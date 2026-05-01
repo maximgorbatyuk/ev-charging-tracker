@@ -13,6 +13,9 @@ import SwiftUI
 struct SessionCard: SwiftUICore.View {
 
     let session: Expense
+    /// Unit applied to the odometer label. The session's underlying
+    /// integer is shown as-is — no value conversion happens here.
+    let measurementSystem: MeasurementSystem
 
     var body: some SwiftUICore.View {
         AppCard {
@@ -79,7 +82,7 @@ struct SessionCard: SwiftUICore.View {
             .foregroundColor(AppColors.inkSoft)
 
             Label(
-                "\(session.odometer.formatted()) km",
+                "\(session.odometer.formatted()) \(measurementSystem.distanceUnitLabel)",
                 systemImage: "speedometer"
             )
             .appFont(.subheadline)

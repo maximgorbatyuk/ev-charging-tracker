@@ -14,10 +14,12 @@ struct ChargingSessionsView: SwiftUICore.View {
                 ScrollView {
                     VStack(spacing: 16) {
                         if let statData = viewModel.statData {
+                            let unit = viewModel.selectedCarForExpenses?.measurementSystem ?? .metric
                             StatsBlockView(
                                 co2Saved: statData.co2Saved,
                                 averageEnergy: statData.avgConsumptionKWhPer100,
-                                chargingSessionsCount: statData.totalChargingSessionsCount
+                                chargingSessionsCount: statData.totalChargingSessionsCount,
+                                measurementSystem: unit
                             )
                             .padding(.horizontal)
 
@@ -25,20 +27,30 @@ struct ChargingSessionsView: SwiftUICore.View {
                                let car = viewModel.selectedCarForExpenses {
 
                                 CostsBlockView(
-                                    title: L("One kilometer price (charging only)"),
-                                    hint: L("How much one kilometer costs you including only charging expenses"),
+                                    title: car.measurementSystem == .imperial
+                                        ? L("One mile price (charging only)")
+                                        : L("One kilometer price (charging only)"),
+                                    hint: car.measurementSystem == .imperial
+                                        ? L("How much one mile costs you including only charging expenses")
+                                        : L("How much one kilometer costs you including only charging expenses"),
                                     currency: car.expenseCurrency,
                                     costsValue: statData.oneKmPriceBasedOnlyOnCharging,
-                                    perKilometer: true
+                                    perKilometer: true,
+                                    measurementSystem: car.measurementSystem
                                 )
                                 .padding(.horizontal)
 
                                 CostsBlockView(
-                                    title: L("One kilometer price (total)"),
-                                    hint: L("How much one kilometer costs you including all logged expenses"),
+                                    title: car.measurementSystem == .imperial
+                                        ? L("One mile price (total)")
+                                        : L("One kilometer price (total)"),
+                                    hint: car.measurementSystem == .imperial
+                                        ? L("How much one mile costs you including all logged expenses")
+                                        : L("How much one kilometer costs you including all logged expenses"),
                                     currency: car.expenseCurrency,
                                     costsValue: statData.oneKmPriceIncludingAllExpenses,
-                                    perKilometer: true
+                                    perKilometer: true,
+                                    measurementSystem: car.measurementSystem
                                 )
                                 .padding(.horizontal)
 

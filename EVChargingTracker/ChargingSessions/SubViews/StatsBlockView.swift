@@ -12,17 +12,24 @@ struct StatsBlockView: SwiftUICore.View {
     let co2Saved: Double
     let averageEnergy: Double
     let chargingSessionsCount: Int
+    /// Drives the CO₂ unit (kg ↔ lb) and the consumption denominator
+    /// label (100km ↔ 100mi). The numeric `co2Saved` and `averageEnergy`
+    /// values are produced by `ChargingViewModel`, which already applies
+    /// the kg → lb conversion when the selected car is `.imperial`.
+    var measurementSystem: MeasurementSystem = .metric
 
     var body: some SwiftUICore.View {
         HStack(alignment: .top, spacing: 10) {
             StatCard(
-                title: L("CO₂ saved (kg)"),
+                title: String(format: L("CO₂ saved (%@)"), measurementSystem.co2UnitLabel),
                 value: String(format: "%.1f", co2Saved),
                 style: .co2Saved
             )
 
             StatCard(
-                title: L("kWh / 100km"),
+                title: measurementSystem == .imperial
+                    ? L("kWh / 100mi")
+                    : L("kWh / 100km"),
                 value: String(format: "%.1f", averageEnergy),
                 style: .energy
             )

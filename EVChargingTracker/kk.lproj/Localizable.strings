@@ -451,3 +451,22 @@
 "import.documents_metadata_only" = "Ескертпе: Құжат файлдары сақтық көшірмеге кірмейді. Тек құжат метадеректері қалпына келтіріледі.";
 
 "Energy per month" = "Айлық энергия";
+
+/* Measurement system */
+"Measurement system" = "Өлшем жүйесі";
+"Metric (km, kg)" = "Метрлік (км, кг)";
+"Imperial (mi, lb)" = "Империялық (миля, фунт)";
+"km" = "км";
+"mi" = "миля";
+"kg" = "кг";
+"lb" = "фунт";
+"CO₂ saved (%@)" = "Үнемделген CO₂ (%@)";
+"kWh / 100mi" = "кВт / 100миля";
+"per mi" = "миля сайын";
+"Odometer (%@)" = "Одометр (%@)";
+"Initial (%@)" = "Бастапқы (%@)";
+"Current (%@)" = "Ағымдағы (%@)";
+"One mile price (charging only)" = "1 миля бағасы (тек зарядтау)";
+"How much one mile costs you including only charging expenses" = "Тек зарядтау шығындарын қоса есептегендегі 1 миля құны";
+"One mile price (total)" = "1 миля бағасы (барлығы)";
+"How much one mile costs you including all logged expenses" = "Барлық тіркелген шығындарды қоса есептегендегі 1 миля құны";

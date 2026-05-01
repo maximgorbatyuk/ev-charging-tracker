@@ -445,3 +445,22 @@
 "import.documents_metadata_only" = "Hinweis: Dokumentdateien sind nicht im Backup enthalten. Nur Dokument-Metadaten werden wiederhergestellt.";
 
 "Energy per month" = "Energie pro Monat";
+
+/* Measurement system */
+"Measurement system" = "Maßsystem";
+"Metric (km, kg)" = "Metrisch (km, kg)";
+"Imperial (mi, lb)" = "Imperial (mi, lb)";
+"km" = "km";
+"mi" = "mi";
+"kg" = "kg";
+"lb" = "lb";
+"CO₂ saved (%@)" = "CO₂ gespart (%@)";
+"kWh / 100mi" = "kWh / 100 mi";
+"per mi" = "pro mi";
+"Odometer (%@)" = "Kilometerstand (%@)";
+"Initial (%@)" = "Anfang (%@)";
+"Current (%@)" = "Aktuell (%@)";
+"One mile price (charging only)" = "Preis pro Meile (nur Laden)";
+"How much one mile costs you including only charging expenses" = "Wie viel eine Meile kostet, wenn nur die Ladekosten berücksichtigt werden";
+"One mile price (total)" = "Preis pro Meile (gesamt)";
+"How much one mile costs you including all logged expenses" = "Wie viel eine Meile kostet, wenn alle erfassten Kosten berücksichtigt werden";

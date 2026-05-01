@@ -230,7 +230,8 @@ struct AddExpenseView: SwiftUICore.View {
 
                     VStack {
                         HStack {
-                            Text(L("Odometer (km)"))
+                            let unit = selectedCardForExpense?.measurementSystem.distanceUnitLabel ?? L("km")
+                            Text(String(format: L("Odometer (%@)"), unit))
                             Spacer()
                             TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
                                 .keyboardType(.numberPad)

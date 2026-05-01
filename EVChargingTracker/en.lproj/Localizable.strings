@@ -14,8 +14,19 @@
 "Save" = "Save";
 "Close" = "Close";
 "CO₂ saved (kg)" = "CO₂ saved (kg)";
+"CO₂ saved (%@)" = "CO₂ saved (%@)";
 "kWh / 100km" = "kWh / 100km";
+"kWh / 100mi" = "kWh / 100mi";
 "Charges" = "Charges";
+
+/* Measurement system */
+"Measurement system" = "Measurement system";
+"Metric (km, kg)" = "Metric (km, kg)";
+"Imperial (mi, lb)" = "Imperial (mi, lb)";
+"km" = "km";
+"mi" = "mi";
+"kg" = "kg";
+"lb" = "lb";
 
 "Initial mileage" = "Initial mileage";
 "Current mileage" = "Current mileage";
@@ -66,6 +77,14 @@
 "How much one kilometer costs you including only charging expenses" = "How much one kilometer costs you including only charging expenses";
 "One kilometer price (total)" = "One kilometer price (total)";
 "How much one kilometer costs you including all logged expenses" = "How much one kilometer costs you including all logged expenses";
+"One mile price (charging only)" = "One mile price (charging only)";
+"How much one mile costs you including only charging expenses" = "How much one mile costs you including only charging expenses";
+"One mile price (total)" = "One mile price (total)";
+"How much one mile costs you including all logged expenses" = "How much one mile costs you including all logged expenses";
+"per mi" = "per mi";
+"Odometer (%@)" = "Odometer (%@)";
+"Initial (%@)" = "Initial (%@)";
+"Current (%@)" = "Current (%@)";
 "Total charging costs" = "Total charging costs";
 "Add Charging Session" = "Add Charging Session";
 "Car stats" = "Car stats";

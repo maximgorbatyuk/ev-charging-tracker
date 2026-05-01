@@ -92,7 +92,8 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency,
                     frontWheelSize: $0.frontWheelSize,
-                    rearWheelSize: $0.rearWheelSize)
+                    rearWheelSize: $0.rearWheelSize,
+                    measurementSystem: $0.measurementSystem)
             } ?? []
 
         // Sync automatic backup state from BackgroundTaskManager
@@ -166,7 +167,8 @@ class UserSettingsViewModel: ObservableObject {
                 initialMileage: car.initialMileage,
                 expenseCurrency: car.expenseCurrency,
                 frontWheelSize: car.frontWheelSize,
-                rearWheelSize: car.rearWheelSize
+                rearWheelSize: car.rearWheelSize,
+                measurementSystem: car.measurementSystem
             )
         }
     }
@@ -242,7 +244,8 @@ class UserSettingsViewModel: ObservableObject {
                     initialMileage: $0.initialMileage,
                     expenseCurrency: $0.expenseCurrency,
                     frontWheelSize: $0.frontWheelSize,
-                    rearWheelSize: $0.rearWheelSize)
+                    rearWheelSize: $0.rearWheelSize,
+                    measurementSystem: $0.measurementSystem)
             } ?? []
         self.objectWillChange.send()
     }

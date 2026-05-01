@@ -12,9 +12,10 @@ struct CarDto: Identifiable {
     let name: String
     let selectedForTracking: Bool
     let batteryCapacity: Double?
-    let currentMileage: Int // in km
-    let initialMileage: Int // in km
+    let currentMileage: Int // raw integer; unit depends on `measurementSystem`
+    let initialMileage: Int // raw integer; unit depends on `measurementSystem`
     let expenseCurrency: Currency
     let frontWheelSize: String?
     let rearWheelSize: String?
+    let measurementSystem: MeasurementSystem
 }

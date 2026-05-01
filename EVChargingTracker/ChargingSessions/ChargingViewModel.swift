@@ -273,7 +273,15 @@ class ChargingViewModel: ObservableObject, IExpenseView {
     func getCo2Saved() -> Double {
         let co2PerKm = environment.getCo2EuropePollutionPerOneKilometer()
         let totalDistance = self.getTotalCarDistance()
-        return co2PerKm * totalDistance
+        let kg = co2PerKm * totalDistance
+
+        // Option B: keep the underlying formula unchanged regardless of
+        // the car's measurement system; only convert the display unit
+        // kg → lb at the boundary.
+        guard selectedCarForExpenses?.measurementSystem == .imperial else {
+            return kg
+        }
+        return kg / kilogramsPerPound
     }
 
     func getAverageEnergyConsumed() -> Double {

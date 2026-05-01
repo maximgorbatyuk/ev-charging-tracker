@@ -10,6 +10,7 @@ import SwiftUI
 struct MaintenancePreviewRow: SwiftUI.View {
 
     let record: PlannedMaintenanceItem
+    let measurementSystem: MeasurementSystem
 
     var body: some SwiftUI.View {
         HStack(spacing: 12) {
@@ -36,7 +37,7 @@ struct MaintenancePreviewRow: SwiftUI.View {
 
                     if let odometer = record.odometer {
                         Label(
-                            "\(odometer.formatted()) km",
+                            "\(odometer.formatted()) \(measurementSystem.distanceUnitLabel)",
                             systemImage: "speedometer"
                         )
                         .appFont(.caption)
@@ -130,8 +131,8 @@ struct CarInfoContent: SwiftUI.View {
         VStack(spacing: 0) {
             CarInfoRow(
                 icon: "road.lanes",
-                label: L("Current (km)"),
-                value: "\(car.currentMileage.formatted()) km"
+                label: String(format: L("Current (%@)"), car.measurementSystem.distanceUnitLabel),
+                value: "\(car.currentMileage.formatted()) \(car.measurementSystem.distanceUnitLabel)"
             )
 
             Divider().padding(.leading, 56)
@@ -139,7 +140,7 @@ struct CarInfoContent: SwiftUI.View {
             CarInfoRow(
                 icon: "gauge.with.dots.needle.bottom.50percent",
                 label: L("Total mileage"),
-                value: "\(car.getTotalMileage().formatted()) km"
+                value: "\(car.getTotalMileage().formatted()) \(car.measurementSystem.distanceUnitLabel)"
             )
 
             if let front = car.frontWheelSize, !front.isEmpty {
