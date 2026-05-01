@@ -66,6 +66,10 @@ struct ExpensesView: SwiftUICore.View {
                 }
                 .onAppear {
                     analytics.trackScreen(viewModel.analyticsScreenName)
+                    // Re-fetch the selected car so changes made in Settings
+                    // (e.g. measurement system toggle) take effect when the
+                    // user returns to this tab.
+                    viewModel.loadSessions()
                 }
                 .refreshable {
                     viewModel.loadSessions()
