@@ -292,6 +292,23 @@
 
 /* Appearance Mode */
 "Appearance" = "Erscheinungsbild";
+
+/* Distance cost basis */
+"Cost per distance" = "Kosten pro Distanz";
+"distance.cost.basis.per_unit" = "Pro 1 km / mi";
+"distance.cost.basis.per_hundred" = "Pro 100 km / mi";
+"Switch to per 1 km/mi" = "Auf 'pro 1 km/mi' umschalten";
+"Switch to per 100 km/mi" = "Auf 'pro 100 km/mi' umschalten";
+"per 100 km" = "pro 100 km";
+"per 100 mi" = "pro 100 mi";
+"100 kilometers price (charging only)" = "Preis pro 100 Kilometer (nur Laden)";
+"100 kilometers price (total)" = "Preis pro 100 Kilometer (gesamt)";
+"100 miles price (charging only)" = "Preis pro 100 Meilen (nur Laden)";
+"100 miles price (total)" = "Preis pro 100 Meilen (gesamt)";
+"How much 100 kilometers cost you including only charging expenses" = "Wie viel 100 Kilometer kosten, wenn nur die Ladekosten berücksichtigt werden";
+"How much 100 kilometers cost you including all logged expenses" = "Wie viel 100 Kilometer inklusive aller protokollierten Ausgaben kosten";
+"How much 100 miles cost you including only charging expenses" = "Wie viel 100 Meilen kosten, wenn nur die Ladekosten berücksichtigt werden";
+"How much 100 miles cost you including all logged expenses" = "Wie viel 100 Meilen kosten, wenn alle erfassten Kosten berücksichtigt werden";
 "System" = "System";
 "Light" = "Hell";
 "Dark" = "Dunkel";

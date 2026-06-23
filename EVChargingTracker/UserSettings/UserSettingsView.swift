@@ -113,6 +113,24 @@ struct UserSettingsView: SwiftUICore.View {
                         }
                     }
 
+                    HStack {
+                        Picker(L("Cost per distance"), selection: $viewModel.selectedDistanceCostBasis) {
+                            ForEach(DistanceCostBasis.allCases, id: \.self) { basis in
+                                Text(basis.displayName).tag(basis)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .onChange(of: viewModel.selectedDistanceCostBasis) { _, newBasis in
+                            analytics.trackEvent("distance_cost_basis_changed", properties: [
+                                "screen": "user_settings_screen",
+                                "button_name": "distance_cost_basis_picker",
+                                "new_basis": newBasis.rawValue
+                            ])
+
+                            viewModel.saveDistanceCostBasis(newBasis)
+                        }
+                    }
+
                     Button(action: {
                         analytics.trackEvent("font_picker_button_clicked", properties: [
                             "screen": "user_settings_screen",

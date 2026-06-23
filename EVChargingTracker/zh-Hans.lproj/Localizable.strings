@@ -289,6 +289,23 @@
 
 /* Appearance Mode */
 "Appearance" = "外观";
+
+/* Distance cost basis */
+"Cost per distance" = "按距离显示成本";
+"distance.cost.basis.per_unit" = "每1公里/英里";
+"distance.cost.basis.per_hundred" = "每100公里/英里";
+"Switch to per 1 km/mi" = "切换为「每 1 公里/英里」";
+"Switch to per 100 km/mi" = "切换为「每 100 公里/英里」";
+"per 100 km" = "每100公里";
+"per 100 mi" = "每100英里";
+"100 kilometers price (charging only)" = "每100公里价格（仅充电）";
+"100 kilometers price (total)" = "每100公里价格（总计）";
+"100 miles price (charging only)" = "每100英里价格（仅充电）";
+"100 miles price (total)" = "每100英里价格（总计）";
+"How much 100 kilometers cost you including only charging expenses" = "仅计算充电费用的每100公里花费";
+"How much 100 kilometers cost you including all logged expenses" = "包含所有记录费用的每100公里花费";
+"How much 100 miles cost you including only charging expenses" = "仅计算充电费用的每100英里花费";
+"How much 100 miles cost you including all logged expenses" = "包含所有记录费用的每100英里花费";
 "System" = "跟随系统";
 "Light" = "浅色";
 "Dark" = "深色";

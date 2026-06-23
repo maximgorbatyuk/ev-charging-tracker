@@ -125,6 +125,16 @@ Cancel-in-progress concurrency keys mean force-pushing a PR cancels the prior ru
 
 `GoogleService-Info.plist` is **not** checked into the repo (deliberate). Local Release builds will fail Firebase init unless you have a personal copy. Debug builds skip Firebase entirely (`#if DEBUG` gate).
 
+## App versioning
+
+The marketing version (the user-visible `2026.M.x` string, e.g. `2026.2.5`) is bumped **manually**. No pipeline, fastlane, or `agvtool` step changes it — GitHub Actions only builds, and `ci_scripts/ci_post_clone.sh` only injects Firebase secrets.
+
+- **Source of truth:** `MARKETING_VERSION` in `EVChargingTracker.xcodeproj/project.pbxproj`. With `GENERATE_INFOPLIST_FILE = YES`, Xcode injects it as `CFBundleShortVersionString`, which is what `EnvironmentService.getAppVisibleVersion()` reads and the app displays.
+- **Bump all four together:** there are four `MARKETING_VERSION` entries — app + ShareExtension, each in Debug and Release — and the app and its extension must share the same version for App Store submission. (The `EVChargingTrackerTests` target stays at `1.0`; leave it.) Set it via a target → General → Identity → Version, or edit the pbxproj directly.
+- **Build number:** `CURRENT_PROJECT_VERSION` (→ `CFBundleVersion`) is `1` in the repo and is not auto-incremented by GitHub Actions. Xcode Cloud may set the build number at archive time; the repo itself does not bump it.
+- **Scheme:** `YYYY.<release>.<patch>`, e.g. `2026.2.5` — encodes the release year and month so a user can tell when a build shipped (the changelog notes this where the scheme changed).
+- **Dead token — do not rely on it:** `Info.plist` has `AppVisibleVersion = $(APP_VISIBLE_VERSION)`, but `APP_VISIBLE_VERSION` is defined nowhere, so it resolves to empty — and `getAppVisibleVersion()` ignores it, reading `CFBundleShortVersionString` instead. There is no second place to update.
+
 ## Branches → environments
 
 | Branch | Maps to | Distribution |

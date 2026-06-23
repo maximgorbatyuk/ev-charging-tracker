@@ -1,5 +1,49 @@
 # Release notes
 
+## 2026.3.5
+
+### English
+
+```
+We added a Cost per distance setting — now you can choose whether the Stats screen shows your running cost per 1 km/mi or per 100 km/mi, whichever is easier to read at a glance. We also made a few improvements under the hood.
+```
+
+### Русский (RU)
+
+```
+Мы добавили настройку «Стоимость за расстояние» — теперь вы можете выбрать, как на экране статистики показывается стоимость пути: за 1 км/милю или за 100 км/миль, как вам удобнее. Также мы сделали несколько улучшений под капотом.
+```
+
+### Қазақша (KK)
+
+```
+Біз «Қашықтыққа шаққандағы құн» параметрін қостық — енді статистика экранында жол құнын 1 км/миля немесе 100 км/миля есебімен, өзіңізге ыңғайлысын таңдап көрсете аласыз. Сонымен қатар ішкі бірнеше жақсарту енгіздік.
+```
+
+### Türkçe (TR)
+
+```
+"Mesafe başına maliyet" ayarını ekledik — artık İstatistik ekranında maliyetinizi 1 km/mi başına mı yoksa 100 km/mi başına mı göreceğinizi, hangisi daha okunaklıysa onu seçebilirsiniz. Ayrıca arka planda birkaç iyileştirme yaptık.
+```
+
+### Українська (UK)
+
+```
+Ми додали налаштування «Вартість за відстань» — тепер ви можете вибрати, як на екрані статистики показується вартість шляху: за 1 км/милю чи за 100 км/миль, як вам зручніше. Також ми зробили кілька покращень під капотом.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben die Einstellung „Kosten pro Distanz" hinzugefügt — Sie können jetzt wählen, ob der Statistik-Bildschirm Ihre Kosten pro 1 km/mi oder pro 100 km/mi anzeigt, je nachdem, was sich für Sie leichter lesen lässt. Außerdem haben wir einige Verbesserungen unter der Haube vorgenommen.
+```
+
+### 简体中文 (ZH-Hans)
+
+```
+我们新增了「按距离显示成本」设置 — 现在您可以选择统计界面按每 1 公里/英里还是每 100 公里/英里显示费用，哪种更易读就用哪种。我们还在后台做了一些改进。
+```
+
 ## 2026.2.4
 
 ### English

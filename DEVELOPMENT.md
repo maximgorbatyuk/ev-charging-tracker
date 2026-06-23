@@ -99,7 +99,7 @@ EVChargingTracker/
 
 ### Cutting a release
 
-- [ ] Bump `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in the Xcode project.
+- [ ] Bump `MARKETING_VERSION` manually — all four entries (app + ShareExtension × Debug/Release) must match; no pipeline does this. The build number (`CURRENT_PROJECT_VERSION`) stays `1` in-repo (Xcode Cloud may set it at archive). See `docs/build-and-config.md` → "App versioning".
 - [ ] Add a section to `changelog.md` (developer-facing).
 - [ ] Add release notes to `appstore/releases.md` following the App Store voice (warm, conversational, 2–3 sentences max — see `CLAUDE.md`-era style guide preserved in `AGENTS.md` and `appstore/releases.md` itself).
 - [ ] Push a PR to `develop`. CI runs SwiftLint + build (`.github/workflows/`).

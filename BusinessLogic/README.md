@@ -8,7 +8,7 @@ For: developers adding services, repositories, or models. For DB mechanics, see 
 
 - SQLite repositories and migrations (`Database/`)
 - Domain models — `Car`, `Expense`, `PlannedMaintenance`, `CarDocument`, `Idea`, `UserSettings`, `MeasurementSystem`, `Currency` (`Models/`)
-- Cross-cutting services — `AnalyticsService` (main-app only), `BackgroundTaskManager` (main-app only), `BackupService`, `DocumentService`, `EnvironmentService`, `LocalizationManager`, `NetworkMonitor`, `NotificationManager`, `AppearanceManager`, `AppFontFamilyManager`, `AppVersionChecker` (`Services/`)
+- Cross-cutting services — `AnalyticsService` (main-app only), `BackgroundTaskManager` (main-app only), `BackupService`, `DocumentService`, `EnvironmentService`, `LocalizationManager`, `NetworkMonitor`, `NotificationManager`, `AppearanceManager`, `AppFontFamilyManager`, `DistanceCostBasisManager`, `AppVersionChecker` (`Services/`)
 - App Group path resolution (`Helpers/AppGroupContainer.swift`)
 - Plain value types passed between layers (`ValueObjects/`)
 - Lightweight error types (`Errors/`)
@@ -60,6 +60,7 @@ Most-used services from app code:
 | `AppVersionChecker` | App Store iTunes lookup → newer-version detection |
 | `AppearanceManager` | Light / dark / system mode |
 | `AppFontFamilyManager` | System vs JetBrains Mono toggle |
+| `DistanceCostBasisManager` | Stats cost shown per 1 vs per 100 distance units |
 | `NetworkMonitor` | Connectivity gate |
 
 ### Models
