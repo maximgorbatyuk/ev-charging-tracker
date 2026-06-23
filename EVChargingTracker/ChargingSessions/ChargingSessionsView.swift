@@ -4,6 +4,7 @@ struct ChargingSessionsView: SwiftUICore.View {
     @StateObject private var viewModel = ChargingViewModel()
     @State private var showingAddSession = false
     @ObservedObject private var analytics = AnalyticsService.shared
+    @ObservedObject private var distanceCostBasisManager = DistanceCostBasisManager.shared
 
     var body: some SwiftUICore.View {
         ZStack {
@@ -26,31 +27,27 @@ struct ChargingSessionsView: SwiftUICore.View {
                             if viewModel.totalCost > 0,
                                let car = viewModel.selectedCarForExpenses {
 
+                                let basis = distanceCostBasisManager.currentBasis
+
                                 CostsBlockView(
-                                    title: car.measurementSystem == .imperial
-                                        ? L("One mile price (charging only)")
-                                        : L("One kilometer price (charging only)"),
-                                    hint: car.measurementSystem == .imperial
-                                        ? L("How much one mile costs you including only charging expenses")
-                                        : L("How much one kilometer costs you including only charging expenses"),
+                                    title: perDistancePriceTitle(unit: car.measurementSystem, basis: basis, chargingOnly: true),
+                                    hint: perDistancePriceHint(unit: car.measurementSystem, basis: basis, chargingOnly: true),
                                     currency: car.expenseCurrency,
-                                    costsValue: statData.oneKmPriceBasedOnlyOnCharging,
+                                    costsValue: statData.oneKmPriceBasedOnlyOnCharging * basis.multiplier,
                                     perKilometer: true,
-                                    measurementSystem: car.measurementSystem
+                                    measurementSystem: car.measurementSystem,
+                                    distanceCostBasis: basis
                                 )
                                 .padding(.horizontal)
 
                                 CostsBlockView(
-                                    title: car.measurementSystem == .imperial
-                                        ? L("One mile price (total)")
-                                        : L("One kilometer price (total)"),
-                                    hint: car.measurementSystem == .imperial
-                                        ? L("How much one mile costs you including all logged expenses")
-                                        : L("How much one kilometer costs you including all logged expenses"),
+                                    title: perDistancePriceTitle(unit: car.measurementSystem, basis: basis, chargingOnly: false),
+                                    hint: perDistancePriceHint(unit: car.measurementSystem, basis: basis, chargingOnly: false),
                                     currency: car.expenseCurrency,
-                                    costsValue: statData.oneKmPriceIncludingAllExpenses,
+                                    costsValue: statData.oneKmPriceIncludingAllExpenses * basis.multiplier,
                                     perKilometer: true,
-                                    measurementSystem: car.measurementSystem
+                                    measurementSystem: car.measurementSystem,
+                                    distanceCostBasis: basis
                                 )
                                 .padding(.horizontal)
 
@@ -143,6 +140,53 @@ struct ChargingSessionsView: SwiftUICore.View {
 
             }
         }
+    }
+
+    /// Title for a per-distance price card, varying by unit and selected basis.
+    private func perDistancePriceTitle(unit: MeasurementSystem, basis: DistanceCostBasis, chargingOnly: Bool) -> String {
+        switch (unit, basis) {
+        case (.metric, .perUnit):
+            return chargingOnly
+                ? L("One kilometer price (charging only)")
+                : L("One kilometer price (total)")
+        case (.metric, .perHundredUnits):
+            return chargingOnly
+                ? L("100 kilometers price (charging only)")
+                : L("100 kilometers price (total)")
+        case (.imperial, .perUnit):
+            return chargingOnly
+                ? L("One mile price (charging only)")
+                : L("One mile price (total)")
+        case (.imperial, .perHundredUnits):
+            return chargingOnly
+                ? L("100 miles price (charging only)")
+                : L("100 miles price (total)")
+        }
+    }
+
+    /// Hint shown behind the info icon, varying by unit and selected basis.
+    private func perDistancePriceHint(unit: MeasurementSystem, basis: DistanceCostBasis, chargingOnly: Bool) -> String {
+        let base: String
+        switch (unit, basis) {
+        case (.metric, .perUnit):
+            base = chargingOnly
+                ? L("How much one kilometer costs you including only charging expenses")
+                : L("How much one kilometer costs you including all logged expenses")
+        case (.metric, .perHundredUnits):
+            base = chargingOnly
+                ? L("How much 100 kilometers cost you including only charging expenses")
+                : L("How much 100 kilometers cost you including all logged expenses")
+        case (.imperial, .perUnit):
+            base = chargingOnly
+                ? L("How much one mile costs you including only charging expenses")
+                : L("How much one mile costs you including all logged expenses")
+        case (.imperial, .perHundredUnits):
+            base = chargingOnly
+                ? L("How much 100 miles cost you including only charging expenses")
+                : L("How much 100 miles cost you including all logged expenses")
+        }
+
+        return base
     }
 }
 

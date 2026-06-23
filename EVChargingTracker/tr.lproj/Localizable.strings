@@ -291,6 +291,23 @@
 
 /* Appearance Mode */
 "Appearance" = "Görünüm";
+
+/* Distance cost basis */
+"Cost per distance" = "Mesafe başına maliyet";
+"distance.cost.basis.per_unit" = "1 km / mi başına";
+"distance.cost.basis.per_hundred" = "100 km / mi başına";
+"Switch to per 1 km/mi" = "'1 km/mi başına' olarak değiştir";
+"Switch to per 100 km/mi" = "'100 km/mi başına' olarak değiştir";
+"per 100 km" = "100 km'de";
+"per 100 mi" = "100 mi'de";
+"100 kilometers price (charging only)" = "100 kilometre başı maliyet (sadece şarj)";
+"100 kilometers price (total)" = "100 kilometre başı maliyet (toplam)";
+"100 miles price (charging only)" = "100 mil başı maliyet (sadece şarj)";
+"100 miles price (total)" = "100 mil başı maliyet (toplam)";
+"How much 100 kilometers cost you including only charging expenses" = "Sadece şarj masrafları dahil olan 100 kilometrenin maliyeti ne kadardır?";
+"How much 100 kilometers cost you including all logged expenses" = "Tüm kaydedilen harcamalar dahil olan 100 kilometrenin maliyeti ne kadardır";
+"How much 100 miles cost you including only charging expenses" = "Sadece şarj masrafları dahil olan 100 milin maliyeti ne kadardır?";
+"How much 100 miles cost you including all logged expenses" = "Tüm kayıtlı masraflar dahil olan 100 milin maliyeti ne kadardır?";
 "System" = "Sistem";
 "Light" = "Açık";
 "Dark" = "Koyu";

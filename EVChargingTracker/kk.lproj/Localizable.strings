@@ -298,6 +298,23 @@
 
 /* Appearance Mode */
 "Appearance" = "Сыртқы түрі";
+
+/* Distance cost basis */
+"Cost per distance" = "Қашықтыққа шаққандағы құн";
+"distance.cost.basis.per_unit" = "1 км / миля сайын";
+"distance.cost.basis.per_hundred" = "100 км / миля сайын";
+"Switch to per 1 km/mi" = "'1 км/миля сайын' күйіне ауысу";
+"Switch to per 100 km/mi" = "'100 км/миля сайын' күйіне ауысу";
+"per 100 km" = "100 км сайын";
+"per 100 mi" = "100 миля сайын";
+"100 kilometers price (charging only)" = "100 км бағасы (тек зарядтау)";
+"100 kilometers price (total)" = "100 км бағасы (барлығы)";
+"100 miles price (charging only)" = "100 миля бағасы (тек зарядтау)";
+"100 miles price (total)" = "100 миля бағасы (барлығы)";
+"How much 100 kilometers cost you including only charging expenses" = "Тек зарядтау шығындарын қоса есептегендегі 100 км құны";
+"How much 100 kilometers cost you including all logged expenses" = "Барлық тіркелген шығындарды қоса есептегендегі 100 км құны";
+"How much 100 miles cost you including only charging expenses" = "Тек зарядтау шығындарын қоса есептегендегі 100 миля құны";
+"How much 100 miles cost you including all logged expenses" = "Барлық тіркелген шығындарды қоса есептегендегі 100 миля құны";
 "System" = "Жүйелік";
 "Light" = "Ашық";
 "Dark" = "Қараңғы";

@@ -308,6 +308,23 @@
 
 /* Appearance Mode */
 "Appearance" = "Appearance";
+
+/* Distance cost basis */
+"Cost per distance" = "Cost per distance";
+"distance.cost.basis.per_unit" = "Per 1 km / mi";
+"distance.cost.basis.per_hundred" = "Per 100 km / mi";
+"Switch to per 1 km/mi" = "Switch to per 1 km/mi";
+"Switch to per 100 km/mi" = "Switch to per 100 km/mi";
+"per 100 km" = "per 100 km";
+"per 100 mi" = "per 100 mi";
+"100 kilometers price (charging only)" = "100 kilometers price (charging only)";
+"100 kilometers price (total)" = "100 kilometers price (total)";
+"100 miles price (charging only)" = "100 miles price (charging only)";
+"100 miles price (total)" = "100 miles price (total)";
+"How much 100 kilometers cost you including only charging expenses" = "How much 100 kilometers cost you including only charging expenses";
+"How much 100 kilometers cost you including all logged expenses" = "How much 100 kilometers cost you including all logged expenses";
+"How much 100 miles cost you including only charging expenses" = "How much 100 miles cost you including only charging expenses";
+"How much 100 miles cost you including all logged expenses" = "How much 100 miles cost you including all logged expenses";
 "System" = "System";
 "Light" = "Light";
 "Dark" = "Dark";

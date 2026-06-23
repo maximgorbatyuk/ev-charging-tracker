@@ -29,6 +29,7 @@ class UserSettingsViewModel: ObservableObject {
     @Published var defaultCurrency: Currency
     @Published var selectedLanguage: AppLanguage
     @Published var selectedAppearanceMode: AppearanceMode
+    @Published var selectedDistanceCostBasis: DistanceCostBasis
     @Published var isExporting: Bool = false
     @Published var isImporting: Bool = false
     @Published var exportError: String?
@@ -81,6 +82,7 @@ class UserSettingsViewModel: ObservableObject {
         self.defaultCurrency = userSettingsRepository?.fetchCurrency() ?? .kzt
         self.selectedLanguage = userSettingsRepository?.fetchLanguage() ?? .en
         self.selectedAppearanceMode = AppearanceManager.shared.currentMode
+        self.selectedDistanceCostBasis = DistanceCostBasisManager.shared.currentBasis
         self._allCars = db.carRepository?.getAllCars()
             .map {
                 CarDto(
@@ -153,6 +155,13 @@ class UserSettingsViewModel: ObservableObject {
 
         /// Update the global appearance manager so the UI reacts immediately
         AppearanceManager.shared.setMode(mode)
+    }
+
+    /// Saves the selected distance cost basis so the Stats screen reacts immediately.
+    func saveDistanceCostBasis(_ basis: DistanceCostBasis) {
+        self.selectedDistanceCostBasis = basis
+
+        DistanceCostBasisManager.shared.setBasis(basis)
     }
 
     func getCars() -> [CarDto] {

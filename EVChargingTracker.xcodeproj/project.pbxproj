@@ -62,6 +62,14 @@
 				Config/Debug.xcconfig,
 				Config/Release.xcconfig,
 				Info.plist,
+				README.md,
+			);
+			target = 87756BD62E963D240055273C /* EVChargingTracker */;
+		};
+		87411A612EA140CB008F69EF /* Exceptions for "BusinessLogic" folder in "EVChargingTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				README.md,
 			);
 			target = 87756BD62E963D240055273C /* EVChargingTracker */;
 		};
@@ -69,12 +77,14 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				README.md,
 			);
 			target = C1ADE0050000000000000005 /* ShareExtension */;
 		};
 		C1ADE0040000000000000004 /* Exceptions for "BusinessLogic" folder in "ShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				README.md,
 				Services/AnalyticsService.swift,
 				Services/BackgroundTaskManager.swift,
 			);
@@ -86,6 +96,7 @@
 		87171B3F2ED9B1240084F6D7 /* BusinessLogic */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				87411A612EA140CB008F69EF /* Exceptions for "BusinessLogic" folder in "EVChargingTracker" target */,
 				C1ADE0040000000000000004 /* Exceptions for "BusinessLogic" folder in "ShareExtension" target */,
 			);
 			path = BusinessLogic;
@@ -521,7 +532,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2026.2.4;
+				MARKETING_VERSION = 2026.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTrackerDebug;
 				PRODUCT_MODULE_NAME = EVChargingTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
@@ -558,7 +569,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2026.2.4;
+				MARKETING_VERSION = 2026.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = mgorbatyuk.dev.EVChargeTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -626,7 +637,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2026.2.4;
+				MARKETING_VERSION = 2026.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SHARE_EXTENSION_BUNDLE_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -655,7 +666,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2026.2.4;
+				MARKETING_VERSION = 2026.2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SHARE_EXTENSION_BUNDLE_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

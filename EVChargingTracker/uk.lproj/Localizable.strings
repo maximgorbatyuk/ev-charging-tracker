@@ -287,6 +287,23 @@
 
 /* Appearance Mode */
 "Appearance" = "Оформлення";
+
+/* Distance cost basis */
+"Cost per distance" = "Вартість за відстань";
+"distance.cost.basis.per_unit" = "За 1 км / милю";
+"distance.cost.basis.per_hundred" = "За 100 км / миль";
+"Switch to per 1 km/mi" = "Перемкнути на 'за 1 км/милю'";
+"Switch to per 100 km/mi" = "Перемкнути на 'за 100 км/миль'";
+"per 100 km" = "за 100 км";
+"per 100 mi" = "за 100 миль";
+"100 kilometers price (charging only)" = "Вартість 100 кілометрів (лише зарядка)";
+"100 kilometers price (total)" = "Вартість 100 кілометрів (загалом)";
+"100 miles price (charging only)" = "Вартість 100 миль (лише зарядка)";
+"100 miles price (total)" = "Вартість 100 миль (загалом)";
+"How much 100 kilometers cost you including only charging expenses" = "Скільки коштують 100 кілометрів, враховуючи лише витрати на зарядку";
+"How much 100 kilometers cost you including all logged expenses" = "Скільки коштують 100 кілометрів, враховуючи всі записані витрати";
+"How much 100 miles cost you including only charging expenses" = "Скільки коштують 100 миль, враховуючи лише витрати на зарядку";
+"How much 100 miles cost you including all logged expenses" = "Скільки коштують 100 миль, враховуючи всі записані витрати";
 "System" = "Системна";
 "Light" = "Світла";
 "Dark" = "Темна";

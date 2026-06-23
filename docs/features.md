@@ -7,7 +7,7 @@ Status legend: `Implemented` = working in code, `Partial` = present with known g
 | Core tracking | Multi-car support | Implemented | Add/edit/delete cars, select active tracking car, per-car currency/mileage. |
 | Core tracking | Charging session logging | Implemented | Detailed add/edit flow, charger type, energy, cost, odometer. |
 | Core tracking | Non-charging expenses | Implemented | Maintenance, repair, carwash, other expense types. |
-| Stats | Cost per km (charging only + total) | Implemented | Computed in stats view model. |
+| Stats | Cost per km (charging only + total) | Implemented | Computed in stats view model; display basis (per 1 unit or per 100 units) is user-configurable. |
 | Stats | CO2 saved estimation | Implemented | Uses configurable coefficient from env. |
 | Stats | Energy efficiency (kWh/100km) | Implemented | Based on charging and total mileage. |
 | Stats | Expense charts | Implemented | Monthly chart with type filters (last N months, default 6). |
@@ -22,6 +22,7 @@ Status legend: `Implemented` = working in code, `Partial` = present with known g
 | Notifications | Local notification scheduling/cancel | Implemented | Date-based scheduling tied to maintenance records. |
 | Settings | Runtime language switching | Implemented | en/de/ru/kk/tr/uk via custom localization manager. |
 | Settings | Appearance mode | Implemented | system/light/dark persisted in UserDefaults. |
+| Settings | Cost-per-distance basis | Implemented | Stats per-distance cost shown per 1 unit or per 100 units; persisted in UserDefaults. |
 | Settings | App update badge/check | Implemented | Checks App Store version via lookup API. |
 | Backup | Export to JSON + share sheet | Implemented | Temporary export file generation with metadata. |
 | Backup | Import JSON with validation + preview | Implemented | Includes destructive confirmation and safety checks. |

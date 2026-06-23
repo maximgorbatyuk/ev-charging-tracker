@@ -15,10 +15,21 @@ struct CostsBlockView: SwiftUICore.View {
     let costsValue: Double
     let perKilometer: Bool
     var measurementSystem: MeasurementSystem = .metric
+    var distanceCostBasis: DistanceCostBasis = .perUnit
 
     @ObservedObject private var analytics = AnalyticsService.shared
 
     @State private var showingHelp = false
+
+    /// Suffix shown next to the value, e.g. "per km" or "per 100 mi".
+    private var perDistanceSuffix: String {
+        switch (measurementSystem, distanceCostBasis) {
+        case (.imperial, .perUnit): return L("per mi")
+        case (.imperial, .perHundredUnits): return L("per 100 mi")
+        case (.metric, .perUnit): return L("per km")
+        case (.metric, .perHundredUnits): return L("per 100 km")
+        }
+    }
 
     func getFormattedDigits() -> String {
         let formatter = NumberFormatter()
@@ -54,17 +65,10 @@ struct CostsBlockView: SwiftUICore.View {
                                 .foregroundColor(AppColors.inkSoft)
                                 .help(hint)
                         }
-                        .popover(isPresented: $showingHelp) {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text(L("Hint"))
-                                    .appFont(.headline)
-
-                                Text(hint)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                            .padding()
-                            .presentationCompactAdaptation(.popover)
-                            .frame(width: 250)
+                        .sheet(isPresented: $showingHelp) {
+                            CostHintModalView(hint: hint, showsBasisSwitch: perKilometer)
+                                .presentationDetents([.medium])
+                                .presentationDragIndicator(.visible)
                         }
                     }
                 }
@@ -82,7 +86,7 @@ struct CostsBlockView: SwiftUICore.View {
                     }
 
                     if perKilometer {
-                        Text(measurementSystem == .imperial ? L("per mi") : L("per km"))
+                        Text(perDistanceSuffix)
                             .appFont(.footnote, weight: .medium)
                             .foregroundColor(AppColors.inkSoft)
                     }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026.2.5 (2026-06-23)
+
+- New "Cost per distance" setting: choose whether the Stats screen shows your cost per 1 km/mi or per 100 km/mi (Settings → Base settings)
+- Switch between per 1 km/mi and per 100 km/mi right from the cost hint on the Stats screen
+- Various under-the-hood improvements
+
 ## 2026.2.3 (2026-03-22)
 
 - **Simplified Chinese Localization**

@@ -1,5 +1,49 @@
 # Release notes
 
+## 2026.2.5
+
+### English
+
+```
+We added a Cost per distance setting — now you can choose whether the Stats screen shows your running cost per 1 km/mi or per 100 km/mi, and switch between them right from the Stats screen whenever you like. We also made a few improvements under the hood.
+```
+
+### Русский (RU)
+
+```
+Мы добавили настройку «Стоимость за расстояние» — теперь вы можете выбрать, как на экране статистики показывается стоимость пути: за 1 км/милю или за 100 км/миль, и переключаться между ними прямо на экране статистики, когда захотите. Также мы сделали несколько улучшений под капотом.
+```
+
+### Қазақша (KK)
+
+```
+Біз «Қашықтыққа шаққандағы құн» параметрін қостық — енді статистика экранында жол құнын 1 км/миля немесе 100 км/миля есебімен көрсетуді таңдап, оларды статистика экранының өзінде кез келген уақытта ауыстыра аласыз. Сонымен қатар ішкі бірнеше жақсарту енгіздік.
+```
+
+### Türkçe (TR)
+
+```
+"Mesafe başına maliyet" ayarını ekledik — artık İstatistik ekranında maliyetinizi 1 km/mi başına mı yoksa 100 km/mi başına mı göstereceğinizi seçebilir ve istediğiniz zaman doğrudan İstatistik ekranından bunlar arasında geçiş yapabilirsiniz. Ayrıca arka planda birkaç iyileştirme yaptık.
+```
+
+### Українська (UK)
+
+```
+Ми додали налаштування «Вартість за відстань» — тепер ви можете вибрати, як на екрані статистики показується вартість шляху: за 1 км/милю чи за 100 км/миль, і перемикатися між ними прямо на екрані статистики будь-коли. Також ми зробили кілька покращень під капотом.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben die Einstellung „Kosten pro Distanz" hinzugefügt — Sie können jetzt wählen, ob der Statistik-Bildschirm Ihre Kosten pro 1 km/mi oder pro 100 km/mi anzeigt, und direkt auf dem Statistik-Bildschirm jederzeit zwischen beiden wechseln. Außerdem haben wir einige Verbesserungen unter der Haube vorgenommen.
+```
+
+### 简体中文 (ZH-Hans)
+
+```
+我们新增了「按距离显示成本」设置 — 现在您可以选择统计界面按每 1 公里/英里还是每 100 公里/英里显示费用，并随时在统计界面上直接切换。我们还在后台做了一些改进。
+```
+
 ## 2026.2.4
 
 ### English
