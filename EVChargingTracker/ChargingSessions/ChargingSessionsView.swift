@@ -62,7 +62,9 @@ struct ChargingSessionsView: SwiftUICore.View {
                             }
 
                             AppButton(
-                                L("Add Charging Session"),
+                                viewModel.selectedCarForExpenses?.carType == .hybrid
+                                    ? L("Add charge/fuel")
+                                    : L("Add Charging Session"),
                                 kind: .accent,
                                 size: .lg,
                                 icon: "plus",
@@ -110,6 +112,7 @@ struct ChargingSessionsView: SwiftUICore.View {
 
                     let selectedCar = viewModel.selectedCarForExpenses
                     let lastChargingSession = viewModel.getLastChargingSessionOrNull(selectedCar)
+                    let lastFuelSession = viewModel.getLastFuelSessionOrNull(selectedCar)
 
                     AddExpenseView(
                         defaultExpenseType: .charging,
@@ -117,12 +120,16 @@ struct ChargingSessionsView: SwiftUICore.View {
                         selectedCar: selectedCar,
                         allCars: viewModel.getAllCars(),
                         lastChargingSession: lastChargingSession,
+                        lastFuelSession: lastFuelSession,
                         onAdd: { newExpenseResult in
 
                             viewModel.saveChargingSession(newExpenseResult)
 
+                            let addedEventName = newExpenseResult.expense.expenseType == .fuel
+                                ? "fuel_session_added"
+                                : "charge_session_added"
                             analytics.trackEvent(
-                                "charge_session_added",
+                                addedEventName,
                                 properties: [
                                     "screen": "charging_sessions_stats_screen"
                                 ])

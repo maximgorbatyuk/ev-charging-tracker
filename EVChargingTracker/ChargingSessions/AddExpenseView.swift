@@ -6,6 +6,13 @@
 //
 import SwiftUI
 
+/// Charge vs Fuel entry for the charging-flow form. Only Hybrid cars expose the
+/// switcher; Electric cars stay charge-only.
+enum ExpenseEntryMode: String {
+    case charge
+    case fuel
+}
+
 struct AddExpenseView: SwiftUICore.View {
 
     static let ExpenseFormatWithTwoDigits = "%.2f"
@@ -18,6 +25,7 @@ struct AddExpenseView: SwiftUICore.View {
     let existingExpense: Expense?
     let onAdd: (AddExpenseViewResult) -> Void
     let lastChargingSession: Expense?
+    let lastFuelSession: Expense?
     let prefilledTitle: String?
     let prefilledNotes: String?
 
@@ -44,9 +52,17 @@ struct AddExpenseView: SwiftUICore.View {
     @State private var storedPricePerKWh: String = ""
     @State private var storedChargerType: ChargerType?
 
+    // Charge/Fuel mode and fuel-specific inputs (Hybrid cars only).
+    @State private var mode: ExpenseEntryMode = .charge
+    @State private var fuelType: FuelType = .octane95
+    @State private var fuelVolumeText = ""
+    @State private var fuelPricePerUnitText = ""
+
     @FocusState private var isCountOfKWtFocused: Bool
     @FocusState private var isPricePerKWhFocused: Bool
     @FocusState private var isCostFocused: Bool
+    @FocusState private var isFuelVolumeFocused: Bool
+    @FocusState private var isFuelPriceFocused: Bool
 
     private var isEditMode: Bool {
         existingExpense != nil
@@ -59,6 +75,7 @@ struct AddExpenseView: SwiftUICore.View {
         allCars: [Car],
         existingExpense: Expense? = nil,
         lastChargingSession: Expense? = nil,
+        lastFuelSession: Expense? = nil,
         prefilledTitle: String? = nil,
         prefilledNotes: String? = nil,
         onAdd: @escaping (AddExpenseViewResult) -> Void
@@ -70,6 +87,7 @@ struct AddExpenseView: SwiftUICore.View {
         self.existingExpense = existingExpense
         self.onAdd = onAdd
         self.lastChargingSession = lastChargingSession
+        self.lastFuelSession = lastFuelSession
         self.prefilledTitle = prefilledTitle
         self.prefilledNotes = prefilledNotes
 
@@ -129,6 +147,85 @@ struct AddExpenseView: SwiftUICore.View {
                 _storedChargerType = State(initialValue: lastChargingSession.chargerType)
             }
         }
+
+        // Fuel mode + fuel-field prefill. Octane and price-per-unit carry over
+        // from the edited expense (edit) or the last fuel session (new); volume
+        // always starts empty.
+        _mode = State(initialValue: existingExpense?.expenseType == .fuel ? .fuel : .charge)
+
+        if let expense = existingExpense, expense.expenseType == .fuel {
+            if let savedFuelType = expense.fuelType {
+                _fuelType = State(initialValue: savedFuelType)
+            }
+
+            // Edit mode restores the stored volume; a blank field would hide the
+            // saved value and block Save (isFuelFormValid needs volume > 0).
+            if let volume = expense.fuelVolume {
+                _fuelVolumeText = State(
+                    initialValue: String(format: AddExpenseView.ExpenseFormatWithTwoDigits, volume))
+            }
+
+            if let price = expense.getFuelPricePerUnit() {
+                _fuelPricePerUnitText = State(
+                    initialValue: String(format: AddExpenseView.ExpenseFormatWithThreeDigits, price))
+            }
+        } else if let lastFuelSession = lastFuelSession {
+            if let savedFuelType = lastFuelSession.fuelType {
+                _fuelType = State(initialValue: savedFuelType)
+            }
+
+            if let price = lastFuelSession.getFuelPricePerUnit() {
+                _fuelPricePerUnitText = State(
+                    initialValue: String(format: AddExpenseView.ExpenseFormatWithThreeDigits, price))
+            }
+        }
+    }
+
+    private var showsChargeOrFuelFields: Bool {
+        defaultExpenseType == .charging || defaultExpenseType == .fuel
+    }
+
+    private var showsModeSwitcher: Bool {
+        existingExpense == nil &&
+        defaultExpenseType == .charging &&
+        selectedCardForExpense?.carType == .hybrid
+    }
+
+    private var isFuelFormValid: Bool {
+        guard let volume = Double(fuelVolumeText.replacing(",", with: ".")),
+              volume > 0
+        else {
+            return false
+        }
+
+        guard let price = Double(fuelPricePerUnitText.replacing(",", with: ".")),
+              price >= 0
+        else {
+            return false
+        }
+
+        return true
+    }
+
+    /// Charging needs a positive energy value; cost stays optional so free
+    /// charging can still be logged (mirrors the guard in `saveSession()`).
+    private var isChargeFormValid: Bool {
+        guard let energy = Double(energyCharged.replacing(",", with: ".")),
+              energy > 0
+        else {
+            return false
+        }
+
+        return true
+    }
+
+    private var isSaveDisabled: Bool {
+        switch mode {
+        case .fuel:
+            return !isFuelFormValid
+        case .charge:
+            return showsChargeOrFuelFields && !isChargeFormValid
+        }
     }
 
     var body: some SwiftUICore.View {
@@ -168,59 +265,33 @@ struct AddExpenseView: SwiftUICore.View {
                                 ])
 
                             selectedCardForExpense = allCars.first { $0.id == newCarId }
+
+                            // Electric cars are charge-only — drop any fuel input.
+                            if selectedCardForExpense?.carType == .electric {
+                                mode = .charge
+                                fuelVolumeText = ""
+                                fuelPricePerUnitText = ""
+                            }
                         }
                         .foregroundColor(isEditMode ? .gray : .primary)
                         .disabled(isEditMode)
                     }
 
+                    if showsModeSwitcher {
+                        modeSwitcher
+                    }
+
                     DatePicker(L("Date"), selection: $date, displayedComponents: .date)
 
-                    if defaultExpenseType == .charging {
-                        HStack {
-                            Text(L("Energy (kWh)"))
-                            Spacer()
-                            TextField(L("45.2"), text: $energyCharged)
-                                .focused($isCountOfKWtFocused)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .onChange(of: energyCharged, { _, _ in
-                                    if !isCountOfKWtFocused {
-                                        return
-                                    }
-
-                                    adjustCostsBasedOnInputs()
-                                })
+                    if showsChargeOrFuelFields {
+                        if mode == .charge {
+                            chargeFields
+                        } else {
+                            fuelFields
                         }
-
-                        HStack {
-                            Text(String(format: L("Price per kWh"), defaultCurrency.rawValue))
-                            Spacer()
-                            TextField(L("65.0"), text: $pricePerKWh)
-                                .focused($isPricePerKWhFocused)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .onChange(of: pricePerKWh, { _, _ in
-
-                                    if !isPricePerKWhFocused {
-                                        return
-                                    }
-
-                                    adjustCostsBasedOnInputs()
-                                })
-                        }
-
-                        Picker(L("Charger Type"), selection: $chargerType) {
-                            ForEach(ChargerType.allCases, id: \.self) { type in
-                                Text(L(type.rawValue)).tag(type)
-                            }
-                        }
-                        .onChange(of: chargerType) { oldChargerType, newChargerType in
-                            handleChargerTypeChange(from: oldChargerType, to: newChargerType)
-                        }
-
                     } else {
                         Picker(L("Expense Type"), selection: $expenseType) {
-                            ForEach(ExpenseType.allCases.filter({ $0 != .charging }), id: \.self) { type in
+                            ForEach(ExpenseType.allCases.filter({ $0 != .charging && $0 != .fuel }), id: \.self) { type in
                                 Text(L(type.rawValue)).tag(type)
                             }
                         }
@@ -256,7 +327,9 @@ struct AddExpenseView: SwiftUICore.View {
                                     return
                                 }
 
-                                if defaultExpenseType == .charging {
+                                if mode == .fuel {
+                                    adjustFuelPriceBasedOnCost()
+                                } else if defaultExpenseType == .charging {
                                     adjustEnergyBasedOnCost()
                                 } else {
                                     adjustPriceBasedOnInputs()
@@ -306,11 +379,13 @@ struct AddExpenseView: SwiftUICore.View {
                             analytics.trackEvent("save_button_clicked", properties: [
                                     "button_name": "save",
                                     "screen": isEditMode ? "edit_expense_screen" : "add_expense_screen",
-                                    "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none")
+                                    "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none"),
+                                    "expense_mode": mode.rawValue
                                 ])
 
                             saveSession()
-                        }
+                        },
+                        isSaveDisabled: isSaveDisabled
                     )
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
@@ -336,11 +411,13 @@ struct AddExpenseView: SwiftUICore.View {
                         analytics.trackEvent("save_toolbaar_button_clicked", properties: [
                                 "button_name": "save",
                                 "screen": isEditMode ? "edit_expense_screen" : "add_expense_screen",
-                                "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none")
+                                "action": (isEditMode ? "edit_expense_" : "add_expense_") + (defaultExpenseType?.rawValue ?? "none"),
+                                "expense_mode": mode.rawValue
                             ])
 
                         saveSession()
                     }
+                    .disabled(isSaveDisabled)
                 }
             }
             .onAppear {
@@ -351,6 +428,169 @@ struct AddExpenseView: SwiftUICore.View {
                     ])
             }
         }
+    }
+
+    @ViewBuilder
+    private var chargeFields: some SwiftUICore.View {
+        HStack {
+            Text(L("Energy (kWh)"))
+            Spacer()
+            TextField(L("45.2"), text: $energyCharged)
+                .focused($isCountOfKWtFocused)
+                .keyboardType(.decimalPad)
+                .multilineTextAlignment(.trailing)
+                .onChange(of: energyCharged, { _, _ in
+                    if !isCountOfKWtFocused {
+                        return
+                    }
+
+                    adjustCostsBasedOnInputs()
+                })
+        }
+
+        HStack {
+            Text(String(format: L("Price per kWh"), defaultCurrency.rawValue))
+            Spacer()
+            TextField(L("65.0"), text: $pricePerKWh)
+                .focused($isPricePerKWhFocused)
+                .keyboardType(.decimalPad)
+                .multilineTextAlignment(.trailing)
+                .onChange(of: pricePerKWh, { _, _ in
+                    if !isPricePerKWhFocused {
+                        return
+                    }
+
+                    adjustCostsBasedOnInputs()
+                })
+        }
+
+        Picker(L("Charger Type"), selection: $chargerType) {
+            ForEach(ChargerType.allCases, id: \.self) { type in
+                Text(L(type.rawValue)).tag(type)
+            }
+        }
+        .onChange(of: chargerType) { oldChargerType, newChargerType in
+            handleChargerTypeChange(from: oldChargerType, to: newChargerType)
+        }
+    }
+
+    @ViewBuilder
+    private var fuelFields: some SwiftUICore.View {
+        Picker(L("Fuel type"), selection: $fuelType) {
+            ForEach(FuelType.allCases, id: \.self) { type in
+                Text(type.localizedName).tag(type)
+            }
+        }
+
+        HStack {
+            let volumeUnit = selectedCardForExpense?.measurementSystem.volumeUnitLabel ?? L("L")
+            Text("\(L("Volume")) (\(volumeUnit))")
+            Spacer()
+            TextField(L("45.2"), text: $fuelVolumeText)
+                .focused($isFuelVolumeFocused)
+                .keyboardType(.decimalPad)
+                .multilineTextAlignment(.trailing)
+                .onChange(of: fuelVolumeText, { _, _ in
+                    if !isFuelVolumeFocused {
+                        return
+                    }
+
+                    adjustFuelCostBasedOnInputs()
+                })
+        }
+
+        HStack {
+            Text(fuelPriceLabel)
+            Spacer()
+            TextField(L("65.0"), text: $fuelPricePerUnitText)
+                .focused($isFuelPriceFocused)
+                .keyboardType(.decimalPad)
+                .multilineTextAlignment(.trailing)
+                .onChange(of: fuelPricePerUnitText, { _, _ in
+                    if !isFuelPriceFocused {
+                        return
+                    }
+
+                    adjustFuelCostBasedOnInputs()
+                })
+        }
+    }
+
+    private var fuelPriceLabel: String {
+        selectedCardForExpense?.measurementSystem == .imperial
+            ? L("Price per gallon")
+            : L("Price per litre")
+    }
+
+    /// Charge/Fuel toggle: both options carry their brand tint at all times
+    /// (green for charge, purple for fuel); the active one gets a solid fill.
+    @ViewBuilder
+    private var modeSwitcher: some SwiftUICore.View {
+        HStack(spacing: 8) {
+            modeSwitcherButton(
+                title: L("Charge"),
+                isSelected: mode == .charge,
+                activeColor: AppColors.green,
+                softColor: AppColors.greenSoft,
+                action: { mode = .charge })
+
+            modeSwitcherButton(
+                title: L("Fuel"),
+                isSelected: mode == .fuel,
+                activeColor: AppColors.purple,
+                softColor: AppColors.purpleSoft,
+                action: { mode = .fuel })
+        }
+        .onChange(of: mode) { _, newMode in
+            analytics.trackEvent("expense_mode_switched", properties: [
+                    "screen": "add_expense_screen",
+                    "mode": newMode.rawValue
+                ])
+        }
+    }
+
+    private func modeSwitcherButton(
+        title: String,
+        isSelected: Bool,
+        activeColor: Color,
+        softColor: Color,
+        action: @escaping () -> Void
+    ) -> some SwiftUICore.View {
+        Button(action: action) {
+            Text(title)
+                .appFont(.subheadline, weight: isSelected ? .semibold : .medium)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .foregroundColor(isSelected ? .white : activeColor)
+                .background(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(isSelected ? activeColor : softColor))
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// Fuel: cost = volume × price. Called when the volume field changes.
+    private func adjustFuelCostBasedOnInputs() {
+        guard let volume = Double(fuelVolumeText.replacing(",", with: ".")),
+              let price = Double(fuelPricePerUnitText.replacing(",", with: "."))
+        else {
+            return
+        }
+
+        cost = String(format: "%.2f", FuelCalc.cost(volume: volume, price: price))
+    }
+
+    /// Fuel: price/unit = cost / volume. The volume the user typed is the anchor,
+    /// so editing cost (or price) recomputes the other field and never volume.
+    private func adjustFuelPriceBasedOnCost() {
+        guard let costValue = Double(cost.replacing(",", with: ".")),
+              let volume = Double(fuelVolumeText.replacing(",", with: ".")),
+              let price = FuelCalc.price(cost: costValue, volume: volume)
+        else {
+            return
+        }
+
+        fuelPricePerUnitText = String(format: AddExpenseView.ExpenseFormatWithThreeDigits, price)
     }
 
     private func adjustCostsBasedOnInputs() {
@@ -412,10 +652,13 @@ struct AddExpenseView: SwiftUICore.View {
         cost = cost.replacing(",", with: ".")
         energyCharged = energyCharged.replacing(",", with: ".")
         batteryCapacity = batteryCapacity.replacing(",", with: ".")
+        fuelVolumeText = fuelVolumeText.replacing(",", with: ".")
 
-        // Unwrap expense type
+        // Unwrap expense type — the charge/fuel flow is driven by `mode`.
         let finalExpenseType: ExpenseType?
-        if let defaultType = defaultExpenseType {
+        if showsChargeOrFuelFields {
+            finalExpenseType = (mode == .fuel) ? .fuel : .charging
+        } else if let defaultType = defaultExpenseType {
             finalExpenseType = defaultType
         } else {
             finalExpenseType = expenseType
@@ -427,6 +670,9 @@ struct AddExpenseView: SwiftUICore.View {
         }
 
         var energy = 0.0
+        var fuelTypeToSave: FuelType?
+        var fuelVolumeToSave: Double?
+
         if expenseTypeUnwrapped == .charging {
             guard let energyParsed = Double(energyCharged) else {
                 alertMessage = L("Please type a valid value for Energy.")
@@ -434,6 +680,29 @@ struct AddExpenseView: SwiftUICore.View {
             }
 
             energy = energyParsed
+        } else if expenseTypeUnwrapped == .fuel {
+            guard let volumeParsed = Double(fuelVolumeText),
+                  volumeParsed > 0
+            else {
+                alertMessage = L("Fuel.Error.VolumeInvalid")
+                return
+            }
+
+            guard let priceParsed = Double(fuelPricePerUnitText.replacing(",", with: ".")),
+                  priceParsed >= 0
+            else {
+                alertMessage = L("Fuel.Error.PriceInvalid")
+                return
+            }
+
+            fuelTypeToSave = fuelType
+            fuelVolumeToSave = volumeParsed
+
+            // Price-per-unit is derived from cost, so a fuel entry must persist a
+            // cost; synthesize it from volume × price when the field is empty.
+            if Double(cost) == nil {
+                cost = String(format: "%.2f", FuelCalc.cost(volume: volumeParsed, price: priceParsed))
+            }
         }
 
         var currentMileageValue: Int? = Int(odometer)
@@ -459,7 +728,9 @@ struct AddExpenseView: SwiftUICore.View {
             isInitialRecord: existingExpense?.isInitialRecord ?? false,
             expenseType: expenseTypeUnwrapped,
             currency: defaultCurrency,
-            carId: selectedCardForExpense?.id ?? existingExpense?.carId
+            carId: selectedCardForExpense?.id ?? existingExpense?.carId,
+            fuelType: fuelTypeToSave,
+            fuelVolume: fuelVolumeToSave
         )
 
         var initialExpenseForNewCar: Expense?

@@ -83,7 +83,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             consumptionLineChartData = ChargingConsumptionLineChartData(
                 expenses: expenses,
                 analytics: self.analytics,
-                monthsCount: getMonthCountForCharts()
+                monthsCount: getMonthCountForCharts(),
+                volumeUnitLabel: car.measurementSystem.volumeUnitLabel
             )
         }
     }
@@ -317,6 +318,18 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
         let expensesSortedByDesc = expenses
             .filter({ $0.expenseType == .charging && $0.carId == car.id })
+            .sorted(by: { $0.date > $1.date })
+
+        return expensesSortedByDesc.first
+    }
+
+    func getLastFuelSessionOrNull(_ car: Car?) -> Expense? {
+        guard let car = car, !expenses.isEmpty else {
+            return nil
+        }
+
+        let expensesSortedByDesc = expenses
+            .filter({ $0.expenseType == .fuel && $0.carId == car.id })
             .sorted(by: { $0.date > $1.date })
 
         return expensesSortedByDesc.first

@@ -966,6 +966,8 @@ struct UserSettingsView: SwiftUICore.View {
                         return
                     }
 
+                    let wasHybrid = carToUpdate.carType == .hybrid
+
                     carToUpdate.updateValues(
                         name: updated.name,
                         batteryCapacity: updated.batteryCapacity,
@@ -975,9 +977,18 @@ struct UserSettingsView: SwiftUICore.View {
                         selectedForTracking: updated.selectedForTracking,
                         frontWheelSize: updated.frontWheelSize,
                         rearWheelSize: updated.rearWheelSize,
-                        measurementSystem: updated.measurementSystem)
+                        measurementSystem: updated.measurementSystem,
+                        carType: updated.carType)
 
                     _ = viewModel.updateCar(car: carToUpdate)
+
+                    // Downgrading Hybrid→Electric permanently removes the car's
+                    // gasoline fuel expenses.
+                    if wasHybrid,
+                       updated.carType == .electric,
+                       let carId = carToUpdate.id {
+                        viewModel.deleteFuelExpenses(forCar: carId)
+                    }
 
                     editingCar = nil
                 } else {
@@ -992,7 +1003,8 @@ struct UserSettingsView: SwiftUICore.View {
                         createdAt: Date(),
                         frontWheelSize: updated.frontWheelSize,
                         rearWheelSize: updated.rearWheelSize,
-                        measurementSystem: updated.measurementSystem
+                        measurementSystem: updated.measurementSystem,
+                        carType: updated.carType
                     )
 
                     _ = viewModel.insertCar(newCar)

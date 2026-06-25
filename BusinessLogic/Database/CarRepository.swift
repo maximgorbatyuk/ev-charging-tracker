@@ -38,6 +38,7 @@ class CarRepository: CarRepositoryProtocol {
     private let frontWheelSizeColumn = Expression<String?>("front_wheel_size")
     private let rearWheelSizeColumn = Expression<String?>("rear_wheel_size")
     private let measurementSystemColumn = Expression<String>("measurement_system")
+    private let carTypeColumn = Expression<String>("car_type")
 
     private let userSettingsRepository: UserSettingsRepository
     private var db: Connection
@@ -71,6 +72,7 @@ class CarRepository: CarRepositoryProtocol {
             t.column(frontWheelSizeColumn)
             t.column(rearWheelSizeColumn)
             t.column(measurementSystemColumn, defaultValue: MeasurementSystem.metric.rawValue)
+            t.column(carTypeColumn, defaultValue: CarType.electric.rawValue)
         }
     }
 
@@ -115,7 +117,8 @@ class CarRepository: CarRepositoryProtocol {
                 createdAtColumn <- currentDate,
                 frontWheelSizeColumn <- car.frontWheelSize,
                 rearWheelSizeColumn <- car.rearWheelSize,
-                measurementSystemColumn <- car.measurementSystem.rawValue
+                measurementSystemColumn <- car.measurementSystem.rawValue,
+                carTypeColumn <- car.carType.rawValue
             )
 
             let rowId = try db.run(insert)
@@ -177,7 +180,8 @@ class CarRepository: CarRepositoryProtocol {
                 selectedForTrackingColumn <- car.selectedForTracking,
                 frontWheelSizeColumn <- car.frontWheelSize,
                 rearWheelSizeColumn <- car.rearWheelSize,
-                measurementSystemColumn <- car.measurementSystem.rawValue
+                measurementSystemColumn <- car.measurementSystem.rawValue,
+                carTypeColumn <- car.carType.rawValue
             )
             let updated = try db.run(update)
             return updated > 0
@@ -319,6 +323,16 @@ class CarRepository: CarRepositoryProtocol {
             return .metric
         }()
 
+        let carType: CarType = {
+            // Older rows (pre-migration) and unrecognized values fall back to
+            // .electric so the app behaves as before until the user opts in.
+            if let raw = try? row.get(carTypeColumn),
+               let parsed = CarType(rawValue: raw) {
+                return parsed
+            }
+            return .electric
+        }()
+
         return Car(
             id: row[idColumn],
             name: row[nameColumn],
@@ -331,7 +345,8 @@ class CarRepository: CarRepositoryProtocol {
             createdAt: row[createdAtColumn],
             frontWheelSize: row[frontWheelSizeColumn],
             rearWheelSize: row[rearWheelSizeColumn],
-            measurementSystem: measurementSystem
+            measurementSystem: measurementSystem,
+            carType: carType
         )
     }
 

@@ -476,3 +476,30 @@
 "How much one mile costs you including only charging expenses" = "Скільки коштує одна миля, враховуючи лише витрати на зарядку";
 "One mile price (total)" = "Вартість однієї милі (загалом)";
 "How much one mile costs you including all logged expenses" = "Скільки коштує одна миля, враховуючи всі записані витрати";
+
+/* Hybrid car support (gasoline fuel) */
+"Filter.Fuel" = "Пальне";
+"expense.filter.fuel" = "Пальне";
+"Fuel.OctaneFormat" = "%@ RON";
+"Add charge/fuel" = "Додати зарядку/пальне";
+"Entry mode" = "Режим введення";
+"Charge" = "Зарядка";
+"Fuel" = "Пальне";
+"Fuel type" = "Тип пального";
+"Volume" = "Об'єм";
+"Price per litre" = "Ціна за літр";
+"Price per gallon" = "Ціна за галон";
+"L" = "л";
+"gal" = "гал";
+"Car type" = "Тип автомобіля";
+"Electric" = "Електро";
+"Hybrid" = "Гібрид";
+"CarType.SwitchToHybrid.Title" = "Перемкнути на гібрид?";
+"CarType.SwitchToHybrid.Body" = "Стануть доступні новий тип витрат «Пальне» та перемикач Зарядка/Пальне.";
+"CarType.SwitchToEV.Title" = "Перемкнути на електро?";
+"CarType.SwitchToEV.Body" = "Усі витрати на пальне для цього автомобіля будуть безповоротно видалені. Цю дію не можна скасувати.";
+"CarType.Switch.Confirm" = "Згоден, перемкнути";
+"Fuel.Error.VolumeInvalid" = "Введіть об'єм більший за 0.";
+"Fuel.Error.PriceInvalid" = "Введіть коректну ціну.";
+"%.1f %@" = "%.1f %@";
+"%@%.2f/%@" = "%@%.2f/%@";

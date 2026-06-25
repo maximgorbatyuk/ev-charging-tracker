@@ -9,6 +9,7 @@ import Foundation
 
 enum ExpenseType: String, CaseIterable, Codable {
     case charging = "charging"
+    case fuel = "fuel"
     case maintenance = "maintenance"
     case repair = "repair"
     case carwash = "carwash"
@@ -17,11 +18,25 @@ enum ExpenseType: String, CaseIterable, Codable {
     var localizedName: String {
         switch self {
         case .charging: return L("Filter.Charges")
+        case .fuel: return L("Filter.Fuel")
         case .maintenance: return L("Filter.Maintenance")
         case .repair: return L("Filter.Repair")
         case .carwash: return L("Filter.Carwash")
         case .other: return L("Filter.Other")
         }
+    }
+}
+
+/// Gasoline octane grades available for a Hybrid car's fuel fill-up, displayed
+/// with the RON rating standard (e.g. "95 RON"). Stored as the bare number.
+enum FuelType: String, Codable, CaseIterable {
+    case octane92 = "92"
+    case octane95 = "95"
+    case octane98 = "98"
+    case octane100 = "100"
+
+    var localizedName: String {
+        return String(format: L("Fuel.OctaneFormat"), rawValue)
     }
 }
 
@@ -42,6 +57,7 @@ enum ExpensesSortingOption: String, CaseIterable, Codable {
 enum ExpensesFilter: String, CaseIterable {
   case all
   case charging
+  case fuel
   case maintenance
   case repair
   case carwash
@@ -53,6 +69,8 @@ enum ExpensesFilter: String, CaseIterable {
       return L("expense.filter.all")
     case .charging:
       return L("expense.filter.charging")
+    case .fuel:
+      return L("expense.filter.fuel")
     case .maintenance:
       return L("expense.filter.maintenance")
     case .repair:
@@ -70,6 +88,8 @@ enum ExpensesFilter: String, CaseIterable {
       return []
     case .charging:
       return [.charging]
+    case .fuel:
+      return [.fuel]
     case .maintenance:
       return [.maintenance]
     case .repair:
@@ -107,6 +127,10 @@ class Expense: Codable, Identifiable {
     var expenseType: ExpenseType
     var currency: Currency
     var carId: Int64?
+    /// Set only for `.fuel` expenses on a Hybrid car. Price-per-unit is never
+    /// stored — it is derived from `cost / fuelVolume` via getFuelPricePerUnit().
+    var fuelType: FuelType?
+    var fuelVolume: Double?
 
     init(
         id: Int64? = nil,
@@ -119,7 +143,9 @@ class Expense: Codable, Identifiable {
         isInitialRecord: Bool,
         expenseType: ExpenseType,
         currency: Currency,
-        carId: Int64? = nil) {
+        carId: Int64? = nil,
+        fuelType: FuelType? = nil,
+        fuelVolume: Double? = nil) {
         self.id = id
         self.date = date
         self.energyCharged = energyCharged
@@ -131,6 +157,8 @@ class Expense: Codable, Identifiable {
         self.expenseType = expenseType
         self.currency = currency
         self.carId = carId
+        self.fuelType = fuelType
+        self.fuelVolume = fuelVolume
     }
 
     // Convenience initializer to match existing call sites that construct
@@ -145,7 +173,9 @@ class Expense: Codable, Identifiable {
         isInitialRecord: Bool,
         expenseType: ExpenseType,
         currency: Currency,
-        carId: Int64? = nil) {
+        carId: Int64? = nil,
+        fuelType: FuelType? = nil,
+        fuelVolume: Double? = nil) {
         self.init(
             id: nil,
             date: date,
@@ -157,7 +187,9 @@ class Expense: Codable, Identifiable {
             isInitialRecord: isInitialRecord,
             expenseType: expenseType,
             currency: currency,
-            carId: carId
+            carId: carId,
+            fuelType: fuelType,
+            fuelVolume: fuelVolume
         )
     }
 
@@ -189,6 +221,21 @@ class Expense: Codable, Identifiable {
         }
 
         return self.cost! / self.energyCharged
+    }
+
+    /// Derived fuel price-per-unit (per litre/gallon). Mirrors getPricePerKWh():
+    /// no price is stored, so it is always computed from cost and volume. The
+    /// single source of truth for the displayed/exported price-per-unit.
+    func getFuelPricePerUnit() -> Double? {
+        guard self.expenseType == .fuel,
+              let cost = self.cost,
+              let volume = self.fuelVolume,
+              volume > 0
+        else {
+            return nil
+        }
+
+        return cost / volume
     }
 
 }

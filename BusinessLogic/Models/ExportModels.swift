@@ -56,6 +56,9 @@ struct ExportCar: Codable {
     /// Optional for back-compat: backups created before schema v8 omit
     /// this field, and `toCar()` defaults them to `.metric`.
     let measurementSystem: String?
+    /// Optional for back-compat: backups created before schema v9 omit this
+    /// field, and `toCar()` defaults them to `.electric`.
+    let carType: String?
 
     init(from car: Car) {
         self.id = car.id
@@ -70,12 +73,17 @@ struct ExportCar: Codable {
         self.frontWheelSize = car.frontWheelSize
         self.rearWheelSize = car.rearWheelSize
         self.measurementSystem = car.measurementSystem.rawValue
+        self.carType = car.carType.rawValue
     }
 
     func toCar() -> Car {
         let parsedMeasurement = measurementSystem
             .flatMap { MeasurementSystem(rawValue: $0) }
             ?? .metric
+
+        let parsedCarType = carType
+            .flatMap { CarType(rawValue: $0) }
+            ?? .electric
 
         let car = Car(
             name: name,
@@ -88,7 +96,8 @@ struct ExportCar: Codable {
             createdAt: createdAt,
             frontWheelSize: frontWheelSize,
             rearWheelSize: rearWheelSize,
-            measurementSystem: parsedMeasurement
+            measurementSystem: parsedMeasurement,
+            carType: parsedCarType
         )
         car.id = id
         return car
@@ -109,6 +118,11 @@ struct ExportExpense: Codable {
     let expenseType: String
     let currency: String
     let carId: Int64?
+    /// Optional for back-compat: backups before schema v9 omit these. Fuel
+    /// price-per-unit is not exported — it is recomputed on import via
+    /// getFuelPricePerUnit() from cost and fuelVolume.
+    let fuelType: String?
+    let fuelVolume: Double?
 
     init(from expense: Expense) {
         self.id = expense.id
@@ -122,6 +136,8 @@ struct ExportExpense: Codable {
         self.expenseType = expense.expenseType.rawValue
         self.currency = expense.currency.rawValue
         self.carId = expense.carId
+        self.fuelType = expense.fuelType?.rawValue
+        self.fuelVolume = expense.fuelVolume
     }
 
     func toExpense() throws -> Expense {
@@ -134,7 +150,9 @@ struct ExportExpense: Codable {
             notes: notes,
             isInitialRecord: isInitialRecord,
             expenseType: ExpenseType(rawValue: expenseType) ?? .other,
-            currency: Currency(rawValue: currency) ?? .usd
+            currency: Currency(rawValue: currency) ?? .usd,
+            fuelType: fuelType.flatMap { FuelType(rawValue: $0) },
+            fuelVolume: fuelVolume
         )
 
         expense.id = id

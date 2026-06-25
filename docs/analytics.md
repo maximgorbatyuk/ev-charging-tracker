@@ -55,6 +55,14 @@ AnalyticsService.shared.identifyUser(userId, properties: [...])  // rarely used;
 
 In Debug, every call also logs the merged event to OSLog (`subsystem: "AnalyticsService", category: "Analytics"`), which is useful for verifying tracking during development without firing real events.
 
+## Hybrid Charge/Fuel telemetry
+
+`AddExpenseView` distinguishes a charge entry from a gasoline fuel entry:
+
+- `expense_mode_switched` — fired when the user toggles the Charge/Fuel switcher (Hybrid cars only). Property `mode` is `charge` or `fuel`.
+- The existing `save_button_clicked` / `save_toolbaar_button_clicked` events gain an `expense_mode` property (`charge` or `fuel`) so a saved entry's kind is distinguishable.
+- The main-screen add sheet fires `charge_session_added` for a charge entry and `fuel_session_added` for a fuel entry (both with `screen = charging_sessions_stats_screen`).
+
 ## GA4 naming limits (cross-cutting reminder)
 
 GA4 enforces:
