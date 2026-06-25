@@ -198,6 +198,8 @@
 "Start onboarding again" = "Start onboarding again";
 "onboarding.track_your_chargings" = "Track your chargings";
 "onboarding.track_your_chargings__subtitle" = "Keep track of all your EV charging sessions in one place";
+"onboarding.track_charge_and_fuel" = "Track charge and fuel";
+"onboarding.track_charge_and_fuel__subtitle" = "Add a hybrid car and track both electric charging and fuel fill-ups in one place.";
 "onboarding.monitor_costs" = "Monitor costs";
 "onboarding.monitor_costs__subtitle" = "See how much you spend on your EV car including power and other expenses";
 "onboarding.plan_maintenance" = "Plan maintenance";

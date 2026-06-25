@@ -181,6 +181,8 @@
 "Start onboarding again" = "Tanıtımı yeniden başlat";
 "onboarding.track_your_chargings" = "Şarjlarınızı takip edin";
 "onboarding.track_your_chargings__subtitle" = "Tüm elektrikli araç şarj oturumlarınızı tek bir yerde takip edin";
+"onboarding.track_charge_and_fuel" = "Şarj ve yakıtı takip edin";
+"onboarding.track_charge_and_fuel__subtitle" = "Bir hibrit araç ekleyin ve hem elektrikli şarjı hem de yakıt dolumlarını tek bir yerde takip edin.";
 "onboarding.monitor_costs" = "Maliyetleri izleyin";
 "onboarding.monitor_costs__subtitle" = "Elektrikli aracınıza elektrik ve diğer masraflar dahil ne kadar harcadığınızı görün";
 "onboarding.plan_maintenance" = "Bakım planlayın";

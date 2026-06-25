@@ -179,6 +179,8 @@
 "Start onboarding again" = "Почати знайомство знову";
 "onboarding.track_your_chargings" = "Відстежуйте зарядки";
 "onboarding.track_your_chargings__subtitle" = "Зберігайте всі сеанси зарядки вашого EV в одному місці";
+"onboarding.track_charge_and_fuel" = "Відстежуйте зарядку та паливо";
+"onboarding.track_charge_and_fuel__subtitle" = "Додайте гібридний автомобіль і відстежуйте і зарядку, і заправки пальним в одному місці.";
 "onboarding.monitor_costs" = "Контролюйте витрати";
 "onboarding.monitor_costs__subtitle" = "Дізнайтесь, скільки ви витрачаєте на електромобіль, включаючи електроенергію та інші витрати";
 "onboarding.plan_maintenance" = "Плануйте обслуговування";

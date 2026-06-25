@@ -181,6 +181,8 @@
 "Start onboarding again" = "Открыть обучение заново";
 "onboarding.track_your_chargings" = "Записывайте сессии зарядки";
 "onboarding.track_your_chargings__subtitle" = "Легко записывайте каждую сессию зарядки вашего электромобиля.";
+"onboarding.track_charge_and_fuel" = "Отслеживайте зарядку и топливо";
+"onboarding.track_charge_and_fuel__subtitle" = "Добавьте гибридный автомобиль и записывайте и зарядку, и заправки топливом в одном месте.";
 "onboarding.monitor_costs" = "Отслеживайте расходы";
 "onboarding.monitor_costs__subtitle" = "Записывайте ваши расходы на зарядку и другие траты на автомобиль";
 "onboarding.plan_maintenance" = "Планируйте сервис";

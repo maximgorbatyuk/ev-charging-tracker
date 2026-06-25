@@ -179,6 +179,8 @@
 "Start onboarding again" = "重新开始引导";
 "onboarding.track_your_chargings" = "追踪您的充电";
 "onboarding.track_your_chargings__subtitle" = "在一个地方记录您所有的电动车充电记录";
+"onboarding.track_charge_and_fuel" = "追踪充电与燃油";
+"onboarding.track_charge_and_fuel__subtitle" = "添加一辆混合动力汽车，在一个地方同时追踪电量充电和燃油加注。";
 "onboarding.monitor_costs" = "监控费用";
 "onboarding.monitor_costs__subtitle" = "了解您的电动车在充电和其他费用上的花费";
 "onboarding.plan_maintenance" = "计划保养";

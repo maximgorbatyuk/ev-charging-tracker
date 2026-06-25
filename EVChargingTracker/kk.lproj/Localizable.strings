@@ -188,6 +188,8 @@
 "Start onboarding again" = "Кіріспені қайта бастау";
 "onboarding.track_your_chargings" = "Зарядтауларды қадағалау";
 "onboarding.track_your_chargings__subtitle" = "Электромобиліңіздің барлық зарядтау сеанстарын бір жерде қадағалаңыз";
+"onboarding.track_charge_and_fuel" = "Зарядтау мен жанармайды қадағалаңыз";
+"onboarding.track_charge_and_fuel__subtitle" = "Гибридті автокөлік қосып, әрі электр зарядтауын, әрі жанармай құюды бір жерде қадағалаңыз.";
 "onboarding.monitor_costs" = "Шығындарды бақылау";
 "onboarding.monitor_costs__subtitle" = "Электромобиліңізге қанша жұмсайтыныңызды, соның ішінде электр энергиясы мен басқа шығындарды көріңіз";
 "onboarding.plan_maintenance" = "Техқызметті жоспарлау";
