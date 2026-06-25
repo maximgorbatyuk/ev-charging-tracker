@@ -109,7 +109,8 @@ struct ShareFormView: SwiftUI.View {
         Group {
             Section(header: Text(L("share.section.type"))) {
                 Picker(L("share.type_picker"), selection: $viewModel.selectedExpenseType) {
-                    ForEach(ExpenseType.allCases, id: \.self) { type in
+                    // .fuel captures no fuel fields here, so it is not offered.
+                    ForEach(ExpenseType.allCases.filter { $0 != .fuel }, id: \.self) { type in
                         Text(expenseTypeDisplayName(type))
                             .tag(type)
                     }
@@ -232,6 +233,8 @@ struct ShareFormView: SwiftUI.View {
         switch type {
         case .charging:
             return L("expense.filter.charging")
+        case .fuel:
+            return L("expense.filter.fuel")
         case .maintenance:
             return L("expense.filter.maintenance")
         case .repair:

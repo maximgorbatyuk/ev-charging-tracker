@@ -42,7 +42,7 @@ class DatabaseManager: DatabaseManagerProtocol {
 
     private var db: Connection?
     private let logger: Logger
-    private let latestVersion = 8
+    private let latestVersion = 9
     private(set) var isInitialized: Bool = false
 
     private init() {
@@ -168,6 +168,10 @@ class DatabaseManager: DatabaseManagerProtocol {
             case 8:
                 let migration8 = Migration_20260501_AddMeasurementSystemToCarsTable(db: db)
                 migration8.execute()
+
+            case 9:
+                let migration9 = Migration_20260624_AddHybridCarSupport(db: db)
+                migration9.execute()
 
             default:
                 break

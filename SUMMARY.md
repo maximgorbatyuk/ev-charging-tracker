@@ -105,7 +105,7 @@ xcodebuild -project EVChargingTracker.xcodeproj -scheme EVChargingTracker \
 | Repository | Table | Key API |
 |---|---|---|
 | `ExpensesRepository` | `charging_sessions` | CRUD, paged + filtered queries |
-| `CarRepository` | `cars` | Active-car selection, mileage, wheels, measurement system |
+| `CarRepository` | `cars` | Active-car selection, mileage, wheels, measurement system, car type |
 | `PlannedMaintenanceRepository` | `planned_maintenance` | Date/odometer triggers |
 | `DocumentsRepository` | `documents` | Per-car file metadata |
 | `IdeasRepository` | `ideas` | Per-car URL/title/notes |
@@ -117,7 +117,7 @@ Each has a `*RepositoryProtocol` for testability. Mocks live in `EVChargingTrack
 
 ## Schema version table
 
-Latest: **v8** (`DatabaseManager.swift:45`).
+Latest: **v9** (`DatabaseManager.swift:45`).
 
 | v | Migration | Purpose |
 |---|---|---|
@@ -129,6 +129,7 @@ Latest: **v8** (`DatabaseManager.swift:45`).
 | 6 | `Migration_20250131_AddWheelDetailsToCarsTable` | wheel size cols on `cars` |
 | 7 | `Migration_20260301_CreateDocumentsAndIdeasTables` | `documents` + `ideas` |
 | 8 | `Migration_20260501_AddMeasurementSystemToCarsTable` | `measurement_system` on `cars` |
+| 9 | `Migration_20260624_AddHybridCarSupport` | `car_type` on `cars` + `fuel_type`/`fuel_volume` on expenses |
 
 Full pattern: `docs/persistence.md`.
 

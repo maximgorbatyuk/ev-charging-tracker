@@ -321,4 +321,16 @@ class ChargingViewModel: ObservableObject, IExpenseView {
 
         return expensesSortedByDesc.first
     }
+
+    func getLastFuelSessionOrNull(_ car: Car?) -> Expense? {
+        guard let car = car, !expenses.isEmpty else {
+            return nil
+        }
+
+        let expensesSortedByDesc = expenses
+            .filter({ $0.expenseType == .fuel && $0.carId == car.id })
+            .sorted(by: { $0.date > $1.date })
+
+        return expensesSortedByDesc.first
+    }
 }

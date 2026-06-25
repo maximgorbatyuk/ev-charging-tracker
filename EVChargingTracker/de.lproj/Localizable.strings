@@ -481,3 +481,30 @@
 "How much one mile costs you including only charging expenses" = "Wie viel eine Meile kostet, wenn nur die Ladekosten berücksichtigt werden";
 "One mile price (total)" = "Preis pro Meile (gesamt)";
 "How much one mile costs you including all logged expenses" = "Wie viel eine Meile kostet, wenn alle erfassten Kosten berücksichtigt werden";
+
+/* Hybrid car support (gasoline fuel) */
+"Filter.Fuel" = "Kraftstoff";
+"expense.filter.fuel" = "Kraftstoff";
+"Fuel.OctaneFormat" = "%@ RON";
+"Add charge/fuel" = "Laden/Tanken hinzufügen";
+"Entry mode" = "Eingabemodus";
+"Charge" = "Laden";
+"Fuel" = "Kraftstoff";
+"Fuel type" = "Kraftstoffart";
+"Volume" = "Menge";
+"Price per litre" = "Preis pro Liter";
+"Price per gallon" = "Preis pro Gallone";
+"L" = "l";
+"gal" = "gal";
+"Car type" = "Fahrzeugtyp";
+"Electric" = "Elektrisch";
+"Hybrid" = "Hybrid";
+"CarType.SwitchToHybrid.Title" = "Zu Hybrid wechseln?";
+"CarType.SwitchToHybrid.Body" = "Eine neue Ausgabenart Kraftstoff und ein Laden/Tanken-Umschalter werden verfügbar.";
+"CarType.SwitchToEV.Title" = "Zu Elektrisch wechseln?";
+"CarType.SwitchToEV.Body" = "Alle Kraftstoffausgaben für dieses Fahrzeug werden dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.";
+"CarType.Switch.Confirm" = "Ich stimme zu, wechseln";
+"Fuel.Error.VolumeInvalid" = "Bitte eine Menge größer als 0 eingeben.";
+"Fuel.Error.PriceInvalid" = "Bitte einen gültigen Preis eingeben.";
+"%.1f %@" = "%.1f %@";
+"%@%.2f/%@" = "%@%.2f/%@";

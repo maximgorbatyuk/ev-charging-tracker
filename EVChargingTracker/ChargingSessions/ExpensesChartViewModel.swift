@@ -68,6 +68,19 @@ class ExpensesChartViewModel: ObservableObject {
                 isSelected: false),
 
             FilterButtonItem(
+                title: L("Filter.Fuel"),
+                innerAction: { [weak self] in
+                    self?.recreateExpensesToShow(ExpenseType.fuel)
+                    self?.analytics.trackEvent(
+                        "expenses_chart_filter_fuel_selected",
+                        properties: [
+                            "screen": ExpensesChartViewModel.ScreenName
+                        ])
+                },
+                customColor: ExpenseType.fuel.color,
+                isSelected: false),
+
+            FilterButtonItem(
                 title: L("Filter.Repair"),
                 innerAction: { [weak self] in
                     self?.recreateExpensesToShow(ExpenseType.repair)
@@ -164,7 +177,7 @@ class ExpensesChartViewModel: ObservableObject {
         let types = Set(monthlyExpenseData.map { $0.expenseType })
         return Array(types).sorted { type1, type2 in
             // Sort by a custom order for consistent legend
-            let order: [ExpenseType] = [.charging, .maintenance, .repair, .carwash, .other]
+            let order: [ExpenseType] = [.charging, .fuel, .maintenance, .repair, .carwash, .other]
             let index1 = order.firstIndex(of: type1) ?? order.count
             let index2 = order.firstIndex(of: type2) ?? order.count
             return index1 < index2

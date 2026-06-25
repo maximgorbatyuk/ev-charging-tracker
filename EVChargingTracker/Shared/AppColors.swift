@@ -93,6 +93,12 @@ enum AppColors {
             : UIColor(hex: 0xDCF1FA)
     })
 
+    static let purpleSoft = Color(UIColor { trait in
+        trait.userInterfaceStyle == .dark
+            ? UIColor(red: 175 / 255, green: 82 / 255, blue: 222 / 255, alpha: 0.18)
+            : UIColor(hex: 0xF1E6FB)
+    })
+
     private static func dyn(light: UInt32, dark: UInt32) -> Color {
         Color(UIColor { trait in
             trait.userInterfaceStyle == .dark ? UIColor(hex: dark) : UIColor(hex: light)

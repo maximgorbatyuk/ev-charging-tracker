@@ -134,7 +134,8 @@ struct CarDetailsRootView: SwiftUI.View {
                         expenseCurrency: car.expenseCurrency,
                         frontWheelSize: car.frontWheelSize,
                         rearWheelSize: car.rearWheelSize,
-                        measurementSystem: car.measurementSystem
+                        measurementSystem: car.measurementSystem,
+                        carType: car.carType
                     ),
                     defaultCurrency: car.expenseCurrency,
                     defaultValueForSelectedForTracking: car.selectedForTracking,
@@ -150,7 +151,8 @@ struct CarDetailsRootView: SwiftUI.View {
                             selectedForTracking: updated.selectedForTracking,
                             frontWheelSize: updated.frontWheelSize,
                             rearWheelSize: updated.rearWheelSize,
-                            measurementSystem: updated.measurementSystem
+                            measurementSystem: updated.measurementSystem,
+                            carType: updated.carType
                         )
                         _ = viewModel.updateCar(carToUpdate)
                         showEditCarSheet = false

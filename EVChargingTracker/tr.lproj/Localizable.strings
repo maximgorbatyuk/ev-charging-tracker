@@ -480,3 +480,30 @@
 "How much one mile costs you including only charging expenses" = "Sadece şarj masrafları dahil olan bir milin maliyeti ne kadardır?";
 "One mile price (total)" = "Mil başı maliyet (toplam)";
 "How much one mile costs you including all logged expenses" = "Tüm kayıtlı masraflar dahil olan bir milin maliyeti ne kadardır?";
+
+/* Hybrid car support (gasoline fuel) */
+"Filter.Fuel" = "Yakıt";
+"expense.filter.fuel" = "Yakıt";
+"Fuel.OctaneFormat" = "%@ RON";
+"Add charge/fuel" = "Şarj/yakıt ekle";
+"Entry mode" = "Giriş modu";
+"Charge" = "Şarj";
+"Fuel" = "Yakıt";
+"Fuel type" = "Yakıt türü";
+"Volume" = "Hacim";
+"Price per litre" = "Litre başına fiyat";
+"Price per gallon" = "Galon başına fiyat";
+"L" = "L";
+"gal" = "gal";
+"Car type" = "Araç türü";
+"Electric" = "Elektrikli";
+"Hybrid" = "Hibrit";
+"CarType.SwitchToHybrid.Title" = "Hibrit'e geçilsin mi?";
+"CarType.SwitchToHybrid.Body" = "Yeni bir Yakıt gider türü ve Şarj/Yakıt değiştirici kullanılabilir olacak.";
+"CarType.SwitchToEV.Title" = "Elektrikli'ye geçilsin mi?";
+"CarType.SwitchToEV.Body" = "Bu aracın tüm yakıt giderleri kalıcı olarak silinecek. Bu işlem geri alınamaz.";
+"CarType.Switch.Confirm" = "Kabul ediyorum, geç";
+"Fuel.Error.VolumeInvalid" = "Lütfen 0'dan büyük bir hacim girin.";
+"Fuel.Error.PriceInvalid" = "Lütfen geçerli bir fiyat girin.";
+"%.1f %@" = "%.1f %@";
+"%@%.2f/%@" = "%@%.2f/%@";

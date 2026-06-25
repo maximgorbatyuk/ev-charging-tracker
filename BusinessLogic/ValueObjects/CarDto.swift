@@ -18,4 +18,5 @@ struct CarDto: Identifiable {
     let frontWheelSize: String?
     let rearWheelSize: String?
     let measurementSystem: MeasurementSystem
+    let carType: CarType
 }

@@ -975,7 +975,8 @@ struct UserSettingsView: SwiftUICore.View {
                         selectedForTracking: updated.selectedForTracking,
                         frontWheelSize: updated.frontWheelSize,
                         rearWheelSize: updated.rearWheelSize,
-                        measurementSystem: updated.measurementSystem)
+                        measurementSystem: updated.measurementSystem,
+                        carType: updated.carType)
 
                     _ = viewModel.updateCar(car: carToUpdate)
 
@@ -992,7 +993,8 @@ struct UserSettingsView: SwiftUICore.View {
                         createdAt: Date(),
                         frontWheelSize: updated.frontWheelSize,
                         rearWheelSize: updated.rearWheelSize,
-                        measurementSystem: updated.measurementSystem
+                        measurementSystem: updated.measurementSystem,
+                        carType: updated.carType
                     )
 
                     _ = viewModel.insertCar(newCar)

@@ -33,20 +33,23 @@ Key fields:
 - `milleageSyncedAt` — when mileage was last updated
 - `frontWheelSize`, `rearWheelSize` — free text (e.g., `"245/45 R19"`), optional
 - `measurementSystem` — `metric` or `imperial`; **display-only conversion**, stored values are not converted
+- `carType` — `electric` (default) or `hybrid`. Only Hybrid cars expose the gasoline Fuel expense type and the Charge/Fuel switcher.
 
 Key rules:
 
 - Mileage is stored as an integer; the `measurementSystem` only affects display labels (`km`/`mi`) and CO₂ display (`kg`/`lb`). The stored stat math (`co2PerKm * totalDistance`) does not change. See `BusinessLogic/Models/MeasurementSystem.swift`.
 - A car cannot be deleted while expenses exist for it without explicit user confirmation (see Settings → car management).
 - The "active" car is part of user prefs; switching it re-scopes Stats / Expenses / Car tabs.
+- Switching a car Hybrid→Electric is destructive: it permanently deletes that car's `.fuel` expenses (confirmation modal in `EditCarView`, cleanup via `ExpensesRepository.deleteFuelExpenses(forCar:)`).
 
 ### **Expense**
 
-A line item against the active car. Five kinds, distinguished by `expenseType`:
+A line item against the active car. Six kinds, distinguished by `expenseType`:
 
 | `expenseType` | Meaning | Counts toward stats? |
 |---|---|---|
 | `charging` | A charging session (energy + cost) | Yes — cost-per-km, kWh/100km, CO₂ |
+| `fuel` | A gasoline fill-up on a Hybrid car (octane + volume + cost) | Total cost only (incl. all-expenses cost-per-km); excluded from charging-only and consumption stats |
 | `maintenance` | Scheduled service | Total cost only |
 | `repair` | Unscheduled repair | Total cost only |
 | `carwash` | Wash | Total cost only |
@@ -63,11 +66,13 @@ Key fields (`BusinessLogic/Models/ExpenseModels.swift:98-194`):
 - `currency` — frozen at creation time, allowed to differ per row
 - `carId` — foreign key to `Car`
 - `isInitialRecord` — marks the seed row created when a car is first added (the row that establishes baseline mileage; should not be edited like a regular session)
+- `fuelType` (`FuelType?`: `92`/`95`/`98`/`100`, displayed with the RON standard) and `fuelVolume` (`Double?`, litres/gallons per the car's `measurementSystem`) — set only for `fuel` expenses. **Fuel price-per-unit is never stored** — it is derived.
 
 Key rules:
 
 - `cost` is optional — a user may log energy without a cost (e.g., free workplace charging).
 - `getPricePerKWh()` returns `cost / energyCharged` only for `charging` expenses with non-zero energy and non-nil cost.
+- `getFuelPricePerUnit()` returns `cost / fuelVolume` only for `fuel` expenses with positive volume and non-nil cost — the single source of truth for the displayed/exported price-per-unit (mirrors `getPricePerKWh()`).
 - The "initial record" exists per car and is created when the user adds the car. It carries the starting odometer reading; UI should not present it like a session.
 
 ### **Charging session vs. expense**

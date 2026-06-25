@@ -487,3 +487,30 @@
 "How much one mile costs you including only charging expenses" = "Тек зарядтау шығындарын қоса есептегендегі 1 миля құны";
 "One mile price (total)" = "1 миля бағасы (барлығы)";
 "How much one mile costs you including all logged expenses" = "Барлық тіркелген шығындарды қоса есептегендегі 1 миля құны";
+
+/* Hybrid car support (gasoline fuel) */
+"Filter.Fuel" = "Жанармай";
+"expense.filter.fuel" = "Жанармай";
+"Fuel.OctaneFormat" = "%@ RON";
+"Add charge/fuel" = "Зарядтау/жанармай қосу";
+"Entry mode" = "Енгізу режимі";
+"Charge" = "Зарядтау";
+"Fuel" = "Жанармай";
+"Fuel type" = "Жанармай түрі";
+"Volume" = "Көлемі";
+"Price per litre" = "Литр бағасы";
+"Price per gallon" = "Галлон бағасы";
+"L" = "л";
+"gal" = "гал";
+"Car type" = "Көлік түрі";
+"Electric" = "Электрлі";
+"Hybrid" = "Гибрид";
+"CarType.SwitchToHybrid.Title" = "Гибридке ауысу керек пе?";
+"CarType.SwitchToHybrid.Body" = "Жаңа «Жанармай» шығын түрі және Зарядтау/Жанармай ауыстырғышы қолжетімді болады.";
+"CarType.SwitchToEV.Title" = "Электрліге ауысу керек пе?";
+"CarType.SwitchToEV.Body" = "Осы көліктің барлық жанармай шығындары біржола жойылады. Бұны қайтару мүмкін емес.";
+"CarType.Switch.Confirm" = "Келісемін, ауысу";
+"Fuel.Error.VolumeInvalid" = "0-ден үлкен көлемді енгізіңіз.";
+"Fuel.Error.PriceInvalid" = "Жарамды бағаны енгізіңіз.";
+"%.1f %@" = "%.1f %@";
+"%@%.2f/%@" = "%@%.2f/%@";

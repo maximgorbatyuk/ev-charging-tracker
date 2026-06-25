@@ -95,7 +95,8 @@ class UserSettingsViewModel: ObservableObject {
                     expenseCurrency: $0.expenseCurrency,
                     frontWheelSize: $0.frontWheelSize,
                     rearWheelSize: $0.rearWheelSize,
-                    measurementSystem: $0.measurementSystem)
+                    measurementSystem: $0.measurementSystem,
+                    carType: $0.carType)
             } ?? []
 
         // Sync automatic backup state from BackgroundTaskManager
@@ -177,7 +178,8 @@ class UserSettingsViewModel: ObservableObject {
                 expenseCurrency: car.expenseCurrency,
                 frontWheelSize: car.frontWheelSize,
                 rearWheelSize: car.rearWheelSize,
-                measurementSystem: car.measurementSystem
+                measurementSystem: car.measurementSystem,
+                carType: car.carType
             )
         }
     }
@@ -254,7 +256,8 @@ class UserSettingsViewModel: ObservableObject {
                     expenseCurrency: $0.expenseCurrency,
                     frontWheelSize: $0.frontWheelSize,
                     rearWheelSize: $0.rearWheelSize,
-                    measurementSystem: $0.measurementSystem)
+                    measurementSystem: $0.measurementSystem,
+                    carType: $0.carType)
             } ?? []
         self.objectWillChange.send()
     }
@@ -411,6 +414,8 @@ class UserSettingsViewModel: ObservableObject {
                     return Double.random(in: 10...200)
                 case .charging:
                     return Double.random(in: 5...50)
+                case .fuel:
+                    return Double.random(in: 20...120)
                 }
             }()
 
@@ -426,6 +431,8 @@ class UserSettingsViewModel: ObservableObject {
                     return ["Parking", "Toll", "Insurance", "Registration"].randomElement() ?? "Other"
                 case .charging:
                     return "Charging"
+                case .fuel:
+                    return "Fuel"
                 }
             }()
 

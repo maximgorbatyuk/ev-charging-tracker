@@ -7,6 +7,9 @@ struct EditCarView: SwiftUICore.View {
     let onDelete: (CarDto) -> Void
     let onCancel: () -> Void
 
+    /// Used only to delete a car's fuel expenses when downgrading Hybrid→EV.
+    private let expensesRepository: ExpensesRepositoryProtocol?
+
     @ObservedObject private var loc = LocalizationManager.shared
 
     @State private var name: String
@@ -19,10 +22,13 @@ struct EditCarView: SwiftUICore.View {
     @State private var rearWheelSize: String
     @State private var sameWheelSizeForFrontAndRear: Bool
     @State private var measurementSystem: MeasurementSystem
+    @State private var carType: CarType
 
     @State private var showDeleteConfirmation = false
     @State private var alertMessage: String?
     @State private var showingWheelInfoSheet = false
+    @State private var showSwitchToHybridInfo = false
+    @State private var showSwitchToEVDataLoss = false
 
     init(
         car: CarDto?,
@@ -37,6 +43,7 @@ struct EditCarView: SwiftUICore.View {
         self.onSave = onSave
         self.onDelete = onDelete
         self.onCancel = onCancel
+        self.expensesRepository = DatabaseManager.shared.expensesRepository
 
         _name = State(initialValue: car?.name ?? "")
         _batteryText = State(initialValue: car?.batteryCapacity.map { String($0) } ?? "")
@@ -51,6 +58,7 @@ struct EditCarView: SwiftUICore.View {
         _rearWheelSize = State(initialValue: rearWheel)
         _sameWheelSizeForFrontAndRear = State(initialValue: frontWheel.isEmpty && rearWheel.isEmpty || frontWheel == rearWheel)
         _measurementSystem = State(initialValue: car?.measurementSystem ?? .metric)
+        _carType = State(initialValue: car?.carType ?? .electric)
     }
 
     var body: some SwiftUICore.View {
@@ -100,6 +108,17 @@ struct EditCarView: SwiftUICore.View {
                     Picker(L("Measurement system"), selection: $measurementSystem) {
                         Text(L("Metric (km, kg)")).tag(MeasurementSystem.metric)
                         Text(L("Imperial (mi, lb)")).tag(MeasurementSystem.imperial)
+                    }
+                    .pickerStyle(.segmented)
+
+                    // Custom binding so the segment does not commit until the
+                    // confirmation modal is accepted (data-loss guard on downgrade).
+                    Picker(L("Car type"), selection: Binding(
+                        get: { carType },
+                        set: { handleCarTypeSelection($0) }
+                    )) {
+                        Text(L("Electric")).tag(CarType.electric)
+                        Text(L("Hybrid")).tag(CarType.hybrid)
                     }
                     .pickerStyle(.segmented)
                 }
@@ -209,6 +228,22 @@ struct EditCarView: SwiftUICore.View {
             .alert(isPresented: $showDeleteConfirmation) {
                 deleteConfirmationAlert()
             }
+            .alert(L("CarType.SwitchToHybrid.Title"), isPresented: $showSwitchToHybridInfo) {
+                Button(L("CarType.Switch.Confirm")) {
+                    carType = .hybrid
+                }
+                Button(L("Cancel"), role: .cancel) {}
+            } message: {
+                Text(L("CarType.SwitchToHybrid.Body"))
+            }
+            .alert(L("CarType.SwitchToEV.Title"), isPresented: $showSwitchToEVDataLoss) {
+                Button(L("CarType.Switch.Confirm"), role: .destructive) {
+                    carType = .electric
+                }
+                Button(L("Cancel"), role: .cancel) {}
+            } message: {
+                Text(L("CarType.SwitchToEV.Body"))
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(L("Cancel")) {
@@ -246,6 +281,14 @@ struct EditCarView: SwiftUICore.View {
                         let frontWheelToSave: String? = frontWheelSize.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : frontWheelSize.trimmingCharacters(in: .whitespacesAndNewlines)
                         let rearWheelToSave: String? = rearWheelSize.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : rearWheelSize.trimmingCharacters(in: .whitespacesAndNewlines)
 
+                        // Hybrid→EV downgrade permanently removes the car's fuel
+                        // expenses; do it before persisting the new type.
+                        if car?.carType == .hybrid,
+                           carType == .electric,
+                           let carId = car?.id {
+                            _ = expensesRepository?.deleteFuelExpenses(forCar: carId)
+                        }
+
                         let updated = CarDto(
                             id: car?.id,
                             name: name,
@@ -256,13 +299,33 @@ struct EditCarView: SwiftUICore.View {
                             expenseCurrency: expenseCurrency,
                             frontWheelSize: frontWheelToSave,
                             rearWheelSize: rearWheelToSave,
-                            measurementSystem: measurementSystem
+                            measurementSystem: measurementSystem,
+                            carType: carType
                         )
                         onSave(updated)
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
+        }
+    }
+
+    /// Intercepts the Car-type segment. New cars commit immediately; editing an
+    /// existing car routes through a confirmation modal that commits on accept.
+    private func handleCarTypeSelection(_ newValue: CarType) {
+        guard newValue != carType else {
+            return
+        }
+
+        if car == nil {
+            carType = newValue
+            return
+        }
+
+        if newValue == .hybrid {
+            showSwitchToHybridInfo = true
+        } else {
+            showSwitchToEVDataLoss = true
         }
     }
 
@@ -354,7 +417,8 @@ struct WheelInfoSheetView: SwiftUICore.View {
             expenseCurrency: .usd,
             frontWheelSize: "225/45R18",
             rearWheelSize: "225/45R18",
-            measurementSystem: .metric),
+            measurementSystem: .metric,
+            carType: .electric),
         defaultCurrency: .usd,
         defaultValueForSelectedForTracking: true,
         hasOtherCars: true,
