@@ -12,4 +12,5 @@ struct ChargingConsumptionLineChartData: Identifiable {
     let expenses: [Expense]
     let analytics: AnalyticsService
     let monthsCount: Int
+    let volumeUnitLabel: String
 }

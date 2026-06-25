@@ -10,7 +10,8 @@ import Foundation
 func createTestCar(
     id: Int64 = 1,
     name: String = "Test Car",
-    currentMileage: Int = 50000
+    currentMileage: Int = 50000,
+    carType: CarType = .electric
 ) -> Car {
     return Car(
         id: id,
@@ -21,7 +22,32 @@ func createTestCar(
         currentMileage: currentMileage,
         initialMileage: 0,
         milleageSyncedAt: Date(),
-        createdAt: Date()
+        createdAt: Date(),
+        carType: carType
+    )
+}
+
+func createTestFuelExpense(
+    id: Int64 = 1,
+    cost: Double? = 60.0,
+    fuelType: FuelType? = .octane95,
+    fuelVolume: Double? = 40.0,
+    carId: Int64 = 1
+) -> Expense {
+    return Expense(
+        id: id,
+        date: Date(),
+        energyCharged: 0,
+        chargerType: .other,
+        odometer: 50000,
+        cost: cost,
+        notes: "",
+        isInitialRecord: false,
+        expenseType: .fuel,
+        currency: .usd,
+        carId: carId,
+        fuelType: fuelType,
+        fuelVolume: fuelVolume
     )
 }
 

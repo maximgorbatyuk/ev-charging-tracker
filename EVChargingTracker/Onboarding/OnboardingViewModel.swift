@@ -39,6 +39,12 @@ class OnboardingViewModel: ObservableObject {
                 color: .orange
             ),
             OnboardingPageViewModelItem(
+                icon: "fuelpump.fill",
+                title: L("onboarding.track_charge_and_fuel", language: selectedLanguage),
+                description: L("onboarding.track_charge_and_fuel__subtitle", language: selectedLanguage),
+                color: .purple
+            ),
+            OnboardingPageViewModelItem(
                 icon: "dollarsign.circle.fill",
                 title: L("onboarding.monitor_costs", language: selectedLanguage),
                 description: L("onboarding.monitor_costs__subtitle", language: selectedLanguage),

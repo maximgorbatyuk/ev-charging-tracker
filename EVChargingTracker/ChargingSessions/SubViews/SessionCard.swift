@@ -41,7 +41,7 @@ struct SessionCard: SwiftUICore.View {
 
             VStack(alignment: .leading, spacing: 4) {
                 if showsEyebrow {
-                    Text(session.expenseType.localizedName)
+                    Text(eyebrowText)
                         .textCase(.uppercase)
                         .appFont(.caption2, weight: .semibold)
                         .tracking(0.3)
@@ -60,7 +60,7 @@ struct SessionCard: SwiftUICore.View {
                         .monospacedDigit()
                         .foregroundColor(AppColors.green)
 
-                    if let subRate = energySubRateText(for: cost) {
+                    if let subRate = subRateText(for: cost) {
                         Text(subRate)
                             .appFont(.caption2)
                             .monospacedDigit()
@@ -109,6 +109,7 @@ struct SessionCard: SwiftUICore.View {
     private var iconName: String {
         switch session.expenseType {
         case .charging: return "bolt.fill"
+        case .fuel: return "fuelpump.fill"
         case .maintenance: return "wrench.fill"
         case .repair: return "wrench.and.screwdriver.fill"
         case .carwash: return "drop.fill"
@@ -119,6 +120,7 @@ struct SessionCard: SwiftUICore.View {
     private var iconTint: Color {
         switch session.expenseType {
         case .charging: return AppColors.green
+        case .fuel: return AppColors.purple
         case .maintenance: return AppColors.orange
         case .repair: return AppColors.red
         case .carwash: return AppColors.teal
@@ -129,6 +131,7 @@ struct SessionCard: SwiftUICore.View {
     private var iconTileFill: Color {
         switch session.expenseType {
         case .charging: return AppColors.greenSoft
+        case .fuel: return AppColors.purpleSoft
         case .maintenance: return AppColors.orangeSoft
         case .repair: return AppColors.redSoft
         case .carwash: return AppColors.tealSoft
@@ -143,7 +146,7 @@ struct SessionCard: SwiftUICore.View {
         // Mono digits help "35.2 kWh" stay tabular; for non-charging the title
         // is free-form notes text where mono advances would just look off.
         Group {
-            if session.expenseType == .charging {
+            if session.expenseType == .charging || session.expenseType == .fuel {
                 Text(titleText).monospacedDigit()
             } else {
                 Text(titleText)
@@ -159,6 +162,8 @@ struct SessionCard: SwiftUICore.View {
         switch session.expenseType {
         case .charging:
             return String(format: L("%.1f kWh"), session.energyCharged)
+        case .fuel:
+            return String(format: L("%.1f %@"), session.fuelVolume ?? 0, measurementSystem.volumeUnitLabel)
         default:
             return session.notes.isEmpty
                 ? session.expenseType.localizedName
@@ -169,22 +174,40 @@ struct SessionCard: SwiftUICore.View {
     private var showsEyebrow: Bool {
         // For non-charging rows with no notes, the title already carries the
         // type label — skip the eyebrow to avoid the same word appearing twice.
-        if session.expenseType == .charging { return true }
+        if session.expenseType == .charging || session.expenseType == .fuel { return true }
         return !session.notes.isEmpty
     }
 
     private var showsNotesBlock: Bool {
         // Non-charging rows promote notes into the title, so a separate block
-        // would duplicate. Charging rows still get a notes line below.
+        // would duplicate. Charging and fuel rows still get a notes line below.
         guard !session.notes.isEmpty else { return false }
-        return session.expenseType == .charging
+        return session.expenseType == .charging || session.expenseType == .fuel
     }
 
-    private func energySubRateText(for cost: Double) -> String? {
-        guard session.expenseType == .charging, session.energyCharged > 0 else {
-            return nil
+    /// Eyebrow label. Fuel rows append the octane grade (e.g. "FUEL · 95 RON")
+    /// since the title shows volume rather than the grade.
+    private var eyebrowText: String {
+        if session.expenseType == .fuel,
+           let fuelType = session.fuelType {
+            return "\(session.expenseType.localizedName) · \(fuelType.localizedName)"
         }
-        let rate = cost / session.energyCharged
-        return String(format: L("%@%.2f/kWh"), session.currency.rawValue, rate)
+
+        return session.expenseType.localizedName
+    }
+
+    private func subRateText(for cost: Double) -> String? {
+        if session.expenseType == .charging,
+           session.energyCharged > 0 {
+            let rate = cost / session.energyCharged
+            return String(format: L("%@%.2f/kWh"), session.currency.rawValue, rate)
+        }
+
+        if session.expenseType == .fuel,
+           let price = session.getFuelPricePerUnit() {
+            return String(format: L("%@%.2f/%@"), session.currency.rawValue, price, measurementSystem.volumeUnitLabel)
+        }
+
+        return nil
     }
 }

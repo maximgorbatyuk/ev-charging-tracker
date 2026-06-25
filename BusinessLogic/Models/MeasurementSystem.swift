@@ -28,6 +28,13 @@ enum MeasurementSystem: String, Codable, CaseIterable {
         case .imperial: return L("lb")
         }
     }
+
+    var volumeUnitLabel: String {
+        switch self {
+        case .metric: return L("L")
+        case .imperial: return L("gal")
+        }
+    }
 }
 
 /// 1 lb = 0.453592 kg. Used to convert CO₂ saved on the Stats block

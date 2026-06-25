@@ -179,6 +179,8 @@
 "Start onboarding again" = "重新开始引导";
 "onboarding.track_your_chargings" = "追踪您的充电";
 "onboarding.track_your_chargings__subtitle" = "在一个地方记录您所有的电动车充电记录";
+"onboarding.track_charge_and_fuel" = "追踪充电与燃油";
+"onboarding.track_charge_and_fuel__subtitle" = "添加一辆混合动力汽车，在一个地方同时追踪电量充电和燃油加注。";
 "onboarding.monitor_costs" = "监控费用";
 "onboarding.monitor_costs__subtitle" = "了解您的电动车在充电和其他费用上的花费";
 "onboarding.plan_maintenance" = "计划保养";
@@ -478,3 +480,30 @@
 "How much one mile costs you including only charging expenses" = "仅计算充电费用的每英里花费";
 "One mile price (total)" = "每英里价格（总计）";
 "How much one mile costs you including all logged expenses" = "包含所有记录费用的每英里花费";
+
+/* Hybrid car support (gasoline fuel) */
+"Filter.Fuel" = "燃油";
+"expense.filter.fuel" = "燃油";
+"Fuel.OctaneFormat" = "%@ RON";
+"Add charge/fuel" = "添加充电/加油";
+"Entry mode" = "录入模式";
+"Charge" = "充电";
+"Fuel" = "燃油";
+"Fuel type" = "燃油类型";
+"Volume" = "加注量";
+"Price per litre" = "每升价格";
+"Price per gallon" = "每加仑价格";
+"L" = "升";
+"gal" = "加仑";
+"Car type" = "车辆类型";
+"Electric" = "纯电动";
+"Hybrid" = "混合动力";
+"CarType.SwitchToHybrid.Title" = "切换到混合动力？";
+"CarType.SwitchToHybrid.Body" = "将启用新的“燃油”支出类型以及充电/加油切换开关。";
+"CarType.SwitchToEV.Title" = "切换到纯电动？";
+"CarType.SwitchToEV.Body" = "该车辆的所有燃油支出将被永久删除，此操作无法撤销。";
+"CarType.Switch.Confirm" = "我同意，切换";
+"Fuel.Error.VolumeInvalid" = "请输入大于 0 的容量。";
+"Fuel.Error.PriceInvalid" = "请输入有效的价格。";
+"%.1f %@" = "%.1f %@";
+"%@%.2f/%@" = "%@%.2f/%@";

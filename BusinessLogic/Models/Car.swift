@@ -7,6 +7,20 @@
 
 import Foundation
 
+/// Drivetrain of a car. Hybrid cars unlock the gasoline Fuel expense type and
+/// the Charge/Fuel switcher; Electric cars keep the charge-only experience.
+enum CarType: String, Codable, CaseIterable {
+    case electric
+    case hybrid
+
+    var localizedName: String {
+        switch self {
+        case .electric: return L("Electric")
+        case .hybrid: return L("Hybrid")
+        }
+    }
+}
+
 class Car: Codable, Identifiable {
     var id: Int64?
     var name: String
@@ -22,6 +36,7 @@ class Car: Codable, Identifiable {
     /// Per-car distance/weight unit. Switching systems does NOT change
     /// stored mileage values (see MeasurementSystem.swift).
     var measurementSystem: MeasurementSystem
+    var carType: CarType
 
     init(
         id: Int64? = nil,
@@ -35,7 +50,8 @@ class Car: Codable, Identifiable {
         createdAt: Date,
         frontWheelSize: String? = nil,
         rearWheelSize: String? = nil,
-        measurementSystem: MeasurementSystem = .metric) {
+        measurementSystem: MeasurementSystem = .metric,
+        carType: CarType = .electric) {
 
         self.id = id
         self.name = name
@@ -50,6 +66,7 @@ class Car: Codable, Identifiable {
         self.frontWheelSize = frontWheelSize
         self.rearWheelSize = rearWheelSize
         self.measurementSystem = measurementSystem
+        self.carType = carType
     }
 
     func updateMileage(newMileage: Int) {
@@ -74,7 +91,8 @@ class Car: Codable, Identifiable {
         selectedForTracking: Bool,
         frontWheelSize: String?,
         rearWheelSize: String?,
-        measurementSystem: MeasurementSystem) {
+        measurementSystem: MeasurementSystem,
+        carType: CarType) {
         if !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.name = name
         }
@@ -97,5 +115,6 @@ class Car: Codable, Identifiable {
         self.frontWheelSize = frontWheelSize
         self.rearWheelSize = rearWheelSize
         self.measurementSystem = measurementSystem
+        self.carType = carType
     }
 }

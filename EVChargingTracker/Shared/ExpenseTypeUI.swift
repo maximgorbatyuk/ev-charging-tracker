@@ -13,6 +13,7 @@ extension ExpenseType {
     var color: Color {
         switch self {
         case .charging: return AppColors.green
+        case .fuel: return AppColors.purple
         case .maintenance: return AppColors.orange
         case .repair: return AppColors.red
         case .carwash: return AppColors.blue

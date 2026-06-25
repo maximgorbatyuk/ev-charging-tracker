@@ -95,7 +95,8 @@ class UserSettingsViewModel: ObservableObject {
                     expenseCurrency: $0.expenseCurrency,
                     frontWheelSize: $0.frontWheelSize,
                     rearWheelSize: $0.rearWheelSize,
-                    measurementSystem: $0.measurementSystem)
+                    measurementSystem: $0.measurementSystem,
+                    carType: $0.carType)
             } ?? []
 
         // Sync automatic backup state from BackgroundTaskManager
@@ -177,7 +178,8 @@ class UserSettingsViewModel: ObservableObject {
                 expenseCurrency: car.expenseCurrency,
                 frontWheelSize: car.frontWheelSize,
                 rearWheelSize: car.rearWheelSize,
-                measurementSystem: car.measurementSystem
+                measurementSystem: car.measurementSystem,
+                carType: car.carType
             )
         }
     }
@@ -224,6 +226,14 @@ class UserSettingsViewModel: ObservableObject {
         return carUpdateSuccess && carExpensesUpdateSyccess
     }
 
+    /// Removes a car's gasoline fuel expenses, used when it is downgraded
+    /// Hybrid→Electric. Fuel rows are matched by expense type, not car type,
+    /// so this is safe to run before or after the car-type change is persisted.
+    func deleteFuelExpenses(forCar carId: Int64) {
+        _ = expensesRepository?.deleteFuelExpenses(forCar: carId)
+        self.objectWillChange.send()
+    }
+
     func deleteCar(_ carId: Int64, selectedForTracking: Bool) {
         db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
         db.documentsRepository?.deleteRecordsForCar(carId)
@@ -254,7 +264,8 @@ class UserSettingsViewModel: ObservableObject {
                     expenseCurrency: $0.expenseCurrency,
                     frontWheelSize: $0.frontWheelSize,
                     rearWheelSize: $0.rearWheelSize,
-                    measurementSystem: $0.measurementSystem)
+                    measurementSystem: $0.measurementSystem,
+                    carType: $0.carType)
             } ?? []
         self.objectWillChange.send()
     }
@@ -411,6 +422,8 @@ class UserSettingsViewModel: ObservableObject {
                     return Double.random(in: 10...200)
                 case .charging:
                     return Double.random(in: 5...50)
+                case .fuel:
+                    return Double.random(in: 20...120)
                 }
             }()
 
@@ -426,6 +439,8 @@ class UserSettingsViewModel: ObservableObject {
                     return ["Parking", "Toll", "Insurance", "Registration"].randomElement() ?? "Other"
                 case .charging:
                     return "Charging"
+                case .fuel:
+                    return "Fuel"
                 }
             }()
 

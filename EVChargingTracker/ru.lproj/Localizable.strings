@@ -181,6 +181,8 @@
 "Start onboarding again" = "Открыть обучение заново";
 "onboarding.track_your_chargings" = "Записывайте сессии зарядки";
 "onboarding.track_your_chargings__subtitle" = "Легко записывайте каждую сессию зарядки вашего электромобиля.";
+"onboarding.track_charge_and_fuel" = "Отслеживайте зарядку и топливо";
+"onboarding.track_charge_and_fuel__subtitle" = "Добавьте гибридный автомобиль и записывайте и зарядку, и заправки топливом в одном месте.";
 "onboarding.monitor_costs" = "Отслеживайте расходы";
 "onboarding.monitor_costs__subtitle" = "Записывайте ваши расходы на зарядку и другие траты на автомобиль";
 "onboarding.plan_maintenance" = "Планируйте сервис";
@@ -480,3 +482,30 @@
 "How much one mile costs you including only charging expenses" = "Сколько стоит одна миля, учитывая только расход на зарядку";
 "One mile price (total)" = "Цена за милю (всего)";
 "How much one mile costs you including all logged expenses" = "Сколько стоит одна миля, учитывая все расходы";
+
+/* Hybrid car support (gasoline fuel) */
+"Filter.Fuel" = "Топливо";
+"expense.filter.fuel" = "Топливо";
+"Fuel.OctaneFormat" = "%@ RON";
+"Add charge/fuel" = "Добавить зарядку/топливо";
+"Entry mode" = "Режим ввода";
+"Charge" = "Зарядка";
+"Fuel" = "Топливо";
+"Fuel type" = "Тип топлива";
+"Volume" = "Объём";
+"Price per litre" = "Цена за литр";
+"Price per gallon" = "Цена за галлон";
+"L" = "л";
+"gal" = "гал";
+"Car type" = "Тип автомобиля";
+"Electric" = "Электро";
+"Hybrid" = "Гибрид";
+"CarType.SwitchToHybrid.Title" = "Переключить на гибрид?";
+"CarType.SwitchToHybrid.Body" = "Станут доступны новый тип расхода «Топливо» и переключатель Зарядка/Топливо.";
+"CarType.SwitchToEV.Title" = "Переключить на электро?";
+"CarType.SwitchToEV.Body" = "Все топливные расходы для этого автомобиля будут безвозвратно удалены. Это действие нельзя отменить.";
+"CarType.Switch.Confirm" = "Согласен, переключить";
+"Fuel.Error.VolumeInvalid" = "Введите объём больше 0.";
+"Fuel.Error.PriceInvalid" = "Введите корректную цену.";
+"%.1f %@" = "%.1f %@";
+"%@%.2f/%@" = "%@%.2f/%@";

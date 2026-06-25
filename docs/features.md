@@ -7,10 +7,12 @@ Status legend: `Implemented` = working in code, `Partial` = present with known g
 | Core tracking | Multi-car support | Implemented | Add/edit/delete cars, select active tracking car, per-car currency/mileage. |
 | Core tracking | Charging session logging | Implemented | Detailed add/edit flow, charger type, energy, cost, odometer. |
 | Core tracking | Non-charging expenses | Implemented | Maintenance, repair, carwash, other expense types. |
+| Core tracking | Hybrid car fuel logging | Implemented | Hybrid cars log gasoline fill-ups (octane RON + volume + cost) via a Charge/Fuel switcher; fuel cost feeds the all-expenses cost-per-km, not charging-only stats. Switching Hybrid→Electric deletes the car's fuel expenses (confirmed). |
 | Stats | Cost per km (charging only + total) | Implemented | Computed in stats view model; display basis (per 1 unit or per 100 units) is user-configurable. |
 | Stats | CO2 saved estimation | Implemented | Uses configurable coefficient from env. |
 | Stats | Energy efficiency (kWh/100km) | Implemented | Based on charging and total mileage. |
 | Stats | Expense charts | Implemented | Monthly chart with type filters (last N months, default 6). |
+| Stats | Energy-per-month chart | Implemented | Line chart of monthly charging energy (green, kWh). Hybrid cars also get a second purple line of monthly fuel volume on a right-side axis (L/gal). |
 | Stats | Daily/weekly/monthly summaries | Partial | Monthly view is implemented; explicit daily/weekly summary modes are not. |
 | Expenses list | Filtering by type | Implemented | Chips for all expense types. |
 | Expenses list | Sorting + persistence | Implemented | Sort by creation date/odometer, saved in settings table. |
@@ -20,7 +22,7 @@ Status legend: `Implemented` = working in code, `Partial` = present with known g
 | Maintenance | Swipe actions + detail screen | Implemented | Mark done, edit, delete, duplicate, full details screen. |
 | Maintenance | Mark done creates expense | Implemented | Opens prefilled expense form and removes task. |
 | Notifications | Local notification scheduling/cancel | Implemented | Date-based scheduling tied to maintenance records. |
-| Settings | Runtime language switching | Implemented | en/de/ru/kk/tr/uk via custom localization manager. |
+| Settings | Runtime language switching | Implemented | en/de/ru/kk/tr/uk/zh-Hans via custom localization manager. |
 | Settings | Appearance mode | Implemented | system/light/dark persisted in UserDefaults. |
 | Settings | Cost-per-distance basis | Implemented | Stats per-distance cost shown per 1 unit or per 100 units; persisted in UserDefaults. |
 | Settings | App update badge/check | Implemented | Checks App Store version via lookup API. |

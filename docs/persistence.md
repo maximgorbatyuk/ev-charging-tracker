@@ -113,7 +113,7 @@ Several view models call into synchronous repository methods and then update `@P
 
 ## Migrations
 
-`DatabaseManager.migrateIfNeeded()` is the runner. The latest schema version is hardcoded in `DatabaseManager.swift:45` (`latestVersion = 8`). The runner replays every missing version in order.
+`DatabaseManager.migrateIfNeeded()` is the runner. The latest schema version is hardcoded in `DatabaseManager.swift:45` (`latestVersion = 9`). The runner replays every missing version in order.
 
 | v | Migration | Purpose |
 |---|---|---|
@@ -125,6 +125,7 @@ Several view models call into synchronous repository methods and then update `@P
 | 6 | `Migration_20250131_AddWheelDetailsToCarsTable.swift` | `front_wheel_size`, `rear_wheel_size` on `cars` |
 | 7 | `Migration_20260301_CreateDocumentsTable.swift` (`Migration_20260301_CreateDocumentsAndIdeasTables`) | `documents` + `ideas` |
 | 8 | `Migration_20260501_AddMeasurementSystemToCarsTable.swift` | `measurement_system` on `cars` (default `metric`) |
+| 9 | `Migration_20260624_AddHybridCarSupport.swift` | `car_type` on `cars` (default `electric`, `columnExists`-guarded) + `fuel_type`/`fuel_volume` on expenses (nullable, unguarded — expenses `createTable()` stays frozen) |
 
 ### Migration rules (read before adding one)
 

@@ -29,6 +29,7 @@ protocol ExpensesRepositoryProtocol {
     func getTotalCost() -> Double
     func getSessionCount() -> Int
     func deleteRecordsForCar(_ carId: Int64)
+    func deleteFuelExpenses(forCar carId: Int64) -> Int
     func updateCarExpensesCurrency(_ car: Car) -> Bool
 }
 
@@ -48,6 +49,8 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
     private let currency = Expression<String>("currency")
     private let expenseType = Expression<String>("expense_type")
     private let carIdColumn = Expression<Int64?>("car_id")
+    private let fuelType = Expression<String?>("fuel_type")
+    private let fuelVolume = Expression<Double?>("fuel_volume")
 
     private var db: Connection
     private let logger: Logger
@@ -111,7 +114,9 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
                 isInitialRecord <- session.isInitialRecord,
                 currency <- session.currency.rawValue,
                 expenseType <- session.expenseType.rawValue,
-                carIdColumn <- session.carId
+                carIdColumn <- session.carId,
+                fuelType <- session.fuelType?.rawValue,
+                fuelVolume <- session.fuelVolume
             )
 
             let rowId = try db.run(insert)
@@ -157,7 +162,9 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
                     isInitialRecord: session[isInitialRecord],
                     expenseType: ExpenseType(rawValue: session[expenseType]) ?? .other,
                     currency: currencyEnum,
-                    carId: session[carIdColumn]
+                    carId: session[carIdColumn],
+                    fuelType: session[fuelType].flatMap { FuelType(rawValue: $0) },
+                    fuelVolume: session[fuelVolume]
                 )
 
                 sessionsList.append(chargingSession)
@@ -201,7 +208,9 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
                     isInitialRecord: session[isInitialRecord],
                     expenseType: ExpenseType(rawValue: session[expenseType]) ?? .other,
                     currency: currencyEnum,
-                    carId: session[carIdColumn]
+                    carId: session[carIdColumn],
+                    fuelType: session[fuelType].flatMap { FuelType(rawValue: $0) },
+                    fuelVolume: session[fuelVolume]
                 )
 
                 sessionsList.append(chargingSession)
@@ -323,7 +332,9 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             isInitialRecord: row[isInitialRecord],
             expenseType: expenseTypeEnum,
             currency: currencyEnum,
-            carId: row[carIdColumn]
+            carId: row[carIdColumn],
+            fuelType: row[fuelType].flatMap { FuelType(rawValue: $0) },
+            fuelVolume: row[fuelVolume]
         )
     }
 
@@ -388,7 +399,9 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
                 isInitialRecord <- session.isInitialRecord,
                 currency <- session.currency.rawValue,
                 expenseType <- session.expenseType.rawValue,
-                carIdColumn <- session.carId
+                carIdColumn <- session.carId,
+                fuelType <- session.fuelType?.rawValue,
+                fuelVolume <- session.fuelVolume
             ))
             return true
         } catch {
@@ -445,6 +458,21 @@ class ExpensesRepository: ExpensesRepositoryProtocol {
             try db.run(recordsToDelete.delete())
         } catch {
             logger.error("Delete failed: \(error)")
+        }
+    }
+
+    /// Deletes every `.fuel` expense for a car. Used by the Hybrid→EV
+    /// car-type switch, which must be called before the type flip so the
+    /// query still matches the car. Returns the number of rows removed.
+    func deleteFuelExpenses(forCar carId: Int64) -> Int {
+        let fuelRecords = chargingSessionsTable
+            .filter(carIdColumn == carId)
+            .filter(expenseType == ExpenseType.fuel.rawValue)
+        do {
+            return try db.run(fuelRecords.delete())
+        } catch {
+            logger.error("Delete fuel expenses failed: \(error)")
+            return 0
         }
     }
 

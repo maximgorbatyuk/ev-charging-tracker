@@ -198,6 +198,8 @@
 "Start onboarding again" = "Start onboarding again";
 "onboarding.track_your_chargings" = "Track your chargings";
 "onboarding.track_your_chargings__subtitle" = "Keep track of all your EV charging sessions in one place";
+"onboarding.track_charge_and_fuel" = "Track charge and fuel";
+"onboarding.track_charge_and_fuel__subtitle" = "Add a hybrid car and track both electric charging and fuel fill-ups in one place.";
 "onboarding.monitor_costs" = "Monitor costs";
 "onboarding.monitor_costs__subtitle" = "See how much you spend on your EV car including power and other expenses";
 "onboarding.plan_maintenance" = "Plan maintenance";
@@ -478,3 +480,30 @@
 "import.documents_metadata_only" = "Note: Document files are not included in the backup. Only document metadata will be restored.";
 
 "Energy per month" = "Energy per month";
+
+/* Hybrid car support (gasoline fuel) */
+"Filter.Fuel" = "Fuel";
+"expense.filter.fuel" = "Fuel";
+"Fuel.OctaneFormat" = "%@ RON";
+"Add charge/fuel" = "Add charge/fuel";
+"Entry mode" = "Entry mode";
+"Charge" = "Charge";
+"Fuel" = "Fuel";
+"Fuel type" = "Fuel type";
+"Volume" = "Volume";
+"Price per litre" = "Price per litre";
+"Price per gallon" = "Price per gallon";
+"L" = "L";
+"gal" = "gal";
+"Car type" = "Car type";
+"Electric" = "Electric";
+"Hybrid" = "Hybrid";
+"CarType.SwitchToHybrid.Title" = "Switch to Hybrid?";
+"CarType.SwitchToHybrid.Body" = "A new Fuel expense type and a Charge/Fuel switcher will become available.";
+"CarType.SwitchToEV.Title" = "Switch to Electric?";
+"CarType.SwitchToEV.Body" = "All Fuel expenses for this car will be permanently deleted. This cannot be undone.";
+"CarType.Switch.Confirm" = "I agree, let's switch";
+"Fuel.Error.VolumeInvalid" = "Please enter a volume greater than 0.";
+"Fuel.Error.PriceInvalid" = "Please enter a valid price.";
+"%.1f %@" = "%.1f %@";
+"%@%.2f/%@" = "%@%.2f/%@";

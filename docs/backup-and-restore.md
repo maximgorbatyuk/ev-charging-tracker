@@ -38,7 +38,9 @@ All three produce the same JSON shape (`BusinessLogic/Models/ExportModels.swift`
 }
 ```
 
-The `databaseSchemaVersion` is sourced from `DatabaseManager.getDatabaseSchemaVersion()` (currently `8`). Import compares against the running app's schema version and warns when the backup is *newer* than the app.
+The `databaseSchemaVersion` is sourced from `DatabaseManager.getDatabaseSchemaVersion()` (currently `9`). Import compares against the running app's schema version and warns when the backup is *newer* than the app.
+
+`ExportCar.carType` and `ExportExpense.fuelType`/`fuelVolume` are all optional for back-compat: pre-v9 backups omit them and decode as `nil` (`carType` then defaults to `.electric` in `toCar()`). Fuel **price-per-unit is not exported** — on import it is recomputed via `getFuelPricePerUnit()` from `cost` and `fuelVolume`.
 
 ## Pre-import validation
 

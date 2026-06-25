@@ -10,6 +10,7 @@ import SwiftUI
 struct FormButtonsView: SwiftUICore.View {
     let onCancel: () -> Void
     let onSave: () -> Void
+    var isSaveDisabled: Bool = false
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -31,6 +32,8 @@ struct FormButtonsView: SwiftUICore.View {
                     borderColor: .green,
                     textColor: .white
                 ))
+                .disabled(isSaveDisabled)
+                .opacity(isSaveDisabled ? 0.5 : 1)
         }
     }
 }

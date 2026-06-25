@@ -1,5 +1,49 @@
 # Release notes
 
+## 2026.3.1
+
+### English
+
+```
+We added support for hybrid cars — mark a car as hybrid and track both your electric charging and your fuel fill-ups in one place. We also updated the Energy per month chart to show charging and fuel as separate lines, and made a few improvements under the hood.
+```
+
+### Русский (RU)
+
+```
+Мы добавили поддержку гибридных автомобилей — отметьте машину как гибрид и записывайте и зарядку, и заправки топливом в одном месте. Мы также обновили график «Энергия за месяц», чтобы зарядка и топливо отображались отдельными линиями, и сделали несколько улучшений под капотом.
+```
+
+### Қазақша (KK)
+
+```
+Біз гибридті автокөліктерге қолдау қостық — көлікті гибрид деп белгілеп, әрі электр зарядтауын, әрі жанармай құюды бір жерде қадағалаңыз. Сонымен қатар «Айлық энергия» графигін зарядтау мен жанармайды бөлек сызықтармен көрсететіндей жаңарттық және ішкі бірнеше жақсарту енгіздік.
+```
+
+### Türkçe (TR)
+
+```
+Hibrit araçlar için destek ekledik — bir aracı hibrit olarak işaretleyin ve hem elektrikli şarjı hem de yakıt dolumlarını tek bir yerde takip edin. Ayrıca «Aylık enerji» grafiğini şarj ve yakıtı ayrı çizgilerle gösterecek şekilde güncelledik ve arka planda birkaç iyileştirme yaptık.
+```
+
+### Українська (UK)
+
+```
+Ми додали підтримку гібридних автомобілів — позначте авто як гібрид і відстежуйте і зарядку, і заправки пальним в одному місці. Ми також оновили графік «Енергія за місяць», щоб зарядка та паливо відображалися окремими лініями, і зробили кілька покращень під капотом.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben Unterstützung für Hybridautos hinzugefügt — markieren Sie ein Auto als Hybrid und verfolgen Sie sowohl das Laden als auch das Tanken an einem Ort. Außerdem haben wir das Diagramm „Energie pro Monat" aktualisiert, sodass Laden und Tanken als getrennte Linien erscheinen, und einige Verbesserungen unter der Haube vorgenommen.
+```
+
+### 简体中文 (ZH-Hans)
+
+```
+我们新增了对混合动力汽车的支持 — 将车辆标记为混合动力，即可在一个地方同时追踪电量充电和燃油加注。我们还更新了「月度能耗」图表，让充电和燃油以独立的折线显示，并在后台做了一些改进。
+```
+
 ## 2026.2.5
 
 ### English

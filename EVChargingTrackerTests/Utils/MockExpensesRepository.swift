@@ -103,6 +103,12 @@ class MockExpensesRepository: ExpensesRepositoryProtocol {
         expenses.removeAll { $0.carId == carId }
     }
 
+    func deleteFuelExpenses(forCar carId: Int64) -> Int {
+        let before = expenses.count
+        expenses.removeAll { $0.carId == carId && $0.expenseType == .fuel }
+        return before - expenses.count
+    }
+
     func updateCarExpensesCurrency(_ car: Car) -> Bool {
         return true
     }
