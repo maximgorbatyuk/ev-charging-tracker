@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026.3.1 (2026-06-25)
+
+- Track both charging and fuel on one car — mark a car as hybrid and log electric charges and gasoline fill-ups together
+- Adding an expense for a hybrid car now has a Charge/Fuel switcher, with volume, price, and cost filled in for you automatically
+- The Energy per month chart shows charging and fuel as separate lines
+- A new onboarding page introduces hybrid tracking
+- Stability improvements
+
 ## 2026.2.5 (2026-06-23)
 
 - New "Cost per distance" setting: choose whether the Stats screen shows your cost per 1 km/mi or per 100 km/mi (Settings → Base settings)
