@@ -158,6 +158,13 @@ struct AddExpenseView: SwiftUICore.View {
                 _fuelType = State(initialValue: savedFuelType)
             }
 
+            // Edit mode restores the stored volume; a blank field would hide the
+            // saved value and block Save (isFuelFormValid needs volume > 0).
+            if let volume = expense.fuelVolume {
+                _fuelVolumeText = State(
+                    initialValue: String(format: AddExpenseView.ExpenseFormatWithTwoDigits, volume))
+            }
+
             if let price = expense.getFuelPricePerUnit() {
                 _fuelPricePerUnitText = State(
                     initialValue: String(format: AddExpenseView.ExpenseFormatWithThreeDigits, price))

@@ -7,9 +7,6 @@ struct EditCarView: SwiftUICore.View {
     let onDelete: (CarDto) -> Void
     let onCancel: () -> Void
 
-    /// Used only to delete a car's fuel expenses when downgrading Hybrid→EV.
-    private let expensesRepository: ExpensesRepositoryProtocol?
-
     @ObservedObject private var loc = LocalizationManager.shared
 
     @State private var name: String
@@ -43,7 +40,6 @@ struct EditCarView: SwiftUICore.View {
         self.onSave = onSave
         self.onDelete = onDelete
         self.onCancel = onCancel
-        self.expensesRepository = DatabaseManager.shared.expensesRepository
 
         _name = State(initialValue: car?.name ?? "")
         _batteryText = State(initialValue: car?.batteryCapacity.map { String($0) } ?? "")
@@ -280,14 +276,6 @@ struct EditCarView: SwiftUICore.View {
 
                         let frontWheelToSave: String? = frontWheelSize.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : frontWheelSize.trimmingCharacters(in: .whitespacesAndNewlines)
                         let rearWheelToSave: String? = rearWheelSize.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : rearWheelSize.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                        // Hybrid→EV downgrade permanently removes the car's fuel
-                        // expenses; do it before persisting the new type.
-                        if car?.carType == .hybrid,
-                           carType == .electric,
-                           let carId = car?.id {
-                            _ = expensesRepository?.deleteFuelExpenses(forCar: carId)
-                        }
 
                         let updated = CarDto(
                             id: car?.id,

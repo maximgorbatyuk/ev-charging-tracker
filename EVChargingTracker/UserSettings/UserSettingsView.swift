@@ -966,6 +966,8 @@ struct UserSettingsView: SwiftUICore.View {
                         return
                     }
 
+                    let wasHybrid = carToUpdate.carType == .hybrid
+
                     carToUpdate.updateValues(
                         name: updated.name,
                         batteryCapacity: updated.batteryCapacity,
@@ -979,6 +981,14 @@ struct UserSettingsView: SwiftUICore.View {
                         carType: updated.carType)
 
                     _ = viewModel.updateCar(car: carToUpdate)
+
+                    // Downgrading Hybrid→Electric permanently removes the car's
+                    // gasoline fuel expenses.
+                    if wasHybrid,
+                       updated.carType == .electric,
+                       let carId = carToUpdate.id {
+                        viewModel.deleteFuelExpenses(forCar: carId)
+                    }
 
                     editingCar = nil
                 } else {

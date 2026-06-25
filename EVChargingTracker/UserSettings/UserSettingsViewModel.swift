@@ -226,6 +226,14 @@ class UserSettingsViewModel: ObservableObject {
         return carUpdateSuccess && carExpensesUpdateSyccess
     }
 
+    /// Removes a car's gasoline fuel expenses, used when it is downgraded
+    /// Hybrid→Electric. Fuel rows are matched by expense type, not car type,
+    /// so this is safe to run before or after the car-type change is persisted.
+    func deleteFuelExpenses(forCar carId: Int64) {
+        _ = expensesRepository?.deleteFuelExpenses(forCar: carId)
+        self.objectWillChange.send()
+    }
+
     func deleteCar(_ carId: Int64, selectedForTracking: Bool) {
         db.plannedMaintenanceRepository?.deleteRecordsForCar(carId)
         db.documentsRepository?.deleteRecordsForCar(carId)
