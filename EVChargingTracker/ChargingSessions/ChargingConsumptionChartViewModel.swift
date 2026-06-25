@@ -44,10 +44,20 @@ class ChargingConsumptionChartViewModel: ObservableObject {
 
             let totalEnergy = monthExpenses.reduce(0.0) { $0 + $1.energyCharged }
 
+            // Fuel volume for hybrid cars, summed independently of charging energy.
+            let monthFuelExpenses = self.expenses.filter { expense in
+                let isFuel = expense.expenseType == .fuel && !expense.isInitialRecord
+                let isInMonth = expense.date >= startOfMonth && expense.date < nextMonthStart
+                return isFuel && isInMonth
+            }
+
+            let totalFuelVolume = monthFuelExpenses.reduce(0.0) { $0 + ($1.fuelVolume ?? 0) }
+
             monthlyTotals.append(
                 MonthlyConsumption(
                     month: startOfMonth,
-                    totalEnergy: totalEnergy
+                    totalEnergy: totalEnergy,
+                    totalFuelVolume: totalFuelVolume
             ))
         }
 
@@ -71,6 +81,25 @@ class ChargingConsumptionChartViewModel: ObservableObject {
         monthlyData.contains { $0.totalEnergy > 0 }
     }
 
+    // Hybrid cars with at least one fuel fill-up get the second (purple) line.
+    var hasFuelData: Bool {
+        monthlyData.contains { $0.totalFuelVolume > 0 }
+    }
+
+    var maxFuelVolume: Double {
+        monthlyData.map { $0.totalFuelVolume }.max() ?? 0
+    }
+
+    /// Factor that maps fuel volume onto the kWh axis so both series share a
+    /// vertical span; the trailing axis divides ticks back to real volume.
+    var fuelScale: Double {
+        guard maxConsumption > 0, maxFuelVolume > 0 else {
+            return 1
+        }
+
+        return maxConsumption / maxFuelVolume
+    }
+
     // Average monthly energy across all months with data
     var overallAverage: Double {
         let validData = monthlyData.filter { $0.totalEnergy > 0 }
@@ -84,6 +113,7 @@ struct MonthlyConsumption: Identifiable {
     let id = UUID()
     let month: Date
     let totalEnergy: Double
+    let totalFuelVolume: Double
 
     var monthName: String {
         let formatter = DateFormatter()

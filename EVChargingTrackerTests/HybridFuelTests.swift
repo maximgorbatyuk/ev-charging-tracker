@@ -56,6 +56,14 @@ struct HybridFuelTests {
         #expect(FuelCalc.volume(cost: 60, price: 0) == nil)
     }
 
+    @Test func fuelCalc_price_isCostDividedByVolume() async throws {
+        #expect(FuelCalc.price(cost: 60, volume: 40) == 1.5)
+    }
+
+    @Test func fuelCalc_price_isNil_whenVolumeIsZero() async throws {
+        #expect(FuelCalc.price(cost: 60, volume: 0) == nil)
+    }
+
     // MARK: - Export / import round-trip (price survives because it is derived)
 
     @Test func fuelExpense_roundTripsThroughExport_preservingDerivedPrice() async throws {

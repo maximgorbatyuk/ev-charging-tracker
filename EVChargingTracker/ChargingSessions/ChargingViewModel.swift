@@ -83,7 +83,8 @@ class ChargingViewModel: ObservableObject, IExpenseView {
             consumptionLineChartData = ChargingConsumptionLineChartData(
                 expenses: expenses,
                 analytics: self.analytics,
-                monthsCount: getMonthCountForCharts()
+                monthsCount: getMonthCountForCharts(),
+                volumeUnitLabel: car.measurementSystem.volumeUnitLabel
             )
         }
     }

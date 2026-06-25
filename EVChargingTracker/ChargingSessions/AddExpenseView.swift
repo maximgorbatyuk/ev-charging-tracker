@@ -207,8 +207,25 @@ struct AddExpenseView: SwiftUICore.View {
         return true
     }
 
+    /// Charging needs a positive energy value; cost stays optional so free
+    /// charging can still be logged (mirrors the guard in `saveSession()`).
+    private var isChargeFormValid: Bool {
+        guard let energy = Double(energyCharged.replacing(",", with: ".")),
+              energy > 0
+        else {
+            return false
+        }
+
+        return true
+    }
+
     private var isSaveDisabled: Bool {
-        mode == .fuel && !isFuelFormValid
+        switch mode {
+        case .fuel:
+            return !isFuelFormValid
+        case .charge:
+            return showsChargeOrFuelFields && !isChargeFormValid
+        }
     }
 
     var body: some SwiftUICore.View {
@@ -261,17 +278,7 @@ struct AddExpenseView: SwiftUICore.View {
                     }
 
                     if showsModeSwitcher {
-                        Picker(L("Entry mode"), selection: $mode) {
-                            Text(L("Charge")).tag(ExpenseEntryMode.charge)
-                            Text(L("Fuel")).tag(ExpenseEntryMode.fuel)
-                        }
-                        .pickerStyle(.segmented)
-                        .onChange(of: mode) { _, newMode in
-                            analytics.trackEvent("expense_mode_switched", properties: [
-                                    "screen": "add_expense_screen",
-                                    "mode": newMode.rawValue
-                                ])
-                        }
+                        modeSwitcher
                     }
 
                     DatePicker(L("Date"), selection: $date, displayedComponents: .date)
@@ -321,7 +328,7 @@ struct AddExpenseView: SwiftUICore.View {
                                 }
 
                                 if mode == .fuel {
-                                    adjustFuelVolumeBasedOnCost()
+                                    adjustFuelPriceBasedOnCost()
                                 } else if defaultExpenseType == .charging {
                                     adjustEnergyBasedOnCost()
                                 } else {
@@ -504,7 +511,7 @@ struct AddExpenseView: SwiftUICore.View {
                         return
                     }
 
-                    adjustFuelVolumeBasedOnPrice()
+                    adjustFuelCostBasedOnInputs()
                 })
         }
     }
@@ -513,6 +520,53 @@ struct AddExpenseView: SwiftUICore.View {
         selectedCardForExpense?.measurementSystem == .imperial
             ? L("Price per gallon")
             : L("Price per litre")
+    }
+
+    /// Charge/Fuel toggle: both options carry their brand tint at all times
+    /// (green for charge, purple for fuel); the active one gets a solid fill.
+    @ViewBuilder
+    private var modeSwitcher: some SwiftUICore.View {
+        HStack(spacing: 8) {
+            modeSwitcherButton(
+                title: L("Charge"),
+                isSelected: mode == .charge,
+                activeColor: AppColors.green,
+                softColor: AppColors.greenSoft,
+                action: { mode = .charge })
+
+            modeSwitcherButton(
+                title: L("Fuel"),
+                isSelected: mode == .fuel,
+                activeColor: AppColors.purple,
+                softColor: AppColors.purpleSoft,
+                action: { mode = .fuel })
+        }
+        .onChange(of: mode) { _, newMode in
+            analytics.trackEvent("expense_mode_switched", properties: [
+                    "screen": "add_expense_screen",
+                    "mode": newMode.rawValue
+                ])
+        }
+    }
+
+    private func modeSwitcherButton(
+        title: String,
+        isSelected: Bool,
+        activeColor: Color,
+        softColor: Color,
+        action: @escaping () -> Void
+    ) -> some SwiftUICore.View {
+        Button(action: action) {
+            Text(title)
+                .appFont(.subheadline, weight: isSelected ? .semibold : .medium)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .foregroundColor(isSelected ? .white : activeColor)
+                .background(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(isSelected ? activeColor : softColor))
+        }
+        .buttonStyle(.plain)
     }
 
     /// Fuel: cost = volume × price. Called when the volume field changes.
@@ -526,40 +580,17 @@ struct AddExpenseView: SwiftUICore.View {
         cost = String(format: "%.2f", FuelCalc.cost(volume: volume, price: price))
     }
 
-    /// Fuel: volume = cost / price (price stays static). Called when cost changes.
-    private func adjustFuelVolumeBasedOnCost() {
+    /// Fuel: price/unit = cost / volume. The volume the user typed is the anchor,
+    /// so editing cost (or price) recomputes the other field and never volume.
+    private func adjustFuelPriceBasedOnCost() {
         guard let costValue = Double(cost.replacing(",", with: ".")),
-              let price = Double(fuelPricePerUnitText.replacing(",", with: ".")),
-              let volume = FuelCalc.volume(cost: costValue, price: price)
+              let volume = Double(fuelVolumeText.replacing(",", with: ".")),
+              let price = FuelCalc.price(cost: costValue, volume: volume)
         else {
             return
         }
 
-        fuelVolumeText = String(format: "%.2f", volume)
-    }
-
-    /// Fuel: editing price recomputes volume from cost when both volume and cost
-    /// are present; otherwise computes cost from volume.
-    private func adjustFuelVolumeBasedOnPrice() {
-        guard let price = Double(fuelPricePerUnitText.replacing(",", with: ".")),
-              price > 0
-        else {
-            return
-        }
-
-        let costValue = Double(cost.replacing(",", with: "."))
-        let volumeValue = Double(fuelVolumeText.replacing(",", with: "."))
-
-        if let costValue = costValue,
-           volumeValue != nil,
-           let volume = FuelCalc.volume(cost: costValue, price: price) {
-            fuelVolumeText = String(format: "%.2f", volume)
-            return
-        }
-
-        if let volumeValue = volumeValue {
-            cost = String(format: "%.2f", FuelCalc.cost(volume: volumeValue, price: price))
-        }
+        fuelPricePerUnitText = String(format: AddExpenseView.ExpenseFormatWithThreeDigits, price)
     }
 
     private func adjustCostsBasedOnInputs() {

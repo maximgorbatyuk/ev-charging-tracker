@@ -12,6 +12,7 @@ Status legend: `Implemented` = working in code, `Partial` = present with known g
 | Stats | CO2 saved estimation | Implemented | Uses configurable coefficient from env. |
 | Stats | Energy efficiency (kWh/100km) | Implemented | Based on charging and total mileage. |
 | Stats | Expense charts | Implemented | Monthly chart with type filters (last N months, default 6). |
+| Stats | Energy-per-month chart | Implemented | Line chart of monthly charging energy (green, kWh). Hybrid cars also get a second purple line of monthly fuel volume on a right-side axis (L/gal). |
 | Stats | Daily/weekly/monthly summaries | Partial | Monthly view is implemented; explicit daily/weekly summary modes are not. |
 | Expenses list | Filtering by type | Implemented | Chips for all expense types. |
 | Expenses list | Sorting + persistence | Implemented | Sort by creation date/odometer, saved in settings table. |

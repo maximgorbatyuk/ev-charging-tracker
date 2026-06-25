@@ -22,4 +22,14 @@ enum FuelCalc {
 
         return cost / price
     }
+
+    /// Price-per-unit from cost and volume. Returns nil when volume is
+    /// non-positive to avoid division by zero.
+    static func price(cost: Double, volume: Double) -> Double? {
+        guard volume > 0 else {
+            return nil
+        }
+
+        return cost / volume
+    }
 }
