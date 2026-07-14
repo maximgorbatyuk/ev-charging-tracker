@@ -15,6 +15,9 @@
 "Close" = "Schließen";
 "CO₂ saved (kg)" = "CO₂ eingespart (kg)";
 "kWh / 100km" = "kWh / 100 km";
+"kWh / km" = "kWh / km";
+"kWh / mi" = "kWh / mi";
+"Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi." = "Durchschnittlicher Energieverbrauch deines Autos über eine Strecke. Wechsle zwischen pro 100 km/mi und pro 1 km/mi.";
 "Charges" = "Ladevorgänge";
 
 "Initial mileage" = "Anfangskilometerstand";

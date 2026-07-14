@@ -63,6 +63,10 @@ In Debug, every call also logs the merged event to OSLog (`subsystem: "Analytics
 - The existing `save_button_clicked` / `save_toolbaar_button_clicked` events gain an `expense_mode` property (`charge` or `fuel`) so a saved entry's kind is distinguishable.
 - The main-screen add sheet fires `charge_session_added` for a charge entry and `fuel_session_added` for a fuel entry (both with `screen = charging_sessions_stats_screen`).
 
+## Stats energy card
+
+- `consumption_basis_card_clicked` — fired when the user taps the kWh energy card on the Stats screen to open the consumption-basis switch modal. Property `screen` is `charging_sessions_stats_screen`.
+
 ## GA4 naming limits (cross-cutting reminder)
 
 GA4 enforces:

@@ -1,5 +1,49 @@
 # Release notes
 
+## 2026.3.2
+
+### English
+
+```
+We made the energy stat on the Stats screen tappable — switch between kWh per 100 km/mi and kWh per 1 km/mi to see your consumption the way you prefer. We also added two new currencies, Malaysian Ringgit and Philippine Peso, so more of you can track costs in your own money.
+```
+
+### Русский (RU)
+
+```
+Мы сделали показатель энергии на экране статистики нажимаемым — переключайтесь между кВт·ч на 100 км/миль и кВт·ч на 1 км/милю, чтобы видеть расход так, как вам удобнее. Мы также добавили две новые валюты — малайзийский ринггит и филиппинское песо, чтобы ещё больше из вас могли вести учёт расходов в своей валюте.
+```
+
+### Қазақша (KK)
+
+```
+Статистика экранындағы энергия көрсеткішін түртуге болатын еттік — қуат шығынын өзіңізге ыңғайлы түрде көру үшін кВт·сағ/100 км/миля мен кВт·сағ/1 км/миля арасында ауысыңыз. Сонымен қатар екі жаңа валюта — Малайзия ринггиті мен Филиппин песосын қостық, осылайша тағы да көбіңіз шығындарды өз валютаңызда қадағалай аласыз.
+```
+
+### Türkçe (TR)
+
+```
+İstatistik ekranındaki enerji göstergesini dokunulabilir yaptık — tüketiminizi tercih ettiğiniz şekilde görmek için kWh/100 km/mi ile kWh/1 km/mi arasında geçiş yapın. Ayrıca iki yeni para birimi ekledik, Malezya Ringgiti ve Filipin Pesosu, böylece daha fazlanız masraflarınızı kendi para biriminizle takip edebilir.
+```
+
+### Українська (UK)
+
+```
+Ми зробили показник енергії на екрані статистики натисним — перемикайтеся між кВт·год на 100 км/миль і кВт·год на 1 км/милю, щоб бачити споживання так, як вам зручніше. Ми також додали дві нові валюти — малайзійський рингіт і філіппінське песо, щоб іще більше з вас могли вести облік витрат у своїй валюті.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben die Energieanzeige auf dem Statistik-Bildschirm antippbar gemacht — wechseln Sie zwischen kWh pro 100 km/mi und kWh pro 1 km/mi, um Ihren Verbrauch so zu sehen, wie Sie möchten. Außerdem haben wir zwei neue Währungen hinzugefügt, den malaysischen Ringgit und den philippinischen Peso, sodass noch mehr von Ihnen Kosten in Ihrer eigenen Währung erfassen können.
+```
+
+### 简体中文 (ZH-Hans)
+
+```
+我们让统计页面上的能耗数据可以点按 — 在每 100 公里/英里千瓦时和每 1 公里/英里千瓦时之间切换，以你喜欢的方式查看能耗。我们还新增了两种货币，马来西亚林吉特和菲律宾比索，让更多人能用自己的货币记录花费。
+```
+
 ## 2026.3.1
 
 ### English

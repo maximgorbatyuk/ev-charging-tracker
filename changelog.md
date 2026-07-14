@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026.3.2 (2026-07-14)
+
+- Tap the energy stat on the Stats screen to switch between kWh per 100 km/mi and kWh per 1 km/mi
+- Added two new currencies: Malaysian Ringgit and Philippine Peso
+
 ## 2026.3.1 (2026-06-25)
 
 - Track both charging and fuel on one car — mark a car as hybrid and log electric charges and gasoline fill-ups together

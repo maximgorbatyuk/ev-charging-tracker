@@ -10,7 +10,7 @@ Status legend: `Implemented` = working in code, `Partial` = present with known g
 | Core tracking | Hybrid car fuel logging | Implemented | Hybrid cars log gasoline fill-ups (octane RON + volume + cost) via a Charge/Fuel switcher; fuel cost feeds the all-expenses cost-per-km, not charging-only stats. Switching Hybrid→Electric deletes the car's fuel expenses (confirmed). |
 | Stats | Cost per km (charging only + total) | Implemented | Computed in stats view model; display basis (per 1 unit or per 100 units) is user-configurable. |
 | Stats | CO2 saved estimation | Implemented | Uses configurable coefficient from env. |
-| Stats | Energy efficiency (kWh/100km) | Implemented | Based on charging and total mileage. |
+| Stats | Energy efficiency (kWh/100km) | Implemented | Based on charging and total mileage. Card is tappable; a modal switches the display basis between per 100 units and per 1 unit (persisted independently from the cost basis). |
 | Stats | Expense charts | Implemented | Monthly chart with type filters (last N months, default 6). |
 | Stats | Energy-per-month chart | Implemented | Line chart of monthly charging energy (green, kWh). Hybrid cars also get a second purple line of monthly fuel volume on a right-side axis (L/gal). |
 | Stats | Daily/weekly/monthly summaries | Partial | Monthly view is implemented; explicit daily/weekly summary modes are not. |

@@ -153,12 +153,12 @@ All in `EVChargingTracker/ChargingSessions/*ViewModel.swift`.
 
 - **Cost-per-km (charging only)** = `sum(charging.cost) / (currentMileage − initialMileage)`
 - **Cost-per-km (all)** = `sum(all.cost) / distance`
-- **Energy efficiency (kWh/100km)** = `sum(charging.energyCharged) / distance × 100`
+- **Energy efficiency (kWh/100km)** = `sum(charging.energyCharged) / distance × 100`. The Stats energy card display basis (per 100 units or per 1 unit) is user-configurable; the per-1 view divides the stored per-100 value at the display boundary. Persisted independently from the cost basis (`ConsumptionBasisManager`, `consumption_basis` key).
 - **CO₂ saved** = `distance × CO2_EUROPE_POLLUTION_PER_ONE_KILOMETER`. Constant comes from `EnvironmentService.getCo2EuropePollutionPerOneKilometer()` (xcconfig: `0.17` kg/km). When the active car's `measurementSystem` is `imperial`, the displayed unit is `lb` and the value is converted at the display boundary (`kg × 1/0.453592`). The stored value is always conceptually kg.
 
 ## Currency
 
-`Currency` enum: `usd`, `kzt`, `eur`, `byn`, `uah`, `rub`, `trl`, `aed`, `sar`, `gbp`, `jpy`, `inr`, `cny`. Stored as raw string in DB. The currency is per-expense — switching the user's default does not retroactively re-stamp old rows.
+`Currency` enum: `usd`, `kzt`, `eur`, `byn`, `uah`, `rub`, `trl`, `aed`, `sar`, `gbp`, `jpy`, `inr`, `cny`, `myr`, `php`. Stored as raw string in DB (the raw value is the display symbol). The currency is per-expense — switching the user's default does not retroactively re-stamp old rows.
 
 **`Expense.cost` is `Double?`, not `Decimal`** — this violates the workspace rule but is intentional in this project; changing it requires a coordinated schema + export-format + stats migration. Do not "fix" it as a side effect of another task.
 

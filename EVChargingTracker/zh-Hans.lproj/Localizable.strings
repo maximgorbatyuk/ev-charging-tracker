@@ -15,6 +15,9 @@
 "Close" = "关闭";
 "CO₂ saved (kg)" = "减少的CO₂ (kg)";
 "kWh / 100km" = "kWh / 100km";
+"kWh / km" = "kWh / km";
+"kWh / mi" = "kWh / mi";
+"Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi." = "您的车辆在一段距离内的平均能耗。可在每 100 公里/英里和每 1 公里/英里之间切换。";
 "Charges" = "充电记录";
 
 "Initial mileage" = "初始里程";

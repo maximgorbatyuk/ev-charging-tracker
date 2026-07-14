@@ -16,6 +16,9 @@
 "CO₂ saved (kg)" = "CO₂ saved (kg)";
 "CO₂ saved (%@)" = "CO₂ saved (%@)";
 "kWh / 100km" = "kWh / 100km";
+"kWh / km" = "kWh / km";
+"kWh / mi" = "kWh / mi";
+"Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi." = "Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi.";
 "kWh / 100mi" = "kWh / 100mi";
 "Charges" = "Charges";
 

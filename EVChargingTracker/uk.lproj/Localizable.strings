@@ -15,6 +15,9 @@
 "Close" = "Закрити";
 "CO₂ saved (kg)" = "Збережено CO₂ (кг)";
 "kWh / 100km" = "кВт·год / 100км";
+"kWh / km" = "кВт·год / км";
+"kWh / mi" = "кВт·год / миль";
+"Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi." = "Середнє споживання енергії вашим автомобілем на відстані. Перемикайтеся між на 100 км/миль і на 1 км/милю.";
 "Charges" = "Зарядки";
 
 "Initial mileage" = "Початковий пробіг";
