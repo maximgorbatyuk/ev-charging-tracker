@@ -15,6 +15,9 @@
 "Close" = "Kapat";
 "CO₂ saved (kg)" = "CO₂ tasarrufu (kg)";
 "kWh / 100km" = "kWh / 100km";
+"kWh / km" = "kWh / km";
+"kWh / mi" = "kWh / mi";
+"Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi." = "Aracınızın belirli bir mesafede tükettiği ortalama enerji. 100 km/mil başına ve 1 km/mil başına arasında geçiş yapın.";
 "Charges" = "Şarj";
 
 "Initial mileage" = "İlk kilometre";

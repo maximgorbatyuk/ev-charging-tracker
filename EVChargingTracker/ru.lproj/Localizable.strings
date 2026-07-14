@@ -16,6 +16,9 @@
 
 "CO₂ saved (kg)" = "CO₂ сэкономлено (кг)";
 "kWh / 100km" = "кВт / 100км";
+"kWh / km" = "кВт / км";
+"kWh / mi" = "кВт / миль";
+"Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi." = "Средний расход энергии вашего автомобиля на расстоянии. Переключайтесь между на 100 км/миль и на 1 км/милю.";
 "Charges" = "Зарядок";
 
 "Initial mileage" = "Начальный пробег";

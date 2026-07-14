@@ -18,6 +18,28 @@ struct StatsBlockView: SwiftUICore.View {
     /// the kg → lb conversion when the selected car is `.imperial`.
     var measurementSystem: MeasurementSystem = .metric
 
+    @ObservedObject private var consumptionBasisManager = ConsumptionBasisManager.shared
+    @ObservedObject private var analytics = AnalyticsService.shared
+    @State private var showingConsumptionInfo = false
+
+    /// Consumption label, varying by unit and the selected per-1/per-100 basis.
+    private var energyTitle: String {
+        switch (measurementSystem, consumptionBasisManager.currentBasis) {
+        case (.imperial, .perHundredUnits): return L("kWh / 100mi")
+        case (.imperial, .perUnit): return L("kWh / mi")
+        case (.metric, .perHundredUnits): return L("kWh / 100km")
+        case (.metric, .perUnit): return L("kWh / km")
+        }
+    }
+
+    /// `averageEnergy` is stored per 100 units; the per-1 view divides at the display boundary.
+    private var energyValue: String {
+        switch consumptionBasisManager.currentBasis {
+        case .perHundredUnits: return String(format: "%.1f", averageEnergy)
+        case .perUnit: return String(format: "%.2f", averageEnergy / 100.0)
+        }
+    }
+
     var body: some SwiftUICore.View {
         HStack(alignment: .top, spacing: 10) {
             StatCard(
@@ -26,13 +48,28 @@ struct StatsBlockView: SwiftUICore.View {
                 style: .co2Saved
             )
 
-            StatCard(
-                title: measurementSystem == .imperial
-                    ? L("kWh / 100mi")
-                    : L("kWh / 100km"),
-                value: String(format: "%.1f", averageEnergy),
-                style: .energy
-            )
+            Button(action: {
+                analytics.trackEvent(
+                    "consumption_basis_card_clicked",
+                    properties: ["screen": "charging_sessions_stats_screen"]
+                )
+                showingConsumptionInfo = true
+            }) {
+                StatCard(
+                    title: energyTitle,
+                    value: energyValue,
+                    style: .energy,
+                    showsInfoIndicator: true
+                )
+            }
+            .buttonStyle(.plain)
+            .sheet(isPresented: $showingConsumptionInfo) {
+                ConsumptionHintModalView(
+                    hint: L("Average energy your car consumes over a distance. Switch between per 100 km/mi and per 1 km/mi.")
+                )
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+            }
 
             StatCard(
                 title: L("Charges"),
@@ -99,19 +136,31 @@ struct StatCard: SwiftUICore.View {
     let title: String
     let value: String
     let style: StatCardStyle
+    /// Shows a small info glyph to signal the card is tappable.
+    var showsInfoIndicator: Bool = false
 
     var body: some SwiftUICore.View {
         AppCard(pad: 14) {
             VStack(alignment: .leading, spacing: 8) {
-                Image(systemName: style.iconName)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(style.tint.color)
-                    .frame(width: 26, height: 26)
-                    .background(
-                        Circle()
-                            .fill(style.tint.color.opacity(0.16))
-                    )
-                    .accessibilityHidden(true)
+                HStack(alignment: .top, spacing: 0) {
+                    Image(systemName: style.iconName)
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(style.tint.color)
+                        .frame(width: 26, height: 26)
+                        .background(
+                            Circle()
+                                .fill(style.tint.color.opacity(0.16))
+                        )
+                        .accessibilityHidden(true)
+
+                    if showsInfoIndicator {
+                        Spacer(minLength: 0)
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(AppColors.inkSoft)
+                            .accessibilityHidden(true)
+                    }
+                }
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(title)
