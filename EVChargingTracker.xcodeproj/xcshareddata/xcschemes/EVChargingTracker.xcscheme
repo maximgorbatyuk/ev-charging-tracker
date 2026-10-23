@@ -41,18 +41,7 @@
                ReferencedContainer = "container:EVChargingTracker.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "87756BED2E963D250055273C"
-               BuildableName = "EVChargingTrackerUITests.xctest"
-               BlueprintName = "EVChargingTrackerUITests"
-               ReferencedContainer = "container:EVChargingTracker.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
+         </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

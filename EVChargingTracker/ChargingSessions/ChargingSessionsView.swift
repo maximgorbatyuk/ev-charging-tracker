@@ -71,6 +71,7 @@ struct ChargingSessionsView: SwiftUICore.View {
                                 fullWidth: true,
                                 action: { showingAddSession = true }
                             )
+                            .accessibilityIdentifier("entity.add")
                             .padding(.horizontal)
 
                             if viewModel.expenses.isEmpty {

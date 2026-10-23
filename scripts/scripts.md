@@ -42,37 +42,30 @@ EOF
 
 ## 1. Testing Scripts
 
-### Run Tests
-**Script:** `scripts/run_tests.sh`
+### Unit tests
 
-**Purpose:** Run all unit and UI tests with code coverage
+**Script:** `run_tests.sh` in the repository root.
 
-**Implementation:**
 ```bash
-#!/bin/bash
-set -e
-
-echo "🧪 Running tests..."
-
-xcodebuild test \
-  -scheme EVChargingTracker \
-  -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=18.0' \
-  -enableCodeCoverage YES \
-  -resultBundlePath ./build/TestResults.xcresult
-
-echo "✅ Tests completed successfully!"
-echo "📊 Code coverage report available in ./build/TestResults.xcresult"
+./run_tests.sh
 ```
 
-**Usage:**
+The script cleans build products, runs the `EVChargingTracker` scheme with coverage on iPhone 17 Pro Max / iOS 26.2, and writes `build/TestResults.xcresult`. It requires that exact simulator destination; it does not choose an installed runtime automatically. The existing unit-test target may also fail to compile because of its Firebase module dependencies.
+
+### Fixed UI scenario
+
+**Script:** `scripts/run_ui_scenario.py`.
+
 ```bash
-chmod +x scripts/run_tests.sh
-./scripts/run_tests.sh
+python3 scripts/run_ui_scenario.py
+python3 scripts/run_ui_scenario.py --language ru --appearance dark
 ```
 
-**Requirements:**
-- Xcode installed
-- iPhone 15 Pro simulator installed (or modify destination)
+Uses the separate `EVChargingTrackerUI` scheme and `EVChargingTrackerScenarioUITests` target. Defaults to iPhone 17 Pro Max / iOS 26.5, creates a fresh temporary simulator, performs onboarding → create charge → save → edit → cancel → verify after relaunch, exports screenshots and an xcresult bundle, then deletes its own simulator. See [UI testing](../docs/ui-testing.md) for parameters, evidence paths and coverage limits.
+
+```bash
+python3 -m unittest discover -s scripts -p test_ui_scenario_runner.py -v
+```
 
 ---
 
@@ -449,7 +442,7 @@ echo ""
 echo ""
 
 # Run tests
-./scripts/run_tests.sh
+./run_tests.sh
 echo ""
 
 echo "✅ All quality checks passed!"
@@ -624,7 +617,7 @@ chmod +x scripts/*.sh
 ./scripts/run_lint.sh
 
 # Before committing
-./scripts/run_tests.sh
+./run_tests.sh
 ```
 
 ### Before Creating PR

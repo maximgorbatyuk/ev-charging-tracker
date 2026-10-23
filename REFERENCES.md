@@ -15,6 +15,7 @@
 @docs/analytics.md
 @docs/notifications.md
 @docs/build-and-config.md
+@docs/ui-testing.md
 @docs/integrations/share-extension.md
 @docs/integrations/icloud-drive.md
 @docs/integrations/firebase.md

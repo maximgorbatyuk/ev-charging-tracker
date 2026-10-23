@@ -10,8 +10,11 @@ For: anyone editing xcconfigs, entitlements, signing, or CI. For per-integration
 | `EVChargingTracker` | Release | iOS app | `mgorbatyuk.dev.EVChargeTracker` | 18.0 |
 | `ShareExtension` | Debug | App extension | `mgorbatyuk.dev.EVChargeTrackerDebug.ShareExtension` | 18.0 |
 | `ShareExtension` | Release | App extension | `mgorbatyuk.dev.EVChargeTracker.ShareExtension` | 18.0 |
+| `EVChargingTrackerScenarioUITests` | Debug / Release | UI test bundle | `dev.mgorbatyuk.EVChargingTrackerScenarioUITests` | 18.0 |
 
 Bundle IDs are also surfaced in `EVChargingTracker/Config/Base.xcconfig` (`SHARE_EXTENSION_BUNDLE_ID`) and in `ci_scripts/ci_post_clone.sh` for Firebase plist generation.
+
+The shared `EVChargingTrackerUI` scheme runs only `EVChargingTrackerScenarioUITests` and builds the main app as its dependency. It does not compile the existing unit-test target. The main scheme retains the unit-test target; its stale reference to the nonexistent `EVChargingTrackerUITests` target has been removed. See [UI testing](ui-testing.md) for the isolated simulator runner and fixed scenario.
 
 ## xcconfig
 

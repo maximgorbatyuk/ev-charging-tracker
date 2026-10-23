@@ -18,7 +18,7 @@ For: agents and developers picking up the repo cold. Pointers, not prose. For on
 | Background work | `BGTaskScheduler` (daily backup task) |
 | Localization | Custom `LocalizationManager`, runtime `.lproj` switching, 7 langs |
 | Targets | App (`EVChargingTracker/`) + Share Extension (`ShareExtension/`) |
-| Tests | Swift Testing |
+| Tests | Swift Testing (unit), XCTest/XCUIAutomation (`UITests/`, `EVChargingTrackerUI` scheme) |
 
 ## Project map
 
@@ -139,6 +139,7 @@ Full pattern: `docs/persistence.md`.
 |---|---|
 | What does this app actually do? | `docs/domain.md` |
 | Build / config / signing | `docs/build-and-config.md` |
+| Repeatable UI scenario / screenshots | `docs/ui-testing.md` |
 | Something is broken | `docs/diagnostics.md` |
 | DB / repos / migrations | `docs/persistence.md` |
 | Backup / restore / iCloud | `docs/backup-and-restore.md` |

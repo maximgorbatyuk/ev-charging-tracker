@@ -106,5 +106,6 @@ struct LanguageButton: SwiftUICore.View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("onboarding.language.\(language.rawValue)")
     }
 }

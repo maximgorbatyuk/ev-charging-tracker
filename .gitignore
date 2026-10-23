@@ -41,6 +41,7 @@ Packages/
 Package.pins
 Package.resolved
 *.xcodeproj
+!EVChargingTracker.xcodeproj/
 # Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
 # hence it is not needed unless you have added a package configuration file to your project
 .swiftpm
@@ -104,3 +105,8 @@ iOSInjectionProject/
 GoogleService-Info.plist
 **/GoogleService-Info.plist
 EVChargingTracker/.env
+
+# Local UI regression runs
+/.ui-test-cache/
+/ui-test-results/
+__pycache__/

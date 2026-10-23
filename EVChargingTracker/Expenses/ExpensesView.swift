@@ -264,6 +264,7 @@ struct ExpensesView: SwiftUICore.View {
                                     Label(L("Edit"), systemImage: "pencil")
                                 }
                                 .tint(.blue)
+                                .accessibilityIdentifier("entity.edit")
                             }
                     }
 

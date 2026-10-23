@@ -305,6 +305,7 @@ struct AddExpenseView: SwiftUICore.View {
                             Text(String(format: L("Odometer (%@)"), unit))
                             Spacer()
                             TextField(selectedCardForExpense?.currentMileage.formatted() ?? "", text: $odometer)
+                                .accessibilityIdentifier("entity.odometer")
                                 .keyboardType(.numberPad)
                                 .multilineTextAlignment(.trailing)
                         }
@@ -320,6 +321,7 @@ struct AddExpenseView: SwiftUICore.View {
                         Text(String(format: L("Cost (%@)"), defaultCurrency.rawValue))
                         Spacer()
                         TextField(L("12.50"), text: $cost)
+                            .accessibilityIdentifier("entity.cost")
                             .focused($isCostFocused)
                             .onChange(of: cost, { _, _ in
 
@@ -344,6 +346,7 @@ struct AddExpenseView: SwiftUICore.View {
                             Text(L("Car name"))
                             Spacer()
                             TextField(L("Name of the car"), text: $carName)
+                                .accessibilityIdentifier("entity.car")
                                 .multilineTextAlignment(.trailing)
                         }
 
@@ -362,6 +365,7 @@ struct AddExpenseView: SwiftUICore.View {
 
                 Section(header: Text(L("Optional"))) {
                     TextField(L("Notes (optional)"), text: $notes)
+                        .accessibilityIdentifier("entity.notes")
                 }
 
                 Section {
@@ -404,6 +408,7 @@ struct AddExpenseView: SwiftUICore.View {
 
                         dismiss()
                     }
+                    .accessibilityIdentifier("entity.cancel")
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -418,6 +423,7 @@ struct AddExpenseView: SwiftUICore.View {
                         saveSession()
                     }
                     .disabled(isSaveDisabled)
+                    .accessibilityIdentifier("entity.save")
                 }
             }
             .onAppear {
@@ -436,6 +442,7 @@ struct AddExpenseView: SwiftUICore.View {
             Text(L("Energy (kWh)"))
             Spacer()
             TextField(L("45.2"), text: $energyCharged)
+                .accessibilityIdentifier("entity.energy")
                 .focused($isCountOfKWtFocused)
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
