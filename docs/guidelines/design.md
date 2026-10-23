@@ -230,9 +230,9 @@ Never omit; never replace with regular-case labels. This is the single most recu
 | Token | Value | Use |
 |---|---|---|
 | `cardRadius` | **20** | Default card corner |
-| Button lg | 14 | 52pt-tall primary CTAs |
-| Button md | 12 | 44pt-tall |
-| Button sm | 10 | 34pt-tall chip-button |
+| Button lg | 14 | Minimum 52pt height for primary CTAs |
+| Button md | 12 | Minimum 44pt height |
+| Button sm | 10 | Minimum 34pt height for chip-buttons |
 | Chip | 999 | Pill |
 | Row icon tile | 9 | 32×32 or 34×34 square |
 | Circle button | 50% | 34×34 `CircleBtn` for back / close / more |
@@ -288,7 +288,7 @@ Chips may lead with an 11pt colored icon. Filter-chip variant (used in Expenses)
 
 ### 6.3 `Btn` — `tokens.jsx:113`
 
-Heights/radii/font-sizes: `lg 52/14/17`, `md 44/12/15`, `sm 34/10/13`. Font UI, weight 600, letter-spacing -0.2.
+Minimum heights/radii/font-sizes: `lg 52/14/17`, `md 44/12/15`, `sm 34/10/13`. Font UI, weight 600, letter-spacing -0.2. SwiftUI buttons grow vertically for multiline labels and accessibility text sizes.
 
 Kinds:
 - `primary`: bg `ink`, fg `#fff` (light) / `#000` (dark). Main screen CTA.

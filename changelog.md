@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026.3.4
+
+- View your stats and settings across the unfolded iPhone Duo screen.
+- Read hints, button labels, and stat cards comfortably with larger text.
+- Reach every introduction page and language option by scrolling when needed.
+
 ## 2026.3.2 (2026-07-14)
 
 - Tap the energy stat on the Stats screen to switch between kWh per 100 km/mi and kWh per 1 km/mi

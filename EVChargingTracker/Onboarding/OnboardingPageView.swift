@@ -11,30 +11,31 @@ struct OnboardingPageView: SwiftUICore.View {
     let page: OnboardingPageViewModelItem
 
     var body: some SwiftUICore.View {
-        VStack(spacing: 32) {
-            Spacer()
+        ScrollView {
+            VStack(spacing: 32) {
+                Spacer()
 
-            // Icon
-            Image(systemName: page.icon)
-                .font(.system(size: 100))
-                .foregroundColor(page.color)
-                .symbolEffect(.bounce, options: .repeating)
+                Image(systemName: page.icon)
+                    .font(.system(size: 100))
+                    .foregroundColor(page.color)
+                    .symbolEffect(.bounce, options: .repeating)
 
-            Text(page.title)
-                .appFont(.largeTitle)
-                .bold()
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+                Text(page.title)
+                    .appFont(.largeTitle)
+                    .bold()
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
 
-            // Description
-            Text(page.description)
-                .appFont(.body)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                Text(page.description)
+                    .appFont(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
 
-            Spacer()
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
+        .defaultScrollAnchor(.center, for: .alignment)
     }
 }

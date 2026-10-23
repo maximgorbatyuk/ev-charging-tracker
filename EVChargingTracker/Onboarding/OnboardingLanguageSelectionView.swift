@@ -17,33 +17,32 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
     @State var selectedLanguage: AppLanguage
 
     var body: some SwiftUICore.View {
-        VStack(spacing: 20) {
-            Image("BackgroundImage")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .shadow(radius: 10)
-                .padding(.top, 16)
+        ScrollView {
+            VStack(spacing: 20) {
+                Image("BackgroundImage")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .shadow(radius: 10)
+                    .padding(.top, 16)
 
-            VStack(spacing: 6) {
-                Text(L("Welcome to"))
-                    .appFont(.title2)
+                VStack(spacing: 6) {
+                    Text(L("Welcome to"))
+                        .appFont(.title2)
+                        .foregroundColor(.secondary)
+
+                    Text("EV Charge Tracker")
+                        .appFont(.largeTitle)
+                        .bold()
+                        .multilineTextAlignment(.center)
+                }
+
+                Text(L("Select your language"))
+                    .appFont(.headline)
                     .foregroundColor(.secondary)
+                    .padding(.top, 5)
 
-                Text("EV Charge Tracker")
-                    .appFont(.largeTitle)
-                    .bold()
-                    .multilineTextAlignment(.center)
-            }
-
-            Text(L("Select your language"))
-                .appFont(.headline)
-                .foregroundColor(.secondary)
-                .padding(.top, 5)
-
-            // Language options
-            ScrollView {
                 VStack(spacing: 10) {
                     ForEach(AppLanguage.allCases, id: \.self) { language in
                         LanguageButton(
@@ -70,9 +69,9 @@ struct OnboardingLanguageSelectionView: SwiftUICore.View {
                 }
                 .padding(.horizontal)
             }
+            .padding()
         }
-        .padding()
-    } // end of body
+    }
 }
 
 struct LanguageButton: SwiftUICore.View {

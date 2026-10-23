@@ -44,7 +44,7 @@ struct UserSettingsView: SwiftUICore.View {
     @Environment(\.requestReview) var requestReview
 
     var body: some SwiftUICore.View {
-        NavigationView {
+        NavigationStack {
 
             Form {
 

@@ -27,42 +27,46 @@ struct CostHintModalView: SwiftUICore.View {
     }
 
     var body: some SwiftUICore.View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(L("Hint"))
-                .appFont(.headline)
-                .foregroundColor(AppColors.ink)
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(L("Hint"))
+                        .appFont(.headline)
+                        .foregroundColor(AppColors.ink)
 
-            Text(hint)
-                .appFont(.body)
-                .foregroundColor(AppColors.inkSoft)
-                .fixedSize(horizontal: false, vertical: true)
+                    Text(hint)
+                        .appFont(.body)
+                        .foregroundColor(AppColors.inkSoft)
+                        .fixedSize(horizontal: false, vertical: true)
 
-            if showsBasisSwitch {
-                AppButton(
-                    switchButtonTitle,
-                    kind: .accent,
-                    size: .lg,
-                    icon: "arrow.left.arrow.right",
-                    fullWidth: true,
-                    action: {
-                        basisManager.setBasis(targetBasis)
-                        dismiss()
+                    if showsBasisSwitch {
+                        AppButton(
+                            switchButtonTitle,
+                            kind: .accent,
+                            size: .lg,
+                            icon: "arrow.left.arrow.right",
+                            fullWidth: true,
+                            action: {
+                                basisManager.setBasis(targetBasis)
+                                dismiss()
+                            }
+                        )
                     }
-                )
+
+                    Spacer()
+
+                    AppButton(
+                        L("Close"),
+                        kind: .tinted,
+                        size: .lg,
+                        fullWidth: true,
+                        action: { dismiss() }
+                    )
+                }
+                .padding(24)
+                .frame(maxWidth: .infinity, minHeight: geometry.size.height, alignment: .topLeading)
             }
-
-            Spacer()
-
-            AppButton(
-                L("Close"),
-                kind: .tinted,
-                size: .lg,
-                fullWidth: true,
-                action: { dismiss() }
-            )
         }
-        .padding(24)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(AppColors.bg)
     }
 }

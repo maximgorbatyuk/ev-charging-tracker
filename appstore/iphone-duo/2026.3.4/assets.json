@@ -1,0 +1,125 @@
+{
+  "app": "EV Charge Tracker",
+  "version": "2026.3.4",
+  "captured_on": "2026-10-23",
+  "device": "iPhone Duo",
+  "runtime": "iOS 27.1",
+  "appearance": "light",
+  "text_size": "large (default)",
+  "data": "Fictional demonstration records in an isolated simulator",
+  "status": "Prepared locally; not uploaded or published",
+  "assets": [
+    {
+      "file": "en/raw/01-overview-closed.png",
+      "locale": "en",
+      "width": 1398,
+      "height": 2034,
+      "channels": 3,
+      "sha256": "b849d465c269002911bd06e9bcbb48315e2596c4511c1e1cd4ff298d67730f89"
+    },
+    {
+      "file": "en/raw/02-overview-open.png",
+      "locale": "en",
+      "width": 2853,
+      "height": 2007,
+      "channels": 3,
+      "sha256": "7e2e0e4ecf99f58455756af7f9c0909e5cfa5aee2feabe705dbecb6f48774c35"
+    },
+    {
+      "file": "en/raw/03-detail-closed.png",
+      "locale": "en",
+      "width": 1398,
+      "height": 2034,
+      "channels": 3,
+      "sha256": "05072d85af62ec75a961de186e8fffff0258d150e4775e8805e672a0fc72259d"
+    },
+    {
+      "file": "en/raw/04-detail-open.png",
+      "locale": "en",
+      "width": 2853,
+      "height": 2007,
+      "channels": 3,
+      "sha256": "5d4ee835f4f47651f2ff40c8aa925f6481456440009c23d9c81ee1e0e5bcfcf8"
+    },
+    {
+      "file": "en/appstore/01-duo-closed.png",
+      "locale": "en",
+      "width": 1398,
+      "height": 2034,
+      "channels": 3,
+      "sha256": "3013e4d0d9451d59be8f50dd4c9e92d365b066b97b6af1971d4246fdac7c923f"
+    },
+    {
+      "file": "en/appstore/02-duo-open.png",
+      "locale": "en",
+      "width": 2853,
+      "height": 2007,
+      "channels": 3,
+      "sha256": "d3bc8006999aaed3dcb25ddf74a79059d98c99cbb789842088bbd1301f39fc55"
+    },
+    {
+      "file": "en/announcement.png",
+      "locale": "en",
+      "width": 1080,
+      "height": 1350,
+      "channels": 3,
+      "sha256": "d643698ca24bcb2375b8db1df4e48bcf35866081dad3feb4df3aae4546d65d63"
+    },
+    {
+      "file": "ru/raw/01-overview-closed.png",
+      "locale": "ru",
+      "width": 1398,
+      "height": 2034,
+      "channels": 3,
+      "sha256": "b962db429cf108899e5a16aa21ca8bf915894a5ea062898257779bc1a0bd9de4"
+    },
+    {
+      "file": "ru/raw/02-overview-open.png",
+      "locale": "ru",
+      "width": 2853,
+      "height": 2007,
+      "channels": 3,
+      "sha256": "7ef4a6317574fe5d2932b3a6da79074d16920c11d07f7f7204f49c7a68372bc5"
+    },
+    {
+      "file": "ru/raw/03-detail-closed.png",
+      "locale": "ru",
+      "width": 1398,
+      "height": 2034,
+      "channels": 3,
+      "sha256": "4ca63855b8eafbcaa16a2c21f9d477abcc3e1dfcc0a1429f4978af3735a82e97"
+    },
+    {
+      "file": "ru/raw/04-detail-open.png",
+      "locale": "ru",
+      "width": 2853,
+      "height": 2007,
+      "channels": 3,
+      "sha256": "99c10634a132d4bb2b9ef003ff55b347fe8f9023b19b9e558f6b0444091e943a"
+    },
+    {
+      "file": "ru/appstore/01-duo-closed.png",
+      "locale": "ru",
+      "width": 1398,
+      "height": 2034,
+      "channels": 3,
+      "sha256": "423182912cfe0567de3c8a1fa0ed6868a2f37ed744f82a674a851900dc7662f9"
+    },
+    {
+      "file": "ru/appstore/02-duo-open.png",
+      "locale": "ru",
+      "width": 2853,
+      "height": 2007,
+      "channels": 3,
+      "sha256": "d1653f2cb088d378001a20678ea61b423c03a50342abfa7643841dacec394c01"
+    },
+    {
+      "file": "ru/announcement.png",
+      "locale": "ru",
+      "width": 1080,
+      "height": 1350,
+      "channels": 3,
+      "sha256": "60ec7fbe61b31c5177eb34dfe2a9be7b2904e0e5a7a5290a57ec3eb3fc2aa80c"
+    }
+  ]
+}
