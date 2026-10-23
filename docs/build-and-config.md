@@ -4,10 +4,12 @@ For: anyone editing xcconfigs, entitlements, signing, or CI. For per-integration
 
 ## Targets
 
-| Target | Type | Bundle ID | Min iOS |
-|---|---|---|---|
-| `EVChargingTracker` | iOS app | `dev.mgorbatyuk.EvChargeTracker` | 18.0 |
-| `ShareExtension` | App extension | `mgorbatyuk.dev.EVChargeTracker.ShareExtension` | 18.0 |
+| Target | Configuration | Type | Bundle ID | Min iOS |
+|---|---|---|---|---|
+| `EVChargingTracker` | Debug | iOS app | `mgorbatyuk.dev.EVChargeTrackerDebug` | 18.0 |
+| `EVChargingTracker` | Release | iOS app | `mgorbatyuk.dev.EVChargeTracker` | 18.0 |
+| `ShareExtension` | Debug | App extension | `mgorbatyuk.dev.EVChargeTrackerDebug.ShareExtension` | 18.0 |
+| `ShareExtension` | Release | App extension | `mgorbatyuk.dev.EVChargeTracker.ShareExtension` | 18.0 |
 
 Bundle IDs are also surfaced in `EVChargingTracker/Config/Base.xcconfig` (`SHARE_EXTENSION_BUNDLE_ID`) and in `ci_scripts/ci_post_clone.sh` for Firebase plist generation.
 
@@ -42,6 +44,8 @@ xcconfig
 ```
 
 `EVChargingTracker/Info.plist` lists the keys: `AppStoreId`, `Co2EuropePollutionPerOneKilometer`, `DeveloperTelegramLink`, `BuildEnvironment`, `AppVisibleVersion`, `DeveloperName`, `GithubRepoUrl`, `AppGroupIdentifier`, `BGTaskSchedulerPermittedIdentifiers`.
+
+The camera permission description is supplied by `INFOPLIST_KEY_NSCameraUsageDescription` in both app build configurations; localized `InfoPlist.strings` provide the translated descriptions.
 
 ## Entitlements
 
@@ -81,14 +85,16 @@ Same token, same resolution. Without this, the extension can't open the shared S
 
 ## Debug vs Release branding
 
-Debug builds use a distinct icon set and display name to make them visible on the home screen alongside the production install. Configured via xcconfig:
+Target build settings and xcconfig inheritance control the icon set and display name. The app names distinguish the development install from production:
 
 | Variable | Debug | Release |
 |---|---|---|
-| `ASSETCATALOG_COMPILER_APPICON_NAME` | `AppIconDebug` (or similar) | `AppIcon` |
-| `INFOPLIST_KEY_CFBundleDisplayName` | `Dev | EV Charge` (or similar) | `EV Charge` |
+| `ASSETCATALOG_COMPILER_APPICON_NAME` | `AppIcon` | `AppIcon` |
+| `INFOPLIST_KEY_CFBundleDisplayName` | `Dev | EV Charge Tracker` | `EV Charge Tracker` |
 
 This is enforced by build settings, not by code.
+
+The existing Debug icon selection still shares the production asset; a dedicated developer icon remains a separate branding gap.
 
 ## Launch screen
 
@@ -132,7 +138,7 @@ The marketing version (the user-visible `2026.M.x` string, e.g. `2026.2.5`) is b
 - **Source of truth:** `MARKETING_VERSION` in `EVChargingTracker.xcodeproj/project.pbxproj`. With `GENERATE_INFOPLIST_FILE = YES`, Xcode injects it as `CFBundleShortVersionString`, which is what `EnvironmentService.getAppVisibleVersion()` reads and the app displays.
 - **Bump all four together:** there are four `MARKETING_VERSION` entries — app + ShareExtension, each in Debug and Release — and the app and its extension must share the same version for App Store submission. (The `EVChargingTrackerTests` target stays at `1.0`; leave it.) Set it via a target → General → Identity → Version, or edit the pbxproj directly.
 - **Build number:** `CURRENT_PROJECT_VERSION` (→ `CFBundleVersion`) is `1` in the repo and is not auto-incremented by GitHub Actions. Xcode Cloud may set the build number at archive time; the repo itself does not bump it.
-- **Scheme:** `YYYY.<release>.<patch>`, e.g. `2026.2.5` — encodes the release year and month so a user can tell when a build shipped (the changelog notes this where the scheme changed).
+- **Scheme:** `YYYY.<release>.<patch>`, e.g. `2026.2.5`. Increment the final component for a patch release; the middle component is the release series rather than the calendar month.
 - **Dead token — do not rely on it:** `Info.plist` has `AppVisibleVersion = $(APP_VISIBLE_VERSION)`, but `APP_VISIBLE_VERSION` is defined nowhere, so it resolves to empty — and `getAppVisibleVersion()` ignores it, reading `CFBundleShortVersionString` instead. There is no second place to update.
 
 ## Branches → environments

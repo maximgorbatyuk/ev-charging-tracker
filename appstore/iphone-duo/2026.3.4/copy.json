@@ -1,0 +1,20 @@
+{
+  "app": "EV Charge Tracker",
+  "version": "2026.3.4",
+  "background": "#F5F6FB",
+  "accent": "#EC7422",
+  "locales": {
+    "en": {
+      "headline": "Ready for iPhone Duo",
+      "subtitle": "More room for your charging stats"
+    },
+    "ru": {
+      "headline": "Поддержка iPhone Duo",
+      "subtitle": "Больше места для статистики зарядок"
+    }
+  },
+  "featured_capture": {
+    "closed": "01-overview-closed.png",
+    "open": "02-overview-open.png"
+  }
+}

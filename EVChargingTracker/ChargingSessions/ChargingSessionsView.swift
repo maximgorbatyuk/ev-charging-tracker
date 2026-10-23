@@ -11,7 +11,7 @@ struct ChargingSessionsView: SwiftUICore.View {
             AppColors.bg
                 .ignoresSafeArea()
 
-            NavigationView {
+            NavigationStack {
                 ScrollView {
                     VStack(spacing: 16) {
                         if let statData = viewModel.statData {

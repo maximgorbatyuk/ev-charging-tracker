@@ -2,32 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Camera access is needed to take photos of your car documents</string>
-	<key>AppStoreId</key>
-	<string>$(APP_STORE_ID)</string>
-	<key>Co2EuropePollutionPerOneKilometer</key>
-	<string>$(CO2_EUROPE_POLLUTION_PER_ONE_KILOMETER)</string>
-	<key>DeveloperTelegramLink</key>
-	<string>$(DEVELOPER_TELEGRAM_LINK)</string>
-	<key>BuildEnvironment</key>
-	<string>$(BUILD_ENVIRONMENT)</string>
-	<key>AppVisibleVersion</key>
-	<string>$(APP_VISIBLE_VERSION)</string>
-	<key>DeveloperName</key>
-	<string>$(DEVELOPER_NAME)</string>
-	<key>GithubRepoUrl</key>
-	<string>$(GITHUB_REPO_URL)</string>
 	<key>AppGroupIdentifier</key>
 	<string>$(APP_GROUP_IDENTIFIER)</string>
+	<key>AppStoreId</key>
+	<string>$(APP_STORE_ID)</string>
+	<key>AppVisibleVersion</key>
+	<string>$(APP_VISIBLE_VERSION)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.evchargingtracker.daily-backup</string>
 	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-	</array>
+	<key>BuildEnvironment</key>
+	<string>$(BUILD_ENVIRONMENT)</string>
+	<key>Co2EuropePollutionPerOneKilometer</key>
+	<string>$(CO2_EUROPE_POLLUTION_PER_ONE_KILOMETER)</string>
+	<key>DeveloperName</key>
+	<string>$(DEVELOPER_NAME)</string>
+	<key>DeveloperTelegramLink</key>
+	<string>$(DEVELOPER_TELEGRAM_LINK)</string>
+	<key>GithubRepoUrl</key>
+	<string>$(GITHUB_REPO_URL)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>JetBrainsMono-Regular.ttf</string>
@@ -35,6 +29,10 @@
 		<string>JetBrainsMono-Bold.ttf</string>
 		<string>JetBrainsMono-Italic.ttf</string>
 		<string>JetBrainsMono-BoldItalic.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
 	</array>
 </dict>
 </plist>

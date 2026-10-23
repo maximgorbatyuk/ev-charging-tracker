@@ -23,6 +23,8 @@ For: anyone hitting an error, build failure, or unexpected behaviour. Search thi
 | [DIAG-009](#diag-009-share-extension-cannot-see-data-saved-in-the-main-app) | Share Extension cannot see data saved in the main app | `#share-extension` `#app-group` `#database` |
 | [DIAG-010](#diag-010-test-target-fails-to-build-with-firebase-module-error) | Test target fails to build with Firebase module error | `#tests` `#firebase` `#environment` |
 | [DIAG-011](#diag-011-mileage-or-co2-display-shows-wrong-units) | Mileage / CO₂ display shows wrong units after toggling measurement system | `#measurement-system` `#stats` |
+| [DIAG-012](#diag-012-single-screen-becomes-a-sidebar-on-open-iphone-duo) | Single screen becomes a sidebar on open iPhone Duo | `#swiftui` `#layout` |
+| [DIAG-013](#diag-013-hint-text-and-actions-are-clipped-in-a-short-sheet) | Hint text and actions are clipped in a short sheet | `#swiftui` `#layout` |
 
 ---
 
@@ -238,6 +240,39 @@ See also: `integrations/share-extension.md`.
 **Resolution:** Use `car.measurementSystem.distanceUnitLabel` / `car.measurementSystem.co2UnitLabel` and convert numeric values at the leaf view. **Do not change the underlying `co2PerKm * totalDistance` formula** — that is in kg by definition.
 
 **Related files:** `BusinessLogic/Models/MeasurementSystem.swift`, `BusinessLogic/Models/Car.swift`, `EVChargingTracker/ChargingSessions/SubViews/CostsBlockView.swift`, `EVChargingTracker/ChargingSessions/SubViews/StatsBlockView.swift`.
+
+---
+
+### `[DIAG-012]` Single screen becomes a sidebar on open iPhone Duo
+
+**Tags:** `#swiftui` `#layout`
+
+**Symptoms:** Opening iPhone Duo leaves Statistics or Settings in a narrow sidebar with a large empty area beside it. The same screen fills the available width when the device is closed.
+
+**Diagnosis steps:**
+
+1. Open the affected tab in the iPhone Duo simulator and switch between Closed, Partially Open, and Open poses.
+2. Check whether a single-column screen is wrapped in `NavigationView`; its automatic style can introduce a split layout at regular width.
+
+**Resolution:** Use `NavigationStack` for these independent single-column tab roots. Verify content width, toolbar actions, and retained form state while changing poses. Modal forms have a different width proposal; verify them separately before changing their navigation containers.
+
+**Related files:** `EVChargingTracker/ChargingSessions/ChargingSessionsView.swift`, `EVChargingTracker/UserSettings/UserSettingsView.swift`.
+
+---
+
+### `[DIAG-013]` Hint text and actions are clipped in a short sheet
+
+**Tags:** `#swiftui` `#layout`
+
+**Symptoms:** At an accessibility text size, a consumption hint in the medium sheet extends above its top edge and places actions below its bottom edge on open iPhone Duo.
+
+**Common causes:** An unscrollable `VStack` containing full-height text and buttons cannot fit the sheet's available height. The cost hint uses the same layout.
+
+**Resolution:** Put the content in a vertical `ScrollView`, using the viewport height as a minimum content height. Short content retains the bottom Close button; overflowing content and both actions can be reached by scrolling. Verify normal and accessibility text sizes after resizing.
+
+The shared `AppButton` also needs a minimum height and a vertically unconstrained multiline label. A fixed 52-point height clips accessibility text even inside a scrolling sheet. Statistics cards use a vertical layout at accessibility sizes so their labels remain readable at compact width.
+
+**Related files:** `EVChargingTracker/ChargingSessions/SubViews/ConsumptionHintModalView.swift`, `EVChargingTracker/ChargingSessions/SubViews/CostHintModalView.swift`, `EVChargingTracker/Shared/AppButton.swift`, `EVChargingTracker/ChargingSessions/SubViews/StatsBlockView.swift`.
 
 ---
 

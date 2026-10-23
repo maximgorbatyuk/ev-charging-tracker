@@ -62,11 +62,13 @@ struct AppButton: SwiftUI.View {
                 Text(title)
                     .appFont(textStyle, weight: .semibold)
                     .tracking(-0.2)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundColor(palette.fg)
             .padding(.horizontal, size == .sm ? 12 : 20)
             .frame(maxWidth: fullWidth ? .infinity : nil)
-            .frame(height: height)
+            .frame(minHeight: height)
             .background(
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
                     .fill(palette.bg)

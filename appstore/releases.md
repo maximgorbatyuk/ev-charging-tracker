@@ -1,5 +1,49 @@
 # Release notes
 
+## 2026.3.4
+
+### English
+
+```
+We optimized EV Charge Tracker for iPhone Duo so your stats and settings make better use of the unfolded screen. We also improved hints, buttons, and stat cards with larger text so you can read everything more comfortably.
+```
+
+### Русский (RU)
+
+```
+Мы адаптировали приложение для iPhone Duo — теперь статистика и настройки используют больше места на раскрытом экране. Ещё улучшили подсказки, кнопки и карточки статистики с крупным текстом, чтобы вам было удобнее читать все подписи.
+```
+
+### Қазақша (KK)
+
+```
+Қолданбаны iPhone Duo құрылғысына бейімдедік — енді статистика мен баптаулар ашылған экрандағы кеңістікті жақсырақ пайдаланады. Сондай-ақ ірі мәтінмен көрсетілетін кеңестерді, түймелерді және статистика карточкаларын оқуға ыңғайлы еттік.
+```
+
+### Türkçe (TR)
+
+```
+Uygulamayı iPhone Duo’ya uyarladık — istatistikleriniz ve ayarlarınız artık açılmış ekranı daha iyi kullanıyor. İpuçlarını, düğmeleri ve istatistik kartlarını da büyük metinle daha rahat okuyabilmeniz için iyileştirdik.
+```
+
+### Українська (UK)
+
+```
+Ми адаптували застосунок для iPhone Duo — тепер статистика й налаштування краще використовують розгорнутий екран. Також покращили підказки, кнопки та картки статистики з великим текстом, щоб вам було зручніше читати всі підписи.
+```
+
+### Deutsch (DE)
+
+```
+Wir haben die App für das iPhone Duo optimiert, damit Ihre Statistik und Einstellungen den aufgeklappten Bildschirm besser nutzen. Außerdem haben wir Hinweise, Schaltflächen und Statistikkarten bei großer Schrift verbessert, damit Sie alle Texte bequemer lesen können.
+```
+
+### 简体中文 (ZH-Hans)
+
+```
+我们针对 iPhone Duo 优化了应用，让统计和设置页面充分利用展开后的屏幕空间。我们还改进了大字体下的提示、按钮和统计卡片，让您更轻松地阅读完整内容。
+```
+
 ## 2026.3.2
 
 ### English

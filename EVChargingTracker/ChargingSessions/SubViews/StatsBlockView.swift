@@ -21,6 +21,7 @@ struct StatsBlockView: SwiftUICore.View {
     @ObservedObject private var consumptionBasisManager = ConsumptionBasisManager.shared
     @ObservedObject private var analytics = AnalyticsService.shared
     @State private var showingConsumptionInfo = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     /// Consumption label, varying by unit and the selected per-1/per-100 basis.
     private var energyTitle: String {
@@ -41,7 +42,11 @@ struct StatsBlockView: SwiftUICore.View {
     }
 
     var body: some SwiftUICore.View {
-        HStack(alignment: .top, spacing: 10) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 10))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: 10))
+
+        layout {
             StatCard(
                 title: String(format: L("CO₂ saved (%@)"), measurementSystem.co2UnitLabel),
                 value: String(format: "%.1f", co2Saved),
